@@ -11,7 +11,7 @@ import android.view.MenuItem;
 
 import com.muflone.android.django_hotels.R;
 
-public class MainActivity extends AppCompatActivity {
+public class Main extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
