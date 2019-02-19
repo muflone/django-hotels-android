@@ -1,4 +1,4 @@
-package com.muflone.android.django_hotels;
+package com.muflone.android.django_hotels.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.muflone.android.django_hotels.R;
 
 public class MainActivity extends AppCompatActivity {
 
