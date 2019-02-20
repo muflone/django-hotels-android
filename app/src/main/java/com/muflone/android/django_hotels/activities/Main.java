@@ -1,5 +1,6 @@
 package com.muflone.android.django_hotels.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.muflone.android.django_hotels.R;
 
@@ -49,12 +49,9 @@ public class Main extends AppCompatActivity {
             case R.id.action_settings:
                 return true;
             case R.id.action_about:
-                /* Show about app name and version number */
-                StringBuffer bufferAppVersion = new StringBuffer();
-                bufferAppVersion.append(this.getString(R.string.app_name));
-                bufferAppVersion.append(" ");
-                bufferAppVersion.append(this.getString(R.string.app_version));
-                Toast.makeText(this, bufferAppVersion.toString(), Toast.LENGTH_SHORT).show();
+                /* Show the about activity */
+                Intent intent = new Intent(this, About.class);
+                startActivity(intent);
                 break;
         }
 
