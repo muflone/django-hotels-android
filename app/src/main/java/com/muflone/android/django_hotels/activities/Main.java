@@ -2,11 +2,13 @@ package com.muflone.android.django_hotels.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.muflone.android.django_hotels.R;
 
@@ -16,6 +18,10 @@ public class Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
@@ -46,4 +52,31 @@ public class Main extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            String title = "";
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    title = getString(R.string.navigation_title_home);
+                    break;
+                case R.id.navigation_dashboard:
+                    title = getString(R.string.navigation_title_structures);
+                    break;
+                case R.id.navigation_notifications:
+                    title = getString(R.string.navigation_title_extra);
+                    break;
+            }
+            if (title.length() > 0) {
+                Toast.makeText(Main.this, title, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    };
+
 }

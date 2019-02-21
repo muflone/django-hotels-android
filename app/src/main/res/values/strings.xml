@@ -3,4 +3,8 @@
     <string name="app_name">Hotels</string>
     <string name="action_settings">Settings</string>
     <string name="action_about">About</string>
+    // Navigation titles
+    <string name="navigation_title_home">Home</string>
+    <string name="navigation_title_structures">Structures</string>
+    <string name="navigation_title_extras">Extra</string>
 </resources>
