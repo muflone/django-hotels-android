@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.muflone.android.django_hotels.R;
+import com.muflone.android.django_hotels.fragments.FragmentMainHome;
+import com.muflone.android.django_hotels.fragments.FragmentMainExtras;
+import com.muflone.android.django_hotels.fragments.FragmentMainStructures;
 
 public class Main extends AppCompatActivity {
 
@@ -18,12 +21,14 @@ public class Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        // Add bottom navigation
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-
+        // Add toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        // Initialize activity with first fragment
+        LoadFragment(new FragmentMainHome());
     }
 
     @Override
@@ -57,26 +62,32 @@ public class Main extends AppCompatActivity {
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            String title = "";
+            // Choose a new fragment for each MenuItem
+            Fragment fragment = null;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    title = getString(R.string.navigation_title_home);
+                    fragment = new FragmentMainHome();
                     break;
-                case R.id.navigation_dashboard:
-                    title = getString(R.string.navigation_title_structures);
+                case R.id.navigation_structures:
+                    fragment = new FragmentMainStructures();
                     break;
-                case R.id.navigation_notifications:
-                    title = getString(R.string.navigation_title_extra);
+                case R.id.navigation_extras:
+                    fragment = new FragmentMainExtras();
                     break;
             }
-            if (title.length() > 0) {
-                Toast.makeText(Main.this, title, Toast.LENGTH_SHORT).show();
-                return true;
-            }
-            else {
-                return false;
-            }
+            return LoadFragment(fragment);
         }
     };
 
+    private boolean LoadFragment(Fragment fragment) {
+        if (fragment != null) {
+            // Load the selected fragment
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
 }
