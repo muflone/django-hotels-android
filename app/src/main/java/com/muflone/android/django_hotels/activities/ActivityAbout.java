@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.muflone.android.django_hotels.R;
 
-public class About extends AppCompatActivity {
+public class ActivityAbout extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

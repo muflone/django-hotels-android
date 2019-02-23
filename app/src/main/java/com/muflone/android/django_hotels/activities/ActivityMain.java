@@ -15,7 +15,7 @@ import com.muflone.android.django_hotels.fragments.FragmentMainHome;
 import com.muflone.android.django_hotels.fragments.FragmentMainExtras;
 import com.muflone.android.django_hotels.fragments.FragmentMainStructures;
 
-public class Main extends AppCompatActivity {
+public class ActivityMain extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class Main extends AppCompatActivity {
                 return true;
             case R.id.action_about:
                 /* Show the about activity */
-                Intent intent = new Intent(this, About.class);
+                Intent intent = new Intent(this, ActivityAbout.class);
                 startActivity(intent);
                 break;
         }
