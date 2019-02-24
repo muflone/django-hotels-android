@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.fragments.FragmentMainHome;
@@ -46,9 +48,10 @@ public class ActivityMain extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_settings:
+            case R.id.actionSettings:
+                Toast.makeText(this, "Settings placeholder", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.action_about:
+            case R.id.actionAbout:
                 /* Show the about activity */
                 Intent intent = new Intent(this, ActivityAbout.class);
                 startActivity(intent);
