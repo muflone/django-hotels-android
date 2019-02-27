@@ -9,16 +9,16 @@ import android.view.ViewGroup;
 import com.muflone.android.django_hotels.R;
 
 
-public class FragmentMainHome extends Fragment {
-    public FragmentMainHome() {
+public class SettingsFragment extends Fragment {
+    public SettingsFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_home, container, false);
+        return inflater.inflate(R.layout.settings_fragment, container, false);
     }
-
 }

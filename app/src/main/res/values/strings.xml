@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Application values -->
     <string name="app_name">Hotels</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_about">About</string>
-    // Navigation titles
-    <string name="navigation_title_home">Home</string>
-    <string name="navigation_title_structures">Structures</string>
-    <string name="navigation_title_extras">Extra</string>
+    <string name="author_email">muflone@muflone.com</string>
+
+    <!-- Navigation titles -->
+    <string name="section_home">Home</string>
+    <string name="section_structures">Structures</string>
+    <string name="section_extras">Extra</string>
+    <string name="section_settings">Settings</string>
+    <string name="section_about">About</string>
+
+    <!-- Other descriptions -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
