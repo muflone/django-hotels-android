@@ -8,6 +8,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.muflone.android.django_hotels.R;
@@ -16,6 +18,7 @@ import com.muflone.android.django_hotels.fragments.ExtrasFragment;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
 import com.muflone.android.django_hotels.fragments.SettingsFragment;
 import com.muflone.android.django_hotels.fragments.StructuresFragment;
+import com.muflone.android.django_hotels.fragments.SyncFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -93,5 +96,29 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Add toolbar icons
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main_toolbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle toolbuttons clicks
+        switch (item.getItemId()) {
+            case R.id.section_sync:
+                LoadFragment(new SyncFragment());
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 }
