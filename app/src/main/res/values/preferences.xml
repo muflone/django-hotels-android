@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Preferences values -->
+    <string name="preferences_title">Settings</string>
+
+    <string name="preferences_tablet_id_id">tablet_id</string>
+    <string name="preferences_tablet_id_title">Tablet ID</string>
+    <string name="preferences_tablet_id_summary">This field will contain the tablet ID</string>
+
+    <string name="preferences_tablet_key_id">tablet_key</string>
+    <string name="preferences_tablet_key_title">Tablet Key</string>
+    <string name="preferences_tablet_key_summary">This is the key used to communicate with the server</string>
+</resources>

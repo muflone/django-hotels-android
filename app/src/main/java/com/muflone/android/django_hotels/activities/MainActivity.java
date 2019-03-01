@@ -16,7 +16,7 @@ import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.fragments.AboutFragment;
 import com.muflone.android.django_hotels.fragments.ExtrasFragment;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
-import com.muflone.android.django_hotels.fragments.SettingsFragment;
+import com.muflone.android.django_hotels.fragments.PreferencesFragment;
 import com.muflone.android.django_hotels.fragments.StructuresFragment;
 import com.muflone.android.django_hotels.fragments.SyncFragment;
 
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new ExtrasFragment();
                 break;
             case R.id.menuitemSettings:
-                fragment = new SettingsFragment();
+                fragment = new PreferencesFragment();
                 break;
             case R.id.menuitemAbout:
                 fragment = new AboutFragment();
