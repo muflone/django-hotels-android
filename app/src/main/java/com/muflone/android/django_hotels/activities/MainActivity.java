@@ -1,9 +1,7 @@
 package com.muflone.android.django_hotels.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -22,7 +20,6 @@ import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.fragments.AboutFragment;
 import com.muflone.android.django_hotels.fragments.ExtrasFragment;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
-import com.muflone.android.django_hotels.fragments.PreferencesFragment;
 import com.muflone.android.django_hotels.fragments.StructuresFragment;
 import com.muflone.android.django_hotels.fragments.SyncFragment;
 
@@ -36,8 +33,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-
-        // Add toolbar
+        // Add preferences_toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Add Navigation Drawer
@@ -56,6 +52,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        // Close drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -64,48 +61,42 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        fragment = null;
+        this.fragment = null;
 
         switch (item.getItemId()) {
             case R.id.menuitemHome:
-                fragment = new HomeFragment();
+                this.fragment = new HomeFragment();
                 break;
             case R.id.menuitemStructures:
-                fragment = new StructuresFragment();
+                this.fragment = new StructuresFragment();
                 break;
             case R.id.menuitemExtras:
-                fragment = new ExtrasFragment();
+                this.fragment = new ExtrasFragment();
                 break;
             case R.id.menuitemSettings:
-                Intent i = new Intent(this, PreferencesActivity.class);
-                startActivity(i);
+                Intent intent = new Intent(this, PreferencesActivity.class);
+                startActivity(intent);
                 break;
             case R.id.menuitemAbout:
-                fragment = new AboutFragment();
+                this.fragment = new AboutFragment();
                 break;
         }
 
-        // item.setChecked(true);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
-        if (fragment != null) {
-            return LoadFragment(fragment);
-        } else {
-            return true;
-        }
+        return LoadFragment(this.fragment);
     }
 
     private boolean LoadFragment(Fragment fragment) {
-        if (fragment != null) {
+        if (this.fragment != null) {
             // Load the selected fragment
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
+                    .replace(R.id.fragment_container, this.fragment)
                     .commit();
             return true;
         }
@@ -114,7 +105,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Add toolbar icons
+        // Add preferences_toolbar icons
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_toolbar, menu);
         return true;
@@ -127,7 +118,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.section_sync:
                 LoadFragment(new SyncFragment());
                 return true;
-
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
