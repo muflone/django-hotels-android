@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.muflone.android.django_hotels.R;
@@ -16,10 +20,21 @@ public class PreferencesActivity extends PreferenceActivity {
     }
 
     @Override
-    protected boolean isValidFragment(String fragmentName)
-    {
-        Toast.makeText(this, fragmentName, Toast.LENGTH_SHORT).show();
-        return true;
+    protected void onPostCreate(Bundle savedInstanceState) {
+        // Add Toolbar to PreferenceActivity
+        super.onPostCreate(savedInstanceState);
+        Toolbar bar;
+
+        LinearLayout root = (LinearLayout) findViewById(android.R.id.list).getParent().getParent().getParent();
+        bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.preferences_toolbar, root, false);
+        root.addView(bar, 0); // insert at top
+
+        bar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     public static class PrefFragment extends PreferenceFragment {
