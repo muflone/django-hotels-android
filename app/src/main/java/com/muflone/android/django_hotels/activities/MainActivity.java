@@ -26,6 +26,7 @@ import com.muflone.android.django_hotels.fragments.SyncFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
+    private static final int PREFERENCES_RETURN_CODE = 1;
     Preferences preferences = null;
     Fragment fragment = null;
     MenuItem menuItemHome = null;
@@ -76,10 +77,9 @@ public class MainActivity extends AppCompatActivity
                     getString(R.string.message_missing_tablet_id) :
                     getString(R.string.message_missing_tablet_key);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            this.menuItemPreferences.setChecked(true);
             this.onNavigationItemSelected(this.menuItemPreferences);
         } else {
-            this.menuItemHome.setChecked(true);
+            this.onNavigationItemSelected(this.menuItemHome);
         }
 
     }
@@ -137,7 +137,9 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         this.fragment = null;
-
+        // Activate MenuItem
+        item.setChecked(true);
+        // Open Fragment or related Activity
         switch (item.getItemId()) {
             case R.id.menuitemHome:
                 this.fragment = new HomeFragment();
@@ -150,7 +152,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.menuitemSettings:
                 Intent intent = new Intent(this, PreferencesActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, PREFERENCES_RETURN_CODE);
                 break;
             case R.id.menuitemAbout:
                 this.fragment = new AboutFragment();
@@ -169,7 +171,7 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, this.fragment)
-                    .commit();
+                    .commitAllowingStateLoss();
             return true;
         }
         return false;
@@ -196,5 +198,15 @@ public class MainActivity extends AppCompatActivity
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Open HomeFragment after closing the preferences activity
+        if (requestCode == PREFERENCES_RETURN_CODE) {
+            this.onNavigationItemSelected(this.menuItemHome);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
