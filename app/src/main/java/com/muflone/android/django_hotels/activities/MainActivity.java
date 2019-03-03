@@ -1,6 +1,9 @@
 package com.muflone.android.django_hotels.activities;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -8,10 +11,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.muflone.android.django_hotels.Preferences;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.fragments.AboutFragment;
 import com.muflone.android.django_hotels.fragments.ExtrasFragment;
@@ -22,6 +28,9 @@ import com.muflone.android.django_hotels.fragments.SyncFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = "MainActivity";
+    Preferences preferences = null;
+    Fragment fragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +68,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        Fragment fragment = null;
+        fragment = null;
 
         switch (item.getItemId()) {
             case R.id.menuitemHome:
@@ -72,7 +81,8 @@ public class MainActivity extends AppCompatActivity
                 fragment = new ExtrasFragment();
                 break;
             case R.id.menuitemSettings:
-                fragment = new PreferencesFragment();
+                Intent i = new Intent(this, PreferencesActivity.class);
+                startActivity(i);
                 break;
             case R.id.menuitemAbout:
                 fragment = new AboutFragment();
@@ -83,7 +93,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
-        return LoadFragment(fragment);
+        if (fragment != null) {
+            return LoadFragment(fragment);
+        } else {
+            return true;
+        }
     }
 
     private boolean LoadFragment(Fragment fragment) {
