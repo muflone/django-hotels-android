@@ -92,26 +92,27 @@ public class MainActivity extends AppCompatActivity
         super.onRestoreInstanceState(savedInstanceState);
         // Restore previous active fragment
         String fragmentName = savedInstanceState.getString("fragment");
+        Fragment fragment = null;
         if (fragmentName != null) {
             switch (fragmentName) {
                 case "HomeFragment":
-                    this.fragment = new HomeFragment();
+                    fragment = new HomeFragment();
                     break;
                 case "StructuresFragment":
-                    this.fragment = new StructuresFragment();
+                    fragment = new StructuresFragment();
                     break;
                 case "ExtrasFragment":
-                    this.fragment = new ExtrasFragment();
+                    fragment = new ExtrasFragment();
                     break;
                 case "AboutFragment":
-                    this.fragment = new AboutFragment();
+                    fragment = new AboutFragment();
                     break;
                 default:
                     Toast.makeText(this, fragmentName, Toast.LENGTH_SHORT).show();
 
             }
-            if (this.fragment != null) {
-                LoadFragment(this.fragment);
+            if (fragment != null) {
+                LoadFragment(fragment);
             }
         }
     }
@@ -130,38 +131,39 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        this.fragment = null;
+        Fragment fragment = null;
         // Activate MenuItem
         item.setChecked(true);
         // Open Fragment or related Activity
         switch (item.getItemId()) {
             case R.id.menuitemHome:
-                this.fragment = new HomeFragment();
+                fragment = new HomeFragment();
                 break;
             case R.id.menuitemStructures:
-                this.fragment = new StructuresFragment();
+                fragment = new StructuresFragment();
                 break;
             case R.id.menuitemExtras:
-                this.fragment = new ExtrasFragment();
+                fragment = new ExtrasFragment();
                 break;
             case R.id.menuitemSettings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivityForResult(intent, SETTINGS_RETURN_CODE);
                 break;
             case R.id.menuitemAbout:
-                this.fragment = new AboutFragment();
+                fragment = new AboutFragment();
                 break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
-        return LoadFragment(this.fragment);
+        return LoadFragment(fragment);
     }
 
     private boolean LoadFragment(Fragment fragment) {
-        if (this.fragment != null) {
+        if (fragment != null) {
             // Load the selected fragment
+            this.fragment = fragment;
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, this.fragment)
