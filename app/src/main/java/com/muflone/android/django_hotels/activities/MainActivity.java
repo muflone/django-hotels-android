@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "MainActivity";
     Preferences preferences = null;
     Fragment fragment = null;
+    MenuItem menuItemHome = null;
+    MenuItem menuItemPreferences = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +46,38 @@ public class MainActivity extends AppCompatActivity
                 R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        // Find the preferences MenuItems
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
-        // Load initial Home fragment
-        LoadFragment(new HomeFragment());
+        Menu menu = navigationView.getMenu();
+        for (int item = 0; item < menu.size(); item++) {
+            switch (menu.getItem(item).getItemId()) {
+                case R.id.menuitemHome:
+                    this.menuItemHome = menu.getItem(item);
+                    break;
+                case R.id.menuitemSettings:
+                    this.menuItemPreferences = menu.getItem(item);
+                    break;
+            }
+        }
+        // Load prerefences
+        this.preferences = new Preferences(this);
+        /*
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        this.tablet_id = sharedPreferences.getString(getString(R.string.preferences_tablet_id_id), "");
+        this.tablet_key = sharedPreferences.getString(getString(R.string.preferences_tablet_key_id), "");
+        */
+        Log.d(TAG, "ID: " + this.preferences.getTabletID());
+        Log.d(TAG, "Key: " + this.preferences.getTabletKey());
+        if (this.preferences.getTabletID().isEmpty() |
+                this.preferences.getTabletKey().isEmpty()) {
+            this.menuItemPreferences.setChecked(true);
+            this.onNavigationItemSelected(this.menuItemPreferences);
+        } else {
+            this.menuItemHome.setChecked(true);
+        }
+
     }
 
     @Override
