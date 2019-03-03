@@ -10,10 +10,6 @@ import com.muflone.android.django_hotels.R;
 
 
 public class ExtrasFragment extends Fragment {
-    public ExtrasFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,

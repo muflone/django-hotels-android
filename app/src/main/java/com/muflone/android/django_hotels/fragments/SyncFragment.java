@@ -10,10 +10,6 @@ import com.muflone.android.django_hotels.R;
 
 
 public class SyncFragment extends Fragment {
-    public SyncFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
