@@ -3,6 +3,9 @@ package com.muflone.android.django_hotels;
 import android.content.Context;
 import android.net.Uri;
 
+import com.google.android.apps.authenticator.Base32String;
+import com.muflone.android.django_hotels.otp.Token;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -103,5 +106,20 @@ public class Api {
             }
         }
         return (difference == 0);
+    }
+
+    public String getCurrentTokenCode() {
+        // Return the current TokenCode
+        Token token = null;
+        try {
+            Uri uri = Uri.parse(String.format(
+                    "otpauth://totp/MilazzoInn:Tablet %s?secret=%s&issuer=Muflone",
+                    this.settings.getTabletID(),
+                    Base32String.encode(this.settings.getTabletKey().getBytes())));
+            token = new Token(uri);
+        } catch (Token.TokenUriInvalidException e) {
+            e.printStackTrace();
+        }
+        return token != null ? token.generateCodes().getCurrentCode() : null;
     }
 }

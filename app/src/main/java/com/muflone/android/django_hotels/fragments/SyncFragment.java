@@ -10,7 +10,6 @@ import android.widget.Toast;
 import com.muflone.android.django_hotels.Api;
 import com.muflone.android.django_hotels.R;
 
-
 public class SyncFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -21,6 +20,7 @@ public class SyncFragment extends Fragment {
         if (!api.checkDates()) {
             Toast.makeText(getActivity(), getString(R.string.message_unmatching_date_time), Toast.LENGTH_SHORT).show();
         }
+        System.out.println(api.getCurrentTokenCode());
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.sync_fragment, container, false);
     }
