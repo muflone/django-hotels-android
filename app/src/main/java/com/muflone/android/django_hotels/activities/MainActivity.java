@@ -51,6 +51,44 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // Save active fragment name
+        if (this.fragment != null) {
+            outState.putString("fragment", this.fragment.getClass().getSimpleName());
+            super.onSaveInstanceState(outState);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // Restore previous active fragment
+        String fragmentName = savedInstanceState.getString("fragment");
+        if (fragmentName != null) {
+            switch (fragmentName) {
+                case "HomeFragment":
+                    this.fragment = new HomeFragment();
+                    break;
+                case "StructuresFragment":
+                    this.fragment = new StructuresFragment();
+                    break;
+                case "ExtrasFragment":
+                    this.fragment = new ExtrasFragment();
+                    break;
+                case "AboutFragment":
+                    this.fragment = new AboutFragment();
+                    break;
+                default:
+                    Toast.makeText(this, fragmentName, Toast.LENGTH_SHORT).show();
+
+            }
+            if (this.fragment != null) {
+                LoadFragment(this.fragment);
+            }
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         // Close drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
