@@ -72,6 +72,10 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "Key: " + this.preferences.getTabletKey());
         if (this.preferences.getTabletID().isEmpty() |
                 this.preferences.getTabletKey().isEmpty()) {
+            String message = this.preferences.getTabletID().isEmpty() ?
+                    getString(R.string.message_missing_tablet_id) :
+                    getString(R.string.message_missing_tablet_key);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             this.menuItemPreferences.setChecked(true);
             this.onNavigationItemSelected(this.menuItemPreferences);
         } else {
