@@ -6,12 +6,12 @@ import android.support.v7.preference.PreferenceManager;
 
 import com.muflone.android.django_hotels.R;
 
-public class PreferencesFragment extends PreferenceFragmentCompat {
+public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         PreferenceManager.setDefaultValues(getActivity(),
-                R.xml.preferences, false);
-        // Inflate the preferences menu for this fragment
-        addPreferencesFromResource(R.xml.preferences);
+                R.xml.settings, false);
+        // Inflate the settings menu for this fragment
+        addPreferencesFromResource(R.xml.settings);
     }
 }

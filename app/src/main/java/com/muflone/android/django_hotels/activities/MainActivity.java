@@ -15,7 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.muflone.android.django_hotels.Preferences;
+import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.fragments.AboutFragment;
 import com.muflone.android.django_hotels.fragments.ExtrasFragment;
@@ -26,17 +26,17 @@ import com.muflone.android.django_hotels.fragments.SyncFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
-    private static final int PREFERENCES_RETURN_CODE = 1;
-    Preferences preferences = null;
+    private static final int SETTINGS_RETURN_CODE = 1;
+    Settings settings = null;
     Fragment fragment = null;
     MenuItem menuItemHome = null;
-    MenuItem menuItemPreferences = null;
+    MenuItem menuItemSettings = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        // Add preferences_toolbar
+        // Add settings_toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Add Navigation Drawer
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
                 R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        // Find the preferences MenuItems
+        // Find the settings MenuItems
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
         Menu menu = navigationView.getMenu();
@@ -57,27 +57,21 @@ public class MainActivity extends AppCompatActivity
                     this.menuItemHome = menu.getItem(item);
                     break;
                 case R.id.menuitemSettings:
-                    this.menuItemPreferences = menu.getItem(item);
+                    this.menuItemSettings = menu.getItem(item);
                     break;
             }
         }
         // Load prerefences
-        this.preferences = new Preferences(this);
-        /*
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        this.tablet_id = sharedPreferences.getString(getString(R.string.preferences_tablet_id_id), "");
-        this.tablet_key = sharedPreferences.getString(getString(R.string.preferences_tablet_key_id), "");
-        */
-        Log.d(TAG, "ID: " + this.preferences.getTabletID());
-        Log.d(TAG, "Key: " + this.preferences.getTabletKey());
-        if (this.preferences.getTabletID().isEmpty() |
-                this.preferences.getTabletKey().isEmpty()) {
-            String message = this.preferences.getTabletID().isEmpty() ?
+        this.settings = new Settings(this);
+        Log.d(TAG, "ID: " + this.settings.getTabletID());
+        Log.d(TAG, "Key: " + this.settings.getTabletKey());
+        if (this.settings.getTabletID().isEmpty() |
+                this.settings.getTabletKey().isEmpty()) {
+            String message = this.settings.getTabletID().isEmpty() ?
                     getString(R.string.message_missing_tablet_id) :
                     getString(R.string.message_missing_tablet_key);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            this.onNavigationItemSelected(this.menuItemPreferences);
+            this.onNavigationItemSelected(this.menuItemSettings);
         } else {
             this.onNavigationItemSelected(this.menuItemHome);
         }
@@ -151,8 +145,8 @@ public class MainActivity extends AppCompatActivity
                 this.fragment = new ExtrasFragment();
                 break;
             case R.id.menuitemSettings:
-                Intent intent = new Intent(this, PreferencesActivity.class);
-                startActivityForResult(intent, PREFERENCES_RETURN_CODE);
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivityForResult(intent, SETTINGS_RETURN_CODE);
                 break;
             case R.id.menuitemAbout:
                 this.fragment = new AboutFragment();
@@ -179,7 +173,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Add preferences_toolbar icons
+        // Add settings_toolbar icons
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_toolbar, menu);
         return true;
@@ -203,8 +197,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Open HomeFragment after closing the preferences activity
-        if (requestCode == PREFERENCES_RETURN_CODE) {
+        // Open HomeFragment after closing the settings activity
+        if (requestCode == SETTINGS_RETURN_CODE) {
             this.onNavigationItemSelected(this.menuItemHome);
         }
         super.onActivityResult(requestCode, resultCode, data);
