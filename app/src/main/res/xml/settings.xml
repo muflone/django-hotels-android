@@ -26,6 +26,12 @@
             android:summary="@string/settings_timezone_summary"
             android:defaultValue="UTC"
             android:title="@string/settings_timezone_title" />
+        <EditTextPreference
+            android:key="@string/settings_api_url_id"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="@string/settings_api_url_summary"
+            android:title="@string/settings_api_url_title" />
     </PreferenceCategory>
 
 </PreferenceScreen>

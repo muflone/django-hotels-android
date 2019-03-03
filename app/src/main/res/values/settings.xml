@@ -12,4 +12,8 @@
     <string name="settings_timezone_id">timezone</string>
     <string name="settings_timezone_title">Timezone</string>
     <string name="settings_timezone_summary">Date and time zone</string>
+
+    <string name="settings_api_url_id">api_url</string>
+    <string name="settings_api_url_title">API URL</string>
+    <string name="settings_api_url_summary">This is the server URL to connect</string>
 </resources>

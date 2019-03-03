@@ -2,6 +2,7 @@ package com.muflone.android.django_hotels;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
@@ -25,5 +26,9 @@ public class Settings {
 
     public String getTimeZone() {
         return preferences.getString(this.context.getString(R.string.settings_timezone_id), "UTC");
+    }
+
+    public Uri getApiUri() {
+        return Uri.parse(preferences.getString(this.context.getString(R.string.settings_api_url_id), ""));
     }
 }
