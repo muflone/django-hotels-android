@@ -22,4 +22,8 @@ public class Settings {
     public String getTabletKey() {
         return preferences.getString(this.context.getString(R.string.settings_tablet_key_id), "");
     }
+
+    public String getTimeZone() {
+        return preferences.getString(this.context.getString(R.string.settings_timezone_id), "UTC");
+    }
 }

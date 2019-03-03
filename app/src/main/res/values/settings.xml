@@ -8,4 +8,8 @@
     <string name="settings_tablet_key_id">tablet_key</string>
     <string name="settings_tablet_key_title">Tablet Key</string>
     <string name="settings_tablet_key_summary">This is the key used to communicate with the server</string>
+
+    <string name="settings_timezone_id">timezone</string>
+    <string name="settings_timezone_title">Timezone</string>
+    <string name="settings_timezone_summary">Date and time zone</string>
 </resources>

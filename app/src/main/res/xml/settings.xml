@@ -19,7 +19,13 @@
             android:singleLine="true"
             android:summary="@string/settings_tablet_key_summary"
             android:title="@string/settings_tablet_key_title" />
+        <EditTextPreference
+            android:key="@string/settings_timezone_id"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="@string/settings_timezone_summary"
+            android:defaultValue="UTC"
+            android:title="@string/settings_timezone_title" />
     </PreferenceCategory>
-
 
 </PreferenceScreen>
