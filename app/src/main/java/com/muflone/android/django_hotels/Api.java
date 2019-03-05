@@ -70,9 +70,9 @@ public class Api {
 
     public boolean checkDates() {
         // Check if the system date/time matches with the remote date/time
-        JSONObject jsonObject = this.getJSONObject("dates/");
+        JSONObject jsonRoot = this.getJSONObject("dates/");
         long difference = -1;
-        if (jsonObject != null) {
+        if (jsonRoot != null) {
             try {
                 // Get current system date only
                 Calendar calendar = Calendar.getInstance();
@@ -83,7 +83,7 @@ public class Api {
                 calendar.set(Calendar.MILLISECOND, 0);
                 Date date1 = calendar.getTime();
                 // Get remote date
-                Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(jsonObject.getString("date"));
+                Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(jsonRoot.getString("date"));
                 difference = Math.abs(date1.getTime() - date2.getTime());
                 // If the dates match then compare the time
                 if (difference == 0) {
@@ -95,7 +95,7 @@ public class Api {
                     calendar.set(Calendar.YEAR, 1970);
                     date1 = calendar.getTime();
                     // Get remote time
-                    date2 = new SimpleDateFormat("hh:mm.ss").parse(jsonObject.getString("time"));
+                    date2 = new SimpleDateFormat("hh:mm.ss").parse(jsonRoot.getString("time"));
                     // Find the difference in thirty seconds
                     difference = Math.abs(date1.getTime() - date2.getTime()) / 1000 / 30;
                 }
