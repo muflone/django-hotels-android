@@ -1,4 +1,4 @@
-package com.muflone.android.django_hotels;
+package com.muflone.android.django_hotels.api;
 
 import android.content.Context;
 import android.net.Uri;
