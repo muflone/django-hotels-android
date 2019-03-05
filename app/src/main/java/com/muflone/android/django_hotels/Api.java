@@ -39,7 +39,7 @@ public class Api {
 
     public Uri buildJsonUri(String segment) {
         // Return the Uri for the requested JSON API segment
-        return Uri.withAppendedPath(this.buildUri("api/json/"), segment);
+        return Uri.withAppendedPath(this.buildUri("api/v1/"), segment);
     }
 
     protected JSONObject getJSONObject(String segment) {
