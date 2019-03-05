@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.google.android.apps.authenticator.Base32String;
+import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.otp.Token;
 
 import org.json.JSONException;
