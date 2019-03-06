@@ -3,4 +3,5 @@
     <string name="message_missing_tablet_id">Missing Tablet ID, please set it in the settings before the use</string>
     <string name="message_missing_tablet_key">Missing Tablet key, please set it in the settings before the use</string>
     <string name="message_unmatching_date_time">The date or the system time is not matching, please check system settings</string>
+    <string name="message_unable_to_download">Unable to download data from the server</string>
 </resources>
