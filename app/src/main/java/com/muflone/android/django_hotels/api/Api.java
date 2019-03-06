@@ -20,6 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.TimeZone;
 
 public class Api {
@@ -122,5 +123,30 @@ public class Api {
             e.printStackTrace();
         }
         return token != null ? token.generateCodes().getCurrentCode() : null;
+    }
+
+    public boolean getData() {
+        // Get data from the server
+        boolean status = false;
+        JSONObject jsonRoot = this.getJSONObject(String.format("get/%s/%s/",
+                this.settings.getTabletID(),
+                this.getCurrentTokenCode()));
+        if (jsonRoot != null) {
+            try {
+                JSONObject jsonStructures = jsonRoot.getJSONObject("structures");
+                // Loop over every structure
+                Iterator<?> jsonKeys = jsonStructures.keys();
+                while (jsonKeys.hasNext()) {
+                    String key = (String) jsonKeys.next();
+                    Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
+                    System.out.println(key);
+                }
+                // Check the final node for successfull reads
+                status = jsonRoot.getString("status").equals("OK");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return status;
     }
 }
