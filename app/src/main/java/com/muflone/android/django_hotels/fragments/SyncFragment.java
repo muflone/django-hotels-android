@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.R;
+import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 
 public class SyncFragment extends Fragment {
@@ -29,6 +30,8 @@ public class SyncFragment extends Fragment {
             }
         } catch (NoConnectionException e) {
             Toast.makeText(getActivity(), getString(R.string.message_no_server_connection), Toast.LENGTH_SHORT).show();
+        } catch (InvalidResponseException e) {
+            Toast.makeText(getActivity(), getString(R.string.message_invalid_server_response), Toast.LENGTH_SHORT).show();
         }
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.sync_fragment, container, false);

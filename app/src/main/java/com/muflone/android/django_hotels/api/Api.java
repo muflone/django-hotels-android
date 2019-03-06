@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import com.google.android.apps.authenticator.Base32String;
 import com.muflone.android.django_hotels.Settings;
+import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.otp.Token;
 
@@ -129,7 +130,17 @@ public class Api {
         return token != null ? token.generateCodes().getCurrentCode() : null;
     }
 
-    public boolean getData() {
+    public boolean checkStatusResponse(JSONObject jsonObject) throws InvalidResponseException {
+        // Check the status object for valid data
+        try {
+            return jsonObject.getString("status").equals("OK");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new InvalidResponseException();
+        }
+    }
+
+    public boolean getData() throws InvalidResponseException {
         // Get data from the server
         boolean status = false;
         JSONObject jsonRoot = this.getJSONObject(String.format("get/%s/%s/",
@@ -146,7 +157,7 @@ public class Api {
                     System.out.println(key);
                 }
                 // Check the final node for successfull reads
-                status = jsonRoot.getString("status").equals("OK");
+                status = this.checkStatusResponse(jsonRoot);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
