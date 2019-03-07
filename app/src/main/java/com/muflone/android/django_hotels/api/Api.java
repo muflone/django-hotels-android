@@ -11,6 +11,7 @@ import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadExeception;
 import com.muflone.android.django_hotels.api.models.Contract;
 import com.muflone.android.django_hotels.api.models.Structure;
+import com.muflone.android.django_hotels.api.results.GetDataResults;
 import com.muflone.android.django_hotels.otp.Token;
 
 import org.json.JSONArray;
@@ -150,8 +151,9 @@ public class Api {
         }
     }
 
-    public void getData() throws InvalidResponseException, NoDownloadExeception, ParseException {
+    public GetDataResults getData() throws InvalidResponseException, NoDownloadExeception, ParseException {
         // Get data from the server
+        GetDataResults results = new GetDataResults();
         boolean status = false;
         JSONObject jsonRoot = this.getJSONObject(String.format("get/%s/%s/",
                 this.settings.getTabletID(),
@@ -164,12 +166,14 @@ public class Api {
                 while (jsonKeys.hasNext()) {
                     String key = (String) jsonKeys.next();
                     Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
+                    results.structures.add(objStructure);
                     System.out.println(key);
                 }
                 // Loop over every contract
                 JSONArray jsonContracts = jsonRoot.getJSONArray("contracts");
                 for (int i = 0; i < jsonContracts.length(); i++) {
                     Contract objContract = new Contract(jsonContracts.getJSONObject(i));
+                    results.contracts.add(objContract);
                 }
                 // Check the final node for successfull reads
                 this.checkStatusResponse(jsonRoot);
@@ -180,6 +184,6 @@ public class Api {
             // Unable to download data from the server
             throw new NoDownloadExeception();
         }
-        return;
+        return results;
     }
 }

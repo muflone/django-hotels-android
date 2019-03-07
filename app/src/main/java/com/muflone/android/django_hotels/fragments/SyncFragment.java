@@ -14,6 +14,7 @@ import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadExeception;
+import com.muflone.android.django_hotels.api.results.GetDataResults;
 
 import java.text.ParseException;
 
@@ -24,12 +25,13 @@ public class SyncFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootLayout = getActivity().findViewById(R.id.drawer_layout);
         Api api = new Api(getActivity());
+        GetDataResults results;
         try {
             // Check system date and time
             api.checkDates();
             System.out.println(api.getCurrentTokenCode());
             // Download data from the server
-            api.getData();
+            results = api.getData();
             NotifyMessage.snackbar(rootLayout,
                     getString(R.string.message_established_connection),
                     Snackbar.LENGTH_INDEFINITE);
