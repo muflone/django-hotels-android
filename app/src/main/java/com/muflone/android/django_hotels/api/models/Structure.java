@@ -12,14 +12,14 @@ import java.util.List;
 public class Structure {
     private final Item2 structure;
     private final Company company;
-    private final Item2 brand;
+    private final Brand brand;
     private final Location location;
     private final List<Building> buildings;
 
     public Structure(JSONObject jsonObject) throws JSONException {
         structure = new Item2(jsonObject.getJSONObject("structure"));
         company = new Company(jsonObject.getJSONObject("company"));
-        brand = new Item2(jsonObject.getJSONObject("brand"));
+        brand = new Brand(jsonObject.getJSONObject("brand"));
         location = new Location(jsonObject.getJSONObject("location"));
 
         // Loop over every building
