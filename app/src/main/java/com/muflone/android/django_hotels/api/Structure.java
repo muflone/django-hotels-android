@@ -1,7 +1,5 @@
 package com.muflone.android.django_hotels.api;
 
-import android.os.Build;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
