@@ -8,6 +8,7 @@ import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
+import com.muflone.android.django_hotels.api.exceptions.NoDownloadExeception;
 import com.muflone.android.django_hotels.otp.Token;
 
 import org.json.JSONException;
@@ -146,7 +147,7 @@ public class Api {
         }
     }
 
-    public void getData() throws InvalidResponseException {
+    public void getData() throws InvalidResponseException, NoDownloadExeception {
         // Get data from the server
         boolean status = false;
         JSONObject jsonRoot = this.getJSONObject(String.format("get/%s/%s/",
@@ -167,6 +168,9 @@ public class Api {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        } else {
+            // Unable to download data from the server
+            throw new NoDownloadExeception();
         }
         return;
     }

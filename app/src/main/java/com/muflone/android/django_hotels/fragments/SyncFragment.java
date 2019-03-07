@@ -12,6 +12,7 @@ import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
+import com.muflone.android.django_hotels.api.exceptions.NoDownloadExeception;
 
 public class SyncFragment extends Fragment {
     @Override
@@ -31,6 +32,8 @@ public class SyncFragment extends Fragment {
             Toast.makeText(getActivity(), getString(R.string.message_unmatching_date_time), Toast.LENGTH_SHORT).show();
         } catch (InvalidResponseException e) {
             Toast.makeText(getActivity(), getString(R.string.message_invalid_server_response), Toast.LENGTH_SHORT).show();
+        } catch (NoDownloadExeception e) {
+            Toast.makeText(getActivity(), getString(R.string.message_unable_to_download), Toast.LENGTH_SHORT).show();
         }
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.sync_fragment, container, false);
