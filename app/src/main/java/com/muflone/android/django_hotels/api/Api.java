@@ -9,6 +9,8 @@ import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadExeception;
+import com.muflone.android.django_hotels.api.models.Contract;
+import com.muflone.android.django_hotels.api.models.Structure;
 import com.muflone.android.django_hotels.otp.Token;
 
 import org.json.JSONArray;
