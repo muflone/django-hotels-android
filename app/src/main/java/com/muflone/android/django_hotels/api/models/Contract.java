@@ -1,7 +1,7 @@
 package com.muflone.android.django_hotels.api.models;
 
-import com.muflone.android.django_hotels.api.Item2;
-import com.muflone.android.django_hotels.api.Item4;
+import com.muflone.android.django_hotels.api.generics.Item2;
+import com.muflone.android.django_hotels.api.generics.Item4;
 
 import org.json.JSONArray;
 import org.json.JSONException;
