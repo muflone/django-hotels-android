@@ -155,8 +155,8 @@ public class Api {
                 this.getCurrentTokenCode()));
         if (jsonRoot != null) {
             try {
-                JSONObject jsonStructures = jsonRoot.getJSONObject("structures");
                 // Loop over every structure
+                JSONObject jsonStructures = jsonRoot.getJSONObject("structures");
                 Iterator<?> jsonKeys = jsonStructures.keys();
                 while (jsonKeys.hasNext()) {
                     String key = (String) jsonKeys.next();
