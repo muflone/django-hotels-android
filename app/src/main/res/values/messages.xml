@@ -5,5 +5,5 @@
     <string name="message_invalid_date_time">Invalid date or time, please check system settings</string>
     <string name="message_no_server_connection">Unable to establish connection with the server</string>
     <string name="message_unable_to_download">Unable to download data from the server</string>
-    <string name="message_invalid_server_response">Incomplete reseponse from the server (the internet connection could be bad)</string>
+    <string name="message_invalid_server_response">Invalid response from the server, please check your internet connection</string>
 </resources>

@@ -24,9 +24,7 @@ public class SyncFragment extends Fragment {
             api.checkDates();
             System.out.println(api.getCurrentTokenCode());
             // Download data from the server
-            if (!api.getData()) {
-                Toast.makeText(getActivity(), getString(R.string.message_unable_to_download), Toast.LENGTH_SHORT).show();
-            }
+            api.getData();
         } catch (NoConnectionException e) {
             Toast.makeText(getActivity(), getString(R.string.message_no_server_connection), Toast.LENGTH_SHORT).show();
         } catch (InvalidDateTimeException e) {
