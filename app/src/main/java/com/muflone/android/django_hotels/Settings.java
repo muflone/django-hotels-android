@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
-import com.google.gson.Gson;
-
 public class Settings {
     private final SharedPreferences preferences;
     private Context context;
