@@ -1,12 +1,13 @@
 package com.muflone.android.django_hotels.fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.muflone.android.django_hotels.NotifyMessage;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
@@ -19,6 +20,7 @@ public class SyncFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
+        View rootLayout = getActivity().findViewById(R.id.drawer_layout);
         Api api = new Api(getActivity());
         try {
             // Check system date and time
@@ -27,13 +29,21 @@ public class SyncFragment extends Fragment {
             // Download data from the server
             api.getData();
         } catch (NoConnectionException e) {
-            Toast.makeText(getActivity(), getString(R.string.message_no_server_connection), Toast.LENGTH_SHORT).show();
+            NotifyMessage.snackbar(rootLayout,
+                    getString(R.string.message_no_server_connection),
+                    Snackbar.LENGTH_INDEFINITE);
         } catch (InvalidDateTimeException e) {
-            Toast.makeText(getActivity(), getString(R.string.message_unmatching_date_time), Toast.LENGTH_SHORT).show();
+            NotifyMessage.snackbar(rootLayout,
+                    getString(R.string.message_invalid_date_time),
+                    Snackbar.LENGTH_INDEFINITE);
         } catch (InvalidResponseException e) {
-            Toast.makeText(getActivity(), getString(R.string.message_invalid_server_response), Toast.LENGTH_SHORT).show();
+            NotifyMessage.snackbar(rootLayout,
+                    getString(R.string.message_invalid_server_response),
+                    Snackbar.LENGTH_INDEFINITE);
         } catch (NoDownloadExeception e) {
-            Toast.makeText(getActivity(), getString(R.string.message_unable_to_download), Toast.LENGTH_SHORT).show();
+            NotifyMessage.snackbar(rootLayout,
+                    getString(R.string.message_unable_to_download),
+                    Snackbar.LENGTH_INDEFINITE);
         }
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.sync_fragment, container, false);

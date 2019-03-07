@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#3D3D3D</color>
     <color name="colorToolbarText">#FFFFFF</color>
+    <color name="colorSnackbarTextColor1">#FFEB3B</color>
+    <color name="colorSnackbarTextColor2">#F44336</color>
 </resources>
