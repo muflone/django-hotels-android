@@ -11,6 +11,7 @@ import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadExeception;
 import com.muflone.android.django_hotels.otp.Token;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -147,7 +148,7 @@ public class Api {
         }
     }
 
-    public void getData() throws InvalidResponseException, NoDownloadExeception {
+    public void getData() throws InvalidResponseException, NoDownloadExeception, ParseException {
         // Get data from the server
         boolean status = false;
         JSONObject jsonRoot = this.getJSONObject(String.format("get/%s/%s/",
@@ -162,6 +163,11 @@ public class Api {
                     String key = (String) jsonKeys.next();
                     Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
                     System.out.println(key);
+                }
+                // Loop over every contract
+                JSONArray jsonContracts = jsonRoot.getJSONArray("contracts");
+                for (int i = 0; i < jsonContracts.length(); i++) {
+                    Contract objContract = new Contract(jsonContracts.getJSONObject(i));
                 }
                 // Check the final node for successfull reads
                 this.checkStatusResponse(jsonRoot);

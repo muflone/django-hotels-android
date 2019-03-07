@@ -15,6 +15,8 @@ import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadExeception;
 
+import java.text.ParseException;
+
 public class SyncFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -39,7 +41,7 @@ public class SyncFragment extends Fragment {
             NotifyMessage.snackbar(rootLayout,
                     getString(R.string.message_invalid_date_time),
                     Snackbar.LENGTH_INDEFINITE);
-        } catch (InvalidResponseException e) {
+        } catch (InvalidResponseException | ParseException e) {
             NotifyMessage.snackbar(rootLayout,
                     getString(R.string.message_invalid_server_response),
                     Snackbar.LENGTH_INDEFINITE);
