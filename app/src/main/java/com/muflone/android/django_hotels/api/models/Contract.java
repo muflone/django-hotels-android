@@ -21,7 +21,7 @@ public class Contract extends Item2 {
     public final Employee employee;
     public final Company company;
     public final ContractType type;
-    public final Item2 job;
+    public final JobType job;
     public final List<Integer> buildings;
 
     public Contract(JSONObject jsonObject) throws JSONException, ParseException {
@@ -35,7 +35,7 @@ public class Contract extends Item2 {
         this.employee = new Employee(jsonObject.getJSONObject("employee"));
         this.company = new Company(jsonObject.getJSONObject("company"));
         this.type = new ContractType(jsonObject.getJSONObject("type"));
-        this.job = new Item2(jsonObject.getJSONObject("job"));
+        this.job = new JobType(jsonObject.getJSONObject("job"));
         JSONArray jsonBuildings = jsonObject.getJSONArray("buildings");
         // Loop every building id
         this.buildings = new ArrayList<Integer>();
