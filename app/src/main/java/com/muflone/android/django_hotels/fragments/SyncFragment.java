@@ -28,6 +28,9 @@ public class SyncFragment extends Fragment {
             System.out.println(api.getCurrentTokenCode());
             // Download data from the server
             api.getData();
+            NotifyMessage.snackbar(rootLayout,
+                    getString(R.string.message_established_connection),
+                    Snackbar.LENGTH_INDEFINITE);
         } catch (NoConnectionException e) {
             NotifyMessage.snackbar(rootLayout,
                     getString(R.string.message_no_server_connection),
