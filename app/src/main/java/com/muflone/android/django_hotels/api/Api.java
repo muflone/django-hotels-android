@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import com.google.android.apps.authenticator.Base32String;
 import com.muflone.android.django_hotels.Settings;
+import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.otp.Token;
@@ -72,7 +73,7 @@ public class Api {
         return jsonObject;
     }
 
-    public boolean checkDates() throws NoConnectionException {
+    public void checkDates() throws NoConnectionException, InvalidDateTimeException {
         // Check if the system date/time matches with the remote date/time
         JSONObject jsonRoot = this.getJSONObject("dates/");
         long difference = -1;
@@ -112,7 +113,10 @@ public class Api {
             // Whether the result cannot be get raise exception
             throw new NoConnectionException();
         }
-        return (difference == 0);
+        if (difference != 0) {
+            throw new InvalidDateTimeException();
+        }
+        return;
     }
 
     public String getCurrentTokenCode() {
