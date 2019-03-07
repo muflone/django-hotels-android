@@ -18,7 +18,7 @@ public class Contract extends Item2 {
     public final Date endDate;
     public final boolean enabled;
     public final boolean active;
-    public final Item4 employee;
+    public final Employee employee;
     public final Item2 company;
     public final ContractType type;
     public final Item2 job;
@@ -32,8 +32,7 @@ public class Contract extends Item2 {
         this.endDate = parser.parse(jsonContract.getString("end"));
         this.enabled = jsonContract.getBoolean("enabled");
         this.active = jsonContract.getBoolean("active");
-        this.employee = new Item4(jsonObject.getJSONObject("employee"),
-                "id", "first_name", "last_name", "genre");
+        this.employee = new Employee(jsonObject.getJSONObject("employee"));
         this.company = new Item2(jsonObject.getJSONObject("company"));
         this.type = new ContractType(jsonObject.getJSONObject("type"));
         this.job = new Item2(jsonObject.getJSONObject("job"));
