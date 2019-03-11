@@ -1,4 +1,4 @@
-package com.muflone.android.django_hotels.api.results;
+package com.muflone.android.django_hotels.api;
 
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Structure;
