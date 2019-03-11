@@ -14,7 +14,7 @@ import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
-import com.muflone.android.django_hotels.api.exceptions.NoDownloadExeception;
+import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
 import com.muflone.android.django_hotels.api.GetDataResults;
 
 public class SyncFragment extends Fragment {
@@ -49,7 +49,7 @@ public class SyncFragment extends Fragment {
                     NotifyMessage.snackbar(rootLayout,
                             getString(R.string.message_invalid_server_response),
                             Snackbar.LENGTH_INDEFINITE);
-                } else if (exception instanceof NoDownloadExeception) {
+                } else if (exception instanceof NoDownloadException) {
                     NotifyMessage.snackbar(rootLayout,
                             getString(R.string.message_unable_to_download),
                             Snackbar.LENGTH_INDEFINITE);

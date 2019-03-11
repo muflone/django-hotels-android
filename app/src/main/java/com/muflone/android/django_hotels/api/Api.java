@@ -11,7 +11,7 @@ import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
-import com.muflone.android.django_hotels.api.exceptions.NoDownloadExeception;
+import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.otp.Token;
@@ -185,7 +185,7 @@ public class Api {
                 }
             } else {
                 // Unable to download data from the server
-                results.exception = new NoDownloadExeception();
+                results.exception = new NoDownloadException();
             }
         }
         return results;
