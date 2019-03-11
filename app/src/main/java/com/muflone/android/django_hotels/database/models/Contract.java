@@ -1,4 +1,4 @@
-package com.muflone.android.django_hotels.api.models;
+package com.muflone.android.django_hotels.database.models;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;

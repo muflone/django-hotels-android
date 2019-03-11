@@ -1,4 +1,4 @@
-package com.muflone.android.django_hotels.api.models;
+package com.muflone.android.django_hotels.database.models;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -7,16 +7,16 @@ import android.arch.persistence.room.PrimaryKey;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@Entity(tableName = "companies")
-public class Company {
+@Entity(tableName = "countries")
+public class Country {
     @PrimaryKey
-    public final int id;
+    public final String id;
 
     @ColumnInfo(name = "name")
     public final String name;
 
-    public Company(JSONObject jsonObject) throws JSONException {
-        this.id = jsonObject.getInt("id");
+    public Country(JSONObject jsonObject) throws JSONException {
+        this.id = jsonObject.getString("id");
         this.name = jsonObject.getString("name");
     }
 }
