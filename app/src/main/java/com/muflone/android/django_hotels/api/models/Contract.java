@@ -1,8 +1,5 @@
 package com.muflone.android.django_hotels.api.models;
 
-import com.muflone.android.django_hotels.api.generics.Item2;
-import com.muflone.android.django_hotels.api.generics.Item4;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,7 +10,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Contract extends Item2 {
+public class Contract {
+    public final int id;
+    public final String guid;
     public final Date startDate;
     public final Date endDate;
     public final boolean enabled;
@@ -25,8 +24,9 @@ public class Contract extends Item2 {
     public final List<Integer> buildings;
 
     public Contract(JSONObject jsonObject) throws JSONException, ParseException {
-        super(jsonObject.getJSONObject("contract"), "id", "guid");
         JSONObject jsonContract = jsonObject.getJSONObject("contract");
+        this.id = jsonContract.getInt("id");
+        this.guid = jsonContract.getString("guid");
         SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
         this.startDate = parser.parse(jsonContract.getString("start"));
         this.endDate = parser.parse(jsonContract.getString("end"));

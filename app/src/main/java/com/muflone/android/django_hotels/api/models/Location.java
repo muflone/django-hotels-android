@@ -1,19 +1,21 @@
 package com.muflone.android.django_hotels.api.models;
 
-import com.muflone.android.django_hotels.api.generics.Item2;
-import com.muflone.android.django_hotels.api.generics.Item2String;
-import com.muflone.android.django_hotels.api.generics.Item3;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Location extends Item3 {
-    public final Item2 region;
-    public final Item2String country;
+public class Location {
+    public final int id;
+    public final String name;
+    public final String address;
+
+    public final Region region;
+    public final Country country;
 
     public Location(JSONObject jsonObject) throws JSONException {
-        super(jsonObject, "id", "name", "address");
-        region = new Item2(jsonObject.getJSONObject("region"));
-        country = new Item2String(jsonObject.getJSONObject("country"));
+        this.id = jsonObject.getInt("id");
+        this.name = jsonObject.getString("name");
+        this.address = jsonObject.getString("address");
+        region = new Region(jsonObject.getJSONObject("region"));
+        country = new Country(jsonObject.getJSONObject("country"));
     }
 }
