@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 
 public class Settings {
     private final SharedPreferences preferences;
-    private Context context;
+    private final Context context;
 
     public Settings(Context context) {
         this.context = context;

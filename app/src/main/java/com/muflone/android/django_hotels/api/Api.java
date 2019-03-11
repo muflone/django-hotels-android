@@ -1,6 +1,5 @@
 package com.muflone.android.django_hotels.api;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -34,43 +33,41 @@ import java.util.Iterator;
 import java.util.TimeZone;
 
 public class Api {
-    private Context context;
-    private Settings settings = null;
-    private Uri apiUri;
+    private final Settings settings;
+    private final Uri apiUri;
 
     public Api(Context context) {
-        this.context = context;
         this.settings = new Settings(context);
         this.apiUri = this.settings.getApiUri();
     }
 
-    protected Uri buildUri(String segment) {
+    private Uri buildUri(String segment) {
         // Return the Uri for the requested segment
         return Uri.withAppendedPath(this.apiUri, segment);
     }
 
-    public Uri buildJsonUri(String segment) {
+    private Uri buildJsonUri(String segment) {
         // Return the Uri for the requested JSON API segment
         return Uri.withAppendedPath(this.buildUri("api/v1/"), segment);
     }
 
-    protected JSONObject getJSONObject(String segment) {
+    private JSONObject getJSONObject(String segment) {
         // Return a JSONObject from the remote URL
         JSONObject jsonObject = null;
         try {
             URL requestUrl = new URL(this.buildJsonUri(segment).toString());
             URLConnection connection = requestUrl.openConnection();
-            BufferedReader bufferedReader = bufferedReader = new BufferedReader(
+            BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()));
-            StringBuffer jsonStringBuffer = new StringBuffer();
-            // Save all the received text in jsonStringBuffer
+            StringBuilder jsonStringBuilder = new StringBuilder();
+            // Save all the received text in jsonStringBuilder
             String line;
             while ((line = bufferedReader.readLine()) != null)
             {
-                jsonStringBuffer.append(line);
+                jsonStringBuilder.append(line);
             }
             // Convert results to JSON
-            jsonObject = new JSONObject(jsonStringBuffer.toString());
+            jsonObject = new JSONObject(jsonStringBuilder.toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -86,7 +83,7 @@ public class Api {
         Token token = null;
         try {
             Uri uri = Uri.parse(String.format(
-                    "otpauth://totp/MilazzoInn:Tablet %s?secret=%s&issuer=Muflone",
+                    "otpauth://totp/Hotels:Tablet %s?secret=%s&issuer=Muflone",
                     this.settings.getTabletID(),
                     Base32String.encode(this.settings.getTabletKey().getBytes())));
             token = new Token(uri);
@@ -96,7 +93,7 @@ public class Api {
         return token != null ? token.generateCodes().getCurrentCode() : null;
     }
 
-    public void checkStatusResponse(JSONObject jsonObject) throws InvalidResponseException {
+    private void checkStatusResponse(JSONObject jsonObject) throws InvalidResponseException {
         // Check the status object for valid data
         try {
             if (!jsonObject.getString("status").equals("OK")) {
@@ -108,11 +105,10 @@ public class Api {
         }
     }
 
-    public GetDataResults getData(String tabletId, String tokenCode) {
+    private GetDataResults getData(String tabletId, String tokenCode) {
         GetDataResults results = new GetDataResults();
         // Check if the system date/time matches with the remote date/time
         JSONObject jsonRoot = this.getJSONObject("dates/");
-        long difference = -1;
         if (jsonRoot != null) {
             try {
                 // Get current system date only
@@ -125,7 +121,7 @@ public class Api {
                 Date date1 = calendar.getTime();
                 // Get remote date
                 Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(jsonRoot.getString("date"));
-                difference = Math.abs(date1.getTime() - date2.getTime());
+                long difference = Math.abs(date1.getTime() - date2.getTime());
                 // If the dates match then compare the time
                 if (difference == 0) {
                     // Get current system time only
@@ -171,10 +167,9 @@ public class Api {
                     // Loop over every contract
                     JSONArray jsonContracts = jsonRoot.getJSONArray("contracts");
                     for (int i = 0; i < jsonContracts.length(); i++) {
-                        Contract objContract = new Contract(jsonContracts.getJSONObject(i));
-                        results.contracts.add(objContract);
+                        results.contracts.add(new Contract(jsonContracts.getJSONObject(i)));
                     }
-                    // Check the final node for successfull reads
+                    // Check the final node for successful reads
                     this.checkStatusResponse(jsonRoot);
                 } catch (JSONException e) {
                     results.exception = new InvalidResponseException();
@@ -199,7 +194,7 @@ public class Api {
     /*
      * AsyncTask(Params, Progress, Result)
      */
-    private class AsyncTaskRunner extends AsyncTask<Void, Void, GetDataResults> {
+    private static class AsyncTaskRunner extends AsyncTask<Void, Void, GetDataResults> {
         private final Api api;
         private final AsyncTaskRunnerListener callback;
 
