@@ -12,7 +12,6 @@ import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadExeception;
-import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.otp.Token;
@@ -193,8 +192,7 @@ public class Api {
     }
 
     public void getData(AsyncTaskRunnerListener callback) {
-        AppDatabase database = Room.databaseBuilder(this.context, AppDatabase.class, "django_hotels").build();
-        AsyncTaskRunner task = new AsyncTaskRunner(database,this, callback);
+        AsyncTaskRunner task = new AsyncTaskRunner(this, callback);
         task.execute();
     }
 
@@ -202,12 +200,10 @@ public class Api {
      * AsyncTask(Params, Progress, Result)
      */
     private class AsyncTaskRunner extends AsyncTask<Void, Void, GetDataResults> {
-        private final AppDatabase database;
         private final Api api;
         private final AsyncTaskRunnerListener callback;
 
-        public AsyncTaskRunner(AppDatabase database, Api api, AsyncTaskRunnerListener callback) {
-            this.database = database;
+        AsyncTaskRunner(Api api, AsyncTaskRunnerListener callback) {
             this.api = api;
             this.callback = callback;
         }
