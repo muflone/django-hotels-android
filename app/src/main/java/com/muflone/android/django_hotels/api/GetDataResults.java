@@ -9,6 +9,7 @@ import java.util.List;
 public class GetDataResults {
     public final List<Structure> structures;
     public final List<Contract> contracts;
+    public Exception exception;
 
     public GetDataResults() {
         this.structures = new ArrayList<Structure>();

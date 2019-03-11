@@ -11,7 +11,6 @@ import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadExeception;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Structure;
-import com.muflone.android.django_hotels.api.results.GetDataResults;
 import com.muflone.android.django_hotels.otp.Token;
 
 import org.json.JSONArray;
@@ -151,13 +150,11 @@ public class Api {
         }
     }
 
-    public GetDataResults getData() throws InvalidResponseException, NoDownloadExeception, ParseException {
+    public GetDataResults getData(String tabletId, String tokenCode) {
         // Get data from the server
         GetDataResults results = new GetDataResults();
         boolean status = false;
-        JSONObject jsonRoot = this.getJSONObject(String.format("get/%s/%s/",
-                this.settings.getTabletID(),
-                this.getCurrentTokenCode()));
+        JSONObject jsonRoot = this.getJSONObject(String.format("get/%s/%s/", tabletId, tokenCode));
         if (jsonRoot != null) {
             try {
                 // Loop over every structure
@@ -178,11 +175,29 @@ public class Api {
                 // Check the final node for successfull reads
                 this.checkStatusResponse(jsonRoot);
             } catch (JSONException e) {
-                throw new InvalidResponseException();
+                results.exception = new InvalidResponseException();
+            } catch (InvalidResponseException e) {
+                results.exception = e;
+            } catch (ParseException e) {
+                results.exception = e;
             }
         } else {
             // Unable to download data from the server
+            results.exception = new NoDownloadExeception();
+        }
+        return results;
+    }
+
+    public GetDataResults getData()
+            throws InvalidResponseException, NoDownloadExeception, ParseException {
+        // Get data from the server
+        GetDataResults results = this.getData(this.settings.getTabletID(), this.getCurrentTokenCode());
+        if (results.exception instanceof NoDownloadExeception) {
             throw new NoDownloadExeception();
+        } else if (results.exception instanceof InvalidResponseException) {
+            throw new InvalidResponseException();
+        } else if (results.exception instanceof ParseException) {
+            throw new ParseException(results.exception.getMessage(), 0);
         }
         return results;
     }
