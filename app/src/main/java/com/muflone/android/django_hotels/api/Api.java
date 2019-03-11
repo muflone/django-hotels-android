@@ -1,14 +1,18 @@
 package com.muflone.android.django_hotels.api;
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 
 import com.google.android.apps.authenticator.Base32String;
+import com.muflone.android.django_hotels.AsyncTaskRunnerListener;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadExeception;
+import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.otp.Token;
@@ -78,7 +82,35 @@ public class Api {
         return jsonObject;
     }
 
-    public void checkDates() throws NoConnectionException, InvalidDateTimeException {
+    public String getCurrentTokenCode() {
+        // Return the current TokenCode
+        Token token = null;
+        try {
+            Uri uri = Uri.parse(String.format(
+                    "otpauth://totp/MilazzoInn:Tablet %s?secret=%s&issuer=Muflone",
+                    this.settings.getTabletID(),
+                    Base32String.encode(this.settings.getTabletKey().getBytes())));
+            token = new Token(uri);
+        } catch (Token.TokenUriInvalidException e) {
+            e.printStackTrace();
+        }
+        return token != null ? token.generateCodes().getCurrentCode() : null;
+    }
+
+    public void checkStatusResponse(JSONObject jsonObject) throws InvalidResponseException {
+        // Check the status object for valid data
+        try {
+            if (!jsonObject.getString("status").equals("OK")) {
+                throw new InvalidResponseException();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new InvalidResponseException();
+        }
+    }
+
+    public GetDataResults getData(String tabletId, String tokenCode) {
+        GetDataResults results = new GetDataResults();
         // Check if the system date/time matches with the remote date/time
         JSONObject jsonRoot = this.getJSONObject("dates/");
         long difference = -1;
@@ -109,96 +141,97 @@ public class Api {
                     // Find the difference in thirty seconds
                     difference = Math.abs(date1.getTime() - date2.getTime()) / 1000 / 30;
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
+                if (difference != 0) {
+                    // Invalid date or time
+                    results.exception = new InvalidDateTimeException();
+                }
+            } catch (ParseException exception) {
+                exception.printStackTrace();
+                results.exception = new InvalidResponseException();
+            } catch (JSONException exception) {
+                exception.printStackTrace();
+                results.exception = new InvalidResponseException();
             }
         } else {
             // Whether the result cannot be get raise exception
-            throw new NoConnectionException();
+            results.exception = new NoConnectionException();
         }
-        if (difference != 0) {
-            throw new InvalidDateTimeException();
-        }
-        return;
-    }
-
-    public String getCurrentTokenCode() {
-        // Return the current TokenCode
-        Token token = null;
-        try {
-            Uri uri = Uri.parse(String.format(
-                    "otpauth://totp/MilazzoInn:Tablet %s?secret=%s&issuer=Muflone",
-                    this.settings.getTabletID(),
-                    Base32String.encode(this.settings.getTabletKey().getBytes())));
-            token = new Token(uri);
-        } catch (Token.TokenUriInvalidException e) {
-            e.printStackTrace();
-        }
-        return token != null ? token.generateCodes().getCurrentCode() : null;
-    }
-
-    public void checkStatusResponse(JSONObject jsonObject) throws InvalidResponseException {
-        // Check the status object for valid data
-        try {
-            if (!jsonObject.getString("status").equals("OK")) {
-                throw new InvalidResponseException();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            throw new InvalidResponseException();
-        }
-    }
-
-    public GetDataResults getData(String tabletId, String tokenCode) {
-        // Get data from the server
-        GetDataResults results = new GetDataResults();
-        boolean status = false;
-        JSONObject jsonRoot = this.getJSONObject(String.format("get/%s/%s/", tabletId, tokenCode));
-        if (jsonRoot != null) {
-            try {
-                // Loop over every structure
-                JSONObject jsonStructures = jsonRoot.getJSONObject("structures");
-                Iterator<?> jsonKeys = jsonStructures.keys();
-                while (jsonKeys.hasNext()) {
-                    String key = (String) jsonKeys.next();
-                    Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
-                    results.structures.add(objStructure);
+        if (results.exception == null) {
+            // Get data from the server
+            jsonRoot = this.getJSONObject(String.format("get/%s/%s/", tabletId, tokenCode));
+            if (jsonRoot != null) {
+                try {
+                    // Loop over every structure
+                    JSONObject jsonStructures = jsonRoot.getJSONObject("structures");
+                    Iterator<?> jsonKeys = jsonStructures.keys();
+                    while (jsonKeys.hasNext()) {
+                        String key = (String) jsonKeys.next();
+                        Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
+                        results.structures.add(objStructure);
+                    }
+                    // Loop over every contract
+                    JSONArray jsonContracts = jsonRoot.getJSONArray("contracts");
+                    for (int i = 0; i < jsonContracts.length(); i++) {
+                        Contract objContract = new Contract(jsonContracts.getJSONObject(i));
+                        results.contracts.add(objContract);
+                    }
+                    // Check the final node for successfull reads
+                    this.checkStatusResponse(jsonRoot);
+                } catch (JSONException e) {
+                    results.exception = new InvalidResponseException();
+                } catch (ParseException e) {
+                    results.exception = new InvalidResponseException();
+                } catch (InvalidResponseException e) {
+                    results.exception = e;
                 }
-                // Loop over every contract
-                JSONArray jsonContracts = jsonRoot.getJSONArray("contracts");
-                for (int i = 0; i < jsonContracts.length(); i++) {
-                    Contract objContract = new Contract(jsonContracts.getJSONObject(i));
-                    results.contracts.add(objContract);
-                }
-                // Check the final node for successfull reads
-                this.checkStatusResponse(jsonRoot);
-            } catch (JSONException e) {
-                results.exception = new InvalidResponseException();
-            } catch (InvalidResponseException e) {
-                results.exception = e;
-            } catch (ParseException e) {
-                results.exception = e;
+            } else {
+                // Unable to download data from the server
+                results.exception = new NoDownloadExeception();
             }
-        } else {
-            // Unable to download data from the server
-            results.exception = new NoDownloadExeception();
         }
         return results;
     }
 
-    public GetDataResults getData()
-            throws InvalidResponseException, NoDownloadExeception, ParseException {
-        // Get data from the server
-        GetDataResults results = this.getData(this.settings.getTabletID(), this.getCurrentTokenCode());
-        if (results.exception instanceof NoDownloadExeception) {
-            throw new NoDownloadExeception();
-        } else if (results.exception instanceof InvalidResponseException) {
-            throw new InvalidResponseException();
-        } else if (results.exception instanceof ParseException) {
-            throw new ParseException(results.exception.getMessage(), 0);
+    public void getData(AsyncTaskRunnerListener callback) {
+        AppDatabase database = Room.databaseBuilder(this.context, AppDatabase.class, "django_hotels").build();
+        AsyncTaskRunner task = new AsyncTaskRunner(database,this, callback);
+        task.execute();
+    }
+
+    /*
+     * AsyncTask(Params, Progress, Result)
+     */
+    private class AsyncTaskRunner extends AsyncTask<Void, Void, GetDataResults> {
+        private final AppDatabase database;
+        private final Api api;
+        private final AsyncTaskRunnerListener callback;
+
+        public AsyncTaskRunner(AppDatabase database, Api api, AsyncTaskRunnerListener callback) {
+            this.database = database;
+            this.api = api;
+            this.callback = callback;
         }
-        return results;
+
+        @Override
+        protected GetDataResults doInBackground(Void... params) {
+            // Do the background job
+            return this.api.getData(this.api.settings.getTabletID(),
+                    this.api.getCurrentTokenCode());
+        }
+
+        @Override
+        protected void onPostExecute(GetDataResults results) {
+            super.onPostExecute(results);
+            // Check if callback listener was requested
+            if (this.callback != null) {
+                if (results.exception == null) {
+                    // Success
+                    this.callback.onSuccess(results);
+                } else {
+                    // Failure with exception
+                    this.callback.onFailure(results.exception);
+                }
+            }
+        }
     }
 }
