@@ -1,5 +1,10 @@
 package com.muflone.android.django_hotels.api.models;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,13 +15,27 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Entity(tableName = "contracts",
+        indices = {@Index(value = {"first_name", "last_name"}, unique = true)})
 public class Contract {
+    @PrimaryKey
     public final int id;
+
+    @ColumnInfo(name = "guid")
     public final String guid;
+
+    @ColumnInfo(name = "start")
     public final Date startDate;
+
+    @ColumnInfo(name = "end")
     public final Date endDate;
+
+    @ColumnInfo(name = "enabled")
     public final boolean enabled;
+
+    @ColumnInfo(name = "active")
     public final boolean active;
+
     public final Employee employee;
     public final Company company;
     public final ContractType type;
