@@ -2,7 +2,7 @@ package com.muflone.android.django_hotels.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         Fragment fragment = null;
         // Activate MenuItem

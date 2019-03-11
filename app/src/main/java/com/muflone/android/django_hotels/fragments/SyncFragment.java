@@ -1,6 +1,8 @@
 package com.muflone.android.django_hotels.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,9 +21,9 @@ import com.muflone.android.django_hotels.api.GetDataResults;
 
 public class SyncFragment extends Fragment {
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         final View rootLayout = getActivity().findViewById(R.id.drawer_layout);
         Api api = new Api(getActivity());
         GetDataResults results;
