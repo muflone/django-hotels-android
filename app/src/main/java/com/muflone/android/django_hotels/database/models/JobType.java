@@ -15,8 +15,13 @@ public class JobType {
     @ColumnInfo(name = "name")
     public final String name;
 
+    public JobType(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public JobType(JSONObject jsonObject) throws JSONException {
-        this.id = jsonObject.getInt("id");
-        this.name = jsonObject.getString("name");
+        this(jsonObject.getInt("id"),
+                jsonObject.getString("name"));
     }
 }

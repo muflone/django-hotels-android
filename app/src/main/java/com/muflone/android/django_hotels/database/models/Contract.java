@@ -42,22 +42,37 @@ public class Contract {
     public final JobType job;
     public final List<Integer> buildings;
 
+    public Contract(int id, String guid, Date startDate, Date endDate,
+                    boolean enabled, boolean active,
+                    Employee employee, Company company, ContractType type, JobType job,
+                    List<Integer> buildings) {
+        this.id = id;
+        this.guid = guid;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.enabled = enabled;
+        this.active = active;
+        this.employee = employee;
+        this.company = company;
+        this.type = type;
+        this.job = job;
+        this.buildings = buildings;
+    }
+
     public Contract(JSONObject jsonObject) throws JSONException, ParseException {
-        JSONObject jsonContract = jsonObject.getJSONObject("contract");
-        this.id = jsonContract.getInt("id");
-        this.guid = jsonContract.getString("guid");
-        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
-        this.startDate = parser.parse(jsonContract.getString("start"));
-        this.endDate = parser.parse(jsonContract.getString("end"));
-        this.enabled = jsonContract.getBoolean("enabled");
-        this.active = jsonContract.getBoolean("active");
-        this.employee = new Employee(jsonObject.getJSONObject("employee"));
-        this.company = new Company(jsonObject.getJSONObject("company"));
-        this.type = new ContractType(jsonObject.getJSONObject("type"));
-        this.job = new JobType(jsonObject.getJSONObject("job"));
-        JSONArray jsonBuildings = jsonObject.getJSONArray("buildings");
+        this(jsonObject.getJSONObject("contract").getInt("id"),
+                jsonObject.getJSONObject("contract").getString("guid"),
+                new SimpleDateFormat("yyyy-MM-dd").parse(jsonObject.getJSONObject("contract").getString("start")),
+                new SimpleDateFormat("yyyy-MM-dd").parse(jsonObject.getJSONObject("contract").getString("end")),
+                jsonObject.getJSONObject("contract").getBoolean("enabled"),
+                jsonObject.getJSONObject("contract").getBoolean("active"),
+                new Employee(jsonObject.getJSONObject("employee")),
+                new Company(jsonObject.getJSONObject("company")),
+                new ContractType(jsonObject.getJSONObject("type")),
+                new JobType(jsonObject.getJSONObject("job")),
+                new ArrayList<Integer>());
         // Loop every building id
-        this.buildings = new ArrayList<Integer>();
+        JSONArray jsonBuildings = jsonObject.getJSONArray("buildings");
         for (int i = 0; i < jsonBuildings.length(); i++) {
             this.buildings.add(jsonBuildings.getInt(i));
         }

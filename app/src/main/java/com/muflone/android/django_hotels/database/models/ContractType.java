@@ -21,10 +21,17 @@ public class ContractType {
     @ColumnInfo(name = "weekly")
     public final int weeklyHours;
 
+    public ContractType(int id, String name, int dailyHours, int weeklyHours) {
+        this.id = id;
+        this.name = name;
+        this.dailyHours = dailyHours;
+        this.weeklyHours = weeklyHours;
+    }
+
     public ContractType(JSONObject jsonObject) throws JSONException {
-        this.id = jsonObject.getInt("id");
-        this.name = jsonObject.getString("name");
-        this.dailyHours = jsonObject.getInt("daily");
-        this.weeklyHours = jsonObject.getInt("weekly");
+        this(jsonObject.getInt("id"),
+                jsonObject.getString("name"),
+                jsonObject.getInt("daily"),
+                jsonObject.getInt("weekly"));
     }
 }

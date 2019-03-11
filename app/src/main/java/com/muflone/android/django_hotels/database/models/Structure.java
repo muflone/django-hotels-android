@@ -48,19 +48,28 @@ public class Structure {
 
     private final List<Building> buildings;
 
-    public Structure(JSONObject jsonObject) throws JSONException {
-        this.id = jsonObject.getJSONObject("structure").getInt("id");
-        this.name = jsonObject.getJSONObject("structure").getString("name");
-        this.company = new Company(jsonObject.getJSONObject("company"));
-        this.companyId = this.company.id;
-        this.brand = new Brand(jsonObject.getJSONObject("brand"));
-        this.brandId = this.brand.id;
-        this.location = new Location(jsonObject.getJSONObject("location"));
-        this.locationId = this.location.id;
+    public Structure(int id, String name, Company company, Brand brand, Location location,
+                     List<Building> buildings) {
+        this.id = id;
+        this.name = name;
+        this.companyId = company.id;
+        this.company = company;
+        this.brandId = brand.id;
+        this.brand = brand;
+        this.locationId = location.id;
+        this.location = location;
+        this.buildings = buildings;
+    }
 
+    public Structure(JSONObject jsonObject) throws JSONException {
+        this(jsonObject.getJSONObject("structure").getInt("id"),
+                jsonObject.getJSONObject("structure").getString("name"),
+                new Company(jsonObject.getJSONObject("company")),
+                new Brand(jsonObject.getJSONObject("brand")),
+                new Location(jsonObject.getJSONObject("location")),
+                new ArrayList<Building>());
         // Loop over every building
         JSONArray jsonBuildings = jsonObject.getJSONArray("buildings");
-        this.buildings = new ArrayList<Building>();
         for (int i = 0; i < jsonBuildings.length(); i++) {
             Building building = new Building(jsonBuildings.getJSONObject(i));
             this.buildings.add(building);

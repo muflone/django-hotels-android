@@ -15,8 +15,13 @@ public class Brand {
     @ColumnInfo(name = "name")
     public final String name;
 
+    public Brand(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Brand(JSONObject jsonObject) throws JSONException {
-        this.id = jsonObject.getInt("id");
-        this.name = jsonObject.getString("name");
+        this(jsonObject.getInt("id"),
+                jsonObject.getString("name"));
     }
 }

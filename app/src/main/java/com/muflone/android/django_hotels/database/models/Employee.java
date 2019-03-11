@@ -13,18 +13,25 @@ public class Employee {
     public final int id;
 
     @ColumnInfo(name = "first_name")
-    public final String first_name;
+    public final String firstName;
 
     @ColumnInfo(name = "last_name")
-    public final String last_name;
+    public final String lastName;
 
     @ColumnInfo(name = "genre")
     public final String genre;
 
+    public Employee(int id, String firstName, String lastName, String genre) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.genre = genre;
+    }
+
     public Employee(JSONObject jsonObject) throws JSONException {
-        this.id = jsonObject.getInt("id");
-        this.first_name = jsonObject.getString("first_name");
-        this.last_name = jsonObject.getString("last_name");
-        this.genre = jsonObject.getString("genre");
+        this(jsonObject.getInt("id"),
+                jsonObject.getString("first_name"),
+                jsonObject.getString("last_name"),
+                jsonObject.getString("genre"));
     }
 }

@@ -22,13 +22,20 @@ public class Building {
     public final Location location;
     public final List<Room> rooms;
 
+    public Building(int id, String name, Location location, List<Room> rooms) {
+        this.id = id;
+        this.name = name;
+        this.location = location;
+        this.rooms = rooms;
+    }
+
     public Building(JSONObject jsonObject) throws JSONException {
-        this.id = jsonObject.getJSONObject("building").getInt("id");
-        this.name = jsonObject.getJSONObject("building").getString("name");
-        this.location = new Location(jsonObject.getJSONObject("location"));
-        JSONArray jsonRooms = jsonObject.getJSONArray("rooms");
+        this(jsonObject.getJSONObject("building").getInt("id"),
+                jsonObject.getJSONObject("building").getString("name"),
+                new Location(jsonObject.getJSONObject("location")),
+                new ArrayList<Room>());
         // Loop over every room
-        this.rooms = new ArrayList<Room>();
+        JSONArray jsonRooms = jsonObject.getJSONArray("rooms");
         for (int i = 0; i < jsonRooms.length(); i++) {
             Room room = new Room(jsonRooms.getJSONObject(i));
             this.rooms.add(room);

@@ -25,11 +25,19 @@ public class Location {
     @Embedded
     public final Country country;
 
+    public Location(int id, String name, String address, Region region, Country county) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.region = region;
+        this.country = county;
+    }
+
     public Location(JSONObject jsonObject) throws JSONException {
-        this.id = jsonObject.getInt("id");
-        this.name = jsonObject.getString("name");
-        this.address = jsonObject.getString("address");
-        region = new Region(jsonObject.getJSONObject("region"));
-        country = new Country(jsonObject.getJSONObject("country"));
+        this(jsonObject.getInt("id"),
+                jsonObject.getString("name"),
+                jsonObject.getString("address"),
+                new Region(jsonObject.getJSONObject("region")),
+                new Country(jsonObject.getJSONObject("country")));
     }
 }

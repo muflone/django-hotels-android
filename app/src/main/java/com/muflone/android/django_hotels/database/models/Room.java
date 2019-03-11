@@ -16,15 +16,22 @@ public class Room {
     public final String name;
 
     @ColumnInfo(name = "room_type")
-    public final String roomType;
+    public final String type;
 
     @ColumnInfo(name = "bed_type")
     public final String bedType;
 
+    public Room(int id, String name, String type, String bedType) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.bedType = bedType;
+    }
+
     public Room(JSONObject jsonObject) throws JSONException {
-        this.id = jsonObject.getJSONObject("room").getInt("id");
-        this.name = jsonObject.getJSONObject("room").getString("name");
-        this.roomType = jsonObject.getString("room_type");
-        this.bedType = jsonObject.getString("bed_type");
+        this(jsonObject.getJSONObject("room").getInt("id"),
+                jsonObject.getJSONObject("room").getString("name"),
+                jsonObject.getString("room_type"),
+                jsonObject.getString("bed_type"));
     }
 }

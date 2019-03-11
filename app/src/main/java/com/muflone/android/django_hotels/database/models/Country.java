@@ -15,8 +15,13 @@ public class Country {
     @ColumnInfo(name = "name")
     public final String name;
 
+    public Country(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Country(JSONObject jsonObject) throws JSONException {
-        this.id = jsonObject.getString("id");
-        this.name = jsonObject.getString("name");
+        this(jsonObject.getString("id"),
+                jsonObject.getString("name"));
     }
 }
