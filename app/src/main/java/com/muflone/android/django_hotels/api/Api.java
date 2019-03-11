@@ -178,7 +178,7 @@ public class Api {
                 // Check the final node for successfull reads
                 this.checkStatusResponse(jsonRoot);
             } catch (JSONException e) {
-                e.printStackTrace();
+                throw new InvalidResponseException();
             }
         } else {
             // Unable to download data from the server
