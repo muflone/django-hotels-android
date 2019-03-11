@@ -57,7 +57,8 @@ public class Api {
         try {
             URL requestUrl = new URL(this.buildJsonUri(segment).toString());
             URLConnection connection = requestUrl.openConnection();
-            BufferedReader bufferedReader = bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            BufferedReader bufferedReader = bufferedReader = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
             StringBuffer jsonStringBuffer = new StringBuffer();
             // Save all the received text in jsonStringBuffer
             String line;
@@ -164,7 +165,6 @@ public class Api {
                     String key = (String) jsonKeys.next();
                     Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
                     results.structures.add(objStructure);
-                    System.out.println(key);
                 }
                 // Loop over every contract
                 JSONArray jsonContracts = jsonRoot.getJSONArray("contracts");

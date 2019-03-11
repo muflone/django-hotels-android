@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             this.onNavigationItemSelected(this.menuItemHome);
         }
-
     }
 
     @Override

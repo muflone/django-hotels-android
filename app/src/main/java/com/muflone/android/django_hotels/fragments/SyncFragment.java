@@ -23,7 +23,7 @@ public class SyncFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootLayout = getActivity().findViewById(R.id.drawer_layout);
+        final View rootLayout = getActivity().findViewById(R.id.drawer_layout);
         Api api = new Api(getActivity());
         GetDataResults results;
         try {
