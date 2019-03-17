@@ -2,12 +2,23 @@ package com.muflone.android.django_hotels.database.models;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@Entity(tableName = "rooms")
+@Entity(tableName = "rooms",
+        indices = {
+            @Index(value = {"building_id"}, unique = false)
+        },
+        foreignKeys = {
+            @ForeignKey(entity = Building.class,
+                        parentColumns = "id",
+                        childColumns = "building_id",
+                        onDelete = ForeignKey.RESTRICT)
+        })
 public class Room {
     @PrimaryKey
     public final long id;

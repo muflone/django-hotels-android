@@ -15,13 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "buildings",
-        foreignKeys = {
-                @ForeignKey(entity = Location.class,
-                            parentColumns = "id",
-                            childColumns = "location_id",
-                            onDelete = ForeignKey.NO_ACTION)},
         indices = {
-                @Index(value = "location_id")
+            @Index(value = "location_id", unique = false)
+        },
+        foreignKeys = {
+            @ForeignKey(entity = Location.class,
+                        parentColumns = "id",
+                        childColumns = "location_id",
+                        onDelete = ForeignKey.RESTRICT)
         })
 public class Building {
     @PrimaryKey

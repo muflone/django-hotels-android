@@ -4,6 +4,7 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 import org.json.JSONArray;
@@ -14,19 +15,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "structures",
+        indices = {
+            @Index("company_id"),
+            @Index("brand_id"),
+            @Index("location_id")
+        },
         foreignKeys = {
             @ForeignKey(entity = Company.class,
-                    parentColumns = "id",
-                    childColumns = "company_id",
-                    onDelete = ForeignKey.RESTRICT),
+                        parentColumns = "id",
+                        childColumns = "company_id",
+                        onDelete = ForeignKey.RESTRICT),
             @ForeignKey(entity = Brand.class,
-                    parentColumns = "id",
-                    childColumns = "brand_id",
-                    onDelete = ForeignKey.RESTRICT),
+                        parentColumns = "id",
+                        childColumns = "brand_id",
+                        onDelete = ForeignKey.RESTRICT),
             @ForeignKey(entity = Location.class,
-                    parentColumns = "id",
-                    childColumns = "location_id",
-                    onDelete = ForeignKey.RESTRICT)
+                        parentColumns = "id",
+                        childColumns = "location_id",
+                        onDelete = ForeignKey.RESTRICT)
         })
 public class Structure {
     @PrimaryKey

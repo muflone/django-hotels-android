@@ -2,6 +2,7 @@ package com.muflone.android.django_hotels.database.models;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
@@ -17,7 +18,31 @@ import java.util.Date;
 import java.util.List;
 
 @Entity(tableName = "contracts",
-        indices = {@Index(value = {"guid"}, unique = true)})
+        indices = {
+            @Index(value = {"guid"}, unique = true),
+            @Index(value = {"employee_id"}, unique = false),
+            @Index(value = {"company_id"}, unique = false),
+            @Index(value = {"contract_type_id"}, unique = false),
+            @Index(value = {"job_type_id"}, unique = false)
+        },
+        foreignKeys = {
+            @ForeignKey(entity = Employee.class,
+                        parentColumns = "id",
+                        childColumns = "employee_id",
+                        onDelete = ForeignKey.RESTRICT),
+            @ForeignKey(entity = Company.class,
+                        parentColumns = "id",
+                        childColumns = "company_id",
+                        onDelete = ForeignKey.RESTRICT),
+            @ForeignKey(entity = ContractType.class,
+                        parentColumns = "id",
+                        childColumns = "contract_type_id",
+                        onDelete = ForeignKey.RESTRICT),
+            @ForeignKey(entity = JobType.class,
+                        parentColumns = "id",
+                        childColumns = "job_type_id",
+                        onDelete = ForeignKey.RESTRICT)
+        })
 public class Contract {
     @PrimaryKey
     public final long id;
@@ -58,7 +83,7 @@ public class Contract {
     @Ignore
     public JobType jobType;
 
-    @ColumnInfo(name = "jobtype_id")
+    @ColumnInfo(name = "job_type_id")
     public final long jobTypeId;
 
     @Ignore

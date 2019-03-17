@@ -1,15 +1,30 @@
 package com.muflone.android.django_hotels.database.models;
 
 import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@Entity(tableName = "locations")
+@Entity(tableName = "locations",
+        indices = {
+            @Index(value = {"region_id"}, unique = false),
+            @Index(value = {"country_id"}, unique = false)
+        },
+        foreignKeys = {
+            @ForeignKey(entity = Region.class,
+                        parentColumns = "id",
+                        childColumns = "region_id",
+                        onDelete = ForeignKey.RESTRICT),
+            @ForeignKey(entity = Country.class,
+                        parentColumns = "id",
+                        childColumns = "country_id",
+                        onDelete = ForeignKey.RESTRICT)
+        })
 public class Location {
     @PrimaryKey
     public final long id;

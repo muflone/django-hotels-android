@@ -264,31 +264,31 @@ public class Api {
             StructureDao structureDao = database.structureDao();
 
             // Delete previous data
-            structureDao.truncate();
+            roomDao.truncate();
             buildingDao.truncate();
-            companyDao.truncate();
+            contractDao.truncate();
             contractTypeDao.truncate();
             jobTypeDao.truncate();
-            countryDao.truncate();
+            structureDao.truncate();
             locationDao.truncate();
             regionDao.truncate();
+            countryDao.truncate();
+            companyDao.truncate();
             brandDao.truncate();
-            roomDao.truncate();
-            contractDao.truncate();
 
             // Save data from structures
             for (Structure structure : results.structures) {
                 brandDao.insert(structure.brand);
                 companyDao.insert(structure.company);
-                locationDao.insert(structure.location);
-                regionDao.insert(structure.location.region);
                 countryDao.insert(structure.location.country);
+                regionDao.insert(structure.location.region);
+                locationDao.insert(structure.location);
                 structureDao.insert(structure);
                 // Save buildings
                 for (Building building : structure.buildings) {
-                    locationDao.insert(building.location);
-                    regionDao.insert(building.location.region);
                     countryDao.insert(building.location.country);
+                    regionDao.insert(building.location.region);
+                    locationDao.insert(building.location);
                     buildingDao.insert(building);
                     // Save rooms
                     for (Room room : building.rooms) {
