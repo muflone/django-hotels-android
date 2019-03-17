@@ -206,18 +206,17 @@ public class Api {
     }
 
     public void getData(AsyncTaskRunnerListener callback) {
-        AsyncTaskRunner task = new AsyncTaskRunner(this, callback);
+        AsyncTaskDownload task = new AsyncTaskDownload(this, callback);
         task.execute();
     }
-
     /*
      * AsyncTask(Params, Progress, Result)
      */
-    private static class AsyncTaskRunner extends AsyncTask<Void, Void, GetDataResults> {
+    private static class AsyncTaskDownload extends AsyncTask<Void, Void, GetDataResults> {
         private final Api api;
         private final AsyncTaskRunnerListener callback;
 
-        AsyncTaskRunner(Api api, AsyncTaskRunnerListener callback) {
+        AsyncTaskDownload(Api api, AsyncTaskRunnerListener callback) {
             this.api = api;
             this.callback = callback;
         }
