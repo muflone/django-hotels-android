@@ -91,7 +91,7 @@ public class Structure {
         // Loop over every building
         JSONArray jsonBuildings = jsonObject.getJSONArray("buildings");
         for (int i = 0; i < jsonBuildings.length(); i++) {
-            Building building = new Building(jsonBuildings.getJSONObject(i));
+            Building building = new Building(jsonBuildings.getJSONObject(i), this);
             this.buildings.add(building);
         }
     }

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b3ba25719779d9aaed2dc55dd175d184",
+    "identityHash": "b10c2e371e9fffcedb46da3200d1dbbd",
     "entities": [
       {
         "tableName": "brands",
@@ -32,7 +32,7 @@
       },
       {
         "tableName": "buildings",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `location_id` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`location_id`) REFERENCES `locations`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `structure_id` INTEGER NOT NULL, `location_id` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`structure_id`) REFERENCES `structures`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`location_id`) REFERENCES `locations`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -45,6 +45,12 @@
             "columnName": "name",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "structureId",
+            "columnName": "structure_id",
+            "affinity": "INTEGER",
+            "notNull": true
           },
           {
             "fieldPath": "locationId",
@@ -61,6 +67,14 @@
         },
         "indices": [
           {
+            "name": "index_buildings_structure_id",
+            "unique": false,
+            "columnNames": [
+              "structure_id"
+            ],
+            "createSql": "CREATE  INDEX `index_buildings_structure_id` ON `${TABLE_NAME}` (`structure_id`)"
+          },
+          {
             "name": "index_buildings_location_id",
             "unique": false,
             "columnNames": [
@@ -70,6 +84,17 @@
           }
         ],
         "foreignKeys": [
+          {
+            "table": "structures",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "structure_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
           {
             "table": "locations",
             "onDelete": "RESTRICT",
@@ -745,7 +770,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b3ba25719779d9aaed2dc55dd175d184\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b10c2e371e9fffcedb46da3200d1dbbd\")"
     ]
   }
 }

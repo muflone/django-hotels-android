@@ -16,9 +16,14 @@ import java.util.List;
 
 @Entity(tableName = "buildings",
         indices = {
+            @Index(value = "structure_id", unique = false),
             @Index(value = "location_id", unique = false)
         },
         foreignKeys = {
+            @ForeignKey(entity = Structure.class,
+                        parentColumns = "id",
+                        childColumns = "structure_id",
+                        onDelete = ForeignKey.RESTRICT),
             @ForeignKey(entity = Location.class,
                         parentColumns = "id",
                         childColumns = "location_id",
@@ -31,6 +36,9 @@ public class Building {
     @ColumnInfo(name = "name")
     public final String name;
 
+    @ColumnInfo(name = "structure_id")
+    public long structureId;
+
     @Ignore
     public Location location = null;
 
@@ -40,23 +48,25 @@ public class Building {
     @Ignore
     public List<Room> rooms = null;
 
-    public Building(long id, String name, long locationId) {
+    public Building(long id, String name, long structureId, long locationId) {
         this.id = id;
         this.name = name;
+        this.structureId = structureId;
         this.locationId = locationId;
     }
 
     @Ignore
-    public Building(long id, String name, Location location, List<Room> rooms) {
-        this(id, name, location.id);
+    public Building(long id, String name, Structure structure, Location location, List<Room> rooms) {
+        this(id, name, structure.id, location.id);
         this.location = location;
         this.rooms = rooms;
     }
 
     @Ignore
-    public Building(JSONObject jsonObject) throws JSONException {
+    public Building(JSONObject jsonObject, Structure structure) throws JSONException {
         this(jsonObject.getJSONObject("building").getLong("id"),
                 jsonObject.getJSONObject("building").getString("name"),
+                structure,
                 new Location(jsonObject.getJSONObject("location")),
                 new ArrayList<Room>());
         // Loop over every room
