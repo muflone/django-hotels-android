@@ -218,7 +218,7 @@ public class Api {
             // Check if callback listener was requested
             if (this.callback != null) {
                 if (results.exception == null) {
-                    // Success
+                    // Return flow to the caller
                     this.callback.onSuccess(results);
                 } else {
                     // Failure with exception
