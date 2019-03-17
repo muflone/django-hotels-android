@@ -1,5 +1,6 @@
 package com.muflone.android.django_hotels.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +19,8 @@ import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
 import com.muflone.android.django_hotels.api.GetDataResults;
+import com.muflone.android.django_hotels.database.AppDatabase;
+import com.muflone.android.django_hotels.database.models.Structure;
 
 public class SyncFragment extends Fragment {
     @Override
@@ -31,9 +34,15 @@ public class SyncFragment extends Fragment {
         api.getData(new AsyncTaskRunnerListener<GetDataResults>() {
             @Override
             public void onSuccess(GetDataResults results) {
-                NotifyMessage.snackbar(rootLayout,
-                        getString(R.string.message_established_connection),
-                        Snackbar.LENGTH_INDEFINITE);
+                if (getActivity() != null) {
+                    /*
+                     * During screen orientation changes the fragment could be called without any
+                     * attached activity, therefore we check here for missing context
+                     */
+                    NotifyMessage.snackbar(rootLayout,
+                            getString(R.string.message_established_connection),
+                            Snackbar.LENGTH_INDEFINITE);
+                }
                 AppDatabase.destroyInstance();
             }
 
