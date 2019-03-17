@@ -10,18 +10,18 @@ import org.json.JSONObject;
 @Entity(tableName = "companies")
 public class Company {
     @PrimaryKey
-    public final int id;
+    public final long id;
 
     @ColumnInfo(name = "name")
     public final String name;
 
-    public Company(int id, String name) {
+    public Company(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
     public Company(JSONObject jsonObject) throws JSONException {
-        this(jsonObject.getInt("id"),
+        this(jsonObject.getLong("id"),
                 jsonObject.getString("name"));
     }
 }

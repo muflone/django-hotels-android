@@ -3,6 +3,7 @@ package com.muflone.android.django_hotels.database.models;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import org.json.JSONArray;
@@ -26,43 +27,56 @@ import java.util.List;
                     parentColumns = "id",
                     childColumns = "location_id",
                     onDelete = ForeignKey.RESTRICT)
-            })
+        })
 public class Structure {
     @PrimaryKey
-    public final int id;
+    public final long id;
 
     @ColumnInfo(name = "name")
     public final String name;
 
+    @Ignore
+    public Company company;
+
     @ColumnInfo(name = "company_id")
-    public final int companyId;
-    private final Company company;
+    public final long companyId;
+
+    @Ignore
+    public Brand brand;
 
     @ColumnInfo(name = "brand_id")
-    public final int brandId;
-    private final Brand brand;
+    public final long brandId;
+
+    @Ignore
+    public Location location;
 
     @ColumnInfo(name = "location_id")
-    public final int locationId;
-    private final Location location;
+    public final long locationId;
 
-    private final List<Building> buildings;
+    @Ignore
+    public List<Building> buildings;
 
-    public Structure(int id, String name, Company company, Brand brand, Location location,
-                     List<Building> buildings) {
+    public Structure(long id, String name, long companyId, long brandId, long locationId) {
         this.id = id;
         this.name = name;
-        this.companyId = company.id;
+        this.companyId = companyId;
+        this.brandId = brandId;
+        this.locationId = locationId;
+    }
+
+    @Ignore
+    public Structure(long id, String name, Company company, Brand brand, Location location,
+                     List<Building> buildings) {
+        this(id, name, company.id, brand.id, location.id);
         this.company = company;
-        this.brandId = brand.id;
         this.brand = brand;
-        this.locationId = location.id;
         this.location = location;
         this.buildings = buildings;
     }
 
+    @Ignore
     public Structure(JSONObject jsonObject) throws JSONException {
-        this(jsonObject.getJSONObject("structure").getInt("id"),
+        this(jsonObject.getJSONObject("structure").getLong("id"),
                 jsonObject.getJSONObject("structure").getString("name"),
                 new Company(jsonObject.getJSONObject("company")),
                 new Brand(jsonObject.getJSONObject("brand")),

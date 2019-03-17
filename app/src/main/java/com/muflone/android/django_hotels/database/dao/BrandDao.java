@@ -9,23 +9,34 @@ import com.muflone.android.django_hotels.database.models.Brand;
 
 import java.util.List;
 
+import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
+
 @Dao
 public interface BrandDao {
     @Query("SELECT * FROM brands")
     List<Brand> getAll();
 
-    @Query("SELECT * FROM brands where id = :id")
+    @Query("SELECT * FROM brands WHERE id = :id")
     Brand findById(int id);
 
-    @Query("SELECT * FROM brands where name = :name")
+    @Query("SELECT * FROM brands WHERE name = :name")
     Brand findByName(String name);
 
-    @Query("SELECT COUNT(*) from brands")
-    int count();
+    @Query("SELECT COUNT(*) FROM brands")
+    long count();
 
-    @Insert
-    void insertAll(Brand... brands);
+    @Insert(onConflict = IGNORE)
+    long insert(Brand item);
+
+    @Insert(onConflict = IGNORE)
+    void insert(Brand... items);
 
     @Delete
-    void delete(Brand brand);
+    void delete(Brand item);
+
+    @Delete
+    void delete(Brand... items);
+
+    @Query("DELETE FROM brands")
+    void truncate();
 }

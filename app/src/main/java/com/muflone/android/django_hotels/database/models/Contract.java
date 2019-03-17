@@ -2,6 +2,7 @@ package com.muflone.android.django_hotels.database.models;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
@@ -16,10 +17,10 @@ import java.util.Date;
 import java.util.List;
 
 @Entity(tableName = "contracts",
-        indices = {@Index(value = {"first_name", "last_name"}, unique = true)})
+        indices = {@Index(value = {"guid"}, unique = true)})
 public class Contract {
     @PrimaryKey
-    public final int id;
+    public final long id;
 
     @ColumnInfo(name = "guid")
     public final String guid;
@@ -36,31 +37,66 @@ public class Contract {
     @ColumnInfo(name = "active")
     public final boolean active;
 
-    public final Employee employee;
-    public final Company company;
-    public final ContractType type;
-    public final JobType job;
-    public final List<Integer> buildings;
+    @Ignore
+    public Employee employee;
 
-    public Contract(int id, String guid, Date startDate, Date endDate,
+    @ColumnInfo(name = "employee_id")
+    public final long employeeId;
+
+    @Ignore
+    public Company company;
+
+    @ColumnInfo(name = "company_id")
+    public final long companyId;
+
+    @Ignore
+    public ContractType contractType;
+
+    @ColumnInfo(name = "contract_type_id")
+    public final long contractTypeId;
+
+    @Ignore
+    public JobType jobType;
+
+    @ColumnInfo(name = "jobtype_id")
+    public final long jobTypeId;
+
+    @Ignore
+    public List<Long> buildings;
+
+    public Contract(long id, String guid, Date startDate, Date endDate,
                     boolean enabled, boolean active,
-                    Employee employee, Company company, ContractType type, JobType job,
-                    List<Integer> buildings) {
+                    long employeeId, long companyId, long contractTypeId,
+                    long jobTypeId) {
         this.id = id;
         this.guid = guid;
         this.startDate = startDate;
         this.endDate = endDate;
         this.enabled = enabled;
         this.active = active;
+        this.employeeId = employeeId;
+        this.companyId = companyId;
+        this.contractTypeId = contractTypeId;
+        this.jobTypeId = jobTypeId;
+    }
+
+    @Ignore
+    public Contract(long id, String guid, Date startDate, Date endDate,
+                    boolean enabled, boolean active,
+                    Employee employee, Company company, ContractType contractType,
+                    JobType jobType, List<Long> buildings) {
+        this(id, guid, startDate, endDate, enabled, active, employee.id, company.id,
+                contractType.id, jobType.id);
         this.employee = employee;
         this.company = company;
-        this.type = type;
-        this.job = job;
+        this.contractType = contractType;
+        this.jobType = jobType;
         this.buildings = buildings;
     }
 
+    @Ignore
     public Contract(JSONObject jsonObject) throws JSONException, ParseException {
-        this(jsonObject.getJSONObject("contract").getInt("id"),
+        this(jsonObject.getJSONObject("contract").getLong("id"),
                 jsonObject.getJSONObject("contract").getString("guid"),
                 new SimpleDateFormat("yyyy-MM-dd").parse(jsonObject.getJSONObject("contract").getString("start")),
                 new SimpleDateFormat("yyyy-MM-dd").parse(jsonObject.getJSONObject("contract").getString("end")),
@@ -70,11 +106,11 @@ public class Contract {
                 new Company(jsonObject.getJSONObject("company")),
                 new ContractType(jsonObject.getJSONObject("type")),
                 new JobType(jsonObject.getJSONObject("job")),
-                new ArrayList<Integer>());
+                new ArrayList<Long>());
         // Loop every building id
         JSONArray jsonBuildings = jsonObject.getJSONArray("buildings");
         for (int i = 0; i < jsonBuildings.length(); i++) {
-            this.buildings.add(jsonBuildings.getInt(i));
+            this.buildings.add(jsonBuildings.getLong(i));
         }
     }
 }

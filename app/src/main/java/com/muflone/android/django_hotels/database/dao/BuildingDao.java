@@ -1,0 +1,42 @@
+package com.muflone.android.django_hotels.database.dao;
+
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.Query;
+
+import com.muflone.android.django_hotels.database.models.Building;
+
+import java.util.List;
+
+import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
+
+@Dao
+public interface BuildingDao {
+    @Query("SELECT * FROM buildings")
+    List<Building> getAll();
+
+    @Query("SELECT * FROM buildings WHERE id = :id")
+    Building findById(int id);
+
+    @Query("SELECT * FROM buildings WHERE name = :name")
+    Building findByName(String name);
+
+    @Query("SELECT COUNT(*) FROM buildings")
+    long count();
+
+    @Insert(onConflict = IGNORE)
+    long insert(Building item);
+
+    @Insert(onConflict = IGNORE)
+    void insert(Building... items);
+
+    @Delete
+    void delete(Building item);
+
+    @Delete
+    void delete(Building... items);
+
+    @Query("DELETE FROM buildings")
+    void truncate();
+}

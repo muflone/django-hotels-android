@@ -2,6 +2,7 @@ package com.muflone.android.django_hotels.database.models;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import org.json.JSONException;
@@ -10,7 +11,7 @@ import org.json.JSONObject;
 @Entity(tableName = "employees")
 public class Employee {
     @PrimaryKey
-    public final int id;
+    public final long id;
 
     @ColumnInfo(name = "first_name")
     public final String firstName;
@@ -18,20 +19,21 @@ public class Employee {
     @ColumnInfo(name = "last_name")
     public final String lastName;
 
-    @ColumnInfo(name = "genre")
-    public final String genre;
+    @ColumnInfo(name = "gender")
+    public final String gender;
 
-    public Employee(int id, String firstName, String lastName, String genre) {
+    public Employee(long id, String firstName, String lastName, String gender) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.genre = genre;
+        this.gender = gender;
     }
 
+    @Ignore
     public Employee(JSONObject jsonObject) throws JSONException {
-        this(jsonObject.getInt("id"),
+        this(jsonObject.getLong("id"),
                 jsonObject.getString("first_name"),
                 jsonObject.getString("last_name"),
-                jsonObject.getString("genre"));
+                jsonObject.getString("gender"));
     }
 }

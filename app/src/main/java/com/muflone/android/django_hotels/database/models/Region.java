@@ -10,18 +10,18 @@ import org.json.JSONObject;
 @Entity(tableName = "regions")
 public class Region {
     @PrimaryKey
-    public final int id;
+    public final long id;
 
     @ColumnInfo(name = "name")
     public final String name;
 
-    public Region(int id, String name) {
+    public Region(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
     public Region(JSONObject jsonObject) throws JSONException {
-        this(jsonObject.getInt("id"),
+        this(jsonObject.getLong("id"),
                 jsonObject.getString("name"));
     }
 }

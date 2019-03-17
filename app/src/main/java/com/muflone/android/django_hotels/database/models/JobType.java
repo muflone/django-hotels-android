@@ -10,18 +10,18 @@ import org.json.JSONObject;
 @Entity(tableName = "job_types")
 public class JobType {
     @PrimaryKey
-    public final int id;
+    public final long id;
 
     @ColumnInfo(name = "name")
     public final String name;
 
-    public JobType(int id, String name) {
+    public JobType(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
     public JobType(JSONObject jsonObject) throws JSONException {
-        this(jsonObject.getInt("id"),
+        this(jsonObject.getLong("id"),
                 jsonObject.getString("name"));
     }
 }

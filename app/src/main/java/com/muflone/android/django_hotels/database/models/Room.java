@@ -10,7 +10,7 @@ import org.json.JSONObject;
 @Entity(tableName = "rooms")
 public class Room {
     @PrimaryKey
-    public final int id;
+    public final long id;
 
     @ColumnInfo(name = "name")
     public final String name;
@@ -21,17 +21,22 @@ public class Room {
     @ColumnInfo(name = "bed_type")
     public final String bedType;
 
-    public Room(int id, String name, String type, String bedType) {
+    @ColumnInfo(name = "building_id")
+    public final long buildingId;
+
+    public Room(long id, String name, String type, String bedType, long buildingId) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.bedType = bedType;
+        this.buildingId = buildingId;
     }
 
-    public Room(JSONObject jsonObject) throws JSONException {
-        this(jsonObject.getJSONObject("room").getInt("id"),
+    public Room(JSONObject jsonObject, long buildingId) throws JSONException {
+        this(jsonObject.getJSONObject("room").getLong("id"),
                 jsonObject.getJSONObject("room").getString("name"),
                 jsonObject.getString("room_type"),
-                jsonObject.getString("bed_type"));
+                jsonObject.getString("bed_type"),
+                buildingId);
     }
 }
