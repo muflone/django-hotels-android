@@ -16,6 +16,9 @@ public interface RoomDao {
     @Query("SELECT * FROM rooms")
     List<Room> getAll();
 
+    @Query("SELECT * FROM rooms WHERE building_id = :buildingId")
+    List<Room> listByBuilding(long buildingId);
+
     @Query("SELECT * FROM rooms WHERE id = :id")
     Room findById(long id);
 
