@@ -18,6 +18,10 @@
             android:id="@+id/menuitemExtras"
             android:icon="@drawable/ic_extras"
             android:title="@string/section_extras" />
+        <item
+            android:id="@+id/menuitemSync"
+            android:icon="@drawable/ic_sync"
+            android:title="@string/section_sync" />
     </group>
 
     <group

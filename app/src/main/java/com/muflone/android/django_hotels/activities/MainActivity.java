@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity
     Fragment fragment = null;
     MenuItem menuItemHome = null;
     MenuItem menuItemSettings = null;
+    MenuItem menuItemSync = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,9 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.menuitemSettings:
                     this.menuItemSettings = menu.getItem(item);
+                    break;
+                case R.id.menuitemSync:
+                    this.menuItemSync = menu.getItem(item);
                     break;
             }
         }
@@ -104,6 +108,9 @@ public class MainActivity extends AppCompatActivity
                 case "ExtrasFragment":
                     fragment = new ExtrasFragment();
                     break;
+                case "SyncFragment":
+                    fragment = new SyncFragment();
+                    break;
                 case "AboutFragment":
                     fragment = new AboutFragment();
                     break;
@@ -144,6 +151,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.menuitemExtras:
                 fragment = new ExtrasFragment();
+                break;
+            case R.id.menuitemSync:
+                fragment = new SyncFragment();
                 break;
             case R.id.menuitemSettings:
                 Intent intent = new Intent(this, SettingsActivity.class);
@@ -186,7 +196,7 @@ public class MainActivity extends AppCompatActivity
         // Handle toolbuttons clicks
         switch (item.getItemId()) {
             case R.id.section_sync:
-                LoadFragment(new SyncFragment());
+                this.onNavigationItemSelected(this.menuItemSync);
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
