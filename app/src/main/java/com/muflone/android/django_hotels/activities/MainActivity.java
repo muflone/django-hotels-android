@@ -43,9 +43,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         // Singleton instance
-        Singleton.getInstance().api = new Api(this);
         Settings settings = new Settings(this);
         Singleton.getInstance().settings = settings;
+        Singleton.getInstance().api = new Api(this);
         // Add settings_toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
