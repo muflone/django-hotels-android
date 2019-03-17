@@ -34,6 +34,7 @@ public class SyncFragment extends Fragment {
                 NotifyMessage.snackbar(rootLayout,
                         getString(R.string.message_established_connection),
                         Snackbar.LENGTH_INDEFINITE);
+                AppDatabase.destroyInstance();
             }
 
             @Override
@@ -55,6 +56,7 @@ public class SyncFragment extends Fragment {
                             getString(R.string.message_unable_to_download),
                             Snackbar.LENGTH_INDEFINITE);
                 }
+                AppDatabase.destroyInstance();
             }
         });
 
