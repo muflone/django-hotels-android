@@ -2,7 +2,6 @@ package com.muflone.android.django_hotels.api;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import com.google.android.apps.authenticator.Base32String;
 import com.muflone.android.django_hotels.api.tasks.AsyncTaskDownload;
@@ -12,7 +11,8 @@ import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
-import com.muflone.android.django_hotels.database.AppDatabase;
+import com.muflone.android.django_hotels.api.tasks.AsyncTaskDownload;
+import com.muflone.android.django_hotels.api.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.otp.Token;
