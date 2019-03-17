@@ -18,6 +18,10 @@ import android.widget.Toast;
 
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.R;
+import com.muflone.android.django_hotels.api.Api;
+import com.muflone.android.django_hotels.api.GetDataResults;
+import com.muflone.android.django_hotels.api.tasks.AsyncTaskListener;
+import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.fragments.AboutFragment;
 import com.muflone.android.django_hotels.fragments.ExtrasFragment;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
     private static final int SETTINGS_RETURN_CODE = 1;
+    private Api api;
     Settings settings = null;
     Fragment fragment = null;
     MenuItem menuItemHome = null;
@@ -80,6 +85,21 @@ public class MainActivity extends AppCompatActivity
         } else {
             this.onNavigationItemSelected(this.menuItemHome);
         }
+        // Load data from database
+        this.api = new Api(this);
+        this.api.loadFromDatabase(new AsyncTaskListener<GetDataResults>() {
+            @Override
+            public void onSuccess(GetDataResults results) {
+                for (Structure structure : results.structures) {
+                    System.out.println(structure.name);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+                
+            }
+        });
     }
 
     @Override
