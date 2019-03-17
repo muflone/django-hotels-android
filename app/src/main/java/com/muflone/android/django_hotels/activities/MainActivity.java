@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity
         Singleton.getInstance().api.loadFromDatabase(new AsyncTaskListener<ApiData>() {
             @Override
             public void onSuccess(ApiData data) {
+                Singleton.getInstance().apiData = data;
                 for (Structure structure : data.structures) {
                     System.out.println(structure.name);
                 }
@@ -226,7 +227,6 @@ public class MainActivity extends AppCompatActivity
 
         }
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

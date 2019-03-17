@@ -3,12 +3,14 @@ package com.muflone.android.django_hotels;
 import android.content.Context;
 
 import com.muflone.android.django_hotels.api.Api;
+import com.muflone.android.django_hotels.api.ApiData;
 
 import java.io.Serializable;
 
 public class Singleton implements Serializable {
     private static volatile Singleton instance;
     public Api api;
+    public ApiData apiData;
     public Settings settings;
 
     private Singleton() {
