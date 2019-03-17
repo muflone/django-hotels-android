@@ -9,9 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.api.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.NotifyMessage;
-import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
@@ -26,10 +26,9 @@ public class SyncFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         final View rootLayout = getActivity().findViewById(R.id.drawer_layout);
-        Api api = new Api(getActivity());
-        System.out.println(api.getCurrentTokenCode());
+        System.out.println(Singleton.getInstance().api.getCurrentTokenCode());
         // Download data asynchronously from the server
-        api.getData(new AsyncTaskListener<ApiData>() {
+        Singleton.getInstance().api.getData(new AsyncTaskListener<ApiData>() {
             @Override
             public void onSuccess(ApiData data) {
                 if (getActivity() != null) {

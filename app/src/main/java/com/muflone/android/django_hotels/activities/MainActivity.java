@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.R;
+import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.api.tasks.AsyncTaskListener;
@@ -32,7 +33,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
     private static final int SETTINGS_RETURN_CODE = 1;
-    private Api api;
     Settings settings = null;
     Fragment fragment = null;
     MenuItem menuItemHome = null;
@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+        // Singleton instance
+        Singleton.getInstance().api = new Api(this);
         // Add settings_toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -86,8 +88,7 @@ public class MainActivity extends AppCompatActivity
             this.onNavigationItemSelected(this.menuItemHome);
         }
         // Load data from database
-        this.api = new Api(this);
-        this.api.loadFromDatabase(new AsyncTaskListener<ApiData>() {
+        Singleton.getInstance().api.loadFromDatabase(new AsyncTaskListener<ApiData>() {
             @Override
             public void onSuccess(ApiData data) {
                 for (Structure structure : data.structures) {
