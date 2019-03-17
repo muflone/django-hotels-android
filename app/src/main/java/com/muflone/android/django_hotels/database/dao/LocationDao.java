@@ -17,7 +17,7 @@ public interface LocationDao {
     List<Location> getAll();
 
     @Query("SELECT * FROM locations WHERE id = :id")
-    Location findById(int id);
+    Location findById(long id);
 
     @Query("SELECT * FROM locations WHERE name = :name")
     Location findByName(String name);

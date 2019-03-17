@@ -17,7 +17,7 @@ public interface CompanyDao {
     List<Company> getAll();
 
     @Query("SELECT * FROM companies WHERE id = :id")
-    Company findById(int id);
+    Company findById(long id);
 
     @Query("SELECT * FROM companies WHERE name = :name")
     Company findByName(String name);

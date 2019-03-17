@@ -17,7 +17,7 @@ public interface CountryDao {
     List<Country> getAll();
 
     @Query("SELECT * FROM countries WHERE id = :id")
-    Country findById(int id);
+    Country findById(long id);
 
     @Query("SELECT * FROM countries WHERE name = :name")
     Country findByName(String name);

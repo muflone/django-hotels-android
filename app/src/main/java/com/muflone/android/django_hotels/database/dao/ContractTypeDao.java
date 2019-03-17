@@ -17,7 +17,7 @@ public interface ContractTypeDao {
     List<ContractType> getAll();
 
     @Query("SELECT * FROM contract_types WHERE id = :id")
-    ContractType findById(int id);
+    ContractType findById(long id);
 
     @Query("SELECT * FROM contract_types WHERE name = :name")
     ContractType findByName(String name);

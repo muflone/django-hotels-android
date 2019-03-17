@@ -17,7 +17,7 @@ public interface RoomDao {
     List<Room> getAll();
 
     @Query("SELECT * FROM rooms WHERE id = :id")
-    Room findById(int id);
+    Room findById(long id);
 
     @Query("SELECT * FROM rooms WHERE name = :name")
     Room findByName(String name);

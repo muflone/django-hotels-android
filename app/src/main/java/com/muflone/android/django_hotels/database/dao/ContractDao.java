@@ -18,7 +18,7 @@ public interface ContractDao {
     List<Contract> getAll();
 
     @Query("SELECT * FROM contracts WHERE id = :id")
-    Contract findById(int id);
+    Contract findById(long id);
 
     @Query("SELECT * FROM contracts WHERE guid = :guid")
     Contract findByGuid(String guid);

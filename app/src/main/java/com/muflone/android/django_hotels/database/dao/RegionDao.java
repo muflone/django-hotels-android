@@ -17,7 +17,7 @@ public interface RegionDao {
     List<Region> getAll();
 
     @Query("SELECT * FROM regions WHERE id = :id")
-    Region findById(int id);
+    Region findById(long id);
 
     @Query("SELECT * FROM regions WHERE name = :name")
     Region findByName(String name);

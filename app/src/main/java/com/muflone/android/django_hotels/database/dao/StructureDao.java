@@ -17,7 +17,7 @@ public interface StructureDao {
     List<Structure> getAll();
 
     @Query("SELECT * FROM structures WHERE id = :id")
-    Structure findById(int id);
+    Structure findById(long id);
 
     @Query("SELECT * FROM structures WHERE name = :name")
     Structure findByName(String name);

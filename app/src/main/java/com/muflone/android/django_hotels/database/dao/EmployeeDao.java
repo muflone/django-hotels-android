@@ -17,7 +17,7 @@ public interface EmployeeDao {
     List<Employee> getAll();
 
     @Query("SELECT * FROM employees WHERE id = :id")
-    Employee findById(int id);
+    Employee findById(long id);
 
     @Query("SELECT * FROM employees WHERE first_name = :first_name AND last_name = :last_name")
     Employee findByName(String first_name, String last_name);

@@ -17,7 +17,7 @@ public interface BuildingDao {
     List<Building> getAll();
 
     @Query("SELECT * FROM buildings WHERE id = :id")
-    Building findById(int id);
+    Building findById(long id);
 
     @Query("SELECT * FROM buildings WHERE name = :name")
     Building findByName(String name);

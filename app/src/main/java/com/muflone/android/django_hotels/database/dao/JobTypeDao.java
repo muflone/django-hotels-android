@@ -17,7 +17,7 @@ public interface JobTypeDao {
     List<JobType> getAll();
 
     @Query("SELECT * FROM job_types WHERE id = :id")
-    JobType findById(int id);
+    JobType findById(long id);
 
     @Query("SELECT * FROM job_types WHERE name = :name")
     JobType findByName(String name);
