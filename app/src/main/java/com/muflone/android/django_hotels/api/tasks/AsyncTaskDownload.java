@@ -63,7 +63,6 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, GetDataResults> {
 
     private void saveToDatabase(GetDataResults results, Context context) {
         AppDatabase database = AppDatabase.getAppDatabase(context);
-        // Save brands
         BrandDao brandDao = database.brandDao();
         BuildingDao buildingDao = database.buildingDao();
         CompanyDao companyDao = database.companyDao();
