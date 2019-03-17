@@ -149,7 +149,7 @@ public class Api {
                     calendar.set(Calendar.YEAR, 1970);
                     date1 = calendar.getTime();
                     // Get remote time
-                    date2 = new SimpleDateFormat("hh:mm.ss").parse(jsonRoot.getString("time"));
+                    date2 = new SimpleDateFormat("HH:mm.ss").parse(jsonRoot.getString("time"));
                     // Find the difference in thirty seconds
                     difference = Math.abs(date1.getTime() - date2.getTime()) / 1000 / 30;
                 }
