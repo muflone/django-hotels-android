@@ -17,7 +17,7 @@ public interface BrandDao {
     List<Brand> getAll();
 
     @Query("SELECT * FROM brands WHERE id = :id")
-    Brand findById(int id);
+    Brand findById(long id);
 
     @Query("SELECT * FROM brands WHERE name = :name")
     Brand findByName(String name);
