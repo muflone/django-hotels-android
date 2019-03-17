@@ -8,6 +8,7 @@ import android.content.Context;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
 import com.muflone.android.django_hotels.database.dao.CompanyDao;
+import com.muflone.android.django_hotels.database.dao.ContractBuildingsDao;
 import com.muflone.android.django_hotels.database.dao.ContractDao;
 import com.muflone.android.django_hotels.database.dao.ContractTypeDao;
 import com.muflone.android.django_hotels.database.dao.CountryDao;
@@ -21,6 +22,7 @@ import com.muflone.android.django_hotels.database.models.Brand;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Company;
 import com.muflone.android.django_hotels.database.models.Contract;
+import com.muflone.android.django_hotels.database.models.ContractBuildings;
 import com.muflone.android.django_hotels.database.models.ContractType;
 import com.muflone.android.django_hotels.database.models.Country;
 import com.muflone.android.django_hotels.database.models.Employee;
@@ -30,7 +32,8 @@ import com.muflone.android.django_hotels.database.models.Region;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Structure;
 
-@Database(entities = {Brand.class, Building.class, Company.class, Contract.class,
+@Database(entities = {Brand.class, Building.class, Company.class,
+                      Contract.class, ContractBuildings.class,
                       ContractType.class, Country.class, Employee.class, JobType.class,
                       Location.class, Region.class, Room.class, Structure.class},
           version = 1)
@@ -42,6 +45,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract BuildingDao buildingDao();
     public abstract CompanyDao companyDao();
     public abstract ContractDao contractDao();
+    public abstract ContractBuildingsDao contractBuildingsDao();
     public abstract ContractTypeDao contractTypeDao();
     public abstract CountryDao countryDao();
     public abstract EmployeeDao employeeDao();

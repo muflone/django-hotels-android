@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ca4d9a38e21c39225187f7b5c2a1d10d",
+    "identityHash": "b3ba25719779d9aaed2dc55dd175d184",
     "entities": [
       {
         "tableName": "brands",
@@ -262,6 +262,73 @@
             "onUpdate": "NO ACTION",
             "columns": [
               "job_type_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "contract_buildings",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`contract_id` INTEGER NOT NULL, `building_id` INTEGER NOT NULL, PRIMARY KEY(`contract_id`, `building_id`), FOREIGN KEY(`contract_id`) REFERENCES `contracts`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`building_id`) REFERENCES `buildings`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "contractId",
+            "columnName": "contract_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "buildingId",
+            "columnName": "building_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "contract_id",
+            "building_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_contract_buildings_contract_id",
+            "unique": false,
+            "columnNames": [
+              "contract_id"
+            ],
+            "createSql": "CREATE  INDEX `index_contract_buildings_contract_id` ON `${TABLE_NAME}` (`contract_id`)"
+          },
+          {
+            "name": "index_contract_buildings_building_id",
+            "unique": false,
+            "columnNames": [
+              "building_id"
+            ],
+            "createSql": "CREATE  INDEX `index_contract_buildings_building_id` ON `${TABLE_NAME}` (`building_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "contracts",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "contract_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "buildings",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "building_id"
             ],
             "referencedColumns": [
               "id"
@@ -678,7 +745,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ca4d9a38e21c39225187f7b5c2a1d10d\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b3ba25719779d9aaed2dc55dd175d184\")"
     ]
   }
 }

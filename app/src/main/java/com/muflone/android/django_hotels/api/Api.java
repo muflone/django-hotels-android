@@ -15,6 +15,7 @@ import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
 import com.muflone.android.django_hotels.database.dao.CompanyDao;
+import com.muflone.android.django_hotels.database.dao.ContractBuildingsDao;
 import com.muflone.android.django_hotels.database.dao.ContractDao;
 import com.muflone.android.django_hotels.database.dao.ContractTypeDao;
 import com.muflone.android.django_hotels.database.dao.CountryDao;
@@ -26,6 +27,7 @@ import com.muflone.android.django_hotels.database.dao.RoomDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
+import com.muflone.android.django_hotels.database.models.ContractBuildings;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.otp.Token;
@@ -254,6 +256,7 @@ public class Api {
             BuildingDao buildingDao = database.buildingDao();
             CompanyDao companyDao = database.companyDao();
             ContractDao contractDao = database.contractDao();
+            ContractBuildingsDao contractBuildingsDao = database.contractBuildingsDao();
             ContractTypeDao contractTypeDao = database.contractTypeDao();
             JobTypeDao jobTypeDao = database.jobTypeDao();
             CountryDao countryDao = database.countryDao();
@@ -265,6 +268,7 @@ public class Api {
 
             // Delete previous data
             roomDao.truncate();
+            contractBuildingsDao.truncate();
             buildingDao.truncate();
             contractDao.truncate();
             contractTypeDao.truncate();
@@ -303,6 +307,10 @@ public class Api {
                 contractTypeDao.insert(contract.contractType);
                 jobTypeDao.insert(contract.jobType);
                 contractDao.insert(contract);
+                // Save ContractBuildings
+                for (long building_id : contract.buildings) {
+                    contractBuildingsDao.insert(new ContractBuildings(contract.id, building_id));
+                }
             }
             return;
         }
