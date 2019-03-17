@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import com.google.android.apps.authenticator.Base32String;
 import com.muflone.android.django_hotels.Settings;
+import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
@@ -35,18 +36,16 @@ import java.util.TimeZone;
 
 public class Api {
     public final Settings settings;
-    private final Uri apiUri;
     public final Context context;
 
     public Api(Context context) {
         this.context = context;
-        this.settings = new Settings(this.context);
-        this.apiUri = this.settings.getApiUri();
+        this.settings = Singleton.getInstance().settings;
     }
 
     private Uri buildUri(String segment) {
         // Return the Uri for the requested segment
-        return Uri.withAppendedPath(this.apiUri, segment);
+        return Uri.withAppendedPath(this.settings.getApiUri(), segment);
     }
 
     private Uri buildJsonUri(String segment) {

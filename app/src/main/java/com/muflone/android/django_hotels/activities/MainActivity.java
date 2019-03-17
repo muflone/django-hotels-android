@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
     private static final int SETTINGS_RETURN_CODE = 1;
-    Settings settings = null;
     Fragment fragment = null;
     MenuItem menuItemHome = null;
     MenuItem menuItemSettings = null;
@@ -45,6 +44,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.main_activity);
         // Singleton instance
         Singleton.getInstance().api = new Api(this);
+        Settings settings = new Settings(this);
+        Singleton.getInstance().settings = settings;
         // Add settings_toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -74,12 +75,11 @@ public class MainActivity extends AppCompatActivity
             }
         }
         // Load preferences
-        this.settings = new Settings(this);
-        Log.d(TAG, "ID: " + this.settings.getTabletID());
-        Log.d(TAG, "Key: " + this.settings.getTabletKey());
-        if (this.settings.getTabletID().isEmpty() |
-                this.settings.getTabletKey().isEmpty()) {
-            String message = this.settings.getTabletID().isEmpty() ?
+        Log.d(TAG, "ID: " + settings.getTabletID());
+        Log.d(TAG, "Key: " + settings.getTabletKey());
+        if (settings.getTabletID().isEmpty() |
+                settings.getTabletKey().isEmpty()) {
+            String message = settings.getTabletID().isEmpty() ?
                     getString(R.string.message_missing_tablet_id) :
                     getString(R.string.message_missing_tablet_key);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
