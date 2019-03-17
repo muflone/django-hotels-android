@@ -35,9 +35,11 @@ import java.util.TimeZone;
 public class Api {
     private final Settings settings;
     private final Uri apiUri;
+    private final Context context;
 
     public Api(Context context) {
-        this.settings = new Settings(context);
+        this.context = context;
+        this.settings = new Settings(this.context);
         this.apiUri = this.settings.getApiUri();
     }
 
