@@ -208,8 +208,13 @@ public class Api {
         @Override
         protected GetDataResults doInBackground(Void... params) {
             // Do the background job
-            return this.api.getData(this.api.settings.getTabletID(),
+            GetDataResults results = this.api.getData(this.api.settings.getTabletID(),
                     this.api.getCurrentTokenCode());
+            if (results.exception == null) {
+                // Success, save data in database
+                this.saveToDatabase(results, this.api.context);
+            }
+            return results;
         }
 
         @Override
@@ -225,6 +230,11 @@ public class Api {
                     this.callback.onFailure(results.exception);
                 }
             }
+        }
+
+        private void saveToDatabase(GetDataResults results, Context context) {
+            AppDatabase database = AppDatabase.getAppDatabase(context);
+            return;
         }
     }
 }

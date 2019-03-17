@@ -1,7 +1,6 @@
 package com.muflone.android.django_hotels.database;
 
 import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
@@ -16,17 +15,19 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME)
+            INSTANCE = android.arch.persistence.room.Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME)
                 // allow queries on the main thread.
                 // Don’t do this on a real app! See PersistenceBasicSample for an example.
-                // .allowMainThreadQueries()
+                //.allowMainThreadQueries()
                 .build();
         }
         return INSTANCE;
     }
 
     public static void destroyInstance() {
-        INSTANCE.close();
+        if (INSTANCE != null) {
+            INSTANCE.close();
+        }
         INSTANCE = null;
     }
 }
