@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.muflone.android.django_hotels.api.Api;
-import com.muflone.android.django_hotels.api.GetDataResults;
+import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
@@ -25,7 +25,7 @@ import com.muflone.android.django_hotels.database.models.ContractBuildings;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Structure;
 
-public class AsyncTaskDownload extends AsyncTask<Void, Void, GetDataResults> {
+public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
     private final Api api;
     private final AsyncTaskListener callback;
 
@@ -35,33 +35,33 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, GetDataResults> {
     }
 
     @Override
-    protected GetDataResults doInBackground(Void... params) {
+    protected ApiData doInBackground(Void... params) {
         // Do the background job
-        GetDataResults results = this.api.getData(this.api.settings.getTabletID(),
+        ApiData data = this.api.getData(this.api.settings.getTabletID(),
                 this.api.getCurrentTokenCode());
-        if (results.exception == null) {
+        if (data.exception == null) {
             // Success, save data in database
-            this.saveToDatabase(results, this.api.context);
+            this.saveToDatabase(data, this.api.context);
         }
-        return results;
+        return data;
     }
 
     @Override
-    protected void onPostExecute(GetDataResults results) {
-        super.onPostExecute(results);
+    protected void onPostExecute(ApiData data) {
+        super.onPostExecute(data);
         // Check if callback listener was requested
-        if (this.callback != null & results != null) {
-            if (results.exception == null) {
+        if (this.callback != null & data != null) {
+            if (data.exception == null) {
                 // Return flow to the caller
-                this.callback.onSuccess(results);
+                this.callback.onSuccess(data);
             } else {
                 // Failure with exception
-                this.callback.onFailure(results.exception);
+                this.callback.onFailure(data.exception);
             }
         }
     }
 
-    private void saveToDatabase(GetDataResults results, Context context) {
+    private void saveToDatabase(ApiData data, Context context) {
         AppDatabase database = AppDatabase.getAppDatabase(context);
         BrandDao brandDao = database.brandDao();
         BuildingDao buildingDao = database.buildingDao();
@@ -92,7 +92,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, GetDataResults> {
         brandDao.truncate();
 
         // Save data from structures
-        for (Structure structure : results.structures) {
+        for (Structure structure : data.structures) {
             brandDao.insert(structure.brand);
             companyDao.insert(structure.company);
             countryDao.insert(structure.location.country);
@@ -112,7 +112,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, GetDataResults> {
             }
         }
         // Save data from contracts
-        for (Contract contract : results.contracts) {
+        for (Contract contract : data.contracts) {
             employeeDao.insert(contract.employee);
             companyDao.insert(contract.company);
             contractTypeDao.insert(contract.contractType);

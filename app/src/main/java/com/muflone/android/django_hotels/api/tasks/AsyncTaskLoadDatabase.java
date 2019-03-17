@@ -3,7 +3,7 @@ package com.muflone.android.django_hotels.api.tasks;
 import android.os.AsyncTask;
 
 import com.muflone.android.django_hotels.api.Api;
-import com.muflone.android.django_hotels.api.GetDataResults;
+import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
@@ -20,10 +20,9 @@ import com.muflone.android.django_hotels.database.dao.RoomDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
-import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Structure;
 
-public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, GetDataResults> {
+public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
     private final Api api;
     private final AsyncTaskListener callback;
 
@@ -33,8 +32,8 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, GetDataResults>
     }
 
     @Override
-    protected GetDataResults doInBackground(Void... params) {
-        GetDataResults results = new GetDataResults();
+    protected ApiData doInBackground(Void... params) {
+        ApiData data = new ApiData();
         AppDatabase database = AppDatabase.getAppDatabase(api.context);
         BrandDao brandDao = database.brandDao();
         BuildingDao buildingDao = database.buildingDao();
@@ -67,7 +66,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, GetDataResults>
                 // Load rooms
                 building.rooms = roomDao.listByBuilding(building.id);
             }
-            results.structures.add(structure);
+            data.structures.add(structure);
         }
         // Load Contracts
         for(Contract contract : contractDao.getAll()) {
@@ -75,22 +74,22 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, GetDataResults>
             contract.company = companyDao.findById(contract.companyId);
             contract.contractType = contractTypeDao.findById(contract.contractTypeId);
             contract.jobType = jobTypeDao.findById(contract.jobTypeId);
-            results.contracts.add(contract);
+            data.contracts.add(contract);
         }
-        return results;
+        return data;
     }
 
     @Override
-    protected void onPostExecute(GetDataResults results) {
-        super.onPostExecute(results);
+    protected void onPostExecute(ApiData data) {
+        super.onPostExecute(data);
         // Check if callback listener was requested
-        if (this.callback != null & results != null) {
-            if (results.exception == null) {
+        if (this.callback != null & data != null) {
+            if (data.exception == null) {
                 // Return flow to the caller
-                this.callback.onSuccess(results);
+                this.callback.onSuccess(data);
             } else {
                 // Failure with exception
-                this.callback.onFailure(results.exception);
+                this.callback.onFailure(data.exception);
             }
         }
     }

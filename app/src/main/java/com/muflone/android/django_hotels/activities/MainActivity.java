@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.api.Api;
-import com.muflone.android.django_hotels.api.GetDataResults;
+import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.api.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.fragments.AboutFragment;
@@ -87,17 +87,17 @@ public class MainActivity extends AppCompatActivity
         }
         // Load data from database
         this.api = new Api(this);
-        this.api.loadFromDatabase(new AsyncTaskListener<GetDataResults>() {
+        this.api.loadFromDatabase(new AsyncTaskListener<ApiData>() {
             @Override
-            public void onSuccess(GetDataResults results) {
-                for (Structure structure : results.structures) {
+            public void onSuccess(ApiData data) {
+                for (Structure structure : data.structures) {
                     System.out.println(structure.name);
                 }
             }
 
             @Override
             public void onFailure(Exception exception) {
-                
+
             }
         });
     }

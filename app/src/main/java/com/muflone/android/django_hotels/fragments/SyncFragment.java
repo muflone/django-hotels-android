@@ -13,11 +13,11 @@ import com.muflone.android.django_hotels.api.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.NotifyMessage;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.R;
+import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
-import com.muflone.android.django_hotels.api.GetDataResults;
 import com.muflone.android.django_hotels.database.AppDatabase;
 
 public class SyncFragment extends Fragment {
@@ -29,9 +29,9 @@ public class SyncFragment extends Fragment {
         Api api = new Api(getActivity());
         System.out.println(api.getCurrentTokenCode());
         // Download data asynchronously from the server
-        api.getData(new AsyncTaskListener<GetDataResults>() {
+        api.getData(new AsyncTaskListener<ApiData>() {
             @Override
-            public void onSuccess(GetDataResults results) {
+            public void onSuccess(ApiData data) {
                 if (getActivity() != null) {
                     /*
                      * During screen orientation changes the fragment could be called without any

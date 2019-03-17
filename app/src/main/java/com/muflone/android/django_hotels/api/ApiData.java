@@ -6,12 +6,12 @@ import com.muflone.android.django_hotels.database.models.Structure;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetDataResults {
+public class ApiData {
     public final List<Structure> structures;
     public final List<Contract> contracts;
     public Exception exception;
 
-    public GetDataResults() {
+    public ApiData() {
         this.structures = new ArrayList<Structure>();
         this.contracts = new ArrayList<Contract>();
     }

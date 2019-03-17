@@ -108,8 +108,8 @@ public class Api {
         }
     }
 
-    public GetDataResults getData(String tabletId, String tokenCode) {
-        GetDataResults results = new GetDataResults();
+    public ApiData getData(String tabletId, String tokenCode) {
+        ApiData data = new ApiData();
         // Check if the system date/time matches with the remote date/time
         JSONObject jsonRoot = this.getJSONObject("dates/");
         if (jsonRoot != null) {
@@ -141,20 +141,20 @@ public class Api {
                 }
                 if (difference != 0) {
                     // Invalid date or time
-                    results.exception = new InvalidDateTimeException();
+                    data.exception = new InvalidDateTimeException();
                 }
             } catch (ParseException exception) {
                 exception.printStackTrace();
-                results.exception = new InvalidResponseException();
+                data.exception = new InvalidResponseException();
             } catch (JSONException exception) {
                 exception.printStackTrace();
-                results.exception = new InvalidResponseException();
+                data.exception = new InvalidResponseException();
             }
         } else {
             // Whether the result cannot be get raise exception
-            results.exception = new NoConnectionException();
+            data.exception = new NoConnectionException();
         }
-        if (results.exception == null) {
+        if (data.exception == null) {
             // Get data from the server
             jsonRoot = this.getJSONObject(String.format("get/%s/%s/", tabletId, tokenCode));
             if (jsonRoot != null) {
@@ -165,28 +165,28 @@ public class Api {
                     while (jsonKeys.hasNext()) {
                         String key = (String) jsonKeys.next();
                         Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
-                        results.structures.add(objStructure);
+                        data.structures.add(objStructure);
                     }
                     // Loop over every contract
                     JSONArray jsonContracts = jsonRoot.getJSONArray("contracts");
                     for (int i = 0; i < jsonContracts.length(); i++) {
-                        results.contracts.add(new Contract(jsonContracts.getJSONObject(i)));
+                        data.contracts.add(new Contract(jsonContracts.getJSONObject(i)));
                     }
                     // Check the final node for successful reads
                     this.checkStatusResponse(jsonRoot);
                 } catch (JSONException e) {
-                    results.exception = new InvalidResponseException();
+                    data.exception = new InvalidResponseException();
                 } catch (ParseException e) {
-                    results.exception = new InvalidResponseException();
+                    data.exception = new InvalidResponseException();
                 } catch (InvalidResponseException e) {
-                    results.exception = e;
+                    data.exception = e;
                 }
             } else {
                 // Unable to download data from the server
-                results.exception = new NoDownloadException();
+                data.exception = new NoDownloadException();
             }
         }
-        return results;
+        return data;
     }
 
     public void getData(AsyncTaskListener callback) {
