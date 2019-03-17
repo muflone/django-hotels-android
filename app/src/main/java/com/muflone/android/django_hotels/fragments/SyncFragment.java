@@ -1,6 +1,5 @@
 package com.muflone.android.django_hotels.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.muflone.android.django_hotels.AsyncTaskRunnerListener;
+import com.muflone.android.django_hotels.api.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.NotifyMessage;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.R;
@@ -20,7 +19,6 @@ import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
 import com.muflone.android.django_hotels.api.GetDataResults;
 import com.muflone.android.django_hotels.database.AppDatabase;
-import com.muflone.android.django_hotels.database.models.Structure;
 
 public class SyncFragment extends Fragment {
     @Override
@@ -31,7 +29,7 @@ public class SyncFragment extends Fragment {
         Api api = new Api(getActivity());
         System.out.println(api.getCurrentTokenCode());
         // Download data asynchronously from the server
-        api.getData(new AsyncTaskRunnerListener<GetDataResults>() {
+        api.getData(new AsyncTaskListener<GetDataResults>() {
             @Override
             public void onSuccess(GetDataResults results) {
                 if (getActivity() != null) {

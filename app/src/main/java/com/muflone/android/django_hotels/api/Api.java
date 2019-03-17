@@ -5,30 +5,15 @@ import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.google.android.apps.authenticator.Base32String;
-import com.muflone.android.django_hotels.AsyncTaskRunnerListener;
+import com.muflone.android.django_hotels.api.tasks.AsyncTaskDownload;
+import com.muflone.android.django_hotels.api.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
 import com.muflone.android.django_hotels.database.AppDatabase;
-import com.muflone.android.django_hotels.database.dao.BrandDao;
-import com.muflone.android.django_hotels.database.dao.BuildingDao;
-import com.muflone.android.django_hotels.database.dao.CompanyDao;
-import com.muflone.android.django_hotels.database.dao.ContractBuildingsDao;
-import com.muflone.android.django_hotels.database.dao.ContractDao;
-import com.muflone.android.django_hotels.database.dao.ContractTypeDao;
-import com.muflone.android.django_hotels.database.dao.CountryDao;
-import com.muflone.android.django_hotels.database.dao.EmployeeDao;
-import com.muflone.android.django_hotels.database.dao.JobTypeDao;
-import com.muflone.android.django_hotels.database.dao.LocationDao;
-import com.muflone.android.django_hotels.database.dao.RegionDao;
-import com.muflone.android.django_hotels.database.dao.RoomDao;
-import com.muflone.android.django_hotels.database.dao.StructureDao;
-import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
-import com.muflone.android.django_hotels.database.models.ContractBuildings;
-import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.otp.Token;
 
@@ -50,9 +35,9 @@ import java.util.Iterator;
 import java.util.TimeZone;
 
 public class Api {
-    private final Settings settings;
+    public final Settings settings;
     private final Uri apiUri;
-    private final Context context;
+    public final Context context;
 
     public Api(Context context) {
         this.context = context;
@@ -124,7 +109,7 @@ public class Api {
         }
     }
 
-    private GetDataResults getData(String tabletId, String tokenCode) {
+    public GetDataResults getData(String tabletId, String tokenCode) {
         GetDataResults results = new GetDataResults();
         // Check if the system date/time matches with the remote date/time
         JSONObject jsonRoot = this.getJSONObject("dates/");
@@ -205,113 +190,8 @@ public class Api {
         return results;
     }
 
-    public void getData(AsyncTaskRunnerListener callback) {
+    public void getData(AsyncTaskListener callback) {
         AsyncTaskDownload task = new AsyncTaskDownload(this, callback);
         task.execute();
-    }
-    /*
-     * AsyncTask(Params, Progress, Result)
-     */
-    private static class AsyncTaskDownload extends AsyncTask<Void, Void, GetDataResults> {
-        private final Api api;
-        private final AsyncTaskRunnerListener callback;
-
-        AsyncTaskDownload(Api api, AsyncTaskRunnerListener callback) {
-            this.api = api;
-            this.callback = callback;
-        }
-
-        @Override
-        protected GetDataResults doInBackground(Void... params) {
-            // Do the background job
-            GetDataResults results = this.api.getData(this.api.settings.getTabletID(),
-                    this.api.getCurrentTokenCode());
-            if (results.exception == null) {
-                // Success, save data in database
-                this.saveToDatabase(results, this.api.context);
-            }
-            return results;
-        }
-
-        @Override
-        protected void onPostExecute(GetDataResults results) {
-            super.onPostExecute(results);
-            // Check if callback listener was requested
-            if (this.callback != null) {
-                if (results.exception == null) {
-                    // Return flow to the caller
-                    this.callback.onSuccess(results);
-                } else {
-                    // Failure with exception
-                    this.callback.onFailure(results.exception);
-                }
-            }
-        }
-
-        private void saveToDatabase(GetDataResults results, Context context) {
-            AppDatabase database = AppDatabase.getAppDatabase(context);
-            // Save brands
-            BrandDao brandDao = database.brandDao();
-            BuildingDao buildingDao = database.buildingDao();
-            CompanyDao companyDao = database.companyDao();
-            ContractDao contractDao = database.contractDao();
-            ContractBuildingsDao contractBuildingsDao = database.contractBuildingsDao();
-            ContractTypeDao contractTypeDao = database.contractTypeDao();
-            JobTypeDao jobTypeDao = database.jobTypeDao();
-            CountryDao countryDao = database.countryDao();
-            EmployeeDao employeeDao = database.employeeDao();
-            LocationDao locationDao = database.locationDao();
-            RegionDao regionDao = database.regionDao();
-            RoomDao roomDao = database.roomDao();
-            StructureDao structureDao = database.structureDao();
-
-            // Delete previous data
-            roomDao.truncate();
-            contractBuildingsDao.truncate();
-            buildingDao.truncate();
-            contractDao.truncate();
-            contractTypeDao.truncate();
-            jobTypeDao.truncate();
-            structureDao.truncate();
-            locationDao.truncate();
-            regionDao.truncate();
-            countryDao.truncate();
-            companyDao.truncate();
-            brandDao.truncate();
-
-            // Save data from structures
-            for (Structure structure : results.structures) {
-                brandDao.insert(structure.brand);
-                companyDao.insert(structure.company);
-                countryDao.insert(structure.location.country);
-                regionDao.insert(structure.location.region);
-                locationDao.insert(structure.location);
-                structureDao.insert(structure);
-                // Save buildings
-                for (Building building : structure.buildings) {
-                    countryDao.insert(building.location.country);
-                    regionDao.insert(building.location.region);
-                    locationDao.insert(building.location);
-                    buildingDao.insert(building);
-                    // Save rooms
-                    for (Room room : building.rooms) {
-                        roomDao.insert(room);
-                    }
-                }
-            }
-            // Save data from contracts
-            for (Contract contract : results.contracts) {
-                employeeDao.insert(contract.employee);
-                companyDao.insert(contract.company);
-                contractTypeDao.insert(contract.contractType);
-                jobTypeDao.insert(contract.jobType);
-                contractDao.insert(contract);
-                // Save ContractBuildings
-                for (long building_id : contract.buildings) {
-                    contractBuildingsDao.insert(new ContractBuildings(contract.id, building_id));
-                }
-            }
-            return;
-        }
     }
 }
