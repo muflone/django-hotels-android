@@ -2,12 +2,15 @@ package com.muflone.android.django_hotels.database;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.models.Brand;
 
-@Database(entities = {Brand.class}, version = 1)
+@Database(entities = {Brand.class},
+          version = 1)
+@TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "hotels.sqlite";
     private static AppDatabase INSTANCE;
