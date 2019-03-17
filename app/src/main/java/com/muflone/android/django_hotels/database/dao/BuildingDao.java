@@ -16,6 +16,9 @@ public interface BuildingDao {
     @Query("SELECT * FROM buildings")
     List<Building> getAll();
 
+    @Query("SELECT * FROM buildings WHERE structure_id = :structureId")
+    List<Building> listByStructure(long structureId);
+
     @Query("SELECT * FROM buildings WHERE id = :id")
     Building findById(long id);
 
