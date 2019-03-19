@@ -51,7 +51,19 @@
 
     </android.support.design.widget.TabLayout>
 
-    <android.support.constraint.ConstraintLayout
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/structuresLayout"
+        app:layout_constraintEnd_toStartOf="@+id/structuresLayout"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TableLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -59,16 +71,64 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buildingsLayout">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
 
-        </LinearLayout>
-    </android.support.constraint.ConstraintLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="@string/rooms"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+            <View
+                android:layout_width="3px"
+                android:layout_height="1sp"
+                android:layout_weight="0.1"
+                android:background="@android:color/holo_red_dark" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/employees"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ListView
+                android:id="@+id/roomsView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:background="@color/colorSnackbarTextColor1"
+                android:choiceMode="multipleChoice"
+                tools:layout_editor_absoluteY="95dp">
+
+            </ListView>
+
+            <View
+                android:layout_width="3px"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:background="@android:color/holo_red_dark" />
+
+            <ListView
+                android:id="@+id/employeesView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorSnackbarTextColor2">
+
+            </ListView>
+
+        </TableRow>
+
+    </TableLayout>
 
 </android.support.constraint.ConstraintLayout>
