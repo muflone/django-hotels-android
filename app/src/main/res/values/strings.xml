@@ -28,4 +28,8 @@
 
     <string name="employees">Employees</string>
     <string name="employee">Employee</string>
+
+    <string name="first_name_label">First name:</string>
+    <string name="last_name_label">First name:</string>
+    <string name="gender_label">Gender:</string>
 </resources>

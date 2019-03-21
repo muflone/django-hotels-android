@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/structuresImageView"
         app:layout_constraintTop_toTopOf="parent"
         app:tabGravity="fill"
         app:tabMaxWidth="0dp"
@@ -30,87 +30,128 @@
     </android.support.design.widget.TabLayout>
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="horizontal"
-        android:baselineAligned="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/structuresLayout">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <ListView
+            android:id="@+id/employeesView"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="30"
-            android:orientation="vertical">
+            android:layout_weight="0.7"
+            android:background="@color/color_employees_background"
+            android:choiceMode="singleChoice"
+            android:listSelector="@color/color_employees_selected"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/structuresLayout"></ListView>
 
-            <TextView
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="0.3"
+            android:rotation="0"
+            app:cardBackgroundColor="@color/color_buildings_background"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="6dp"
+            app:contentPadding="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/employeesView"
+            app:layout_constraintTop_toBottomOf="@+id/structuresLayout">
+
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/employees"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+                android:layout_height="match_parent">
 
-            <ListView
-                android:id="@+id/employeesView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/color_employees_background"
-                android:choiceMode="singleChoice"
-                android:listSelector="@color/color_employees_selected">
+                <TextView
+                    android:id="@+id/firstNameLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/first_name_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </ListView>
+                <TextView
+                    android:id="@+id/firstNameView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/firstNameLabel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/firstNameLabel"
+                    tools:text="FIRST NAME" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/lastNameLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/last_name_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    app:layout_constraintEnd_toEndOf="@+id/firstNameLabel"
+                    app:layout_constraintStart_toStartOf="@+id/firstNameLabel"
+                    app:layout_constraintTop_toBottomOf="@+id/firstNameLabel" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="30"
-            android:orientation="vertical">
+                <TextView
+                    android:id="@+id/lastNameView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/lastNameLabel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/lastNameLabel"
+                    tools:text="LAST NAME" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/buildings"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+                <TextView
+                    android:id="@+id/genderLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/gender_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/lastNameLabel"
+                    app:layout_constraintStart_toStartOf="@+id/lastNameLabel"
+                    app:layout_constraintTop_toBottomOf="@+id/lastNameLabel" />
 
-            <ListView
-                android:id="@+id/buildingsView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/color_buildings_background"
-                android:choiceMode="singleChoice"
-                android:listSelector="@color/color_buildings_selected">
+                <TextView
+                    android:id="@+id/genderView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/genderLabel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/genderLabel"
+                    tools:text="GENDER" />
+            </android.support.constraint.ConstraintLayout>
 
-            </ListView>
+        </android.support.v7.widget.CardView>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="30"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/rooms"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
-
-            <ListView
-                android:id="@+id/roomsView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/color_rooms_background"
-                android:choiceMode="singleChoice"
-                android:listSelector="@color/color_rooms_selected"
-                tools:layout_editor_absoluteY="95dp">
-
-            </ListView>
-
-        </LinearLayout>
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/structuresImageView"
+        android:layout_width="64dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/structures"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_structures" />
 
 </android.support.constraint.ConstraintLayout>
