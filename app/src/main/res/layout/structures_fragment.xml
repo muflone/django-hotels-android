@@ -6,6 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/structuresImageView"
+        android:layout_width="64dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/structures"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_structures" />
+
     <android.support.design.widget.TabLayout
         android:id="@+id/structuresLayout"
         android:layout_width="0dp"
@@ -118,7 +128,7 @@
                     android:id="@+id/lastNameLabel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:text="@string/last_name_label"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
@@ -143,15 +153,5 @@
         </android.support.v7.widget.CardView>
 
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/structuresImageView"
-        android:layout_width="64dp"
-        android:layout_height="0dp"
-        android:contentDescription="@string/structures"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_structures" />
 
 </android.support.constraint.ConstraintLayout>
