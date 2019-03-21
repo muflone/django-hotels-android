@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,7 +32,7 @@ public class StructuresFragment extends Fragment {
 
     private TextView firstNameView;
     private TextView lastNameView;
-    private TextView genderView;
+    private ImageView genderImageView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -95,7 +96,7 @@ public class StructuresFragment extends Fragment {
         this.employeesView = rootLayout.findViewById(R.id.employeesView);
         this.firstNameView = rootLayout.findViewById(R.id.firstNameView);
         this.lastNameView = rootLayout.findViewById(R.id.lastNameView);
-        this.genderView = rootLayout.findViewById(R.id.genderView);
+        this.genderImageView = rootLayout.findViewById(R.id.genderImageView);
     }
 
     protected void loadEmployees(TabLayout.Tab tab) {
@@ -114,6 +115,18 @@ public class StructuresFragment extends Fragment {
         // Load Employee details
         this.firstNameView.setText(employee.firstName);
         this.lastNameView.setText(employee.lastName);
-        this.genderView.setText(employee.gender);
+        int genderResourceId;
+        switch (employee.gender) {
+            case "male":
+                genderResourceId = R.drawable.ic_gender_male;
+                break;
+            case "female":
+                genderResourceId = R.drawable.ic_gender_female;
+                break;
+            default:
+                genderResourceId = R.drawable.ic_gender_unknown;
+                break;
+        }
+        this.genderImageView.setImageResource(genderResourceId);
     }
 }

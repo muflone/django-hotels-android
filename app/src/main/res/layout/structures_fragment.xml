@@ -71,6 +71,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/genderImageView"
+                    android:layout_width="48dp"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="8dp"
+                    android:contentDescription="@string/gender_tooltip"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/employeeLabel"
+                    tools:srcCompat="@drawable/ic_gender_unknown" />
+
                 <TextView
                     android:id="@+id/firstNameLabel"
                     android:layout_width="wrap_content"
@@ -79,7 +90,7 @@
                     android:layout_marginTop="8dp"
                     android:text="@string/first_name_label"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/genderImageView"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -98,8 +109,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/last_name_label"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/firstNameLabel"
                     app:layout_constraintStart_toStartOf="@+id/firstNameLabel"
                     app:layout_constraintTop_toBottomOf="@+id/firstNameLabel" />
@@ -115,29 +128,6 @@
                     app:layout_constraintStart_toEndOf="@+id/lastNameLabel"
                     tools:text="LAST NAME" />
 
-                <TextView
-                    android:id="@+id/genderLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/gender_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/lastNameLabel"
-                    app:layout_constraintStart_toStartOf="@+id/lastNameLabel"
-                    app:layout_constraintTop_toBottomOf="@+id/lastNameLabel" />
-
-                <TextView
-                    android:id="@+id/genderView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/genderLabel"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/genderLabel"
-                    tools:text="GENDER" />
             </android.support.constraint.ConstraintLayout>
 
         </android.support.v7.widget.CardView>
