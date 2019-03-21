@@ -13,16 +13,22 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 
 @Dao
 public interface RegionDao {
-    @Query("SELECT * FROM regions")
+    @Query("SELECT * " +
+           "FROM regions")
     List<Region> getAll();
 
-    @Query("SELECT * FROM regions WHERE id = :id")
+    @Query("SELECT * " +
+           "FROM regions " +
+           "WHERE id = :id")
     Region findById(long id);
 
-    @Query("SELECT * FROM regions WHERE name = :name")
+    @Query("SELECT * " +
+           "FROM regions " +
+           "WHERE name = :name")
     Region findByName(String name);
 
-    @Query("SELECT COUNT(*) FROM regions")
+    @Query("SELECT COUNT(*) " +
+           "FROM regions")
     long count();
 
     @Insert(onConflict = IGNORE)

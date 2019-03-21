@@ -13,16 +13,22 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 
 @Dao
 public interface ContractTypeDao {
-    @Query("SELECT * FROM contract_types")
+    @Query("SELECT * " +
+           "FROM contract_types")
     List<ContractType> getAll();
 
-    @Query("SELECT * FROM contract_types WHERE id = :id")
+    @Query("SELECT * " +
+           "FROM contract_types " +
+           "WHERE id = :id")
     ContractType findById(long id);
 
-    @Query("SELECT * FROM contract_types WHERE name = :name")
+    @Query("SELECT * " +
+           "FROM contract_types " +
+           "WHERE name = :name")
     ContractType findByName(String name);
 
-    @Query("SELECT COUNT(*) FROM contract_types")
+    @Query("SELECT COUNT(*) " +
+           "FROM contract_types")
     long count();
 
     @Insert(onConflict = IGNORE)

@@ -13,16 +13,22 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 
 @Dao
 public interface StructureDao {
-    @Query("SELECT * FROM structures")
+    @Query("SELECT * " +
+           "FROM structures")
     List<Structure> getAll();
 
-    @Query("SELECT * FROM structures WHERE id = :id")
+    @Query("SELECT * " +
+           "FROM structures " +
+           "WHERE id = :id")
     Structure findById(long id);
 
-    @Query("SELECT * FROM structures WHERE name = :name")
+    @Query("SELECT * " +
+           "FROM structures " +
+           "WHERE name = :name")
     Structure findByName(String name);
 
-    @Query("SELECT COUNT(*) FROM structures")
+    @Query("SELECT COUNT(*) " +
+           "FROM structures")
     long count();
 
     @Insert(onConflict = IGNORE)

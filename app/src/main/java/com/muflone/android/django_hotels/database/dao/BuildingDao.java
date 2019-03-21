@@ -13,19 +13,27 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 
 @Dao
 public interface BuildingDao {
-    @Query("SELECT * FROM buildings")
+    @Query("SELECT * " +
+           "FROM buildings")
     List<Building> getAll();
 
-    @Query("SELECT * FROM buildings WHERE structure_id = :structureId")
+    @Query("SELECT * " +
+           "FROM buildings " +
+           "WHERE structure_id = :structureId")
     List<Building> listByStructure(long structureId);
 
-    @Query("SELECT * FROM buildings WHERE id = :id")
+    @Query("SELECT * " +
+           "FROM buildings " +
+           "WHERE id = :id")
     Building findById(long id);
 
-    @Query("SELECT * FROM buildings WHERE name = :name")
+    @Query("SELECT * " +
+           "FROM buildings " +
+           "WHERE name = :name")
     Building findByName(String name);
 
-    @Query("SELECT COUNT(*) FROM buildings")
+    @Query("SELECT COUNT(*) " +
+           "FROM buildings")
     long count();
 
     @Insert(onConflict = IGNORE)

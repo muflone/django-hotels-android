@@ -13,16 +13,23 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 
 @Dao
 public interface EmployeeDao {
-    @Query("SELECT * FROM employees")
+    @Query("SELECT * " +
+           "FROM employees")
     List<Employee> getAll();
 
-    @Query("SELECT * FROM employees WHERE id = :id")
+    @Query("SELECT * " +
+           "FROM employees " +
+           "WHERE id = :id")
     Employee findById(long id);
 
-    @Query("SELECT * FROM employees WHERE first_name = :first_name AND last_name = :last_name")
+    @Query("SELECT * " +
+           "FROM employees " +
+           "WHERE first_name = :first_name " +
+           "  AND last_name = :last_name")
     Employee findByName(String first_name, String last_name);
 
-    @Query("SELECT COUNT(*) FROM employees")
+    @Query("SELECT COUNT(*) " +
+           "FROM employees")
     long count();
 
     @Insert(onConflict = IGNORE)

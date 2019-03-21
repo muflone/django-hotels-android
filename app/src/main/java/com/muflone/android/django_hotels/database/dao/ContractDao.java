@@ -14,16 +14,22 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 
 @Dao
 public interface ContractDao {
-    @Query("SELECT * FROM contracts")
+    @Query("SELECT * " +
+           "FROM contracts")
     List<Contract> getAll();
 
-    @Query("SELECT * FROM contracts WHERE id = :id")
+    @Query("SELECT * " +
+           "FROM contracts " +
+           "WHERE id = :id")
     Contract findById(long id);
 
-    @Query("SELECT * FROM contracts WHERE guid = :guid")
+    @Query("SELECT * " +
+           "FROM contracts " +
+           "WHERE guid = :guid")
     Contract findByGuid(String guid);
 
-    @Query("SELECT COUNT(*) FROM contracts")
+    @Query("SELECT COUNT(*) " +
+           "FROM contracts")
     long count();
 
     @Insert(onConflict = IGNORE)
