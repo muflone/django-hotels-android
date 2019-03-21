@@ -62,6 +62,9 @@ public class Structure {
     @Ignore
     public List<Building> buildings;
 
+    @Ignore
+    public List<Employee> employees;
+
     public Structure(long id, String name, long companyId, long brandId, long locationId) {
         this.id = id;
         this.name = name;

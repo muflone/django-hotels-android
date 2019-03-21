@@ -48,6 +48,9 @@ public class Building {
     @Ignore
     public List<Room> rooms = null;
 
+    @Ignore
+    public List<Employee> employees = null;
+
     public Building(long id, String name, long structureId, long locationId) {
         this.id = id;
         this.name = name;

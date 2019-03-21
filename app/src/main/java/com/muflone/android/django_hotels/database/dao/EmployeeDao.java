@@ -28,6 +28,28 @@ public interface EmployeeDao {
            "  AND last_name = :last_name")
     Employee findByName(String first_name, String last_name);
 
+    @Query("SELECT DISTINCT employees.* " +
+           "FROM employees " +
+           "INNER JOIN contracts " +
+           "   ON contracts.employee_id = employees.id " +
+           "INNER JOIN contract_buildings " +
+           "   ON contract_buildings.contract_id = contracts.id " +
+           "WHERE contract_buildings.building_id = :building_id")
+    List<Employee> findByBuilding(long building_id);
+
+    @Query("SELECT DISTINCT employees.* " +
+           "FROM employees " +
+           "INNER JOIN contracts " +
+           "   ON contracts.employee_id = employees.id " +
+           "INNER JOIN contract_buildings " +
+           "   ON contract_buildings.contract_id = contracts.id " +
+            "INNER JOIN buildings " +
+            "   ON buildings.id = contract_buildings.building_id " +
+            "INNER JOIN structures " +
+            "   ON structures.id = buildings.structure_id " +
+           "WHERE structures.id = :structure_id")
+    List<Employee> findByStructure(long structure_id);
+
     @Query("SELECT COUNT(*) " +
            "FROM employees")
     long count();

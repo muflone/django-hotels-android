@@ -20,7 +20,10 @@ import com.muflone.android.django_hotels.database.dao.RoomDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
+import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.Structure;
+
+import java.util.ArrayList;
 
 public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
     private final Api api;
@@ -58,6 +61,11 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
             structure.location.country = countryDao.findById(structure.location.countryId);
             // Load buildings
             structure.buildings = buildingDao.listByStructure(structure.id);
+            // Load employees
+            structure.employees = new ArrayList<Employee>();
+            for (Employee employee : employeeDao.findByStructure(structure.id)) {
+                structure.employees.add(employee);
+            }
             for(Building building : structure.buildings) {
                 // Load building location
                 building.location = locationDao.findById(building.locationId);
@@ -65,6 +73,11 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
                 building.location.country = countryDao.findById(building.location.countryId);
                 // Load rooms
                 building.rooms = roomDao.listByBuilding(building.id);
+                // Load employees
+                building.employees = new ArrayList<Employee>();
+                for (Employee employee : employeeDao.findByBuilding(building.id)) {
+                    building.employees.add(employee);
+                }
             }
             data.structures.add(structure);
         }
