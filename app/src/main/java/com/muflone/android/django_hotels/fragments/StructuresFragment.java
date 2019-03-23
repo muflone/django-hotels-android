@@ -65,13 +65,7 @@ public class StructuresFragment extends Fragment {
 
 
         // Initialize Structures
-        this.structuresTabs.removeAllTabs();
-        for (Structure structure : this.apiData.structuresMap.values()) {
-            TabLayout.Tab tabItem = this.structuresTabs.newTab();
-            this.structures.add(structure);
-            tabItem.setText(structure.name);
-            this.structuresTabs.addTab(tabItem);
-        }
+        this.loadStructures();
         this.structuresTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -119,6 +113,19 @@ public class StructuresFragment extends Fragment {
         this.weeklyHoursView = rootLayout.findViewById(R.id.weeklyHoursView);
         this.startDateView = rootLayout.findViewById(R.id.startDateView);
         this.endDateView = rootLayout.findViewById(R.id.endDateView);
+    }
+
+    protected void loadStructures() {
+        // Load all the structues, skipping those without any employee
+        this.structuresTabs.removeAllTabs();
+        for (Structure structure : this.apiData.structuresMap.values()) {
+            if (structure.employees.size() > 0) {
+                TabLayout.Tab tabItem = this.structuresTabs.newTab();
+                this.structures.add(structure);
+                tabItem.setText(structure.name);
+                this.structuresTabs.addTab(tabItem);
+            }
+        }
     }
 
     protected void loadEmployees(TabLayout.Tab tab) {
