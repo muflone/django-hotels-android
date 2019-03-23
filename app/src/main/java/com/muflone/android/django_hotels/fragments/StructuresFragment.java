@@ -70,12 +70,6 @@ public class StructuresFragment extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 loadEmployees(tab);
-                // Select the first employee for the selected tab
-                if (employeesList.size() > 0) {
-                    employeesView.requestFocusFromTouch();
-                    employeesView.setSelection(0);
-                    loadEmployee(selectedStructure.employees.get(0));
-                }
             }
 
             @Override
@@ -87,13 +81,8 @@ public class StructuresFragment extends Fragment {
             }
         });
         // Select the first structure tab
-        if (employeesList.size() > 0) {
-            this.structuresTabs.post(new Runnable() {
-                @Override
-                public void run() {
-                    loadEmployee(selectedStructure.employees.get(0));
-                }
-            });
+        if (this.structuresTabs.getTabCount() > 0 ) {
+            this.loadEmployees(this.structuresTabs.getTabAt(0));
         }
         return rootLayout;
     }
@@ -129,7 +118,7 @@ public class StructuresFragment extends Fragment {
     }
 
     protected void loadEmployees(TabLayout.Tab tab) {
-        // Load employess list for the selected Structure tab
+        // Load employees list for the selected Structure tab
         employeesList.clear();
         this.selectedStructure = this.structures.get(tab.getPosition());
         for (Employee employee : this.selectedStructure.employees) {
@@ -137,6 +126,17 @@ public class StructuresFragment extends Fragment {
         }
         // Update data
         ((ArrayAdapter) employeesView.getAdapter()).notifyDataSetChanged();
+        // Select the first employee for the selected tab
+        if (this.employeesList.size() > 0) {
+            this.employeesView.post(new Runnable() {
+                @Override
+                public void run() {
+                    employeesView.requestFocusFromTouch();
+                    employeesView.setSelection(0);
+                    loadEmployee(selectedStructure.employees.get(0));
+                }
+            });
+        }
     }
 
     protected void loadEmployee(Employee employee) {
