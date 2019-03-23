@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onSuccess(ApiData data) {
                 Singleton.getInstance().apiData = data;
-                for (Structure structure : data.structures) {
+                for (Structure structure : data.structuresMap.values()) {
                     System.out.println(structure.name);
                 }
             }

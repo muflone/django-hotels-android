@@ -92,7 +92,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
         brandDao.truncate();
 
         // Save data from structures
-        for (Structure structure : data.structures) {
+        for (Structure structure : data.structuresMap.values()) {
             brandDao.insert(structure.brand);
             companyDao.insert(structure.company);
             countryDao.insert(structure.location.country);
@@ -112,7 +112,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
             }
         }
         // Save data from contracts
-        for (Contract contract : data.contracts) {
+        for (Contract contract : data.contractsMap.values()) {
             employeeDao.insert(contract.employee);
             companyDao.insert(contract.company);
             contractTypeDao.insert(contract.contractType);

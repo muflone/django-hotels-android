@@ -164,12 +164,13 @@ public class Api {
                     while (jsonKeys.hasNext()) {
                         String key = (String) jsonKeys.next();
                         Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
-                        data.structures.add(objStructure);
+                        data.structuresMap.put(objStructure.id, objStructure);
                     }
                     // Loop over every contract
                     JSONArray jsonContracts = jsonRoot.getJSONArray("contracts");
                     for (int i = 0; i < jsonContracts.length(); i++) {
-                        data.contracts.add(new Contract(jsonContracts.getJSONObject(i)));
+                        Contract contract = new Contract(jsonContracts.getJSONObject(i));
+                        data.contractsMap.put(contract.id, contract);
                     }
                     // Check the final node for successful reads
                     this.checkStatusResponse(jsonRoot);

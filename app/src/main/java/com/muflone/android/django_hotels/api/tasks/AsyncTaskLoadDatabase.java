@@ -21,6 +21,7 @@ import com.muflone.android.django_hotels.database.dao.StructureDao;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Employee;
+import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Structure;
 
 import java.util.ArrayList;
@@ -53,8 +54,10 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
         StructureDao structureDao = database.structureDao();
         // Load Structures
         for(Structure structure : structureDao.getAll()) {
+            data.structuresMap.put(structure.id, structure);
             structure.company = companyDao.findById(structure.companyId);
             structure.brand = brandDao.findById(structure.brandId);
+            data.brandsMap.put(structure.brand.id, structure.brand);
             // Load Structure location
             structure.location = locationDao.findById(structure.locationId);
             structure.location.region = regionDao.findById(structure.location.regionId);
@@ -68,28 +71,37 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
                 structure.employees.add(employee);
             }
             for(Building building : structure.buildings) {
+                data.buildindsMap.put(building.id, building);
                 // Load building location
                 building.location = locationDao.findById(building.locationId);
                 building.location.region = regionDao.findById(building.location.regionId);
                 building.location.country = countryDao.findById(building.location.countryId);
                 // Load rooms
                 building.rooms = roomDao.listByBuilding(building.id);
+                for (Room room : building.rooms) {
+                    data.roomsMap.put(room.id, room);
+                }
                 // Load employees
                 building.employees = new ArrayList<Employee>();
                 for (Employee employee : employeeDao.findByBuilding(building.id)) {
+                    employee.contractBuildings = contractBuildingsDao.findByEmployee(employee.id);
                     building.employees.add(employee);
                 }
             }
-            data.structures.add(structure);
         }
         // Load Contracts
         for(Contract contract : contractDao.getAll()) {
+            data.contractsMap.put(contract.id, contract);
             contract.employee = employeeDao.findById(contract.employeeId);
+            data.employeesMap.put(contract.employee.id, contract.employee);
             contract.employee.contractBuildings = contractBuildingsDao.findByEmployee(contract.employeeId);
             contract.company = companyDao.findById(contract.companyId);
+            data.companiesMap.put(contract.company.id, contract.company);
             contract.contractType = contractTypeDao.findById(contract.contractTypeId);
+            data.contractTypeMap.put(contract.contractType.id, contract.contractType);
             contract.jobType = jobTypeDao.findById(contract.jobTypeId);
-            data.contracts.add(contract);
+            data.jobTypesMap.put(contract.jobType.id, contract.jobType);
+            data.contractsMap.put(contract.id, contract);
         }
         return data;
     }

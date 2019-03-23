@@ -17,6 +17,9 @@ import android.widget.TextView;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.api.ApiData;
+import com.muflone.android.django_hotels.database.models.Contract;
+import com.muflone.android.django_hotels.database.models.ContractBuildings;
+import com.muflone.android.django_hotels.database.models.ContractType;
 import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.Structure;
 
@@ -24,11 +27,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StructuresFragment extends Fragment {
+    private final ApiData apiData = Singleton.getInstance().apiData;
+
     private View rootLayout;
     private Structure selectedStructure;
     private TabLayout structuresTabs;
     private ListView employeesView;
     private List<String> employeesList = new ArrayList<>();
+    private List<Structure> structures = new ArrayList<>();
 
     private TextView firstNameView;
     private TextView lastNameView;
@@ -49,10 +55,10 @@ public class StructuresFragment extends Fragment {
 
 
         // Initialize Structures
-        final ApiData apiData = Singleton.getInstance().apiData;
         this.structuresTabs.removeAllTabs();
-        for (Structure structure : apiData.structures) {
+        for (Structure structure : this.apiData.structuresMap.values()) {
             TabLayout.Tab tabItem = this.structuresTabs.newTab();
+            this.structures.add(structure);
             tabItem.setText(structure.name);
             this.structuresTabs.addTab(tabItem);
         }
@@ -102,8 +108,7 @@ public class StructuresFragment extends Fragment {
     protected void loadEmployees(TabLayout.Tab tab) {
         // Load employess list for the selected Structure tab
         employeesList.clear();
-        ApiData apiData = Singleton.getInstance().apiData;
-        this.selectedStructure = apiData.structures.get(tab.getPosition());
+        this.selectedStructure = this.structures.get(tab.getPosition());
         for (Employee employee : this.selectedStructure.employees) {
             employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
         }
