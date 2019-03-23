@@ -6,7 +6,6 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
 import com.muflone.android.django_hotels.database.models.Contract;
-import com.muflone.android.django_hotels.database.models.ContractType;
 
 import java.util.List;
 

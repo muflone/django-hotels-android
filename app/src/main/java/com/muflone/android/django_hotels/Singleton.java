@@ -1,7 +1,5 @@
 package com.muflone.android.django_hotels;
 
-import android.content.Context;
-
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 
