@@ -43,6 +43,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:baselineAligned="false"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,96 +62,256 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/structuresLayout"></ListView>
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/cardView"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="0.3"
-            android:rotation="0"
-            app:cardBackgroundColor="@color/color_buildings_background"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="6dp"
-            app:contentPadding="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/employeesView"
-            app:layout_constraintTop_toBottomOf="@+id/structuresLayout">
+            android:layout_height="match_parent"
+            android:layout_weight="0.3">
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardViewEmployee"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="0.3"
+                android:rotation="0"
+                app:cardBackgroundColor="@color/color_buildings_background"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/employeeLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/employee"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/genderImageView"
-                    android:layout_width="48dp"
-                    android:layout_height="0dp"
-                    android:layout_marginBottom="8dp"
-                    android:contentDescription="@string/gender_tooltip"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/employeeLabel"
-                    tools:srcCompat="@drawable/ic_gender_unknown" />
+                    <TextView
+                        android:id="@+id/employeeLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/employee"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/firstNameLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/first_name_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    app:layout_constraintStart_toEndOf="@+id/genderImageView"
-                    app:layout_constraintTop_toBottomOf="@+id/employeeLabel" />
+                    <TextView
+                        android:id="@+id/firstNameLabel"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/first_name_label"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/employeeLabel" />
 
-                <TextView
-                    android:id="@+id/firstNameView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/firstNameLabel"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/firstNameLabel"
-                    tools:text="FIRST NAME" />
+                    <TextView
+                        android:id="@+id/firstNameView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/firstNameLabel"
+                        app:layout_constraintEnd_toStartOf="@+id/genderImageView"
+                        app:layout_constraintStart_toEndOf="@+id/firstNameLabel"
+                        tools:text="FIRST NAME" />
 
-                <TextView
-                    android:id="@+id/lastNameLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/last_name_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/firstNameLabel"
-                    app:layout_constraintStart_toStartOf="@+id/firstNameLabel"
-                    app:layout_constraintTop_toBottomOf="@+id/firstNameLabel" />
+                    <TextView
+                        android:id="@+id/lastNameLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/last_name_label"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/firstNameLabel"
+                        app:layout_constraintStart_toStartOf="@+id/firstNameLabel"
+                        app:layout_constraintTop_toBottomOf="@+id/firstNameLabel" />
 
-                <TextView
-                    android:id="@+id/lastNameView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/lastNameLabel"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/lastNameLabel"
-                    tools:text="LAST NAME" />
+                    <TextView
+                        android:id="@+id/lastNameView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/lastNameLabel"
+                        app:layout_constraintEnd_toEndOf="@+id/firstNameView"
+                        app:layout_constraintStart_toStartOf="@+id/firstNameView"
+                        tools:text="LAST NAME" />
 
-            </android.support.constraint.ConstraintLayout>
+                    <ImageView
+                        android:id="@+id/genderImageView"
+                        android:layout_width="48dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:contentDescription="@string/gender_label"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/employeeLabel"
+                        tools:srcCompat="@drawable/ic_gender_unknown" />
 
-        </android.support.v7.widget.CardView>
+                </android.support.constraint.ConstraintLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardViewContract"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:cardBackgroundColor="@color/color_buildings_background"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardViewEmployee">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/contractLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/contract"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/companyLabel"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/company_label"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/contractLabel" />
+
+                    <TextView
+                        android:id="@+id/companyView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/companyLabel"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/companyLabel"
+                        tools:text="COMPANY" />
+
+                    <TextView
+                        android:id="@+id/contractTypeLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/type_label"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        app:layout_constraintEnd_toEndOf="@+id/companyLabel"
+                        app:layout_constraintStart_toStartOf="@+id/companyLabel"
+                        app:layout_constraintTop_toBottomOf="@+id/companyLabel" />
+
+                    <TextView
+                        android:id="@+id/contractTypeView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/contractTypeLabel"
+                        app:layout_constraintEnd_toEndOf="@+id/companyView"
+                        app:layout_constraintStart_toStartOf="@+id/companyView"
+                        tools:text="CONTRACT TYPE" />
+
+                    <TextView
+                        android:id="@+id/dailyHoursLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/daily_hours_label"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        app:layout_constraintEnd_toEndOf="@+id/contractTypeLabel"
+                        app:layout_constraintStart_toStartOf="@+id/contractTypeLabel"
+                        app:layout_constraintTop_toBottomOf="@+id/contractTypeLabel" />
+
+                    <TextView
+                        android:id="@+id/dailyHoursView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/dailyHoursLabel"
+                        app:layout_constraintEnd_toEndOf="@+id/contractTypeView"
+                        app:layout_constraintStart_toStartOf="@+id/contractTypeView"
+                        tools:text="DAILY HOURS" />
+
+                    <TextView
+                        android:id="@+id/weeklyHoursLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/weekly_hours_label"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        app:layout_constraintEnd_toEndOf="@+id/dailyHoursLabel"
+                        app:layout_constraintStart_toStartOf="@+id/dailyHoursLabel"
+                        app:layout_constraintTop_toBottomOf="@+id/dailyHoursLabel" />
+
+                    <TextView
+                        android:id="@+id/weeklyHoursView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/weeklyHoursLabel"
+                        app:layout_constraintEnd_toEndOf="@+id/dailyHoursView"
+                        app:layout_constraintStart_toStartOf="@+id/dailyHoursView"
+                        tools:text="WEEKLY HOURS" />
+
+                    <TextView
+                        android:id="@+id/startDateLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/start_date_label"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        app:layout_constraintEnd_toEndOf="@+id/weeklyHoursLabel"
+                        app:layout_constraintStart_toStartOf="@+id/dailyHoursLabel"
+                        app:layout_constraintTop_toBottomOf="@+id/weeklyHoursLabel" />
+
+                    <TextView
+                        android:id="@+id/startDateView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/startDateLabel"
+                        app:layout_constraintEnd_toEndOf="@+id/weeklyHoursView"
+                        app:layout_constraintStart_toStartOf="@+id/weeklyHoursView"
+                        tools:text="START DATE" />
+
+                    <TextView
+                        android:id="@+id/endDateLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/end_date_label"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/startDateLabel"
+                        app:layout_constraintStart_toStartOf="@+id/startDateLabel"
+                        app:layout_constraintTop_toBottomOf="@+id/startDateLabel" />
+
+                    <TextView
+                        android:id="@+id/endDateView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/endDateLabel"
+                        app:layout_constraintEnd_toEndOf="@+id/startDateView"
+                        app:layout_constraintStart_toStartOf="@+id/startDateView"
+                        tools:text="END DATE" />
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
+
+        </android.support.constraint.ConstraintLayout>
 
     </LinearLayout>
 

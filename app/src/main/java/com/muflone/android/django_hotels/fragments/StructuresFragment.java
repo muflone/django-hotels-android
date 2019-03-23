@@ -23,6 +23,8 @@ import com.muflone.android.django_hotels.database.models.ContractType;
 import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.Structure;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +41,12 @@ public class StructuresFragment extends Fragment {
     private TextView firstNameView;
     private TextView lastNameView;
     private ImageView genderImageView;
+    private TextView companyView;
+    private TextView contractTypeView;
+    private TextView dailyHoursView;
+    private TextView weeklyHoursView;
+    private TextView startDateView;
+    private TextView endDateView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -49,6 +57,8 @@ public class StructuresFragment extends Fragment {
                 getActivity(), android.R.layout.simple_list_item_1, this.employeesList));
         this.employeesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                employeesView.requestFocusFromTouch();
+                employeesView.setSelection(position);
                 loadEmployee(selectedStructure.employees.get(position));
             }
         });
@@ -103,6 +113,12 @@ public class StructuresFragment extends Fragment {
         this.firstNameView = rootLayout.findViewById(R.id.firstNameView);
         this.lastNameView = rootLayout.findViewById(R.id.lastNameView);
         this.genderImageView = rootLayout.findViewById(R.id.genderImageView);
+        this.companyView = rootLayout.findViewById(R.id.companyView);
+        this.contractTypeView = rootLayout.findViewById(R.id.contractTypeView);
+        this.dailyHoursView = rootLayout.findViewById(R.id.dailyHoursView);
+        this.weeklyHoursView = rootLayout.findViewById(R.id.weeklyHoursView);
+        this.startDateView = rootLayout.findViewById(R.id.startDateView);
+        this.endDateView = rootLayout.findViewById(R.id.endDateView);
     }
 
     protected void loadEmployees(TabLayout.Tab tab) {
@@ -133,5 +149,17 @@ public class StructuresFragment extends Fragment {
                 break;
         }
         this.genderImageView.setImageResource(genderResourceId);
+        ContractBuildings contractBuildings = employee.contractBuildings.get(0);
+        Contract contract = this.apiData.contractsMap.get(contractBuildings.contractId);
+        this.companyView.setText(this.apiData.companiesMap.get(contract.companyId).name);
+        // Add contract info
+        ContractType contractType = this.apiData.contractTypeMap.get(contract.contractTypeId);
+        this.contractTypeView.setText(contractType.name);
+        this.dailyHoursView.setText(String.valueOf(contractType.dailyHours));
+        this.weeklyHoursView.setText(String.valueOf(contractType.weeklyHours));
+        // Add contract dates
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        this.startDateView.setText(formatter.format(contract.startDate));
+        this.endDateView.setText(formatter.format(contract.endDate));
     }
 }
