@@ -17,11 +17,13 @@ import com.muflone.android.django_hotels.database.dao.JobTypeDao;
 import com.muflone.android.django_hotels.database.dao.LocationDao;
 import com.muflone.android.django_hotels.database.dao.RegionDao;
 import com.muflone.android.django_hotels.database.dao.RoomDao;
+import com.muflone.android.django_hotels.database.dao.ServiceDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.Room;
+import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
 
 import java.util.ArrayList;
@@ -51,6 +53,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
         LocationDao locationDao = database.locationDao();
         RegionDao regionDao = database.regionDao();
         RoomDao roomDao = database.roomDao();
+        ServiceDao serviceDao = database.serviceDao();
         StructureDao structureDao = database.structureDao();
         // Load Structures
         for(Structure structure : structureDao.getAll()) {
@@ -102,6 +105,14 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
             contract.jobType = jobTypeDao.findById(contract.jobTypeId);
             data.jobTypesMap.put(contract.jobType.id, contract.jobType);
             data.contractsMap.put(contract.id, contract);
+        }
+        // Load Services
+        for(Service service : serviceDao.getAll()) {
+            if (service.extra_service) {
+                data.serviceExtraMap.put(service.id, service);
+            } else {
+                data.serviceMap.put(service.id, service);
+            }
         }
         return data;
     }

@@ -17,6 +17,7 @@ import com.muflone.android.django_hotels.database.dao.JobTypeDao;
 import com.muflone.android.django_hotels.database.dao.LocationDao;
 import com.muflone.android.django_hotels.database.dao.RegionDao;
 import com.muflone.android.django_hotels.database.dao.RoomDao;
+import com.muflone.android.django_hotels.database.dao.ServiceDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
 import com.muflone.android.django_hotels.database.models.Brand;
 import com.muflone.android.django_hotels.database.models.Building;
@@ -30,12 +31,13 @@ import com.muflone.android.django_hotels.database.models.JobType;
 import com.muflone.android.django_hotels.database.models.Location;
 import com.muflone.android.django_hotels.database.models.Region;
 import com.muflone.android.django_hotels.database.models.Room;
+import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
 
 @Database(entities = {Brand.class, Building.class, Company.class,
                       Contract.class, ContractBuildings.class,
                       ContractType.class, Country.class, Employee.class, JobType.class,
-                      Location.class, Region.class, Room.class, Structure.class},
+                      Location.class, Region.class, Room.class, Service.class, Structure.class},
           version = 1)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -53,11 +55,13 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract LocationDao locationDao();
     public abstract RegionDao regionDao();
     public abstract RoomDao roomDao();
+    public abstract ServiceDao serviceDao();
     public abstract StructureDao structureDao();
 
     public static AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = android.arch.persistence.room.Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME)
+            INSTANCE = android.arch.persistence.room.Room.databaseBuilder(
+                    context.getApplicationContext(), AppDatabase.class, DATABASE_NAME)
                 // allow queries on the main thread.
                 // Don’t do this on a real app! See PersistenceBasicSample for an example.
                 //.allowMainThreadQueries()

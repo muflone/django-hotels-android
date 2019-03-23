@@ -18,11 +18,13 @@ import com.muflone.android.django_hotels.database.dao.JobTypeDao;
 import com.muflone.android.django_hotels.database.dao.LocationDao;
 import com.muflone.android.django_hotels.database.dao.RegionDao;
 import com.muflone.android.django_hotels.database.dao.RoomDao;
+import com.muflone.android.django_hotels.database.dao.ServiceDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.ContractBuildings;
 import com.muflone.android.django_hotels.database.models.Room;
+import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
 
 public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
@@ -75,6 +77,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
         LocationDao locationDao = database.locationDao();
         RegionDao regionDao = database.regionDao();
         RoomDao roomDao = database.roomDao();
+        ServiceDao serviceDao = database.serviceDao();
         StructureDao structureDao = database.structureDao();
 
         // Delete previous data
@@ -90,6 +93,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
         countryDao.truncate();
         companyDao.truncate();
         brandDao.truncate();
+        serviceDao.truncate();
 
         // Save data from structures
         for (Structure structure : data.structuresMap.values()) {
@@ -122,6 +126,10 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
             for (long building_id : contract.buildings) {
                 contractBuildingsDao.insert(new ContractBuildings(contract.id, building_id));
             }
+        }
+        // Save data for services
+        for (Service service : data.serviceMap.values()) {
+            serviceDao.insert(service);
         }
     }
 }

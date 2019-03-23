@@ -14,6 +14,7 @@ import com.muflone.android.django_hotels.api.tasks.AsyncTaskDownload;
 import com.muflone.android.django_hotels.api.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.api.tasks.AsyncTaskLoadDatabase;
 import com.muflone.android.django_hotels.database.models.Contract;
+import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.otp.Token;
 
@@ -171,6 +172,16 @@ public class Api {
                     for (int i = 0; i < jsonContracts.length(); i++) {
                         Contract contract = new Contract(jsonContracts.getJSONObject(i));
                         data.contractsMap.put(contract.id, contract);
+                    }
+                    // Loop over every service
+                    JSONArray jsonServices = jsonRoot.getJSONArray("services");
+                    for (int i = 0; i < jsonServices.length(); i++) {
+                        Service service = new Service(jsonServices.getJSONObject(i));
+                        if (service.extra_service) {
+                            data.serviceExtraMap.put(service.id, service);
+                        } else {
+                            data.serviceMap.put(service.id, service);
+                        }
                     }
                     // Check the final node for successful reads
                     this.checkStatusResponse(jsonRoot);

@@ -8,6 +8,7 @@ import com.muflone.android.django_hotels.database.models.ContractType;
 import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.JobType;
 import com.muflone.android.django_hotels.database.models.Room;
+import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
 
 import java.util.HashMap;
@@ -21,6 +22,8 @@ public class ApiData {
     public final HashMap<Long, Employee> employeesMap;
     public final HashMap<Long, JobType> jobTypesMap;
     public final HashMap<Long, Room> roomsMap;
+    public final HashMap<Long, Service> serviceMap;
+    public final HashMap<Long, Service> serviceExtraMap;
     public final HashMap<Long, Structure> structuresMap;
     public Exception exception;
 
@@ -33,6 +36,8 @@ public class ApiData {
         this.employeesMap = new HashMap<>();
         this.jobTypesMap = new HashMap<>();
         this.roomsMap = new HashMap<>();
+        this.serviceMap = new HashMap<>();
+        this.serviceExtraMap = new HashMap<>();
         this.structuresMap = new HashMap<>();
     }
 }
