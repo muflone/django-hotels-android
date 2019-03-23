@@ -65,13 +65,13 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
             // Load buildings
             structure.buildings = buildingDao.listByStructure(structure.id);
             // Load employees
-            structure.employees = new ArrayList<Employee>();
+            structure.employees = new ArrayList<>();
             for (Employee employee : employeeDao.findByStructure(structure.id)) {
                 employee.contractBuildings = contractBuildingsDao.findByEmployee(employee.id);
                 structure.employees.add(employee);
             }
             for(Building building : structure.buildings) {
-                data.buildindsMap.put(building.id, building);
+                data.buildingsMap.put(building.id, building);
                 // Load building location
                 building.location = locationDao.findById(building.locationId);
                 building.location.region = regionDao.findById(building.location.regionId);
@@ -82,7 +82,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
                     data.roomsMap.put(room.id, room);
                 }
                 // Load employees
-                building.employees = new ArrayList<Employee>();
+                building.employees = new ArrayList<>();
                 for (Employee employee : employeeDao.findByBuilding(building.id)) {
                     employee.contractBuildings = contractBuildingsDao.findByEmployee(employee.id);
                     building.employees.add(employee);

@@ -35,8 +35,8 @@ public class StructuresFragment extends Fragment {
     private Structure selectedStructure;
     private TabLayout structuresTabs;
     private ListView employeesView;
-    private List<String> employeesList = new ArrayList<>();
-    private List<Structure> structures = new ArrayList<>();
+    private final List<String> employeesList = new ArrayList<>();
+    private final List<Structure> structures = new ArrayList<>();
 
     private TextView firstNameView;
     private TextView lastNameView;
@@ -53,7 +53,7 @@ public class StructuresFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         this.loadUI(inflater, container);
-        this.employeesView.setAdapter(new ArrayAdapter<String>(
+        this.employeesView.setAdapter(new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_list_item_1, this.employeesList));
         this.employeesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -105,7 +105,7 @@ public class StructuresFragment extends Fragment {
     }
 
     protected void loadStructures() {
-        // Load all the structues, skipping those without any employee
+        // Load all the structures, skipping those without any employee
         this.structuresTabs.removeAllTabs();
         for (Structure structure : this.apiData.structuresMap.values()) {
             if (structure.employees.size() > 0) {

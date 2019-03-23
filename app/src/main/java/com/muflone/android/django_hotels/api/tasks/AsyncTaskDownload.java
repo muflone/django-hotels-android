@@ -123,6 +123,5 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
                 contractBuildingsDao.insert(new ContractBuildings(contract.id, building_id));
             }
         }
-        return;
     }
 }

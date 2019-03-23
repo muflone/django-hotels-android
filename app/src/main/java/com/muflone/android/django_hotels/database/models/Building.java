@@ -37,7 +37,7 @@ public class Building {
     public final String name;
 
     @ColumnInfo(name = "structure_id")
-    public long structureId;
+    public final long structureId;
 
     @Ignore
     public Location location = null;

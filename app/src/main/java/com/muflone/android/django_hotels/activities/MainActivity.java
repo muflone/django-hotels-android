@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
     private static final int SETTINGS_RETURN_CODE = 1;
-    Fragment fragment = null;
-    MenuItem menuItemHome = null;
-    MenuItem menuItemSettings = null;
-    MenuItem menuItemSync = null;
+    private Fragment fragment = null;
+    private MenuItem menuItemHome = null;
+    private MenuItem menuItemSettings = null;
+    private MenuItem menuItemSync = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +63,13 @@ public class MainActivity extends AppCompatActivity
         Menu menu = navigationView.getMenu();
         for (int item = 0; item < menu.size(); item++) {
             switch (menu.getItem(item).getItemId()) {
-                case R.id.menuitemHome:
+                case R.id.menuItemHome:
                     this.menuItemHome = menu.getItem(item);
                     break;
-                case R.id.menuitemSettings:
+                case R.id.menuItemSettings:
                     this.menuItemSettings = menu.getItem(item);
                     break;
-                case R.id.menuitemSync:
+                case R.id.menuItemSync:
                     this.menuItemSync = menu.getItem(item);
                     break;
             }
@@ -92,9 +92,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onSuccess(ApiData data) {
                 Singleton.getInstance().apiData = data;
-                for (Structure structure : data.structuresMap.values()) {
-                    System.out.println(structure.name);
-                }
             }
 
             @Override
@@ -165,23 +162,23 @@ public class MainActivity extends AppCompatActivity
         item.setChecked(true);
         // Open Fragment or related Activity
         switch (item.getItemId()) {
-            case R.id.menuitemHome:
+            case R.id.menuItemHome:
                 fragment = new HomeFragment();
                 break;
-            case R.id.menuitemStructures:
+            case R.id.menuItemStructures:
                 fragment = new StructuresFragment();
                 break;
-            case R.id.menuitemExtras:
+            case R.id.menuItemExtras:
                 fragment = new ExtrasFragment();
                 break;
-            case R.id.menuitemSync:
+            case R.id.menuItemSync:
                 fragment = new SyncFragment();
                 break;
-            case R.id.menuitemSettings:
+            case R.id.menuItemSettings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivityForResult(intent, SETTINGS_RETURN_CODE);
                 break;
-            case R.id.menuitemAbout:
+            case R.id.menuItemAbout:
                 fragment = new AboutFragment();
                 break;
         }

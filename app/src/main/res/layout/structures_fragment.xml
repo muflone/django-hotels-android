@@ -60,7 +60,7 @@
             android:listSelector="@color/color_employees_selected"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/structuresLayout"></ListView>
+            app:layout_constraintTop_toBottomOf="@+id/structuresLayout" />
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

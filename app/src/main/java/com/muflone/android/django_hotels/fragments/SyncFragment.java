@@ -26,7 +26,6 @@ public class SyncFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         final View rootLayout = getActivity().findViewById(R.id.drawer_layout);
-        System.out.println(Singleton.getInstance().api.getCurrentTokenCode());
         // Download data asynchronously from the server
         Singleton.getInstance().api.getData(new AsyncTaskListener<ApiData>() {
             @Override
