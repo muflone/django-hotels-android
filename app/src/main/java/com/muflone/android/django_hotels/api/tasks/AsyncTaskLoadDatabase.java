@@ -64,6 +64,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
             // Load employees
             structure.employees = new ArrayList<Employee>();
             for (Employee employee : employeeDao.findByStructure(structure.id)) {
+                employee.contractBuildings = contractBuildingsDao.findByEmployee(employee.id);
                 structure.employees.add(employee);
             }
             for(Building building : structure.buildings) {
@@ -84,6 +85,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
         // Load Contracts
         for(Contract contract : contractDao.getAll()) {
             contract.employee = employeeDao.findById(contract.employeeId);
+            contract.employee.contractBuildings = contractBuildingsDao.findByEmployee(contract.employeeId);
             contract.company = companyDao.findById(contract.companyId);
             contract.contractType = contractTypeDao.findById(contract.contractTypeId);
             contract.jobType = jobTypeDao.findById(contract.jobTypeId);

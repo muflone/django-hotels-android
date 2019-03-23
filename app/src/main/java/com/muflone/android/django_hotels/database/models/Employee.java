@@ -8,6 +8,8 @@ import android.arch.persistence.room.PrimaryKey;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 @Entity(tableName = "employees")
 public class Employee {
     @PrimaryKey
@@ -21,6 +23,9 @@ public class Employee {
 
     @ColumnInfo(name = "gender")
     public final String gender;
+
+    @Ignore
+    public List<ContractBuildings> contractBuildings = null;
 
     public Employee(long id, String firstName, String lastName, String gender) {
         this.id = id;

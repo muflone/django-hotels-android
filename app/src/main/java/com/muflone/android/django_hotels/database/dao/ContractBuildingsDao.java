@@ -27,6 +27,15 @@ public interface ContractBuildingsDao {
            "WHERE building_id = :building_id")
     List<ContractBuildings> findByBuilding(long building_id);
 
+    @Query("SELECT contract_buildings.* " +
+           "FROM contract_buildings " +
+           "INNER JOIN contracts " +
+           "   ON contracts.id = contract_buildings.contract_id " +
+           "INNER JOIN employees " +
+           "   ON employees.id = contracts.employee_id " +
+           "WHERE employees.id = :employee_id")
+    List<ContractBuildings> findByEmployee(long employee_id);
+
     @Query("SELECT COUNT(*) " +
            "FROM contract_buildings")
     long count();
