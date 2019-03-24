@@ -42,9 +42,10 @@ public class StructuresFragment extends Fragment {
     private TabLayout structuresTabs;
     private ListView employeesView;
     private ExpandableListView roomsView;
+    private ExpandableListAdapter buildingRoomsAdapter;
     private final List<String> employeesList = new ArrayList<>();
-    private final List<String> buildingsList = new ArrayList<String>();
-    private final HashMap<String, List<String>> roomsList = new HashMap<String, List<String>>();
+    private final List<String> buildingsList = new ArrayList<>();
+    private final HashMap<String, List<String>> roomsList = new HashMap<>();
     private final List<String> servicesList = new ArrayList<>();
     private final List<Structure> structures = new ArrayList<>();
 
@@ -58,12 +59,11 @@ public class StructuresFragment extends Fragment {
     private TextView startDateView;
     private TextView endDateView;
 
-    ExpandableListAdapter adapterBuildingRooms;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // Initialize UI
         this.loadUI(inflater, container);
 
         this.employeesView.setAdapter(new ArrayAdapter<>(
@@ -97,8 +97,8 @@ public class StructuresFragment extends Fragment {
             this.loadEmployees(this.structuresTabs.getTabAt(0));
         }
 
-        adapterBuildingRooms = new ExpandableListAdapter(getActivity(), buildingsList, roomsList);
-        this.roomsView.setAdapter(adapterBuildingRooms);
+        this.buildingRoomsAdapter = new ExpandableListAdapter(getActivity(), buildingsList, roomsList);
+        this.roomsView.setAdapter(this.buildingRoomsAdapter);
         this.roomsView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v,
@@ -148,7 +148,7 @@ public class StructuresFragment extends Fragment {
         for (Employee employee : this.selectedStructure.employees) {
             employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
         }
-        // Update data
+        // Update data in the list
         ((ArrayAdapter) employeesView.getAdapter()).notifyDataSetChanged();
         // Select the first employee for the selected tab
         if (this.employeesList.size() > 0) {
@@ -204,70 +204,64 @@ public class StructuresFragment extends Fragment {
             }
             this.roomsList.put(building.name, rooms);
         }
-        adapterBuildingRooms.notifyDataSetChanged();
-        // Expand all buildings groups
-        for (int i = 0; i < this.buildingsList.size(); i++) {
-            this.roomsView.expandGroup(i);
+        this.buildingRoomsAdapter.notifyDataSetChanged();
+        // Collapse all the buildings groups
+        // TODO: implement initial collapse/expansion as preference
+        for (int group = 0; group < this.buildingsList.size(); group++) {
+            this.roomsView.collapseGroup(group);
         }
+        // Allocate space for the expanded list
         this.setExpandableListViewHeight(this.roomsView, -1);
     }
 
     private void setExpandableListViewHeight(ExpandableListView listView, int group) {
+        // Set the listview height
         ExpandableListAdapter listAdapter = (ExpandableListAdapter) listView.getExpandableListAdapter();
         int totalHeight = 0;
         int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
                 View.MeasureSpec.EXACTLY);
-        for (int i = 0; i < listAdapter.getGroupCount(); i++) {
-            View groupItem = listAdapter.getGroupView(i, false, null, listView);
+        for (int index = 0; index < listAdapter.getGroupCount(); index++) {
+            View groupItem = listAdapter.getGroupView(index, false, null, listView);
             groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-
             totalHeight += groupItem.getMeasuredHeight();
 
-            if (((listView.isGroupExpanded(i)) && (i != group))
-                    || ((!listView.isGroupExpanded(i)) && (i == group))) {
-                for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
-                    View listItem = listAdapter.getChildView(i, j, false, null,
+            if (((listView.isGroupExpanded(index)) && (index != group))
+                    || ((!listView.isGroupExpanded(index)) && (index == group))) {
+                for (int j = 0; j < listAdapter.getChildrenCount(index); j++) {
+                    View listItem = listAdapter.getChildView(index, j, false, null,
                             listView);
                     listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-
                     totalHeight += listItem.getMeasuredHeight();
-
                 }
-                //Add Divider Height
-                totalHeight += listView.getDividerHeight() * (listAdapter.getChildrenCount(i) - 1);
+                // Add Divider Height
+                totalHeight += listView.getDividerHeight() * (listAdapter.getChildrenCount(index) - 1);
             }
         }
-        //Add Divider Height
+        // Add Divider Height
         totalHeight += listView.getDividerHeight() * (listAdapter.getGroupCount() - 1);
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        int height = totalHeight
-                + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
-        if (height < 10)
-            height = 200;
-        params.height = height;
+        int height = totalHeight + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
+        params.height = height < 10 ? 200 : height;
         listView.setLayoutParams(params);
         listView.requestLayout();
     }
 
     private class ExpandableListAdapter extends BaseExpandableListAdapter {
-
-        private Context _context;
-        private List<String> _listDataHeader; // header titles
-        // child data in format of header title, child title
-        private HashMap<String, List<String>> _listDataChild;
+        private Context context;
+        private List<String> buildingsList;
+        private HashMap<String, List<RoomStatus>> roomsList;
 
         public ExpandableListAdapter(Context context, List<String> listDataHeader,
-                                     HashMap<String, List<String>> listChildData) {
-            this._context = context;
-            this._listDataHeader = listDataHeader;
-            this._listDataChild = listChildData;
+                                     HashMap<String, List<RoomStatus>> listChildData) {
+            this.context = context;
+            this.buildingsList = listDataHeader;
+            this.roomsList = listChildData;
         }
 
         @Override
         public Object getChild(int groupPosition, int childPosititon) {
-            return this._listDataChild.get(this._listDataHeader.get(groupPosition))
-                    .get(childPosititon);
+            return this.roomsList.get(this.buildingsList.get(groupPosition)).get(childPosititon);
         }
 
         @Override
@@ -282,32 +276,30 @@ public class StructuresFragment extends Fragment {
             final String childText = (String) getChild(groupPosition, childPosition);
 
             if (convertView == null) {
-                LayoutInflater infalInflater = (LayoutInflater) this._context
+                LayoutInflater infalInflater = (LayoutInflater) this.context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = infalInflater.inflate(R.layout.structures_building_item, null);
             }
 
-            TextView txtListChild = (TextView) convertView
-                    .findViewById(R.id.lblListItem);
-
-            txtListChild.setText(childText);
+            // Set rooom name
+            TextView roomView = (TextView) convertView.findViewById(R.id.roomView);
+            roomView.setText(childText);
             return convertView;
         }
 
         @Override
         public int getChildrenCount(int groupPosition) {
-            return this._listDataChild.get(this._listDataHeader.get(groupPosition))
-                    .size();
+            return this.roomsList.get(this.buildingsList.get(groupPosition)).size();
         }
 
         @Override
         public Object getGroup(int groupPosition) {
-            return this._listDataHeader.get(groupPosition);
+            return this.buildingsList.get(groupPosition);
         }
 
         @Override
         public int getGroupCount() {
-            return this._listDataHeader.size();
+            return this.buildingsList.size();
         }
 
         @Override
@@ -320,14 +312,12 @@ public class StructuresFragment extends Fragment {
                                  View convertView, ViewGroup parent) {
             String headerTitle = (String) getGroup(groupPosition);
             if (convertView == null) {
-                LayoutInflater infalInflater = (LayoutInflater) this._context
+                LayoutInflater infalInflater = (LayoutInflater) this.context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = infalInflater.inflate(R.layout.structures_building_group, null);
             }
-
-            TextView lblListHeader = (TextView) convertView
-                    .findViewById(R.id.lblListHeader);
-            lblListHeader.setText(headerTitle);
+            TextView buildingView = (TextView) convertView.findViewById(R.id.buildingView);
+            buildingView.setText(headerTitle);
 
             return convertView;
         }
