@@ -149,13 +149,14 @@ public class StructuresFragment extends Fragment {
 
     protected void loadEmployees(TabLayout.Tab tab) {
         // Load employees list for the selected Structure tab
-        employeesList.clear();
+        this.employeesList.clear();
         this.selectedStructure = this.structures.get(tab.getPosition());
         for (Employee employee : this.selectedStructure.employees) {
-            employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
+            this.employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
         }
+
         // Update data in the list
-        ((ArrayAdapter) employeesView.getAdapter()).notifyDataSetChanged();
+        ((ArrayAdapter) this.employeesView.getAdapter()).notifyDataSetChanged();
         // Select the first employee for the selected tab
         if (this.employeesList.size() > 0) {
             this.employeesView.post(new Runnable() {
