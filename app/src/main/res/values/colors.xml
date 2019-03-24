@@ -7,8 +7,10 @@
     <color name="colorSnackbarTextColor1">#FFEB3B</color>
     <color name="colorSnackbarTextColor2">#F44336</color>
 
-    <color name="color_employees_selected">#E64A19</color>
     <color name="color_employees_background">#FFCCBC</color>
+    <color name="color_employees_selected">#E64A19</color>
+
+    <color name="color_employee_detail_background">#B3E5FC</color>
 
     <color name="color_buildings_selected">#2786EC</color>
     <color name="color_buildings_background">#B3E5FC</color>
