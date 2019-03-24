@@ -14,7 +14,8 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 @Dao
 public interface RoomDao {
     @Query("SELECT * " +
-           "FROM rooms")
+           "FROM rooms " +
+           "ORDER BY name")
     List<Room> getAll();
 
     @Query("SELECT * " +

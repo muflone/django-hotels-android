@@ -33,7 +33,10 @@ public interface ContractBuildingsDao {
            "   ON contracts.id = contract_buildings.contract_id " +
            "INNER JOIN employees " +
            "   ON employees.id = contracts.employee_id " +
-           "WHERE employees.id = :employee_id")
+           "INNER JOIN buildings " +
+           "   ON buildings.id = contract_buildings.building_id " +
+           "WHERE employees.id = :employee_id " +
+           "ORDER BY buildings.name")
     List<ContractBuildings> findByEmployee(long employee_id);
 
     @Query("SELECT COUNT(*) " +

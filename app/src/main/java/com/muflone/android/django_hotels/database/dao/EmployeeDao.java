@@ -14,7 +14,8 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 @Dao
 public interface EmployeeDao {
     @Query("SELECT * " +
-           "FROM employees")
+           "FROM employees " +
+           "ORDER BY first_name, last_name")
     List<Employee> getAll();
 
     @Query("SELECT * " +
@@ -47,7 +48,8 @@ public interface EmployeeDao {
             "   ON buildings.id = contract_buildings.building_id " +
             "INNER JOIN structures " +
             "   ON structures.id = buildings.structure_id " +
-           "WHERE structures.id = :structure_id")
+           "WHERE structures.id = :structure_id " +
+           "ORDER BY first_name, last_name")
     List<Employee> findByStructure(long structure_id);
 
     @Query("SELECT COUNT(*) " +

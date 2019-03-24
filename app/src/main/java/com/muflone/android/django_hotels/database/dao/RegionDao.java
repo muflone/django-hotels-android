@@ -14,7 +14,8 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 @Dao
 public interface RegionDao {
     @Query("SELECT * " +
-           "FROM regions")
+           "FROM regions " +
+           "ORDER BY name")
     List<Region> getAll();
 
     @Query("SELECT * " +

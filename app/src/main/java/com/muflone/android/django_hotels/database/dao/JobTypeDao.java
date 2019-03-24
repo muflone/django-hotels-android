@@ -14,7 +14,8 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 @Dao
 public interface JobTypeDao {
     @Query("SELECT * " +
-           "FROM job_types")
+           "FROM job_types " +
+           "ORDER BY name")
     List<JobType> getAll();
 
     @Query("SELECT * " +
