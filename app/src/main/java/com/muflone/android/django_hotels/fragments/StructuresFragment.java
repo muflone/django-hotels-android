@@ -1,7 +1,6 @@
 package com.muflone.android.django_hotels.fragments;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -328,7 +327,6 @@ public class StructuresFragment extends Fragment {
 
             TextView lblListHeader = (TextView) convertView
                     .findViewById(R.id.lblListHeader);
-            lblListHeader.setTypeface(null, Typeface.BOLD);
             lblListHeader.setText(headerTitle);
 
             return convertView;
