@@ -1,5 +1,7 @@
 package com.muflone.android.django_hotels.fragments;
 
+import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,15 +21,18 @@ import android.widget.TextView;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.api.ApiData;
+import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.ContractBuildings;
 import com.muflone.android.django_hotels.database.models.ContractType;
 import com.muflone.android.django_hotels.database.models.Employee;
+import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Structure;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class StructuresFragment extends Fragment {
@@ -35,7 +42,11 @@ public class StructuresFragment extends Fragment {
     private Structure selectedStructure;
     private TabLayout structuresTabs;
     private ListView employeesView;
+    private ExpandableListView roomsView;
     private final List<String> employeesList = new ArrayList<>();
+    private final List<String> buildingsList = new ArrayList<String>();
+    private final HashMap<String, List<String>> roomsList = new HashMap<String, List<String>>();
+    private final List<String> servicesList = new ArrayList<>();
     private final List<Structure> structures = new ArrayList<>();
 
     private TextView firstNameView;
@@ -48,11 +59,14 @@ public class StructuresFragment extends Fragment {
     private TextView startDateView;
     private TextView endDateView;
 
+    ExpandableListAdapter adapterBuildingRooms;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         this.loadUI(inflater, container);
+
         this.employeesView.setAdapter(new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_list_item_1, this.employeesList));
         this.employeesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -62,7 +76,6 @@ public class StructuresFragment extends Fragment {
                 loadEmployee(selectedStructure.employees.get(position));
             }
         });
-
 
         // Initialize Structures
         this.loadStructures();
@@ -84,6 +97,17 @@ public class StructuresFragment extends Fragment {
         if (this.structuresTabs.getTabCount() > 0 ) {
             this.loadEmployees(this.structuresTabs.getTabAt(0));
         }
+
+        adapterBuildingRooms = new ExpandableListAdapter(getActivity(), buildingsList, roomsList);
+        this.roomsView.setAdapter(adapterBuildingRooms);
+        this.roomsView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v,
+                                        int groupPosition, long id) {
+                setExpandableListViewHeight(parent, groupPosition);
+                return false;
+            }
+        });
         return rootLayout;
     }
 
@@ -102,6 +126,7 @@ public class StructuresFragment extends Fragment {
         this.weeklyHoursView = rootLayout.findViewById(R.id.weeklyHoursView);
         this.startDateView = rootLayout.findViewById(R.id.startDateView);
         this.endDateView = rootLayout.findViewById(R.id.endDateView);
+        this.roomsView = rootLayout.findViewById(R.id.roomsView);
     }
 
     protected void loadStructures() {
@@ -156,8 +181,8 @@ public class StructuresFragment extends Fragment {
                 break;
         }
         this.genderImageView.setImageResource(genderResourceId);
-        ContractBuildings contractBuildings = employee.contractBuildings.get(0);
-        Contract contract = this.apiData.contractsMap.get(contractBuildings.contractId);
+        // Get the first contract for the employee
+        Contract contract = this.apiData.contractsMap.get(employee.contractBuildings.get(0).contractId);
         this.companyView.setText(this.apiData.companiesMap.get(contract.companyId).name);
         // Add contract info
         ContractType contractType = this.apiData.contractTypeMap.get(contract.contractTypeId);
@@ -168,5 +193,155 @@ public class StructuresFragment extends Fragment {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         this.startDateView.setText(formatter.format(contract.startDate));
         this.endDateView.setText(formatter.format(contract.endDate));
+        // Build buildings and rooms lists
+        buildingsList.clear();
+        roomsList.clear();
+        for (ContractBuildings contractBuilding : employee.contractBuildings) {
+            Building building = this.apiData.buildingsMap.get(contractBuilding.buildingId);
+            this.buildingsList.add(building.name);
+            List<String> rooms = new ArrayList<>();
+            for (Room room : building.rooms) {
+                rooms.add(room.name);
+            }
+            this.roomsList.put(building.name, rooms);
+        }
+        adapterBuildingRooms.notifyDataSetChanged();
+        // Expand all buildings groups
+        for (int i = 0; i < this.buildingsList.size(); i++) {
+            this.roomsView.expandGroup(i);
+        }
+        this.setExpandableListViewHeight(this.roomsView, -1);
+    }
+
+    private void setExpandableListViewHeight(ExpandableListView listView, int group) {
+        ExpandableListAdapter listAdapter = (ExpandableListAdapter) listView.getExpandableListAdapter();
+        int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
+                View.MeasureSpec.EXACTLY);
+        for (int i = 0; i < listAdapter.getGroupCount(); i++) {
+            View groupItem = listAdapter.getGroupView(i, false, null, listView);
+            groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+            totalHeight += groupItem.getMeasuredHeight();
+
+            if (((listView.isGroupExpanded(i)) && (i != group))
+                    || ((!listView.isGroupExpanded(i)) && (i == group))) {
+                for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
+                    View listItem = listAdapter.getChildView(i, j, false, null,
+                            listView);
+                    listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+                    totalHeight += listItem.getMeasuredHeight();
+
+                }
+                //Add Divider Height
+                totalHeight += listView.getDividerHeight() * (listAdapter.getChildrenCount(i) - 1);
+            }
+        }
+        //Add Divider Height
+        totalHeight += listView.getDividerHeight() * (listAdapter.getGroupCount() - 1);
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        int height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
+        if (height < 10)
+            height = 200;
+        params.height = height;
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+
+    private class ExpandableListAdapter extends BaseExpandableListAdapter {
+
+        private Context _context;
+        private List<String> _listDataHeader; // header titles
+        // child data in format of header title, child title
+        private HashMap<String, List<String>> _listDataChild;
+
+        public ExpandableListAdapter(Context context, List<String> listDataHeader,
+                                     HashMap<String, List<String>> listChildData) {
+            this._context = context;
+            this._listDataHeader = listDataHeader;
+            this._listDataChild = listChildData;
+        }
+
+        @Override
+        public Object getChild(int groupPosition, int childPosititon) {
+            return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+                    .get(childPosititon);
+        }
+
+        @Override
+        public long getChildId(int groupPosition, int childPosition) {
+            return childPosition;
+        }
+
+        @Override
+        public View getChildView(int groupPosition, final int childPosition,
+                                 boolean isLastChild, View convertView, ViewGroup parent) {
+
+            final String childText = (String) getChild(groupPosition, childPosition);
+
+            if (convertView == null) {
+                LayoutInflater infalInflater = (LayoutInflater) this._context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = infalInflater.inflate(R.layout.structures_building_item, null);
+            }
+
+            TextView txtListChild = (TextView) convertView
+                    .findViewById(R.id.lblListItem);
+
+            txtListChild.setText(childText);
+            return convertView;
+        }
+
+        @Override
+        public int getChildrenCount(int groupPosition) {
+            return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+                    .size();
+        }
+
+        @Override
+        public Object getGroup(int groupPosition) {
+            return this._listDataHeader.get(groupPosition);
+        }
+
+        @Override
+        public int getGroupCount() {
+            return this._listDataHeader.size();
+        }
+
+        @Override
+        public long getGroupId(int groupPosition) {
+            return groupPosition;
+        }
+
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded,
+                                 View convertView, ViewGroup parent) {
+            String headerTitle = (String) getGroup(groupPosition);
+            if (convertView == null) {
+                LayoutInflater infalInflater = (LayoutInflater) this._context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = infalInflater.inflate(R.layout.structures_building_group, null);
+            }
+
+            TextView lblListHeader = (TextView) convertView
+                    .findViewById(R.id.lblListHeader);
+            lblListHeader.setTypeface(null, Typeface.BOLD);
+            lblListHeader.setText(headerTitle);
+
+            return convertView;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return false;
+        }
+
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
+            return true;
+        }
     }
 }
