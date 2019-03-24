@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -26,6 +27,7 @@ import com.muflone.android.django_hotels.database.models.ContractBuildings;
 import com.muflone.android.django_hotels.database.models.ContractType;
 import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.Room;
+import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
 
 import java.text.DateFormat;
@@ -45,9 +47,9 @@ public class StructuresFragment extends Fragment {
     private ExpandableListAdapter buildingRoomsAdapter;
     private final List<String> employeesList = new ArrayList<>();
     private final List<String> buildingsList = new ArrayList<>();
-    private final HashMap<String, List<String>> roomsList = new HashMap<>();
-    private final List<String> servicesList = new ArrayList<>();
+    private final HashMap<String, List<RoomStatus>> roomsList = new HashMap<>();
     private final List<Structure> structures = new ArrayList<>();
+    private final List<Service> roomServicesList = new ArrayList<>();
 
     private TextView firstNameView;
     private TextView lastNameView;
@@ -96,6 +98,10 @@ public class StructuresFragment extends Fragment {
         if (this.structuresTabs.getTabCount() > 0 ) {
             this.loadEmployees(this.structuresTabs.getTabAt(0));
         }
+
+        // Build services list for rooms (the first element is empty)
+        this.roomServicesList.add(null);
+        this.roomServicesList.addAll(this.apiData.serviceMap.values());
 
         this.buildingRoomsAdapter = new ExpandableListAdapter(getActivity(), buildingsList, roomsList);
         this.roomsView.setAdapter(this.buildingRoomsAdapter);
@@ -198,9 +204,10 @@ public class StructuresFragment extends Fragment {
         for (ContractBuildings contractBuilding : employee.contractBuildings) {
             Building building = this.apiData.buildingsMap.get(contractBuilding.buildingId);
             this.buildingsList.add(building.name);
-            List<String> rooms = new ArrayList<>();
+            List<RoomStatus> rooms = new ArrayList<>();
             for (Room room : building.rooms) {
-                rooms.add(room.name);
+                // TODO: restore the previous service for the room
+                rooms.add(new RoomStatus(getActivity(), room.name, null));
             }
             this.roomsList.put(building.name, rooms);
         }
@@ -260,7 +267,7 @@ public class StructuresFragment extends Fragment {
         }
 
         @Override
-        public Object getChild(int groupPosition, int childPosititon) {
+        public RoomStatus getChild(int groupPosition, int childPosititon) {
             return this.roomsList.get(this.buildingsList.get(groupPosition)).get(childPosititon);
         }
 
@@ -273,7 +280,7 @@ public class StructuresFragment extends Fragment {
         public View getChildView(int groupPosition, final int childPosition,
                                  boolean isLastChild, View convertView, ViewGroup parent) {
 
-            final String childText = (String) getChild(groupPosition, childPosition);
+            final RoomStatus roomStatus = getChild(groupPosition, childPosition);
 
             if (convertView == null) {
                 LayoutInflater infalInflater = (LayoutInflater) this.context
@@ -283,7 +290,18 @@ public class StructuresFragment extends Fragment {
 
             // Set rooom name
             TextView roomView = (TextView) convertView.findViewById(R.id.roomView);
-            roomView.setText(childText);
+            roomView.setText(roomStatus.name);
+
+            // Set room service
+            Button buttonState = convertView.findViewById(R.id.serviceButton);
+            buttonState.setText(roomStatus.getServiceName());
+            buttonState.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View button) {
+                    roomStatus.nextService(roomServicesList);
+                    ((Button) button).setText(roomStatus.getServiceName());
+                }
+            });
+
             return convertView;
         }
 
@@ -330,6 +348,34 @@ public class StructuresFragment extends Fragment {
         @Override
         public boolean isChildSelectable(int groupPosition, int childPosition) {
             return true;
+        }
+    }
+
+    private class RoomStatus {
+        private String emptyServiceDescription;
+        public String name;
+        public Service service;
+        private int serviceCounter = 0;
+
+        public RoomStatus(Context context, String name, Service service) {
+            this.emptyServiceDescription = context.getString(R.string.empty_service);
+            this.name = name;
+            this.service = service;
+        }
+
+        public Service nextService(List<Service> services) {
+            // Cycle services
+            this.serviceCounter++;
+            if (this.serviceCounter == services.size()) {
+                this.serviceCounter = 0;
+            }
+            this.service = services.get(this.serviceCounter);
+            return this.service;
+        }
+
+        public String getServiceName() {
+            // Get current service name
+            return this.service == null ? this.emptyServiceDescription : this.service.name;
         }
     }
 }
