@@ -113,7 +113,7 @@ public class StructuresFragment extends Fragment {
                 return false;
             }
         });
-        return rootLayout;
+        return this.rootLayout;
     }
 
     protected void loadUI(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container) {
