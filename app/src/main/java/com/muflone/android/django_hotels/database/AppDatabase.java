@@ -82,6 +82,15 @@ public abstract class AppDatabase extends RoomDatabase {
         INSTANCE = null;
     }
 
+    public boolean checkDB() {
+        try {
+            return INSTANCE.companyDao().count() >= 0;
+        } catch (IllegalStateException exception) {
+            // The database state is invalid
+            return false;
+        }
+    }
+
     public void reload() {
         // Load data from database
         AsyncTaskLoadDatabase task = new AsyncTaskLoadDatabase(

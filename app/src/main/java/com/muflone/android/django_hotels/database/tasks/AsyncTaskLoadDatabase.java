@@ -1,6 +1,7 @@
 package com.muflone.android.django_hotels.database.tasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
@@ -42,6 +43,10 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
     protected ApiData doInBackground(Void... params) {
         ApiData data = new ApiData();
         AppDatabase database = AppDatabase.getAppDatabase(api.context);
+        if (! database.checkDB()) {
+            Log.d("", "Invalid database structure " + database.getOpenHelper().getDatabaseName());
+        }
+
         BrandDao brandDao = database.brandDao();
         BuildingDao buildingDao = database.buildingDao();
         CompanyDao companyDao = database.companyDao();
