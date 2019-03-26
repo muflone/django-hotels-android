@@ -104,6 +104,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
         // Load Contracts
         for(Contract contract : contractDao.getAll()) {
             data.contractsMap.put(contract.id, contract);
+            data.contractsGuidMap.put(contract.guid, contract);
             contract.employee = employeeDao.findById(contract.employeeId);
             data.employeesMap.put(contract.employee.id, contract.employee);
             contract.employee.contractBuildings = contractBuildingsDao.findByEmployee(contract.employeeId);
