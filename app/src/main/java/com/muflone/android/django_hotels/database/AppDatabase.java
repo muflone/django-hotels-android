@@ -67,6 +67,8 @@ public abstract class AppDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             INSTANCE = android.arch.persistence.room.Room.databaseBuilder(
                     context.getApplicationContext(), AppDatabase.class, Constants.DATABASE_NAME)
+                // Allow schema changes even without any migration
+                .fallbackToDestructiveMigration()
                 // allow queries on the main thread.
                 // Don’t do this on a real app! See PersistenceBasicSample for an example.
                 //.allowMainThreadQueries()
