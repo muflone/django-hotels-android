@@ -21,12 +21,14 @@ import com.muflone.android.django_hotels.database.dao.RegionDao;
 import com.muflone.android.django_hotels.database.dao.RoomDao;
 import com.muflone.android.django_hotels.database.dao.ServiceDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
+import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
+import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
 import java.util.ArrayList;
 
@@ -61,6 +63,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
         RoomDao roomDao = database.roomDao();
         ServiceDao serviceDao = database.serviceDao();
         StructureDao structureDao = database.structureDao();
+        TimestampDirectionDao timestampDirectionDao = database.timestampDirectionDao();
         // Load Structures
         for(Structure structure : structureDao.getAll()) {
             data.structuresMap.put(structure.id, structure);
@@ -119,6 +122,10 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
             } else {
                 data.serviceMap.put(service.id, service);
             }
+        }
+        // Load Timestamp directions
+        for(TimestampDirection timestampDirection : timestampDirectionDao.getAll()) {
+            data.timestampDirectionsMap.put(timestampDirection.id, timestampDirection);
         }
         return data;
     }

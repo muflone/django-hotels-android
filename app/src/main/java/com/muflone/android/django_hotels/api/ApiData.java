@@ -10,6 +10,7 @@ import com.muflone.android.django_hotels.database.models.JobType;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
+import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
 import java.util.HashMap;
 
@@ -25,6 +26,7 @@ public class ApiData {
     public final HashMap<Long, Service> serviceMap;
     public final HashMap<Long, Service> serviceExtraMap;
     public final HashMap<Long, Structure> structuresMap;
+    public final HashMap<String, TimestampDirection> timestampDirectionsMap;
     public Exception exception;
 
     public ApiData() {
@@ -39,5 +41,6 @@ public class ApiData {
         this.serviceMap = new HashMap<>();
         this.serviceExtraMap = new HashMap<>();
         this.structuresMap = new HashMap<>();
+        this.timestampDirectionsMap = new HashMap<>();
     }
 }

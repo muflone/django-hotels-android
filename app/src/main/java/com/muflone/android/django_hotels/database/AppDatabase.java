@@ -24,6 +24,7 @@ import com.muflone.android.django_hotels.database.dao.RegionDao;
 import com.muflone.android.django_hotels.database.dao.RoomDao;
 import com.muflone.android.django_hotels.database.dao.ServiceDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
+import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Brand;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Company;
@@ -38,12 +39,14 @@ import com.muflone.android.django_hotels.database.models.Region;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
+import com.muflone.android.django_hotels.database.models.TimestampDirection;
 import com.muflone.android.django_hotels.database.tasks.AsyncTaskLoadDatabase;
 
 @Database(entities = {Brand.class, Building.class, Company.class,
                       Contract.class, ContractBuildings.class,
                       ContractType.class, Country.class, Employee.class, JobType.class,
-                      Location.class, Region.class, Room.class, Service.class, Structure.class},
+                      Location.class, Region.class, Room.class, Service.class, Structure.class
+                      TimestampDirection.class},
           version = Constants.DATABASE_VERSION)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -62,6 +65,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract RoomDao roomDao();
     public abstract ServiceDao serviceDao();
     public abstract StructureDao structureDao();
+    public abstract TimestampDirectionDao timestampDirectionDao();
 
     public static AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {

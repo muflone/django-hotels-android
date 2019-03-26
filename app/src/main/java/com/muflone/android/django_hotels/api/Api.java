@@ -15,6 +15,7 @@ import com.muflone.android.django_hotels.AsyncTaskListener;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
+import com.muflone.android.django_hotels.database.models.TimestampDirection;
 import com.muflone.android.django_hotels.otp.Token;
 
 import org.json.JSONArray;
@@ -181,6 +182,12 @@ public class Api {
                         } else {
                             data.serviceMap.put(service.id, service);
                         }
+                    }
+                    // Loop over every timestamp direction
+                    JSONArray jsonTimestampDirections = jsonRoot.getJSONArray("timestamp_directions");
+                    for (int i = 0; i < jsonTimestampDirections.length(); i++) {
+                        TimestampDirection timestampDirection = new TimestampDirection(jsonTimestampDirections.getJSONObject(i));
+                        data.timestampDirectionsMap.put(timestampDirection.id, timestampDirection);
                     }
                     // Check the final node for successful reads
                     this.checkStatusResponse(jsonRoot);
