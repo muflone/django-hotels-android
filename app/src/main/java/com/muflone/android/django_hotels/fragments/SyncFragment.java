@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.muflone.android.django_hotels.Singleton;
-import com.muflone.android.django_hotels.api.tasks.AsyncTaskListener;
+import com.muflone.android.django_hotels.AsyncTaskListener;
 import com.muflone.android.django_hotels.NotifyMessage;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.api.ApiData;

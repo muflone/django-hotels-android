@@ -3,6 +3,7 @@ package com.muflone.android.django_hotels.api.tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.muflone.android.django_hotels.AsyncTaskListener;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;

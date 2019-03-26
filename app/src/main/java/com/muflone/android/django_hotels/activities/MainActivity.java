@@ -21,7 +21,7 @@ import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
-import com.muflone.android.django_hotels.api.tasks.AsyncTaskListener;
+import com.muflone.android.django_hotels.AsyncTaskListener;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.fragments.AboutFragment;
 import com.muflone.android.django_hotels.fragments.ExtrasFragment;
