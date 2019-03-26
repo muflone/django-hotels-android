@@ -6,6 +6,7 @@ import android.net.Uri;
 import com.google.android.apps.authenticator.Base32String;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
+import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
@@ -30,10 +31,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.TimeZone;
 
 public class Api {
     public final Settings settings;
@@ -115,25 +114,14 @@ public class Api {
         if (jsonRoot != null) {
             try {
                 // Get current system date only
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeZone(TimeZone.getTimeZone(this.settings.getTimeZone()));
-                calendar.set(Calendar.HOUR_OF_DAY, 0);
-                calendar.set(Calendar.MINUTE, 0);
-                calendar.set(Calendar.SECOND, 0);
-                calendar.set(Calendar.MILLISECOND, 0);
-                Date date1 = calendar.getTime();
+                Date date1 = Utility.getCurrentDate(this.settings.getTimeZone());
                 // Get remote date
                 Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(jsonRoot.getString("date"));
                 long difference = Math.abs(date1.getTime() - date2.getTime());
                 // If the dates match then compare the time
                 if (difference == 0) {
                     // Get current system time only
-                    calendar = Calendar.getInstance();
-                    calendar.setTimeZone(TimeZone.getTimeZone(this.settings.getTimeZone()));
-                    calendar.set(Calendar.DAY_OF_MONTH, 1);
-                    calendar.set(Calendar.MONTH, 0);
-                    calendar.set(Calendar.YEAR, 1970);
-                    date1 = calendar.getTime();
+                    date1 = Utility.getCurrentTime(this.settings.getTimeZone());
                     // Get remote time
                     date2 = new SimpleDateFormat("HH:mm.ss").parse(jsonRoot.getString("time"));
                     // Find the difference in thirty seconds
