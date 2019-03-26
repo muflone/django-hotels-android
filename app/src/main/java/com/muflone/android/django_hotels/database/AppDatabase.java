@@ -5,6 +5,8 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
+import com.muflone.android.django_hotels.Constants;
+
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
 import com.muflone.android.django_hotels.database.dao.CompanyDao;
@@ -38,10 +40,9 @@ import com.muflone.android.django_hotels.database.models.Structure;
                       Contract.class, ContractBuildings.class,
                       ContractType.class, Country.class, Employee.class, JobType.class,
                       Location.class, Region.class, Room.class, Service.class, Structure.class},
-          version = 1)
+          version = Constants.DATABASE_VERSION)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
-    private static final String DATABASE_NAME = "hotels.sqlite";
     private static AppDatabase INSTANCE;
     public abstract BrandDao brandDao();
     public abstract BuildingDao buildingDao();
@@ -61,7 +62,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public static AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {
             INSTANCE = android.arch.persistence.room.Room.databaseBuilder(
-                    context.getApplicationContext(), AppDatabase.class, DATABASE_NAME)
+                    context.getApplicationContext(), AppDatabase.class, Constants.DATABASE_NAME)
                 // allow queries on the main thread.
                 // Don’t do this on a real app! See PersistenceBasicSample for an example.
                 //.allowMainThreadQueries()
