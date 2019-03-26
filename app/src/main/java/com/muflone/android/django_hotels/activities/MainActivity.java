@@ -22,7 +22,8 @@ import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.AsyncTaskListener;
-import com.muflone.android.django_hotels.database.models.Structure;
+import com.muflone.android.django_hotels.database.AppDatabase;
+import com.muflone.android.django_hotels.database.tasks.AsyncTaskLoadDatabase;
 import com.muflone.android.django_hotels.fragments.AboutFragment;
 import com.muflone.android.django_hotels.fragments.ExtrasFragment;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
@@ -87,18 +88,8 @@ public class MainActivity extends AppCompatActivity
         } else {
             this.onNavigationItemSelected(this.menuItemHome);
         }
-        // Load data from database
-        Singleton.getInstance().api.loadFromDatabase(new AsyncTaskListener<ApiData>() {
-            @Override
-            public void onSuccess(ApiData data) {
-                Singleton.getInstance().apiData = data;
-            }
-
-            @Override
-            public void onFailure(Exception exception) {
-
-            }
-        });
+        // Reload data from database
+        AppDatabase.getAppDatabase(this).reload();
     }
 
     @Override

@@ -38,6 +38,8 @@ public class SyncFragment extends Fragment {
                     NotifyMessage.snackbar(rootLayout,
                             getString(R.string.message_established_connection),
                             Snackbar.LENGTH_INDEFINITE);
+                    // Reload data from database
+                    AppDatabase.getAppDatabase(getActivity()).reload();
                 }
                 AppDatabase.destroyInstance();
             }

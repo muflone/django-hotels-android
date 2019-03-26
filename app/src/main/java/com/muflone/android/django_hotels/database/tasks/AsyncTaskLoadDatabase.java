@@ -1,9 +1,10 @@
-package com.muflone.android.django_hotels.api.tasks;
+package com.muflone.android.django_hotels.database.tasks;
 
 import android.os.AsyncTask;
 
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
+import com.muflone.android.django_hotels.AsyncTaskListener;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;

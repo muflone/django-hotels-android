@@ -4,9 +4,12 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
+import android.util.Log;
 
+import com.muflone.android.django_hotels.AsyncTaskListener;
 import com.muflone.android.django_hotels.Constants;
-
+import com.muflone.android.django_hotels.Singleton;
+import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
 import com.muflone.android.django_hotels.database.dao.CompanyDao;
@@ -35,6 +38,7 @@ import com.muflone.android.django_hotels.database.models.Region;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
+import com.muflone.android.django_hotels.database.tasks.AsyncTaskLoadDatabase;
 
 @Database(entities = {Brand.class, Building.class, Company.class,
                       Contract.class, ContractBuildings.class,
@@ -76,5 +80,22 @@ public abstract class AppDatabase extends RoomDatabase {
             INSTANCE.close();
         }
         INSTANCE = null;
+    }
+
+    public void reload() {
+        // Load data from database
+        AsyncTaskLoadDatabase task = new AsyncTaskLoadDatabase(
+                Singleton.getInstance().api, new AsyncTaskListener<ApiData>() {
+            @Override
+            public void onSuccess(ApiData data) {
+                Singleton.getInstance().apiData = data;
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+            }
+        });
+        task.execute();
+
     }
 }
