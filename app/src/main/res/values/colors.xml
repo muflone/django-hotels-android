@@ -15,4 +15,10 @@
     <color name="color_buildings_background">#689F38</color>
 
     <color name="color_rooms_background">#DCEDC8</color>
+
+    <color name="action_enter">#7AE400</color>
+    <color name="action_exit">#FA3333</color>
+
+    <color name="clock_background">@color/colorPrimary</color>
+    <color name="clock_foreground">#5DAC00</color>
 </resources>

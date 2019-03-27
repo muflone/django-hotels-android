@@ -11,6 +11,10 @@
             android:icon="@drawable/ic_home"
             android:title="@string/section_home" />
         <item
+            android:id="@+id/menuItemScanner"
+            android:icon="@drawable/ic_scanner"
+            android:title="@string/section_scanner" />
+        <item
             android:id="@+id/menuItemStructures"
             android:icon="@drawable/ic_structures"
             android:title="@string/section_structures" />

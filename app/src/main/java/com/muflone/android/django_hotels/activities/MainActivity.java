@@ -28,6 +28,7 @@ import com.muflone.android.django_hotels.database.tasks.AsyncTaskLoadDatabase;
 import com.muflone.android.django_hotels.fragments.AboutFragment;
 import com.muflone.android.django_hotels.fragments.ExtrasFragment;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
+import com.muflone.android.django_hotels.fragments.ScannerFragment;
 import com.muflone.android.django_hotels.fragments.StructuresFragment;
 import com.muflone.android.django_hotels.fragments.SyncFragment;
 
@@ -109,6 +110,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppDatabase.getAppDatabase(this).close();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         // Restore previous active fragment
@@ -118,6 +130,9 @@ public class MainActivity extends AppCompatActivity
             switch (fragmentName) {
                 case "HomeFragment":
                     fragment = new HomeFragment();
+                    break;
+                case "ScannerFragment":
+                    fragment = new ScannerFragment();
                     break;
                 case "StructuresFragment":
                     fragment = new StructuresFragment();
@@ -163,6 +178,9 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.menuItemHome:
                 fragment = new HomeFragment();
+                break;
+            case R.id.menuItemScanner:
+                fragment = new ScannerFragment();
                 break;
             case R.id.menuItemStructures:
                 fragment = new StructuresFragment();
