@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "108ac5fd08babeca2a3129d30893a16a",
+    "identityHash": "0eece3be599b93f4c2c7f70983155622",
     "entities": [
       {
         "tableName": "brands",
@@ -801,7 +801,7 @@
       },
       {
         "tableName": "timestamps",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`contract_id` INTEGER NOT NULL, `direction_id` TEXT NOT NULL, `date` INTEGER, `time` INTEGER, `description` TEXT NOT NULL, PRIMARY KEY(`contract_id`, `direction_id`), FOREIGN KEY(`contract_id`) REFERENCES `contracts`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`direction_id`) REFERENCES `timestamp_directions`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`contract_id` INTEGER NOT NULL, `direction_id` TEXT NOT NULL, `date` INTEGER NOT NULL, `time` INTEGER NOT NULL, `description` TEXT NOT NULL, PRIMARY KEY(`contract_id`, `direction_id`, `date`, `time`), FOREIGN KEY(`contract_id`) REFERENCES `contracts`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`direction_id`) REFERENCES `timestamp_directions`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "contractId",
@@ -819,13 +819,13 @@
             "fieldPath": "date",
             "columnName": "date",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "time",
             "columnName": "time",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "description",
@@ -837,7 +837,9 @@
         "primaryKey": {
           "columnNames": [
             "contract_id",
-            "direction_id"
+            "direction_id",
+            "date",
+            "time"
           ],
           "autoGenerate": false
         },
@@ -925,30 +927,13 @@
           ],
           "autoGenerate": false
         },
-        "indices": [
-          {
-            "name": "index_timestamp_directions_type_enter",
-            "unique": true,
-            "columnNames": [
-              "type_enter"
-            ],
-            "createSql": "CREATE UNIQUE INDEX `index_timestamp_directions_type_enter` ON `${TABLE_NAME}` (`type_enter`)"
-          },
-          {
-            "name": "index_timestamp_directions_type_exit",
-            "unique": true,
-            "columnNames": [
-              "type_exit"
-            ],
-            "createSql": "CREATE UNIQUE INDEX `index_timestamp_directions_type_exit` ON `${TABLE_NAME}` (`type_exit`)"
-          }
-        ],
+        "indices": [],
         "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"108ac5fd08babeca2a3129d30893a16a\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0eece3be599b93f4c2c7f70983155622\")"
     ]
   }
 }

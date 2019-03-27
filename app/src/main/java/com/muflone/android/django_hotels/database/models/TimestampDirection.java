@@ -3,18 +3,13 @@ package com.muflone.android.django_hotels.database.models;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@Entity(tableName = "timestamp_directions",
-        indices = {
-                @Index(value = {"type_enter"}, unique = true),
-                @Index(value = {"type_exit"}, unique = true)
-        })
+@Entity(tableName = "timestamp_directions")
 public class TimestampDirection {
     @PrimaryKey
     @NonNull
