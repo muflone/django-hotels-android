@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
 import java.util.Date;
 
 @Entity(tableName = "timestamps",
-        primaryKeys = {"contract_id", "direction_id"},
+        primaryKeys = {"contract_id", "direction_id", "date", "time"},
         indices = {
                 @Index(value = "contract_id", unique = false),
                 @Index(value = "direction_id", unique = false)
@@ -33,9 +33,11 @@ public class Timestamp {
     public final String directionId;
 
     @ColumnInfo(name = "date")
+    @NonNull
     public final Date date;
 
     @ColumnInfo(name = "time")
+    @NonNull
     public final Date time;
 
     @ColumnInfo(name = "description")
