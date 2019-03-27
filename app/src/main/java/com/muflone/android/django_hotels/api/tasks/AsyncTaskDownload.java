@@ -21,12 +21,14 @@ import com.muflone.android.django_hotels.database.dao.RegionDao;
 import com.muflone.android.django_hotels.database.dao.RoomDao;
 import com.muflone.android.django_hotels.database.dao.ServiceDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
+import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.ContractBuildings;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
+import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
 public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
     private final Api api;
@@ -80,6 +82,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
         RoomDao roomDao = database.roomDao();
         ServiceDao serviceDao = database.serviceDao();
         StructureDao structureDao = database.structureDao();
+        TimestampDirectionDao timestampDirectionDao = database.timestampDirectionDao();
 
         // Delete previous data
         roomDao.truncate();
@@ -95,6 +98,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
         companyDao.truncate();
         brandDao.truncate();
         serviceDao.truncate();
+        timestampDirectionDao.truncate();
 
         // Save data from structures
         for (Structure structure : data.structuresMap.values()) {
@@ -131,6 +135,10 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
         // Save data for services
         for (Service service : data.serviceMap.values()) {
             serviceDao.insert(service);
+        }
+        // Save data for timestamp directions
+        for (TimestampDirection timestampDirection : data.timestampDirectionsMap.values()) {
+            timestampDirectionDao.insert(timestampDirection);
         }
     }
 }

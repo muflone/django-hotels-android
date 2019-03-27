@@ -128,6 +128,8 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
         for(TimestampDirection timestampDirection : timestampDirectionDao.getAll()) {
             data.timestampDirectionsMap.put(timestampDirection.id, timestampDirection);
         }
+        data.enterDirection = timestampDirectionDao.findByTypeEnter();
+        data.exitDirection = timestampDirectionDao.findByTypeExit();
         return data;
     }
 

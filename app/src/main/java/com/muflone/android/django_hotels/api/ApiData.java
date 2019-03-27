@@ -28,6 +28,8 @@ public class ApiData {
     public final HashMap<Long, Service> serviceExtraMap;
     public final HashMap<Long, Structure> structuresMap;
     public final HashMap<String, TimestampDirection> timestampDirectionsMap;
+    public TimestampDirection enterDirection;
+    public TimestampDirection exitDirection;
     public Exception exception;
 
     public ApiData() {
