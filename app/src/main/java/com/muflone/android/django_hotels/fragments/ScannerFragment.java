@@ -30,7 +30,7 @@ import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Timestamp;
-import com.muflone.android.django_hotels.database.tasks.AsyncTaskTimestampInsert;
+import com.muflone.android.django_hotels.tasks.AsyncTaskTimestampInsert;
 import com.muflone.android.django_hotels.otp.Token;
 
 import java.text.SimpleDateFormat;

@@ -6,7 +6,6 @@ import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.util.Log;
 
-import com.muflone.android.django_hotels.AsyncTaskListener;
 import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.api.ApiData;
@@ -42,7 +41,8 @@ import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
-import com.muflone.android.django_hotels.database.tasks.AsyncTaskLoadDatabase;
+import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
+import com.muflone.android.django_hotels.tasks.AsyncTaskLoadDatabase;
 
 @Database(entities = {Brand.class, Building.class, Company.class,
                       Contract.class, ContractBuildings.class,

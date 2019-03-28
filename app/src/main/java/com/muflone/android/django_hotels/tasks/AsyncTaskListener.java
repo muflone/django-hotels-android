@@ -1,4 +1,4 @@
-package com.muflone.android.django_hotels;
+package com.muflone.android.django_hotels.tasks;
 
 /*
  * Listener for AsyncTaskRunner

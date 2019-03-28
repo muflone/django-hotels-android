@@ -11,8 +11,8 @@ import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
-import com.muflone.android.django_hotels.api.tasks.AsyncTaskDownload;
-import com.muflone.android.django_hotels.AsyncTaskListener;
+import com.muflone.android.django_hotels.tasks.AsyncTaskDownload;
+import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
