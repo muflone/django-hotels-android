@@ -20,12 +20,12 @@ public interface ContractBuildingsDao {
     @Query("SELECT * " +
            "FROM contract_buildings " +
            "WHERE contract_id = :contract_id")
-    List<ContractBuildings> findByContract(long contract_id);
+    List<ContractBuildings> listByContract(long contract_id);
 
     @Query("SELECT * " +
            "FROM contract_buildings " +
            "WHERE building_id = :building_id")
-    List<ContractBuildings> findByBuilding(long building_id);
+    List<ContractBuildings> listByBuilding(long building_id);
 
     @Query("SELECT contract_buildings.* " +
            "FROM contract_buildings " +
@@ -37,7 +37,7 @@ public interface ContractBuildingsDao {
            "   ON buildings.id = contract_buildings.building_id " +
            "WHERE employees.id = :employee_id " +
            "ORDER BY buildings.name")
-    List<ContractBuildings> findByEmployee(long employee_id);
+    List<ContractBuildings> listByEmployee(long employee_id);
 
     @Query("SELECT COUNT(*) " +
            "FROM contract_buildings")

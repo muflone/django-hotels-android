@@ -20,14 +20,14 @@ public interface TimestampDao {
 
     @Query("SELECT * " +
            "FROM timestamps " +
-           "WHERE contract_id = :contractId " +
-           "  AND direction_id = :directionId")
-    Timestamp findById(long contractId, String directionId);
+           "WHERE contract_id = :contractId")
+    List<Timestamp> listByName(long contractId);
 
     @Query("SELECT * " +
-           "FROM timestamps " +
-            "WHERE contract_id = :contractId")
-    List<Timestamp> findByName(long contractId);
+            "FROM timestamps " +
+            "WHERE contract_id = :contractId " +
+            "  AND direction_id = :directionId")
+    Timestamp findById(long contractId, String directionId);
 
     @Query("SELECT COUNT(*) " +
            "FROM timestamps")

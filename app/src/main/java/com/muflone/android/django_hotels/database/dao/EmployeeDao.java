@@ -18,17 +18,6 @@ public interface EmployeeDao {
            "ORDER BY first_name, last_name")
     List<Employee> listAll();
 
-    @Query("SELECT * " +
-           "FROM employees " +
-           "WHERE id = :id")
-    Employee findById(long id);
-
-    @Query("SELECT * " +
-           "FROM employees " +
-           "WHERE first_name = :first_name " +
-           "  AND last_name = :last_name")
-    Employee findByName(String first_name, String last_name);
-
     @Query("SELECT DISTINCT employees.* " +
            "FROM employees " +
            "INNER JOIN contracts " +
@@ -36,7 +25,7 @@ public interface EmployeeDao {
            "INNER JOIN contract_buildings " +
            "   ON contract_buildings.contract_id = contracts.id " +
            "WHERE contract_buildings.building_id = :building_id")
-    List<Employee> findByBuilding(long building_id);
+    List<Employee> listByBuilding(long building_id);
 
     @Query("SELECT DISTINCT employees.* " +
            "FROM employees " +
@@ -50,7 +39,18 @@ public interface EmployeeDao {
             "   ON structures.id = buildings.structure_id " +
            "WHERE structures.id = :structure_id " +
            "ORDER BY first_name, last_name")
-    List<Employee> findByStructure(long structure_id);
+    List<Employee> listByStructure(long structure_id);
+
+    @Query("SELECT * " +
+            "FROM employees " +
+            "WHERE id = :id")
+    Employee findById(long id);
+
+    @Query("SELECT * " +
+            "FROM employees " +
+            "WHERE first_name = :first_name " +
+            "  AND last_name = :last_name")
+    Employee findByName(String first_name, String last_name);
 
     @Query("SELECT COUNT(*) " +
            "FROM employees")

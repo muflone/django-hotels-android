@@ -77,8 +77,8 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
             structure.buildings = buildingDao.listByStructure(structure.id);
             // Load employees
             structure.employees = new ArrayList<>();
-            for (Employee employee : employeeDao.findByStructure(structure.id)) {
-                employee.contractBuildings = contractBuildingsDao.findByEmployee(employee.id);
+            for (Employee employee : employeeDao.listByStructure(structure.id)) {
+                employee.contractBuildings = contractBuildingsDao.listByEmployee(employee.id);
                 structure.employees.add(employee);
             }
             for(Building building : structure.buildings) {
@@ -94,8 +94,8 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
                 }
                 // Load employees
                 building.employees = new ArrayList<>();
-                for (Employee employee : employeeDao.findByBuilding(building.id)) {
-                    employee.contractBuildings = contractBuildingsDao.findByEmployee(employee.id);
+                for (Employee employee : employeeDao.listByBuilding(building.id)) {
+                    employee.contractBuildings = contractBuildingsDao.listByEmployee(employee.id);
                     building.employees.add(employee);
                 }
             }
@@ -106,7 +106,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
             data.contractsGuidMap.put(contract.guid, contract);
             contract.employee = employeeDao.findById(contract.employeeId);
             data.employeesMap.put(contract.employee.id, contract.employee);
-            contract.employee.contractBuildings = contractBuildingsDao.findByEmployee(contract.employeeId);
+            contract.employee.contractBuildings = contractBuildingsDao.listByEmployee(contract.employeeId);
             contract.company = companyDao.findById(contract.companyId);
             data.companiesMap.put(contract.company.id, contract.company);
             contract.contractType = contractTypeDao.findById(contract.contractTypeId);
