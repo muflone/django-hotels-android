@@ -31,7 +31,7 @@ import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
 import java.util.ArrayList;
 
-public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
+public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult<ApiData>> {
     private final Api api;
     private final AsyncTaskListener callback;
 
@@ -41,7 +41,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
     }
 
     @Override
-    protected ApiData doInBackground(Void... params) {
+    protected AsyncTaskResult doInBackground(Void... params) {
         ApiData data = new ApiData();
         AppDatabase database = AppDatabase.getAppDatabase(api.context);
         if (! database.checkDB()) {
@@ -129,20 +129,20 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
         }
         data.enterDirection = timestampDirectionDao.findByTypeEnter();
         data.exitDirection = timestampDirectionDao.findByTypeExit();
-        return data;
+        return new AsyncTaskResult(data, this.callback, data.exception);
     }
 
     @Override
-    protected void onPostExecute(ApiData data) {
-        super.onPostExecute(data);
+    protected void onPostExecute(AsyncTaskResult<ApiData> results) {
+        super.onPostExecute(results);
         // Check if callback listener was requested
-        if (this.callback != null & data != null) {
-            if (data.exception == null) {
+        if (this.callback != null & results != null) {
+            if (results.exception == null) {
                 // Return flow to the caller
-                this.callback.onSuccess(data);
+                this.callback.onSuccess(results);
             } else {
                 // Failure with exception
-                this.callback.onFailure(data.exception);
+                this.callback.onFailure(results.exception);
             }
         }
     }

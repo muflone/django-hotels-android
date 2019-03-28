@@ -193,9 +193,4 @@ public class Api {
         }
         return data;
     }
-
-    public void getData(AsyncTaskListener callback) {
-        AsyncTaskDownload task = new AsyncTaskDownload(this, callback);
-        task.execute();
-    }
 }

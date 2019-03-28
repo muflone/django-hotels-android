@@ -7,7 +7,7 @@ import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.TimestampDao;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 
-public class AsyncTaskTimestampInsert extends AsyncTask<Timestamp, Integer, ApiData> {
+public class AsyncTaskTimestampInsert extends AsyncTask<Timestamp, Integer, AsyncTaskResult<Void>> {
     private final AppDatabase database;
     private final AsyncTaskListener callback;
 
@@ -17,23 +17,23 @@ public class AsyncTaskTimestampInsert extends AsyncTask<Timestamp, Integer, ApiD
     }
 
     @Override
-    protected ApiData doInBackground(Timestamp... params) {
+    protected AsyncTaskResult doInBackground(Timestamp... params) {
         TimestampDao timestampDao = this.database.timestampDao();
         timestampDao.insert(params);
-        return null;
+        return new AsyncTaskResult(null, this.callback, null);
     }
 
     @Override
-    protected void onPostExecute(ApiData data) {
-        super.onPostExecute(data);
+    protected void onPostExecute(AsyncTaskResult<Void> results) {
+        super.onPostExecute(results);
         // Check if callback listener was requested
-        if (this.callback != null & data != null) {
-            if (data.exception == null) {
+        if (this.callback != null & results != null) {
+            if (results.exception == null) {
                 // Return flow to the caller
-                this.callback.onSuccess(data);
+                this.callback.onSuccess(results);
             } else {
                 // Failure with exception
-                this.callback.onFailure(data.exception);
+                this.callback.onFailure(results.exception);
             }
         }
     }

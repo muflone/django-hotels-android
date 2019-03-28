@@ -129,10 +129,10 @@ public class ScannerFragment extends Fragment {
                             // Valid contract found
                             Contract contract = this.apiData.contractsGuidMap.get(secret);
                             Log.d("QR", contract.employee.firstName + " " + contract.employee.lastName);
-                            AsyncTaskTimestampInsert task = new AsyncTaskTimestampInsert(this.database, null);
                             Toast.makeText(getActivity(),
                                     contract.employee.firstName + " " + contract.employee.lastName,
                                     Toast.LENGTH_SHORT).show();
+                            AsyncTaskTimestampInsert task = new AsyncTaskTimestampInsert(this.database, null);
                             task.execute(new Timestamp(contract.id,
                                     this.scanType == ScanType.SCAN_TYPE_ENTER ?
                                             this.apiData.enterDirection.id : this.apiData.exitDirection.id,

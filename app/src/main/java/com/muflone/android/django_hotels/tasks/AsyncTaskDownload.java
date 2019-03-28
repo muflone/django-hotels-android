@@ -29,7 +29,7 @@ import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
-public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
+public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<ApiData>> {
     private final Api api;
     private final AsyncTaskListener callback;
 
@@ -39,7 +39,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
     }
 
     @Override
-    protected ApiData doInBackground(Void... params) {
+    protected AsyncTaskResult doInBackground(Void... params) {
         // Do the background job
         ApiData data = this.api.getData(this.api.settings.getTabletID(),
                 this.api.getCurrentTokenCode());
@@ -47,20 +47,20 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
             // Success, save data in database
             this.saveToDatabase(data, this.api.context);
         }
-        return data;
+        return new AsyncTaskResult(data, this.callback, data.exception);
     }
 
     @Override
-    protected void onPostExecute(ApiData data) {
-        super.onPostExecute(data);
+    protected void onPostExecute(AsyncTaskResult<ApiData> results) {
+        super.onPostExecute(results);
         // Check if callback listener was requested
-        if (this.callback != null & data != null) {
-            if (data.exception == null) {
+        if (this.callback != null & results != null) {
+            if (results.exception == null) {
                 // Return flow to the caller
-                this.callback.onSuccess(data);
+                this.callback.onSuccess(results);
             } else {
                 // Failure with exception
-                this.callback.onFailure(data.exception);
+                this.callback.onFailure(results.exception);
             }
         }
     }

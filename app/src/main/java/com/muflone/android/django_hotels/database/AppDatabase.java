@@ -42,6 +42,7 @@ import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.tasks.AsyncTaskLoadDatabase;
+import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
 
 @Database(entities = {Brand.class, Building.class, Company.class,
                       Contract.class, ContractBuildings.class,
@@ -102,10 +103,10 @@ public abstract class AppDatabase extends RoomDatabase {
     public void reload() {
         // Load data from database
         AsyncTaskLoadDatabase task = new AsyncTaskLoadDatabase(
-                Singleton.getInstance().api, new AsyncTaskListener<ApiData>() {
+                Singleton.getInstance().api, new AsyncTaskListener<AsyncTaskResult<ApiData>>() {
             @Override
-            public void onSuccess(ApiData data) {
-                Singleton.getInstance().apiData = data;
+            public void onSuccess(AsyncTaskResult<ApiData> results) {
+                Singleton.getInstance().apiData = results.data;
             }
 
             @Override
