@@ -1,6 +1,6 @@
 package com.muflone.android.django_hotels.fragments;
 
-import android.arch.persistence.room.Database;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,14 +11,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.apps.authenticator.Base32String;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import com.muflone.android.django_hotels.AsyncTaskListener;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.ScanType;
 import com.muflone.android.django_hotels.Settings;
@@ -28,20 +30,25 @@ import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Timestamp;
-import com.muflone.android.django_hotels.database.models.TimestampDirection;
 import com.muflone.android.django_hotels.database.tasks.AsyncTaskTimestampInsert;
 import com.muflone.android.django_hotels.otp.Token;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class ScannerFragment extends Fragment {
     private View rootLayout;
     private Button enterButton;
     private Button exitButton;
+    private ListView timestampEmployeesView;
     private ScanType scanType = ScanType.SCAN_TYPE_UNKNOWN;
     private ApiData apiData;
     private AppDatabase database;
     private Settings settings;
+    private List<TimestampEmployee> timestampEmployeeList;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -50,6 +57,13 @@ public class ScannerFragment extends Fragment {
         this.apiData = Singleton.getInstance().apiData;
         this.settings = Singleton.getInstance().settings;
         this.database = AppDatabase.getAppDatabase(getActivity());
+
+        this.timestampEmployeeList = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            this.timestampEmployeeList.add(new TimestampEmployee("prova ciao " + i,
+                    Utility.getCurrentDate(this.settings.getTimeZone()),
+                    Utility.getCurrentTime(this.settings.getTimeZone())));
+        }
 
         // Initialize UI
         this.loadUI(inflater, container);
@@ -66,6 +80,8 @@ public class ScannerFragment extends Fragment {
                 startQRScanner(false);
             }
         });
+        this.timestampEmployeesView.setAdapter(new TimestampAdapter(getActivity(),
+                R.layout.scanner_timestamps, this.timestampEmployeeList));
         return this.rootLayout;
     }
 
@@ -75,6 +91,7 @@ public class ScannerFragment extends Fragment {
         // Save references
         this.enterButton = this.rootLayout.findViewById(R.id.enterButton);
         this.exitButton = this.rootLayout.findViewById(R.id.exitButton);
+        this.timestampEmployeesView = this.rootLayout.findViewById(R.id.timestampEmployeesView);
     }
 
     private void startQRScanner(boolean enter) {
@@ -142,4 +159,36 @@ public class ScannerFragment extends Fragment {
         }
     }
 
+    private class TimestampEmployee {
+        public String fullName;
+        public Date date;
+        public Date time;
+
+        public TimestampEmployee(String fullName, Date date, Date time) {
+            this.fullName = fullName;
+            this.date = date;
+            this.time = time;
+        }
+    }
+
+    private class TimestampAdapter extends ArrayAdapter<TimestampEmployee> {
+        public TimestampAdapter(Context context, int resource, List<TimestampEmployee> objects) {
+            super(context, resource, objects);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) getContext()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.scanner_timestamps, null);
+            TextView employeeView = convertView.findViewById(R.id.employeeView);
+            TextView dateView = convertView.findViewById(R.id.dateView);
+            TextView timeView = convertView.findViewById(R.id.timeView);
+            TimestampEmployee timestampEmployee = getItem(position);
+            employeeView.setText(timestampEmployee.fullName);
+            dateView.setText(new SimpleDateFormat("yyyy-MM-dd").format(timestampEmployee.date));
+            timeView.setText(new SimpleDateFormat("HH:mm.ss").format(timestampEmployee.time));
+            return convertView;
+        }
+    }
 }
