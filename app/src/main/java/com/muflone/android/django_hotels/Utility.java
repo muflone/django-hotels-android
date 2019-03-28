@@ -1,5 +1,8 @@
 package com.muflone.android.django_hotels;
 
+import android.content.Context;
+import android.content.res.Configuration;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -23,5 +26,17 @@ public class Utility {
         calendar.set(Calendar.MONTH, 0);
         calendar.set(Calendar.YEAR, 1970);
         return calendar.getTime();
+    }
+
+    public static int getScreenOrientation(Context context) {
+        return context.getResources().getConfiguration().orientation;
+    }
+
+    public static boolean isScreenOrientationPortrait(Context context) {
+        return getScreenOrientation(context) == Configuration.ORIENTATION_PORTRAIT;
+    }
+
+    public static boolean isScreenOrientationLandscape(Context context) {
+        return getScreenOrientation(context) == Configuration.ORIENTATION_LANDSCAPE;
     }
 }
