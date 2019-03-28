@@ -16,7 +16,7 @@ public interface RoomDao {
     @Query("SELECT * " +
            "FROM rooms " +
            "ORDER BY name")
-    List<Room> getAll();
+    List<Room> listAll();
 
     @Query("SELECT * " +
            "FROM rooms " +

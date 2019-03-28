@@ -16,7 +16,7 @@ public interface CompanyDao {
     @Query("SELECT * " +
            "FROM companies " +
            "ORDER BY name")
-    List<Company> getAll();
+    List<Company> listAll();
 
     @Query("SELECT * " +
            "FROM companies " +

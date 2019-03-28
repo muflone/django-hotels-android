@@ -16,7 +16,7 @@ public interface RegionDao {
     @Query("SELECT * " +
            "FROM regions " +
            "ORDER BY name")
-    List<Region> getAll();
+    List<Region> listAll();
 
     @Query("SELECT * " +
            "FROM regions " +

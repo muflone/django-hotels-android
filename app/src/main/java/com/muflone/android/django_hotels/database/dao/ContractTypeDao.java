@@ -15,7 +15,7 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 public interface ContractTypeDao {
     @Query("SELECT * " +
            "FROM contract_types")
-    List<ContractType> getAll();
+    List<ContractType> listAll();
 
     @Query("SELECT * " +
            "FROM contract_types " +

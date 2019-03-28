@@ -16,7 +16,7 @@ public interface LocationDao {
     @Query("SELECT * " +
            "FROM locations " +
            "ORDER BY name")
-    List<Location> getAll();
+    List<Location> listAll();
 
     @Query("SELECT * " +
            "FROM locations " +

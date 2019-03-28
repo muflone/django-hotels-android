@@ -16,7 +16,7 @@ public interface StructureDao {
     @Query("SELECT * " +
            "FROM structures " +
            "ORDER BY name")
-    List<Structure> getAll();
+    List<Structure> listAll();
 
     @Query("SELECT * " +
            "FROM structures " +

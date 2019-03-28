@@ -16,7 +16,7 @@ public interface EmployeeDao {
     @Query("SELECT * " +
            "FROM employees " +
            "ORDER BY first_name, last_name")
-    List<Employee> getAll();
+    List<Employee> listAll();
 
     @Query("SELECT * " +
            "FROM employees " +

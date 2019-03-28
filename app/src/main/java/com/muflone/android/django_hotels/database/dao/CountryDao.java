@@ -16,7 +16,7 @@ public interface CountryDao {
     @Query("SELECT * " +
            "FROM countries " +
            "ORDER BY name")
-    List<Country> getAll();
+    List<Country> listAll();
 
     @Query("SELECT * " +
            "FROM countries " +

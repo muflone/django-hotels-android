@@ -16,7 +16,7 @@ public interface BrandDao {
     @Query("SELECT * " +
            "FROM brands " +
            "ORDER BY name")
-    List<Brand> getAll();
+    List<Brand> listAll();
 
     @Query("SELECT * " +
            "FROM brands " +

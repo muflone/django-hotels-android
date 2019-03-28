@@ -64,7 +64,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
         StructureDao structureDao = database.structureDao();
         TimestampDirectionDao timestampDirectionDao = database.timestampDirectionDao();
         // Load Structures
-        for(Structure structure : structureDao.getAll()) {
+        for(Structure structure : structureDao.listAll()) {
             data.structuresMap.put(structure.id, structure);
             structure.company = companyDao.findById(structure.companyId);
             structure.brand = brandDao.findById(structure.brandId);
@@ -101,7 +101,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
             }
         }
         // Load Contracts
-        for(Contract contract : contractDao.getAll()) {
+        for(Contract contract : contractDao.listAll()) {
             data.contractsMap.put(contract.id, contract);
             data.contractsGuidMap.put(contract.guid, contract);
             contract.employee = employeeDao.findById(contract.employeeId);
@@ -116,7 +116,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
             data.contractsMap.put(contract.id, contract);
         }
         // Load Services
-        for(Service service : serviceDao.getAll()) {
+        for(Service service : serviceDao.listAll()) {
             if (service.extra_service) {
                 data.serviceExtraMap.put(service.id, service);
             } else {
@@ -124,7 +124,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
             }
         }
         // Load Timestamp directions
-        for(TimestampDirection timestampDirection : timestampDirectionDao.getAll()) {
+        for(TimestampDirection timestampDirection : timestampDirectionDao.listAll()) {
             data.timestampDirectionsMap.put(timestampDirection.id, timestampDirection);
         }
         data.enterDirection = timestampDirectionDao.findByTypeEnter();

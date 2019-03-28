@@ -16,7 +16,7 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 public interface TimestampDirectionDao {
     @Query("SELECT * " +
            "FROM timestamp_directions")
-    List<TimestampDirection> getAll();
+    List<TimestampDirection> listAll();
 
     @Query("SELECT * " +
            "FROM timestamp_directions " +

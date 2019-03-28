@@ -16,7 +16,7 @@ public interface JobTypeDao {
     @Query("SELECT * " +
            "FROM job_types " +
            "ORDER BY name")
-    List<JobType> getAll();
+    List<JobType> listAll();
 
     @Query("SELECT * " +
            "FROM job_types " +

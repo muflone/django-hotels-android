@@ -16,7 +16,7 @@ public interface BuildingDao {
     @Query("SELECT * " +
            "FROM buildings " +
            "ORDER BY name")
-    List<Building> getAll();
+    List<Building> listAll();
 
     @Query("SELECT * " +
            "FROM buildings " +

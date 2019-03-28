@@ -16,7 +16,7 @@ public interface ServiceDao {
     @Query("SELECT * " +
            "FROM services " +
            "ORDER BY name")
-    List<Service> getAll();
+    List<Service> listAll();
 
     @Query("SELECT * " +
            "FROM services " +
