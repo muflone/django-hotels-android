@@ -4,7 +4,6 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
-import android.util.Log;
 
 import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.Singleton;
