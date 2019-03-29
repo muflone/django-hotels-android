@@ -20,6 +20,7 @@ import com.muflone.android.django_hotels.database.dao.RegionDao;
 import com.muflone.android.django_hotels.database.dao.RoomDao;
 import com.muflone.android.django_hotels.database.dao.ServiceDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
+import com.muflone.android.django_hotels.database.dao.TimestampDao;
 import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
@@ -81,12 +82,15 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
         RoomDao roomDao = database.roomDao();
         ServiceDao serviceDao = database.serviceDao();
         StructureDao structureDao = database.structureDao();
+        TimestampDao timestampDao = database.timestampDao();
         TimestampDirectionDao timestampDirectionDao = database.timestampDirectionDao();
 
         // Delete previous data
         roomDao.truncate();
         contractBuildingsDao.truncate();
         buildingDao.truncate();
+        // TODO: this must be removed in order to keep timestamps
+        timestampDao.truncate();
         contractDao.truncate();
         contractTypeDao.truncate();
         jobTypeDao.truncate();
