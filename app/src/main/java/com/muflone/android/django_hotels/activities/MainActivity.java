@@ -107,12 +107,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        AppDatabase.getAppDatabase(this).close();
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
     }
