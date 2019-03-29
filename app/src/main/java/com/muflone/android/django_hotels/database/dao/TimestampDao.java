@@ -7,6 +7,7 @@ import android.arch.persistence.room.Query;
 
 import com.muflone.android.django_hotels.database.models.ContractType;
 import com.muflone.android.django_hotels.database.models.Timestamp;
+import com.muflone.android.django_hotels.database.models.TimestampEmployee;
 
 import java.util.List;
 
@@ -18,11 +19,19 @@ public interface TimestampDao {
            "FROM timestamps")
     List<Timestamp> listAll();
 
-    @Query("SELECT * " +
+    @Query("SELECT " +
+           "  employees.first_name, " +
+           "  employees.last_name, " +
+           "  timestamps.date, " +
+           "  timestamps.time " +
            "FROM timestamps " +
-           "ORDER BY date DESC, time DESC " +
+           "INNER JOIN contracts " +
+           "   ON contracts.id = timestamps.contract_id " +
+           "INNER JOIN employees " +
+           "   ON employees.id = contracts.employee_id " +
+           "ORDER BY timestamps.date DESC, timestamps.time DESC " +
            "LIMIT :count")
-    List<Timestamp> listByLatest(long count);
+    List<TimestampEmployee> listByLatest(long count);
 
     @Query("SELECT * " +
            "FROM timestamps " +

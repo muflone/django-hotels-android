@@ -31,6 +31,7 @@ import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Timestamp;
+import com.muflone.android.django_hotels.database.models.TimestampEmployee;
 import com.muflone.android.django_hotels.otp.Token;
 import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
@@ -172,15 +173,16 @@ public class ScannerFragment extends Fragment {
     }
 
     private void listByLatest() {
+        // List the latest timestamps
         AsyncTaskTimestampListByLatest task = new AsyncTaskTimestampListByLatest(
-                this.database, new AsyncTaskListener<AsyncTaskResult<List<Timestamp>>>() {
+                this.database, new AsyncTaskListener<AsyncTaskResult<List<TimestampEmployee>>>() {
             @Override
-            public void onSuccess(AsyncTaskResult<List<Timestamp>> results) {
-                Log.d("", results.toString());
+            public void onSuccess(AsyncTaskResult<List<TimestampEmployee>> results) {
+                // Reload the timestamps list
                 timestampEmployeeList.clear();
-                for (Timestamp timestamp : results.data) {
+                for (TimestampEmployee timestamp : results.data) {
                     timestampEmployeeList.add(new TimestampEmployeeItem(
-                            "prova ciao ",
+                            String.format("%s %s", timestamp.firstName, timestamp.lastName),
                             timestamp.date,
                             timestamp.time));
                 }
