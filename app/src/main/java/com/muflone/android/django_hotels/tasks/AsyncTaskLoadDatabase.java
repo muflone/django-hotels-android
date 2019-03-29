@@ -43,7 +43,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
     @Override
     protected AsyncTaskResult doInBackground(Void... params) {
         ApiData data = new ApiData();
-        AppDatabase database = AppDatabase.getAppDatabase(api.context);
+        AppDatabase database = AppDatabase.getAppDatabase(this.api.context);
         if (! database.checkDB()) {
             Log.d("", "Invalid database structure " + database.getOpenHelper().getDatabaseName());
         }
