@@ -53,7 +53,7 @@ public class ScannerFragment extends Fragment {
     private AppDatabase database;
     private Settings settings;
     private TimestampAdapter timestampAdapter;
-    private List<TimestampEmployee> timestampEmployeeList;
+    private List<TimestampEmployeeItem> timestampEmployeeList;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -179,7 +179,8 @@ public class ScannerFragment extends Fragment {
                 Log.d("", results.toString());
                 timestampEmployeeList.clear();
                 for (Timestamp timestamp : results.data) {
-                    timestampEmployeeList.add(new TimestampEmployee("prova ciao ",
+                    timestampEmployeeList.add(new TimestampEmployeeItem(
+                            "prova ciao ",
                             timestamp.date,
                             timestamp.time));
                 }
@@ -193,20 +194,20 @@ public class ScannerFragment extends Fragment {
         task.execute(Long.valueOf(Constants.LATEST_TIMESTAMPS));
     }
 
-    private class TimestampEmployee {
+    private class TimestampEmployeeItem {
         public String fullName;
         public Date date;
         public Date time;
 
-        public TimestampEmployee(String fullName, Date date, Date time) {
+        public TimestampEmployeeItem(String fullName, Date date, Date time) {
             this.fullName = fullName;
             this.date = date;
             this.time = time;
         }
     }
 
-    private class TimestampAdapter extends ArrayAdapter<TimestampEmployee> {
-        public TimestampAdapter(Context context, int resource, List<TimestampEmployee> objects) {
+    private class TimestampAdapter extends ArrayAdapter<TimestampEmployeeItem> {
+        public TimestampAdapter(Context context, int resource, List<TimestampEmployeeItem> objects) {
             super(context, resource, objects);
         }
 
@@ -218,7 +219,7 @@ public class ScannerFragment extends Fragment {
             TextView employeeView = convertView.findViewById(R.id.employeeView);
             TextView dateView = convertView.findViewById(R.id.dateView);
             TextView timeView = convertView.findViewById(R.id.timeView);
-            TimestampEmployee timestampEmployee = getItem(position);
+            TimestampEmployeeItem timestampEmployee = getItem(position);
             employeeView.setText(timestampEmployee.fullName);
             dateView.setText(new SimpleDateFormat("yyyy-MM-dd").format(timestampEmployee.date));
             timeView.setText(new SimpleDateFormat("HH:mm.ss").format(timestampEmployee.time));
