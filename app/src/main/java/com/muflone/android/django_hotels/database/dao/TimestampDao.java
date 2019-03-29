@@ -20,6 +20,12 @@ public interface TimestampDao {
 
     @Query("SELECT * " +
            "FROM timestamps " +
+           "ORDER BY date DESC, time DESC " +
+           "LIMIT :count")
+    List<Timestamp> listByLatest(long count);
+
+    @Query("SELECT * " +
+           "FROM timestamps " +
            "WHERE contract_id = :contractId")
     List<Timestamp> listByName(long contractId);
 

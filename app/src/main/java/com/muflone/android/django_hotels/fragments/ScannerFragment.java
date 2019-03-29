@@ -21,6 +21,7 @@ import com.google.android.apps.authenticator.Base32String;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.ScanType;
 import com.muflone.android.django_hotels.Settings;
@@ -30,8 +31,11 @@ import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Timestamp;
-import com.muflone.android.django_hotels.tasks.AsyncTaskTimestampInsert;
 import com.muflone.android.django_hotels.otp.Token;
+import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
+import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
+import com.muflone.android.django_hotels.tasks.AsyncTaskTimestampInsert;
+import com.muflone.android.django_hotels.tasks.AsyncTaskTimestampListByLatest;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,6 +52,7 @@ public class ScannerFragment extends Fragment {
     private ApiData apiData;
     private AppDatabase database;
     private Settings settings;
+    private TimestampAdapter timestampAdapter;
     private List<TimestampEmployee> timestampEmployeeList;
 
     @Override
@@ -57,13 +62,6 @@ public class ScannerFragment extends Fragment {
         this.apiData = Singleton.getInstance().apiData;
         this.settings = Singleton.getInstance().settings;
         this.database = AppDatabase.getAppDatabase(getActivity());
-
-        this.timestampEmployeeList = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            this.timestampEmployeeList.add(new TimestampEmployee("prova ciao " + i,
-                    Utility.getCurrentDate(this.settings.getTimeZone()),
-                    Utility.getCurrentTime(this.settings.getTimeZone())));
-        }
 
         // Initialize UI
         this.loadUI(inflater, container);
@@ -80,8 +78,12 @@ public class ScannerFragment extends Fragment {
                 startQRScanner(false);
             }
         });
-        this.timestampEmployeesView.setAdapter(new TimestampAdapter(getActivity(),
-                R.layout.scanner_timestamps, this.timestampEmployeeList));
+        // Load latest timestamps
+        this.timestampEmployeeList = new ArrayList<>();
+        this.listByLatest();
+        this.timestampAdapter = new TimestampAdapter(getActivity(),
+                R.layout.scanner_timestamps, this.timestampEmployeeList);
+        this.timestampEmployeesView.setAdapter(this.timestampAdapter);
         return this.rootLayout;
     }
 
@@ -132,7 +134,17 @@ public class ScannerFragment extends Fragment {
                             Toast.makeText(getActivity(),
                                     contract.employee.firstName + " " + contract.employee.lastName,
                                     Toast.LENGTH_SHORT).show();
-                            AsyncTaskTimestampInsert task = new AsyncTaskTimestampInsert(this.database, null);
+                            AsyncTaskTimestampInsert task = new AsyncTaskTimestampInsert(
+                                    this.database, new AsyncTaskListener<AsyncTaskResult<Void>>() {
+                                @Override
+                                public void onSuccess(AsyncTaskResult<Void> results) {
+                                    listByLatest();
+                                }
+
+                                @Override
+                                public void onFailure(Exception exception) {
+                                }
+                            });
                             task.execute(new Timestamp(contract.id,
                                     this.scanType == ScanType.SCAN_TYPE_ENTER ?
                                             this.apiData.enterDirection.id : this.apiData.exitDirection.id,
@@ -157,6 +169,28 @@ public class ScannerFragment extends Fragment {
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private void listByLatest() {
+        AsyncTaskTimestampListByLatest task = new AsyncTaskTimestampListByLatest(
+                this.database, new AsyncTaskListener<AsyncTaskResult<List<Timestamp>>>() {
+            @Override
+            public void onSuccess(AsyncTaskResult<List<Timestamp>> results) {
+                Log.d("", results.toString());
+                timestampEmployeeList.clear();
+                for (Timestamp timestamp : results.data) {
+                    timestampEmployeeList.add(new TimestampEmployee("prova ciao ",
+                            timestamp.date,
+                            timestamp.time));
+                }
+                timestampAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+            }
+        });
+        task.execute(Long.valueOf(Constants.LATEST_TIMESTAMPS));
     }
 
     private class TimestampEmployee {
