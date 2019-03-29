@@ -184,7 +184,8 @@ public class ScannerFragment extends Fragment {
                     timestampEmployeeList.add(new TimestampEmployeeItem(
                             String.format("%s %s", timestamp.firstName, timestamp.lastName),
                             timestamp.date,
-                            timestamp.time));
+                            timestamp.time,
+                            timestamp.direction));
                 }
                 timestampAdapter.notifyDataSetChanged();
             }
@@ -200,11 +201,13 @@ public class ScannerFragment extends Fragment {
         public String fullName;
         public Date date;
         public Date time;
+        public String direction;
 
-        public TimestampEmployeeItem(String fullName, Date date, Date time) {
+        public TimestampEmployeeItem(String fullName, Date date, Date time, String direction) {
             this.fullName = fullName;
             this.date = date;
             this.time = time;
+            this.direction = direction;
         }
     }
 
@@ -221,10 +224,12 @@ public class ScannerFragment extends Fragment {
             TextView employeeView = convertView.findViewById(R.id.employeeView);
             TextView dateView = convertView.findViewById(R.id.dateView);
             TextView timeView = convertView.findViewById(R.id.timeView);
+            TextView directionView = convertView.findViewById(R.id.directionView);
             TimestampEmployeeItem timestampEmployee = getItem(position);
             employeeView.setText(timestampEmployee.fullName);
             dateView.setText(new SimpleDateFormat("yyyy-MM-dd").format(timestampEmployee.date));
             timeView.setText(new SimpleDateFormat("HH:mm.ss").format(timestampEmployee.time));
+            directionView.setText(timestampEmployee.direction);
             return convertView;
         }
     }

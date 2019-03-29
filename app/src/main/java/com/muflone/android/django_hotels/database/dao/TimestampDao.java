@@ -23,12 +23,15 @@ public interface TimestampDao {
            "  employees.first_name, " +
            "  employees.last_name, " +
            "  timestamps.date, " +
-           "  timestamps.time " +
+           "  timestamps.time, " +
+           "  timestamp_directions.description AS direction " +
            "FROM timestamps " +
            "INNER JOIN contracts " +
            "   ON contracts.id = timestamps.contract_id " +
            "INNER JOIN employees " +
            "   ON employees.id = contracts.employee_id " +
+           "INNER JOIN timestamp_directions " +
+           "   ON timestamp_directions.id = timestamps.direction_id " +
            "ORDER BY timestamps.date DESC, timestamps.time DESC " +
            "LIMIT :count")
     List<TimestampEmployee> listByLatest(long count);
