@@ -81,7 +81,7 @@ public class ScannerFragment extends Fragment {
         });
         // Load latest timestamps
         this.timestampEmployeeList = new ArrayList<>();
-        this.listByLatest();
+        this.listLatestTimestamps();
         this.timestampAdapter = new TimestampAdapter(getActivity(),
                 R.layout.scanner_timestamps, this.timestampEmployeeList);
         this.timestampEmployeesView.setAdapter(this.timestampAdapter);
@@ -139,7 +139,7 @@ public class ScannerFragment extends Fragment {
                                     this.database, new AsyncTaskListener<AsyncTaskResult<Void>>() {
                                 @Override
                                 public void onSuccess(AsyncTaskResult<Void> results) {
-                                    listByLatest();
+                                    listLatestTimestamps();
                                 }
 
                                 @Override
@@ -172,7 +172,7 @@ public class ScannerFragment extends Fragment {
         }
     }
 
-    private void listByLatest() {
+    private void listLatestTimestamps() {
         // List the latest timestamps
         AsyncTaskTimestampListByLatest task = new AsyncTaskTimestampListByLatest(
                 this.database, new AsyncTaskListener<AsyncTaskResult<List<TimestampEmployee>>>() {
