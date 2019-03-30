@@ -56,7 +56,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
             List<Timestamp> timestampsList = database.timestampDao().listByUntrasmitted();
             for (Timestamp timestamp : timestampsList) {
                 data = this.api.putTimestamp(timestamp);
-                if (data.exception != null) {
+                if (data.exception == null) {
                     // Update transmission date
                     timestamp.transmission = Utility.getCurrentDateTime(this.api.settings.getTimeZone());
                     database.timestampDao().update(timestamp);

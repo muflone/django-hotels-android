@@ -226,7 +226,7 @@ public class Api {
                 String status = jsonRoot.getString("status");
                 if (status.equals(this.STATUS_EXISTING)) {
                     Log.w(TAG, String.format("Existing timestamp during the data transmission: %s", status));
-                } else if (status.equals(this.STATUS_OK)) {
+                } else if (! status.equals(this.STATUS_OK)) {
                     // Invalid response received
                     Log.e(TAG, String.format("Invalid response received during the data transmission: %s", status));
                     throw new InvalidResponseException();
