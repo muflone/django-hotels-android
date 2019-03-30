@@ -105,6 +105,8 @@ public class ScannerFragment extends Fragment {
         integrator.setPrompt(getActivity().getString(R.string.scan_prompt));
         // Set beep after scan
         integrator.setBeepEnabled(this.settings.getScanBeep());
+        // Allow screen rotation during the scan
+        integrator.setOrientationLocked(this.settings.getScanOrientationLock());
         // Start scan
         integrator.initiateScan();
     }

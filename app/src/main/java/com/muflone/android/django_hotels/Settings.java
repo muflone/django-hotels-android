@@ -33,4 +33,8 @@ public class Settings {
     public boolean getScanBeep() {
         return this.preferences.getBoolean(this.context.getString(R.string.settings_scan_beep_id), false);
     }
+
+    public boolean getScanOrientationLock() {
+        return this.preferences.getBoolean(this.context.getString(R.string.settings_scan_orientation_lock_id), false);
+    }
 }
