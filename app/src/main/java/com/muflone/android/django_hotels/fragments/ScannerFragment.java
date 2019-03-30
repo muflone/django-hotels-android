@@ -101,6 +101,8 @@ public class ScannerFragment extends Fragment {
         // Initiate scan via zxing
         this.scanType = enter ? ScanType.SCAN_TYPE_ENTER : ScanType.SCAN_TYPE_EXIT;
         IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
+        // Limit the type of recognized scans to QR Codes
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
         // Set scan title
         integrator.setPrompt(getActivity().getString(R.string.scan_prompt));
         // Set beep after scan
