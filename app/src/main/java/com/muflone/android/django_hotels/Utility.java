@@ -8,6 +8,13 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class Utility {
+    public static Date getCurrentDateTime(String timezone) {
+        // Get current system date and time
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone(timezone));
+        return calendar.getTime();
+    }
+
     public static Date getCurrentDate(String timezone) {
         // Get current system date only
         Calendar calendar = Calendar.getInstance();
