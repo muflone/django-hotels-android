@@ -53,6 +53,9 @@ public interface ContractBuildingsDao {
     @Update
     void update(ContractBuildings item);
 
+    @Update
+    void update(ContractBuildings... items);
+
     @Delete
     void delete(ContractBuildings item);
 

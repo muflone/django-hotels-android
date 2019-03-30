@@ -42,6 +42,9 @@ public interface ServiceDao {
     @Update
     void update(Service item);
 
+    @Update
+    void update(Service... items);
+
     @Delete
     void delete(Service item);
 

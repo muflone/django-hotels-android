@@ -42,6 +42,9 @@ public interface JobTypeDao {
     @Update
     void update(JobType item);
 
+    @Update
+    void update(JobType... items);
+
     @Delete
     void delete(JobType item);
 

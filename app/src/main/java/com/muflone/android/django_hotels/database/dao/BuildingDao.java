@@ -47,6 +47,9 @@ public interface BuildingDao {
     @Update
     void update(Building item);
 
+    @Update
+    void update(Building... items);
+
     @Delete
     void delete(Building item);
 

@@ -42,6 +42,9 @@ public interface LocationDao {
     @Update
     void update(Location item);
 
+    @Update
+    void update(Location... items);
+
     @Delete
     void delete(Location item);
 

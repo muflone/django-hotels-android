@@ -52,6 +52,9 @@ public interface TimestampDirectionDao {
     @Update
     void update(TimestampDirection item);
 
+    @Update
+    void update(TimestampDirection... items);
+
     @Delete
     void delete(TimestampDirection item);
 

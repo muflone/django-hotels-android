@@ -41,6 +41,9 @@ public interface ContractDao {
     @Update
     void update(Contract item);
 
+    @Update
+    void update(Contract... items);
+
     @Delete
     void delete(Contract item);
 

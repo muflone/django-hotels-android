@@ -42,6 +42,9 @@ public interface CompanyDao {
     @Update
     void update(Company item);
 
+    @Update
+    void update(Company... items);
+
     @Delete
     void delete(Company item);
 

@@ -42,6 +42,9 @@ public interface CountryDao {
     @Update
     void update(Country item);
 
+    @Update
+    void update(Country... items);
+
     @Delete
     void delete(Country item);
 

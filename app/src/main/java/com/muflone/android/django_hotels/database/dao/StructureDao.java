@@ -42,6 +42,9 @@ public interface StructureDao {
     @Update
     void update(Structure item);
 
+    @Update
+    void update(Structure... items);
+
     @Delete
     void delete(Structure item);
 

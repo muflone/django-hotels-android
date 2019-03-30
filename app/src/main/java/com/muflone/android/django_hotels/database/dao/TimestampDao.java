@@ -61,6 +61,9 @@ public interface TimestampDao {
     @Update
     void update(Timestamp item);
 
+    @Update
+    void update(Timestamp... items);
+
     @Delete
     void delete(Timestamp item);
 

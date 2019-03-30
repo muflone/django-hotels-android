@@ -66,6 +66,9 @@ public interface EmployeeDao {
     @Update
     void update(Employee item);
 
+    @Update
+    void update(Employee... items);
+
     @Delete
     void delete(Employee item);
 

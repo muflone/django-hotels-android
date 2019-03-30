@@ -42,6 +42,9 @@ public interface BrandDao {
     @Update
     void update(Brand item);
 
+    @Update
+    void update(Brand... items);
+
     @Delete
     void delete(Brand item);
 

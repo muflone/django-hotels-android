@@ -41,6 +41,9 @@ public interface ContractTypeDao {
     @Update
     void update(ContractType item);
 
+    @Update
+    void update(ContractType... items);
+
     @Delete
     void delete(ContractType item);
 

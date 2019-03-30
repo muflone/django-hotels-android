@@ -47,6 +47,9 @@ public interface RoomDao {
     @Update
     void update(Room item);
 
+    @Update
+    void update(Room... items);
+
     @Delete
     void delete(Room item);
 

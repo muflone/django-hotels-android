@@ -42,6 +42,9 @@ public interface RegionDao {
     @Update
     void update(Region item);
 
+    @Update
+    void update(Region... items);
+
     @Delete
     void delete(Region item);
 
