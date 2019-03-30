@@ -151,7 +151,7 @@ public class ScannerFragment extends Fragment {
                                             this.apiData.enterDirection.id : this.apiData.exitDirection.id,
                                     Utility.getCurrentDate(this.settings.getTimeZone()),
                                     Utility.getCurrentTime(this.settings.getTimeZone()),
-                                    ""));
+                                    "", null));
 
                         } else {
                             // Cannot find any contract with the provided GUID

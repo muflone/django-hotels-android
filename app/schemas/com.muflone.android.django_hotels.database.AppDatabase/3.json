@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "0eece3be599b93f4c2c7f70983155622",
+    "identityHash": "245b07c644e2bf59e844e0ba46d0ad9e",
     "entities": [
       {
         "tableName": "brands",
@@ -801,7 +801,7 @@
       },
       {
         "tableName": "timestamps",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`contract_id` INTEGER NOT NULL, `direction_id` TEXT NOT NULL, `date` INTEGER NOT NULL, `time` INTEGER NOT NULL, `description` TEXT NOT NULL, PRIMARY KEY(`contract_id`, `direction_id`, `date`, `time`), FOREIGN KEY(`contract_id`) REFERENCES `contracts`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`direction_id`) REFERENCES `timestamp_directions`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`contract_id` INTEGER NOT NULL, `direction_id` TEXT NOT NULL, `date` INTEGER NOT NULL, `time` INTEGER NOT NULL, `description` TEXT NOT NULL, `transmission` INTEGER, PRIMARY KEY(`contract_id`, `direction_id`, `date`, `time`))",
         "fields": [
           {
             "fieldPath": "contractId",
@@ -832,6 +832,12 @@
             "columnName": "description",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "transmission",
+            "columnName": "transmission",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -859,32 +865,17 @@
               "direction_id"
             ],
             "createSql": "CREATE  INDEX `index_timestamps_direction_id` ON `${TABLE_NAME}` (`direction_id`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "contracts",
-            "onDelete": "RESTRICT",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "contract_id"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
           },
           {
-            "table": "timestamp_directions",
-            "onDelete": "RESTRICT",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "direction_id"
+            "name": "index_timestamps_transmission",
+            "unique": false,
+            "columnNames": [
+              "transmission"
             ],
-            "referencedColumns": [
-              "id"
-            ]
+            "createSql": "CREATE  INDEX `index_timestamps_transmission` ON `${TABLE_NAME}` (`transmission`)"
           }
-        ]
+        ],
+        "foreignKeys": []
       },
       {
         "tableName": "timestamp_directions",
@@ -933,7 +924,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0eece3be599b93f4c2c7f70983155622\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"245b07c644e2bf59e844e0ba46d0ad9e\")"
     ]
   }
 }
