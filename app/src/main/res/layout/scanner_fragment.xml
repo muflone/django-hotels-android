@@ -76,7 +76,7 @@
             android:id="@+id/timeClock"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:format24Hour="hh:mm.ss"
+            android:format24Hour="HH:mm.ss"
             android:padding="10dp"
             android:textAlignment="center"
             android:textColor="@color/clock_foreground"
