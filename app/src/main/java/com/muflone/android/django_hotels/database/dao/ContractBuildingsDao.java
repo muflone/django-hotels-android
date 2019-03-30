@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.muflone.android.django_hotels.database.models.ContractBuildings;
 
@@ -48,6 +49,9 @@ public interface ContractBuildingsDao {
 
     @Insert(onConflict = IGNORE)
     void insert(ContractBuildings... items);
+
+    @Update
+    void update(ContractBuildings item);
 
     @Delete
     void delete(ContractBuildings item);

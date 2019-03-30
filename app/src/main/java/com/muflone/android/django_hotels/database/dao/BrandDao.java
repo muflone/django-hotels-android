@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.muflone.android.django_hotels.database.models.Brand;
 
@@ -37,6 +38,9 @@ public interface BrandDao {
 
     @Insert(onConflict = IGNORE)
     void insert(Brand... items);
+
+    @Update
+    void update(Brand item);
 
     @Delete
     void delete(Brand item);

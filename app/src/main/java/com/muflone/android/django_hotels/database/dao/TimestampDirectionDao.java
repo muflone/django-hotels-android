@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.muflone.android.django_hotels.database.models.ContractType;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
@@ -47,6 +48,9 @@ public interface TimestampDirectionDao {
 
     @Insert(onConflict = IGNORE)
     void insert(TimestampDirection... items);
+
+    @Update
+    void update(TimestampDirection item);
 
     @Delete
     void delete(TimestampDirection item);
