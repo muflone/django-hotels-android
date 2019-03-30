@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.Iterator;
 
 public class Api {
+    private final String STATUS_OK = "OK";
     public final Settings settings;
     public final Context context;
 
@@ -98,7 +99,7 @@ public class Api {
     private void checkStatusResponse(JSONObject jsonObject) throws InvalidResponseException {
         // Check the status object for valid data
         try {
-            if (!jsonObject.getString("status").equals("OK")) {
+            if (!jsonObject.getString("status").equals(this.STATUS_OK)) {
                 throw new InvalidResponseException();
             }
         } catch (JSONException e) {
