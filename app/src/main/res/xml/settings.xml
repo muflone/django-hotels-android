@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:fragment="com.muflone.android.django_hotels.activities.SettingsActivity$PrefFragment">
 
-    <PreferenceCategory android:title="@string/section_settings">
+    <PreferenceCategory android:title="@string/settings_category_server">
 
         <EditTextPreference
             android:key="@string/settings_tablet_id_id"

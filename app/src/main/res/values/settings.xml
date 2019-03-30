@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Settings values -->
+    <!-- Server settings values -->
+    <string name="settings_category_server">Server settings</string>
+
     <string name="settings_tablet_id_id">tablet_id</string>
     <string name="settings_tablet_id_title">Tablet ID</string>
     <string name="settings_tablet_id_summary">This field will contain the tablet ID</string>
