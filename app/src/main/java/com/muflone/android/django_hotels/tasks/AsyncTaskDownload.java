@@ -3,6 +3,7 @@ package com.muflone.android.django_hotels.tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;
@@ -28,7 +29,10 @@ import com.muflone.android.django_hotels.database.models.ContractBuildings;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
+import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
+
+import java.util.List;
 
 public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<ApiData>> {
     private final Api api;
@@ -42,13 +46,33 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
     @Override
     protected AsyncTaskResult doInBackground(Void... params) {
         // Do the background job
+        boolean transmissionErrors = false;
         AppDatabase database = AppDatabase.getAppDatabase(this.api.context);
 
         // Check if the system date/time matches with the remote date/time
         ApiData data = this.api.checkDates();
         if (data.exception == null) {
-            // Success, save data in database
-            this.saveToDatabase(data, this.api.context);
+            // Transmit any incomplete timestamp (UPLOAD)
+            List<Timestamp> timestampsList = database.timestampDao().listByUntrasmitted();
+            for (Timestamp timestamp : timestampsList) {
+                data = this.api.putTimestamp(timestamp);
+                if (data.exception != null) {
+                    // Update transmission date
+                    timestamp.transmission = Utility.getCurrentDateTime(this.api.settings.getTimeZone());
+                    database.timestampDao().update(timestamp);
+                } else {
+                    // There were some errors during the timestamps transmissions
+                    transmissionErrors = true;
+                }
+            }
+            if (! transmissionErrors) {
+                // Get new data from the server (DOWNLOAD)
+                data = this.api.getData();
+                if (data.exception == null) {
+                    // Success, save data in database
+                    this.saveToDatabase(data, this.api.context);
+                }
+            }
         }
         return new AsyncTaskResult(data, this.callback, data.exception);
     }

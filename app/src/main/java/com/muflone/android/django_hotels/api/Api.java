@@ -2,6 +2,7 @@ package com.muflone.android.django_hotels.api;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.google.android.apps.authenticator.Base32String;
 import com.muflone.android.django_hotels.Settings;
@@ -11,8 +12,7 @@ import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
-import com.muflone.android.django_hotels.tasks.AsyncTaskDownload;
-import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
+import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
@@ -26,16 +26,20 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 
 public class Api {
+    private final String TAG = "Api";
     private final String STATUS_OK = "OK";
+    private final String STATUS_EXISTING = "EXISTING";
     public final Settings settings;
     public final Context context;
 
@@ -189,6 +193,45 @@ public class Api {
             } catch (JSONException e) {
                 data.exception = new InvalidResponseException();
             } catch (ParseException e) {
+                data.exception = new InvalidResponseException();
+            } catch (InvalidResponseException e) {
+                data.exception = e;
+            }
+        } else {
+            // Unable to download data from the server
+            data.exception = new NoDownloadException();
+        }
+        return data;
+    }
+
+    public ApiData putTimestamp(Timestamp timestamp) {
+        JSONObject jsonRoot = null;
+        ApiData data = new ApiData();
+        // Send timestamps to the server
+        try {
+            jsonRoot = this.getJSONObject(String.format("put/timestamp/%s/%s/%d/%s/%d/%d/%s/",
+                    this.settings.getTabletID(),
+                    this.getCurrentTokenCode(),
+                    timestamp.contractId, timestamp.directionId,
+                    timestamp.date.getTime() / 1000,
+                    timestamp.time.getTime() / 1000,
+                    URLEncoder.encode(timestamp.description, "UTF-8")));
+        } catch (UnsupportedEncodingException e) {
+            data.exception = new InvalidResponseException();
+        }
+        if (jsonRoot != null) {
+            try {
+                Log.d("", jsonRoot.getString("status"));
+                // Check the final node for successful reads
+                String status = jsonRoot.getString("status");
+                if (status.equals(this.STATUS_EXISTING)) {
+                    Log.w(TAG, String.format("Existing timestamp during the data transmission: %s", status));
+                } else if (status.equals(this.STATUS_OK)) {
+                    // Invalid response received
+                    Log.e(TAG, String.format("Invalid response received during the data transmission: %s", status));
+                    throw new InvalidResponseException();
+                }
+            } catch (JSONException e) {
                 data.exception = new InvalidResponseException();
             } catch (InvalidResponseException e) {
                 data.exception = e;
