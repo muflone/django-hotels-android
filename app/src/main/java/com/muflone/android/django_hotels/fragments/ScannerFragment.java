@@ -122,9 +122,6 @@ public class ScannerFragment extends Fragment {
             if (result != null) {
                 if (result.getContents() != null) {
                     Uri uri = Uri.parse(result.getContents());
-
-                    Log.d("QR", this.scanType == ScanType.SCAN_TYPE_ENTER ? "enter" : "exit");
-                    Log.d("QR", uri.toString());
                     try {
                         // Decode key and parse as GUID
                         Token token = new Token(uri);
