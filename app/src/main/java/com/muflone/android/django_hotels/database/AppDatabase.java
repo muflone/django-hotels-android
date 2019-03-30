@@ -70,7 +70,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract TimestampDao timestampDao();
     public abstract TimestampDirectionDao timestampDirectionDao();
 
-    public static AppDatabase getAppDatabase(Context context) {
+    public static synchronized AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {
             INSTANCE = android.arch.persistence.room.Room.databaseBuilder(
                     context.getApplicationContext(), AppDatabase.class, Constants.DATABASE_NAME)
