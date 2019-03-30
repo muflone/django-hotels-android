@@ -100,7 +100,11 @@ public class ScannerFragment extends Fragment {
     private void startQRScanner(boolean enter) {
         // Initiate scan via zxing
         this.scanType = enter ? ScanType.SCAN_TYPE_ENTER : ScanType.SCAN_TYPE_EXIT;
-        IntentIntegrator.forSupportFragment(this).initiateScan();
+        IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
+        // Set scan title
+        integrator.setPrompt(getActivity().getString(R.string.scan_prompt));
+        // Start scan
+        integrator.initiateScan();
     }
 
     @Override
