@@ -42,8 +42,10 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
     @Override
     protected AsyncTaskResult doInBackground(Void... params) {
         // Do the background job
-        ApiData data = this.api.getData(this.api.settings.getTabletID(),
-                this.api.getCurrentTokenCode());
+        AppDatabase database = AppDatabase.getAppDatabase(this.api.context);
+
+        // Check if the system date/time matches with the remote date/time
+        ApiData data = this.api.checkDates();
         if (data.exception == null) {
             // Success, save data in database
             this.saveToDatabase(data, this.api.context);

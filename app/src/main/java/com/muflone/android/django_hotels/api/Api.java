@@ -108,9 +108,9 @@ public class Api {
         }
     }
 
-    public ApiData getData(String tabletId, String tokenCode) {
-        ApiData data = new ApiData();
+    public ApiData checkDates() {
         // Check if the system date/time matches with the remote date/time
+        ApiData data = new ApiData();
         JSONObject jsonRoot = this.getJSONObject("dates/");
         if (jsonRoot != null) {
             try {
@@ -143,54 +143,59 @@ public class Api {
             // Whether the result cannot be get raise exception
             data.exception = new NoConnectionException();
         }
-        if (data.exception == null) {
-            // Get data from the server
-            jsonRoot = this.getJSONObject(String.format("get/%s/%s/", tabletId, tokenCode));
-            if (jsonRoot != null) {
-                try {
-                    // Loop over every structure
-                    JSONObject jsonStructures = jsonRoot.getJSONObject("structures");
-                    Iterator<?> jsonKeys = jsonStructures.keys();
-                    while (jsonKeys.hasNext()) {
-                        String key = (String) jsonKeys.next();
-                        Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
-                        data.structuresMap.put(objStructure.id, objStructure);
-                    }
-                    // Loop over every contract
-                    JSONArray jsonContracts = jsonRoot.getJSONArray("contracts");
-                    for (int i = 0; i < jsonContracts.length(); i++) {
-                        Contract contract = new Contract(jsonContracts.getJSONObject(i));
-                        data.contractsMap.put(contract.id, contract);
-                    }
-                    // Loop over every service
-                    JSONArray jsonServices = jsonRoot.getJSONArray("services");
-                    for (int i = 0; i < jsonServices.length(); i++) {
-                        Service service = new Service(jsonServices.getJSONObject(i));
-                        if (service.extra_service) {
-                            data.serviceExtraMap.put(service.id, service);
-                        } else {
-                            data.serviceMap.put(service.id, service);
-                        }
-                    }
-                    // Loop over every timestamp direction
-                    JSONArray jsonTimestampDirections = jsonRoot.getJSONArray("timestamp_directions");
-                    for (int i = 0; i < jsonTimestampDirections.length(); i++) {
-                        TimestampDirection timestampDirection = new TimestampDirection(jsonTimestampDirections.getJSONObject(i));
-                        data.timestampDirectionsMap.put(timestampDirection.id, timestampDirection);
-                    }
-                    // Check the final node for successful reads
-                    this.checkStatusResponse(jsonRoot);
-                } catch (JSONException e) {
-                    data.exception = new InvalidResponseException();
-                } catch (ParseException e) {
-                    data.exception = new InvalidResponseException();
-                } catch (InvalidResponseException e) {
-                    data.exception = e;
+        return data;
+    }
+
+    public ApiData getData() {
+        ApiData data = new ApiData();
+        // Get data from the server
+        JSONObject jsonRoot = this.getJSONObject(String.format("get/%s/%s/",
+                this.settings.getTabletID(),
+                this.getCurrentTokenCode()));
+        if (jsonRoot != null) {
+            try {
+                // Loop over every structure
+                JSONObject jsonStructures = jsonRoot.getJSONObject("structures");
+                Iterator<?> jsonKeys = jsonStructures.keys();
+                while (jsonKeys.hasNext()) {
+                    String key = (String) jsonKeys.next();
+                    Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
+                    data.structuresMap.put(objStructure.id, objStructure);
                 }
-            } else {
-                // Unable to download data from the server
-                data.exception = new NoDownloadException();
+                // Loop over every contract
+                JSONArray jsonContracts = jsonRoot.getJSONArray("contracts");
+                for (int i = 0; i < jsonContracts.length(); i++) {
+                    Contract contract = new Contract(jsonContracts.getJSONObject(i));
+                    data.contractsMap.put(contract.id, contract);
+                }
+                // Loop over every service
+                JSONArray jsonServices = jsonRoot.getJSONArray("services");
+                for (int i = 0; i < jsonServices.length(); i++) {
+                    Service service = new Service(jsonServices.getJSONObject(i));
+                    if (service.extra_service) {
+                        data.serviceExtraMap.put(service.id, service);
+                    } else {
+                        data.serviceMap.put(service.id, service);
+                    }
+                }
+                // Loop over every timestamp direction
+                JSONArray jsonTimestampDirections = jsonRoot.getJSONArray("timestamp_directions");
+                for (int i = 0; i < jsonTimestampDirections.length(); i++) {
+                    TimestampDirection timestampDirection = new TimestampDirection(jsonTimestampDirections.getJSONObject(i));
+                    data.timestampDirectionsMap.put(timestampDirection.id, timestampDirection);
+                }
+                // Check the final node for successful reads
+                this.checkStatusResponse(jsonRoot);
+            } catch (JSONException e) {
+                data.exception = new InvalidResponseException();
+            } catch (ParseException e) {
+                data.exception = new InvalidResponseException();
+            } catch (InvalidResponseException e) {
+                data.exception = e;
             }
+        } else {
+            // Unable to download data from the server
+            data.exception = new NoDownloadException();
         }
         return data;
     }
