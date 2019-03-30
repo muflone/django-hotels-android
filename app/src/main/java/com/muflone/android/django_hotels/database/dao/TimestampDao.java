@@ -43,6 +43,11 @@ public interface TimestampDao {
     List<Timestamp> listByName(long contractId);
 
     @Query("SELECT * " +
+           "FROM timestamps " +
+           "WHERE transmission IS NULL")
+    List<Timestamp> listByUntrasmitted();
+
+    @Query("SELECT * " +
             "FROM timestamps " +
             "WHERE contract_id = :contractId " +
             "  AND direction_id = :directionId")
