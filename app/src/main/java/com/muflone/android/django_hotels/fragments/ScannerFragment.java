@@ -103,6 +103,8 @@ public class ScannerFragment extends Fragment {
         IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
         // Set scan title
         integrator.setPrompt(getActivity().getString(R.string.scan_prompt));
+        // Set beep after scan
+        integrator.setBeepEnabled(this.settings.getScanBeep());
         // Start scan
         integrator.initiateScan();
     }

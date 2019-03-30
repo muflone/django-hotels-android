@@ -18,4 +18,11 @@
     <string name="settings_api_url_id">api_url</string>
     <string name="settings_api_url_title">API URL</string>
     <string name="settings_api_url_summary">This is the server URL to connect</string>
+
+    <!-- Scan settings values -->
+    <string name="settings_category_scan">Scan settings</string>
+
+    <string name="settings_scan_beep_id">scan_beep</string>
+    <string name="settings_scan_beep_title">Beep after scan</string>
+    <string name="settings_scan_beep_summary">Enable beep after a successfull scan</string>
 </resources>

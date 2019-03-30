@@ -29,4 +29,8 @@ public class Settings {
     public Uri getApiUri() {
         return Uri.parse(preferences.getString(this.context.getString(R.string.settings_api_url_id), ""));
     }
+
+    public boolean getScanBeep() {
+        return this.preferences.getBoolean(this.context.getString(R.string.settings_scan_beep_id), false);
+    }
 }
