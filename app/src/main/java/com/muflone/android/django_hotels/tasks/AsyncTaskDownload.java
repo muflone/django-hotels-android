@@ -82,15 +82,12 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
         RoomDao roomDao = database.roomDao();
         ServiceDao serviceDao = database.serviceDao();
         StructureDao structureDao = database.structureDao();
-        TimestampDao timestampDao = database.timestampDao();
         TimestampDirectionDao timestampDirectionDao = database.timestampDirectionDao();
 
         // Delete previous data
         roomDao.truncate();
         contractBuildingsDao.truncate();
         buildingDao.truncate();
-        // TODO: this must be removed in order to keep timestamps
-        timestampDao.truncate();
         contractDao.truncate();
         contractTypeDao.truncate();
         jobTypeDao.truncate();

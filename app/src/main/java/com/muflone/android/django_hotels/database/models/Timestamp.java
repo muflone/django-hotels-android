@@ -13,16 +13,6 @@ import java.util.Date;
         indices = {
                 @Index(value = "contract_id", unique = false),
                 @Index(value = "direction_id", unique = false)
-        },
-        foreignKeys = {
-                @ForeignKey(entity = Contract.class,
-                        parentColumns = "id",
-                        childColumns = "contract_id",
-                        onDelete = ForeignKey.RESTRICT),
-                @ForeignKey(entity = TimestampDirection.class,
-                        parentColumns = "id",
-                        childColumns = "direction_id",
-                        onDelete = ForeignKey.RESTRICT)
         })
 public class Timestamp {
     @ColumnInfo(name = "contract_id")
