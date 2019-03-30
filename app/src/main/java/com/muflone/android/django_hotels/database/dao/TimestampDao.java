@@ -44,7 +44,9 @@ public interface TimestampDao {
 
     @Query("SELECT * " +
            "FROM timestamps " +
-           "WHERE transmission IS NULL")
+           "WHERE transmission IS NULL " +
+           "ORDER BY timestamps.date ASC, " +
+           "         timestamps.time ASC")
     List<Timestamp> listByUntrasmitted();
 
     @Query("SELECT * " +
