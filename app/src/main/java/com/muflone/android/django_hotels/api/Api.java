@@ -209,7 +209,7 @@ public class Api {
         ApiData data = new ApiData();
         // Send timestamps to the server
         try {
-            jsonRoot = this.getJSONObject(String.format("put/timestamp/%s/%s/%d/%s/%d/%s/",
+            jsonRoot = this.getJSONObject(String.format("put/timestamp/%s/%s/%d/%d/%d/%s/",
                     this.settings.getTabletID(),
                     this.getCurrentTokenCode(),
                     timestamp.contractId,

@@ -13,7 +13,11 @@ import org.json.JSONObject;
 public class TimestampDirection {
     @PrimaryKey
     @NonNull
-    public final String id;
+    public final long id;
+
+    @ColumnInfo(name = "name")
+    @NonNull
+    public final String name;
 
     @ColumnInfo(name = "description")
     @NonNull
@@ -29,8 +33,9 @@ public class TimestampDirection {
     @ColumnInfo(name = "type_exit")
     public final boolean exit;
 
-    public TimestampDirection(String id, String description, String shortCode, boolean enter, boolean exit) {
+    public TimestampDirection(long id, String name, String description, String shortCode, boolean enter, boolean exit) {
         this.id = id;
+        this.name = name;
         this.description = description;
         this.shortCode = shortCode;
         this.enter = enter;
@@ -39,7 +44,8 @@ public class TimestampDirection {
 
     @Ignore
     public TimestampDirection(JSONObject jsonObject) throws JSONException {
-        this(jsonObject.getString("name"),
+        this(jsonObject.getLong("id"),
+                jsonObject.getString("name"),
                 jsonObject.getString("description"),
                 jsonObject.getString("short_code"),
                 jsonObject.getBoolean("type_enter"),

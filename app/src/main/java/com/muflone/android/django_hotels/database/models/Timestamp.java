@@ -23,8 +23,7 @@ public class Timestamp {
     public final long contractId;
 
     @ColumnInfo(name = "direction_id", index = true)
-    @NonNull
-    public final String directionId;
+    public final long directionId;
 
     @ColumnInfo(name = "datetime")
     @NonNull
@@ -38,7 +37,7 @@ public class Timestamp {
     @Nullable
     public Date transmission;
 
-    public Timestamp(long id, long contractId, @NonNull String directionId, Date datetime, @NonNull String description, @Nullable Date transmission) {
+    public Timestamp(long id, long contractId, @NonNull long directionId, Date datetime, @NonNull String description, @Nullable Date transmission) {
         this.id = id;
         this.contractId = contractId;
         this.directionId = directionId;
