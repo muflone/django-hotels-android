@@ -36,7 +36,7 @@ public class Timestamp {
     @NonNull
     public final String description;
 
-    @ColumnInfo(name = "transmission")
+    @ColumnInfo(name = "transmission", index = true)
     @Nullable
     public Date transmission;
 

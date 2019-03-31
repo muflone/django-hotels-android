@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "245b07c644e2bf59e844e0ba46d0ad9e",
+    "identityHash": "2f3ad92cd2dcbd91b6c3275134402baf",
     "entities": [
       {
         "tableName": "brands",
@@ -801,8 +801,14 @@
       },
       {
         "tableName": "timestamps",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`contract_id` INTEGER NOT NULL, `direction_id` TEXT NOT NULL, `date` INTEGER NOT NULL, `time` INTEGER NOT NULL, `description` TEXT NOT NULL, `transmission` INTEGER, PRIMARY KEY(`contract_id`, `direction_id`, `date`, `time`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `contract_id` INTEGER NOT NULL, `direction_id` TEXT NOT NULL, `datetime` INTEGER NOT NULL, `description` TEXT NOT NULL, `transmission` INTEGER)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "contractId",
             "columnName": "contract_id",
@@ -816,14 +822,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "date",
-            "columnName": "date",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "time",
-            "columnName": "time",
+            "fieldPath": "datetime",
+            "columnName": "datetime",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -842,14 +842,21 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "contract_id",
-            "direction_id",
-            "date",
-            "time"
+            "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [
+          {
+            "name": "index_timestamps_contract_id_direction_id_datetime",
+            "unique": true,
+            "columnNames": [
+              "contract_id",
+              "direction_id",
+              "datetime"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_timestamps_contract_id_direction_id_datetime` ON `${TABLE_NAME}` (`contract_id`, `direction_id`, `datetime`)"
+          },
           {
             "name": "index_timestamps_contract_id",
             "unique": false,
@@ -924,7 +931,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"245b07c644e2bf59e844e0ba46d0ad9e\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"2f3ad92cd2dcbd91b6c3275134402baf\")"
     ]
   }
 }

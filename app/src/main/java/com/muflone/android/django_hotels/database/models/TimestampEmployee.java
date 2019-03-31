@@ -2,6 +2,7 @@ package com.muflone.android.django_hotels.database.models;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.Date;
 
@@ -23,12 +24,16 @@ public class TimestampEmployee {
     @NonNull
     public final String direction;
 
-    public TimestampEmployee(long id, String firstName, String lastName, @NonNull Date date,
-                             @NonNull String direction) {
+    @ColumnInfo(name = "transmission")
+    public final Date transmission;
+
+    public TimestampEmployee(long id, String firstName, String lastName, @NonNull Date datetime,
+                             @NonNull String direction, Date transmission) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.datetime = datetime;
         this.direction = direction;
+        this.transmission = transmission;
     }
 }

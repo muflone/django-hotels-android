@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -191,7 +192,8 @@ public class ScannerFragment extends Fragment {
                             timestamp.id,
                             String.format("%s %s", timestamp.firstName, timestamp.lastName),
                             timestamp.datetime,
-                            timestamp.direction));
+                            timestamp.direction,
+                            timestamp.transmission));
                 }
                 timestampAdapter.notifyDataSetChanged();
             }
@@ -208,12 +210,15 @@ public class ScannerFragment extends Fragment {
         public String fullName;
         public Date datetime;
         public String direction;
+        public Date transmission;
 
-        public TimestampEmployeeItem(long id, String fullName, Date datetime, String direction) {
+        public TimestampEmployeeItem(long id, String fullName, Date datetime,
+                                     String direction, Date transmission) {
             this.id = id;
             this.fullName = fullName;
             this.datetime = datetime;
             this.direction = direction;
+            this.transmission = transmission;
         }
     }
 
@@ -235,6 +240,9 @@ public class ScannerFragment extends Fragment {
             employeeView.setText(timestampEmployee.fullName);
             dateView.setText(new SimpleDateFormat("yyyy-MM-dd").format(timestampEmployee.datetime));
             timeView.setText(new SimpleDateFormat("HH:mm.ss").format(timestampEmployee.datetime));
+            ImageView transmissionImage = convertView.findViewById(R.id.transmissionImage);
+            transmissionImage.setImageResource(timestampEmployee.transmission == null ?
+                    0 : R.drawable.ic_timestamp_transmitted);
             directionView.setText(timestampEmployee.direction);
             return convertView;
         }

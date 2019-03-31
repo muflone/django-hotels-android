@@ -25,7 +25,8 @@ public interface TimestampDao {
            "  employees.first_name, " +
            "  employees.last_name, " +
            "  timestamps.datetime, " +
-           "  timestamp_directions.description AS direction " +
+           "  timestamp_directions.description AS direction, " +
+           "  timestamps.transmission AS transmission " +
            "FROM timestamps " +
            "INNER JOIN contracts " +
            "   ON contracts.id = timestamps.contract_id " +
