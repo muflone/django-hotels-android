@@ -11,10 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 @Entity(tableName = "locations",
-        indices = {
-            @Index(value = {"region_id"}, unique = false),
-            @Index(value = {"country_id"}, unique = false)
-        },
         foreignKeys = {
             @ForeignKey(entity = Region.class,
                         parentColumns = "id",
@@ -38,13 +34,13 @@ public class Location {
     @Ignore
     public Region region;
 
-    @ColumnInfo(name = "region_id")
+    @ColumnInfo(name = "region_id", index = true)
     public final long regionId;
 
     @Ignore
     public Country country;
 
-    @ColumnInfo(name = "country_id")
+    @ColumnInfo(name = "country_id", index = true)
     public final String countryId;
 
     public Location(long id, String name, String address, long regionId, String countryId) {

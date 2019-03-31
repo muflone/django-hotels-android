@@ -15,11 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "structures",
-        indices = {
-            @Index("company_id"),
-            @Index("brand_id"),
-            @Index("location_id")
-        },
         foreignKeys = {
             @ForeignKey(entity = Company.class,
                         parentColumns = "id",
@@ -44,19 +39,19 @@ public class Structure {
     @Ignore
     public Company company;
 
-    @ColumnInfo(name = "company_id")
+    @ColumnInfo(name = "company_id", index = true)
     public final long companyId;
 
     @Ignore
     public Brand brand;
 
-    @ColumnInfo(name = "brand_id")
+    @ColumnInfo(name = "brand_id", index = true)
     public final long brandId;
 
     @Ignore
     public Location location;
 
-    @ColumnInfo(name = "location_id")
+    @ColumnInfo(name = "location_id", index = true)
     public final long locationId;
 
     @Ignore

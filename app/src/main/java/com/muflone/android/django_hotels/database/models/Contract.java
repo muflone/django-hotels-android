@@ -20,10 +20,6 @@ import java.util.List;
 @Entity(tableName = "contracts",
         indices = {
             @Index(value = {"guid"}, unique = true),
-            @Index(value = {"employee_id"}, unique = false),
-            @Index(value = {"company_id"}, unique = false),
-            @Index(value = {"contract_type_id"}, unique = false),
-            @Index(value = {"job_type_id"}, unique = false)
         },
         foreignKeys = {
             @ForeignKey(entity = Employee.class,
@@ -65,25 +61,25 @@ public class Contract {
     @Ignore
     public Employee employee;
 
-    @ColumnInfo(name = "employee_id")
+    @ColumnInfo(name = "employee_id", index = true)
     public final long employeeId;
 
     @Ignore
     public Company company;
 
-    @ColumnInfo(name = "company_id")
+    @ColumnInfo(name = "company_id", index = true)
     public final long companyId;
 
     @Ignore
     public ContractType contractType;
 
-    @ColumnInfo(name = "contract_type_id")
+    @ColumnInfo(name = "contract_type_id", index = true)
     public final long contractTypeId;
 
     @Ignore
     public JobType jobType;
 
-    @ColumnInfo(name = "job_type_id")
+    @ColumnInfo(name = "job_type_id", index = true)
     public final long jobTypeId;
 
     @Ignore

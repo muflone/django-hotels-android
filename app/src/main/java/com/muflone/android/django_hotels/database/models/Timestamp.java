@@ -12,19 +12,17 @@ import java.util.Date;
 
 @Entity(tableName = "timestamps",
         indices = {
-                @Index(value = "contract_id", unique = false),
-                @Index(value = "direction_id", unique = false),
-                @Index(value = "transmission", unique = false)
+                @Index(value = {"contract_id", "direction_id", "datetime"}, unique = true),
         })
 public class Timestamp {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     public final long id;
 
-    @ColumnInfo(name = "contract_id")
+    @ColumnInfo(name = "contract_id", index = true)
     public final long contractId;
 
-    @ColumnInfo(name = "direction_id")
+    @ColumnInfo(name = "direction_id", index = true)
     @NonNull
     public final String directionId;
 

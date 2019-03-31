@@ -10,9 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 @Entity(tableName = "rooms",
-        indices = {
-            @Index(value = {"building_id"}, unique = false)
-        },
         foreignKeys = {
             @ForeignKey(entity = Building.class,
                         parentColumns = "id",
@@ -32,7 +29,7 @@ public class Room {
     @ColumnInfo(name = "bed_type")
     public final String bedType;
 
-    @ColumnInfo(name = "building_id")
+    @ColumnInfo(name = "building_id", index = true)
     public final long buildingId;
 
     public Room(long id, String name, String type, String bedType, long buildingId) {
