@@ -29,6 +29,7 @@ import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult<ApiData>> {
@@ -43,11 +44,17 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
     @Override
     protected AsyncTaskResult doInBackground(Void... params) {
         ApiData data = new ApiData();
-        AppDatabase database = AppDatabase.getAppDatabase(this.api.context);
-        if (! database.checkDB()) {
+        AppDatabase database = null;
+        database = AppDatabase.getAppDatabase(this.api.context);
+        // TODO: Database deletion is dangerous, must implement migrations
+        if (!database.checkDB() | true) {
             Log.d("", "Invalid database structure " + database.getOpenHelper().getDatabaseName());
+            AppDatabase.destroyInstance();
+            File databaseFile = new File(this.api.context.getApplicationInfo().dataDir +
+                    "/databases/" + database.getOpenHelper().getDatabaseName());
+            databaseFile.delete();
+            database = AppDatabase.getAppDatabase(this.api.context);
         }
-
         BrandDao brandDao = database.brandDao();
         BuildingDao buildingDao = database.buildingDao();
         CompanyDao companyDao = database.companyDao();
