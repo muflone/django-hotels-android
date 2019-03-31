@@ -153,7 +153,7 @@ public class ScannerFragment extends Fragment {
                                 public void onFailure(Exception exception) {
                                 }
                             });
-                            task.execute(new Timestamp(contract.id,
+                            task.execute(new Timestamp(0, contract.id,
                                     this.scanType == ScanType.SCAN_TYPE_ENTER ?
                                             this.apiData.enterDirection.id : this.apiData.exitDirection.id,
                                     Utility.getCurrentDateTime(this.settings.getTimeZone()),
@@ -188,6 +188,7 @@ public class ScannerFragment extends Fragment {
                 timestampEmployeeList.clear();
                 for (TimestampEmployee timestamp : results.data) {
                     timestampEmployeeList.add(new TimestampEmployeeItem(
+                            timestamp.id,
                             String.format("%s %s", timestamp.firstName, timestamp.lastName),
                             timestamp.datetime,
                             timestamp.direction));
@@ -203,11 +204,13 @@ public class ScannerFragment extends Fragment {
     }
 
     private class TimestampEmployeeItem {
+        public long id;
         public String fullName;
         public Date datetime;
         public String direction;
 
-        public TimestampEmployeeItem(String fullName, Date datetime, String direction) {
+        public TimestampEmployeeItem(long id, String fullName, Date datetime, String direction) {
+            this.id = id;
             this.fullName = fullName;
             this.datetime = datetime;
             this.direction = direction;

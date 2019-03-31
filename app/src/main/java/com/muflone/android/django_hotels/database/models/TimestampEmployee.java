@@ -6,6 +6,9 @@ import android.support.annotation.NonNull;
 import java.util.Date;
 
 public class TimestampEmployee {
+    @ColumnInfo(name = "id")
+    public final long id;
+
     @ColumnInfo(name = "first_name")
     public final String firstName;
 
@@ -20,8 +23,9 @@ public class TimestampEmployee {
     @NonNull
     public final String direction;
 
-    public TimestampEmployee(String firstName, String lastName, @NonNull Date date,
+    public TimestampEmployee(long id, String firstName, String lastName, @NonNull Date date,
                              @NonNull String direction) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.datetime = datetime;

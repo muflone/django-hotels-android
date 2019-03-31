@@ -21,6 +21,7 @@ public interface TimestampDao {
     List<Timestamp> listAll();
 
     @Query("SELECT " +
+           "  timestamps.id, " +
            "  employees.first_name, " +
            "  employees.last_name, " +
            "  timestamps.datetime, " +
@@ -49,9 +50,8 @@ public interface TimestampDao {
 
     @Query("SELECT * " +
             "FROM timestamps " +
-            "WHERE contract_id = :contractId " +
-            "  AND direction_id = :directionId")
-    Timestamp findById(long contractId, String directionId);
+            "WHERE id = :id")
+    Timestamp findById(long id);
 
     @Query("SELECT COUNT(*) " +
            "FROM timestamps")
