@@ -47,7 +47,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
         AppDatabase database = null;
         database = AppDatabase.getAppDatabase(this.api.context);
         // TODO: Database deletion is dangerous, must implement migrations
-        if (!database.checkDB() | true) {
+        if (!database.checkDB()) {
             Log.d("", "Invalid database structure " + database.getOpenHelper().getDatabaseName());
             AppDatabase.destroyInstance();
             File databaseFile = new File(this.api.context.getApplicationInfo().dataDir +
