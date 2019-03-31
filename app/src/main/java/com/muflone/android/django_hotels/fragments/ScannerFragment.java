@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -84,6 +85,31 @@ public class ScannerFragment extends Fragment {
         this.timestampAdapter = new TimestampAdapter(getActivity(),
                 R.layout.scanner_timestamps, this.timestampEmployeeList);
         this.timestampEmployeesView.setAdapter(this.timestampAdapter);
+        // Clear transmission date on long press
+        this.timestampEmployeesView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        // Update adapter
+                        TimestampEmployeeItem timestampEmployeeItem = timestampEmployeeList.get(position);
+                        timestampEmployeeItem.transmission = null;
+                        // Update database
+                        Timestamp timestamp = database.timestampDao().findById(timestampEmployeeItem.id);
+                        timestamp.transmission = null;
+                        database.timestampDao().update(timestamp);
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void results) {
+                        timestampAdapter.notifyDataSetChanged();
+                    }
+                }.execute();
+                return false;
+            }
+        });
         return this.rootLayout;
     }
 
