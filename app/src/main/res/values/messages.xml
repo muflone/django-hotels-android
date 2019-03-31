@@ -7,6 +7,6 @@
     <string name="message_unable_to_download">Unable to download data from the server</string>
     <string name="message_invalid_server_response">Invalid response from the server, please check your internet connection</string>
     <string name="message_established_connection">Established connection with the server</string>
-    <string name="message_unnown_employee">Unknown employee</string>
+    <string name="message_unknown_employee">Unknown employee</string>
     <string name="message_unsupported_qrcode">Unsupported QR Code</string>
 </resources>

@@ -187,7 +187,7 @@ public class ScannerFragment extends Fragment {
                         } else {
                             // Cannot find any contract with the provided GUID
                             Toast.makeText(getActivity(),
-                                    getString(R.string.message_unnown_employee),
+                                    getString(R.string.message_unknown_employee),
                                     Toast.LENGTH_LONG).show();
                         }
                     } catch (Token.TokenUriInvalidException | Base32String.DecodingException e) {
