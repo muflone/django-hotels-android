@@ -3,6 +3,7 @@ package com.muflone.android.django_hotels.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,13 +31,11 @@ import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;
+import com.muflone.android.django_hotels.database.dao.TimestampDao;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampEmployee;
 import com.muflone.android.django_hotels.otp.Token;
-import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
-import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
-import com.muflone.android.django_hotels.tasks.AsyncTaskTimestampInsert;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -142,23 +141,23 @@ public class ScannerFragment extends Fragment {
                             Toast.makeText(getActivity(),
                                     contract.employee.firstName + " " + contract.employee.lastName,
                                     Toast.LENGTH_SHORT).show();
-                            AsyncTaskTimestampInsert task = new AsyncTaskTimestampInsert(
-                                    this.database, new AsyncTaskListener<AsyncTaskResult<Void>>() {
-                                @Override
-                                public void onSuccess(AsyncTaskResult<Void> results) {
-                                    listLatestTimestamps();
-                                }
-
-                                @Override
-                                public void onFailure(Exception exception) {
-                                }
-                            });
-                            task.execute(new Timestamp(0, contract.id,
+                            // Insert new Timestamp in background
+                            Timestamp timestamp = new Timestamp(0, contract.id,
                                     this.scanType == ScanType.SCAN_TYPE_ENTER ?
                                             this.apiData.enterDirection.id : this.apiData.exitDirection.id,
                                     Utility.getCurrentDateTime(this.settings.getTimeZone()),
-                                    "", null));
-
+                                    "", null);
+                            new AsyncTask<Timestamp, Void, Void>() {
+                                @Override
+                                protected Void doInBackground(Timestamp... params) {
+                                    // Insert new Timestamp
+                                    TimestampDao timestampDao = database.timestampDao();
+                                    timestampDao.insert(params);
+                                    // Reload list
+                                    listLatestTimestamps();
+                                    return null;
+                                }
+                            }.execute(timestamp);
                         } else {
                             // Cannot find any contract with the provided GUID
                             Toast.makeText(getActivity(),
