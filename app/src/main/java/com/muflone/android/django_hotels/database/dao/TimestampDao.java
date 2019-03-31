@@ -23,8 +23,7 @@ public interface TimestampDao {
     @Query("SELECT " +
            "  employees.first_name, " +
            "  employees.last_name, " +
-           "  timestamps.date, " +
-           "  timestamps.time, " +
+           "  timestamps.datetime, " +
            "  timestamp_directions.description AS direction " +
            "FROM timestamps " +
            "INNER JOIN contracts " +
@@ -33,7 +32,7 @@ public interface TimestampDao {
            "   ON employees.id = contracts.employee_id " +
            "INNER JOIN timestamp_directions " +
            "   ON timestamp_directions.id = timestamps.direction_id " +
-           "ORDER BY timestamps.date DESC, timestamps.time DESC " +
+           "ORDER BY timestamps.datetime DESC " +
            "LIMIT :count")
     List<TimestampEmployee> listByLatest(long count);
 
@@ -45,8 +44,7 @@ public interface TimestampDao {
     @Query("SELECT * " +
            "FROM timestamps " +
            "WHERE transmission IS NULL " +
-           "ORDER BY timestamps.date ASC, " +
-           "         timestamps.time ASC")
+           "ORDER BY timestamps.datetime ASC")
     List<Timestamp> listByUntrasmitted();
 
     @Query("SELECT * " +

@@ -156,8 +156,7 @@ public class ScannerFragment extends Fragment {
                             task.execute(new Timestamp(contract.id,
                                     this.scanType == ScanType.SCAN_TYPE_ENTER ?
                                             this.apiData.enterDirection.id : this.apiData.exitDirection.id,
-                                    Utility.getCurrentDate(this.settings.getTimeZone()),
-                                    Utility.getCurrentTime(this.settings.getTimeZone()),
+                                    Utility.getCurrentDateTime(this.settings.getTimeZone()),
                                     "", null));
 
                         } else {
@@ -190,8 +189,7 @@ public class ScannerFragment extends Fragment {
                 for (TimestampEmployee timestamp : results.data) {
                     timestampEmployeeList.add(new TimestampEmployeeItem(
                             String.format("%s %s", timestamp.firstName, timestamp.lastName),
-                            timestamp.date,
-                            timestamp.time,
+                            timestamp.datetime,
                             timestamp.direction));
                 }
                 timestampAdapter.notifyDataSetChanged();
@@ -206,14 +204,12 @@ public class ScannerFragment extends Fragment {
 
     private class TimestampEmployeeItem {
         public String fullName;
-        public Date date;
-        public Date time;
+        public Date datetime;
         public String direction;
 
-        public TimestampEmployeeItem(String fullName, Date date, Date time, String direction) {
+        public TimestampEmployeeItem(String fullName, Date datetime, String direction) {
             this.fullName = fullName;
-            this.date = date;
-            this.time = time;
+            this.datetime = datetime;
             this.direction = direction;
         }
     }
@@ -234,8 +230,8 @@ public class ScannerFragment extends Fragment {
             TextView directionView = convertView.findViewById(R.id.directionView);
             TimestampEmployeeItem timestampEmployee = getItem(position);
             employeeView.setText(timestampEmployee.fullName);
-            dateView.setText(new SimpleDateFormat("yyyy-MM-dd").format(timestampEmployee.date));
-            timeView.setText(new SimpleDateFormat("HH:mm.ss").format(timestampEmployee.time));
+            dateView.setText(new SimpleDateFormat("yyyy-MM-dd").format(timestampEmployee.datetime));
+            timeView.setText(new SimpleDateFormat("HH:mm.ss").format(timestampEmployee.datetime));
             directionView.setText(timestampEmployee.direction);
             return convertView;
         }

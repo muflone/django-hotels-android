@@ -10,7 +10,7 @@ import android.support.annotation.Nullable;
 import java.util.Date;
 
 @Entity(tableName = "timestamps",
-        primaryKeys = {"contract_id", "direction_id", "date", "time"},
+        primaryKeys = {"contract_id", "direction_id", "datetime"},
         indices = {
                 @Index(value = "contract_id", unique = false),
                 @Index(value = "direction_id", unique = false),
@@ -24,13 +24,9 @@ public class Timestamp {
     @NonNull
     public final String directionId;
 
-    @ColumnInfo(name = "date")
+    @ColumnInfo(name = "datetime")
     @NonNull
-    public final Date date;
-
-    @ColumnInfo(name = "time")
-    @NonNull
-    public final Date time;
+    public final Date datetime;
 
     @ColumnInfo(name = "description")
     @NonNull
@@ -40,11 +36,10 @@ public class Timestamp {
     @Nullable
     public Date transmission;
 
-    public Timestamp(long contractId, @NonNull String directionId, Date date, Date time, @NonNull String description, @Nullable Date transmission) {
+    public Timestamp(long contractId, @NonNull String directionId, Date datetime, @NonNull String description, @Nullable Date transmission) {
         this.contractId = contractId;
         this.directionId = directionId;
-        this.date = date;
-        this.time = time;
+        this.datetime = datetime;
         this.description = description;
         this.transmission = transmission;
     }

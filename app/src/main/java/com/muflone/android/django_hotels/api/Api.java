@@ -209,12 +209,12 @@ public class Api {
         ApiData data = new ApiData();
         // Send timestamps to the server
         try {
-            jsonRoot = this.getJSONObject(String.format("put/timestamp/%s/%s/%d/%s/%d/%d/%s/",
+            jsonRoot = this.getJSONObject(String.format("put/timestamp/%s/%s/%d/%s/%d/%s/",
                     this.settings.getTabletID(),
                     this.getCurrentTokenCode(),
-                    timestamp.contractId, timestamp.directionId,
-                    timestamp.date.getTime() / 1000,
-                    timestamp.time.getTime() / 1000,
+                    timestamp.contractId,
+                    timestamp.directionId,
+                    timestamp.datetime.getTime() / 1000,
                     URLEncoder.encode(timestamp.description, "UTF-8")));
         } catch (UnsupportedEncodingException e) {
             data.exception = new InvalidResponseException();
