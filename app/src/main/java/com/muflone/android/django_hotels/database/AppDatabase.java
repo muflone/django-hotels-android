@@ -4,6 +4,7 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
+import android.database.Cursor;
 
 import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.Singleton;
@@ -86,6 +87,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static void destroyInstance() {
         if (INSTANCE != null) {
+            INSTANCE.checkpoint();
             INSTANCE.close();
         }
         INSTANCE = null;
@@ -98,6 +100,14 @@ public abstract class AppDatabase extends RoomDatabase {
             // The database state is invalid
             return false;
         }
+    }
+
+    private synchronized int checkpoint() {
+        Cursor cursor = INSTANCE.query("PRAGMA wal_checkpoint(truncate)", null);
+        cursor.moveToFirst();
+        int results = cursor.getInt(0);
+        cursor.close();
+        return results;
     }
 
     public void reload() {
