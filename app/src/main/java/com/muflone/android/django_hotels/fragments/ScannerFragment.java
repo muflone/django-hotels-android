@@ -37,7 +37,6 @@ import com.muflone.android.django_hotels.otp.Token;
 import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
 import com.muflone.android.django_hotels.tasks.AsyncTaskTimestampInsert;
-import com.muflone.android.django_hotels.tasks.AsyncTaskTimestampListByLatest;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -181,13 +180,17 @@ public class ScannerFragment extends Fragment {
 
     private void listLatestTimestamps() {
         // List the latest timestamps
-        AsyncTaskTimestampListByLatest task = new AsyncTaskTimestampListByLatest(
-                this.database, new AsyncTaskListener<AsyncTaskResult<List<TimestampEmployee>>>() {
+        new AsyncTask<Long, Void, List<TimestampEmployee>>() {
             @Override
-            public void onSuccess(AsyncTaskResult<List<TimestampEmployee>> results) {
+            protected List<TimestampEmployee> doInBackground(Long... params) {
+                return database.timestampDao().listByLatest(params[0]);
+            }
+
+            @Override
+            protected void onPostExecute(List<TimestampEmployee> results) {
                 // Reload the timestamps list
                 timestampEmployeeList.clear();
-                for (TimestampEmployee timestamp : results.data) {
+                for (TimestampEmployee timestamp : results) {
                     timestampEmployeeList.add(new TimestampEmployeeItem(
                             timestamp.id,
                             String.format("%s %s", timestamp.firstName, timestamp.lastName),
@@ -197,12 +200,7 @@ public class ScannerFragment extends Fragment {
                 }
                 timestampAdapter.notifyDataSetChanged();
             }
-
-            @Override
-            public void onFailure(Exception exception) {
-            }
-        });
-        task.execute(Long.valueOf(Constants.LATEST_TIMESTAMPS));
+        }.execute(Long.valueOf(Constants.LATEST_TIMESTAMPS));
     }
 
     private class TimestampEmployeeItem {
