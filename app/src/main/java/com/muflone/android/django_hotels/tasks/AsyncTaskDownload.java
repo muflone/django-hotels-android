@@ -1,8 +1,9 @@
-package com.muflone.android.django_hotels.api.tasks;
+package com.muflone.android.django_hotels.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;
@@ -20,14 +21,20 @@ import com.muflone.android.django_hotels.database.dao.RegionDao;
 import com.muflone.android.django_hotels.database.dao.RoomDao;
 import com.muflone.android.django_hotels.database.dao.ServiceDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
+import com.muflone.android.django_hotels.database.dao.TimestampDao;
+import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.ContractBuildings;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
+import com.muflone.android.django_hotels.database.models.Timestamp;
+import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
-public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
+import java.util.List;
+
+public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<ApiData>> {
     private final Api api;
     private final AsyncTaskListener callback;
 
@@ -37,28 +44,50 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
     }
 
     @Override
-    protected ApiData doInBackground(Void... params) {
+    protected AsyncTaskResult doInBackground(Void... params) {
         // Do the background job
-        ApiData data = this.api.getData(this.api.settings.getTabletID(),
-                this.api.getCurrentTokenCode());
+        boolean transmissionErrors = false;
+        AppDatabase database = AppDatabase.getAppDatabase(this.api.context);
+
+        // Check if the system date/time matches with the remote date/time
+        ApiData data = this.api.checkDates();
         if (data.exception == null) {
-            // Success, save data in database
-            this.saveToDatabase(data, this.api.context);
+            // Transmit any incomplete timestamp (UPLOAD)
+            List<Timestamp> timestampsList = database.timestampDao().listByUntrasmitted();
+            for (Timestamp timestamp : timestampsList) {
+                data = this.api.putTimestamp(timestamp);
+                if (data.exception == null) {
+                    // Update transmission date
+                    timestamp.transmission = Utility.getCurrentDateTime(this.api.settings.getTimeZone());
+                    database.timestampDao().update(timestamp);
+                } else {
+                    // There were some errors during the timestamps transmissions
+                    transmissionErrors = true;
+                }
+            }
+            if (! transmissionErrors) {
+                // Get new data from the server (DOWNLOAD)
+                data = this.api.getData();
+                if (data.exception == null) {
+                    // Success, save data in database
+                    this.saveToDatabase(data, this.api.context);
+                }
+            }
         }
-        return data;
+        return new AsyncTaskResult(data, this.callback, data.exception);
     }
 
     @Override
-    protected void onPostExecute(ApiData data) {
-        super.onPostExecute(data);
+    protected void onPostExecute(AsyncTaskResult<ApiData> results) {
+        super.onPostExecute(results);
         // Check if callback listener was requested
-        if (this.callback != null & data != null) {
-            if (data.exception == null) {
+        if (this.callback != null & results != null) {
+            if (results.exception == null) {
                 // Return flow to the caller
-                this.callback.onSuccess(data);
+                this.callback.onSuccess(results);
             } else {
                 // Failure with exception
-                this.callback.onFailure(data.exception);
+                this.callback.onFailure(results.exception);
             }
         }
     }
@@ -79,6 +108,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
         RoomDao roomDao = database.roomDao();
         ServiceDao serviceDao = database.serviceDao();
         StructureDao structureDao = database.structureDao();
+        TimestampDirectionDao timestampDirectionDao = database.timestampDirectionDao();
 
         // Delete previous data
         roomDao.truncate();
@@ -94,6 +124,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
         companyDao.truncate();
         brandDao.truncate();
         serviceDao.truncate();
+        timestampDirectionDao.truncate();
 
         // Save data from structures
         for (Structure structure : data.structuresMap.values()) {
@@ -130,6 +161,10 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, ApiData> {
         // Save data for services
         for (Service service : data.serviceMap.values()) {
             serviceDao.insert(service);
+        }
+        // Save data for timestamp directions
+        for (TimestampDirection timestampDirection : data.timestampDirectionsMap.values()) {
+            timestampDirectionDao.insert(timestampDirection);
         }
     }
 }

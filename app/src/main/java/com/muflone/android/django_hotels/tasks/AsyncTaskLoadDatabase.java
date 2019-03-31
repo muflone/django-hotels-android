@@ -1,6 +1,7 @@
-package com.muflone.android.django_hotels.api.tasks;
+package com.muflone.android.django_hotels.tasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
@@ -19,16 +20,19 @@ import com.muflone.android.django_hotels.database.dao.RegionDao;
 import com.muflone.android.django_hotels.database.dao.RoomDao;
 import com.muflone.android.django_hotels.database.dao.ServiceDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
+import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
+import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
+import java.io.File;
 import java.util.ArrayList;
 
-public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
+public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult<ApiData>> {
     private final Api api;
     private final AsyncTaskListener callback;
 
@@ -38,9 +42,19 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
     }
 
     @Override
-    protected ApiData doInBackground(Void... params) {
+    protected AsyncTaskResult doInBackground(Void... params) {
         ApiData data = new ApiData();
-        AppDatabase database = AppDatabase.getAppDatabase(api.context);
+        AppDatabase database = null;
+        database = AppDatabase.getAppDatabase(this.api.context);
+        // TODO: Database deletion is dangerous, must implement migrations
+        if (!database.checkDB()) {
+            Log.d("", "Invalid database structure " + database.getOpenHelper().getDatabaseName());
+            AppDatabase.destroyInstance();
+            File databaseFile = new File(this.api.context.getApplicationInfo().dataDir +
+                    "/databases/" + database.getOpenHelper().getDatabaseName());
+            databaseFile.delete();
+            database = AppDatabase.getAppDatabase(this.api.context);
+        }
         BrandDao brandDao = database.brandDao();
         BuildingDao buildingDao = database.buildingDao();
         CompanyDao companyDao = database.companyDao();
@@ -55,8 +69,9 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
         RoomDao roomDao = database.roomDao();
         ServiceDao serviceDao = database.serviceDao();
         StructureDao structureDao = database.structureDao();
+        TimestampDirectionDao timestampDirectionDao = database.timestampDirectionDao();
         // Load Structures
-        for(Structure structure : structureDao.getAll()) {
+        for(Structure structure : structureDao.listAll()) {
             data.structuresMap.put(structure.id, structure);
             structure.company = companyDao.findById(structure.companyId);
             structure.brand = brandDao.findById(structure.brandId);
@@ -69,8 +84,8 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
             structure.buildings = buildingDao.listByStructure(structure.id);
             // Load employees
             structure.employees = new ArrayList<>();
-            for (Employee employee : employeeDao.findByStructure(structure.id)) {
-                employee.contractBuildings = contractBuildingsDao.findByEmployee(employee.id);
+            for (Employee employee : employeeDao.listByStructure(structure.id)) {
+                employee.contractBuildings = contractBuildingsDao.listByEmployee(employee.id);
                 structure.employees.add(employee);
             }
             for(Building building : structure.buildings) {
@@ -86,18 +101,19 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
                 }
                 // Load employees
                 building.employees = new ArrayList<>();
-                for (Employee employee : employeeDao.findByBuilding(building.id)) {
-                    employee.contractBuildings = contractBuildingsDao.findByEmployee(employee.id);
+                for (Employee employee : employeeDao.listByBuilding(building.id)) {
+                    employee.contractBuildings = contractBuildingsDao.listByEmployee(employee.id);
                     building.employees.add(employee);
                 }
             }
         }
         // Load Contracts
-        for(Contract contract : contractDao.getAll()) {
+        for(Contract contract : contractDao.listAll()) {
             data.contractsMap.put(contract.id, contract);
+            data.contractsGuidMap.put(contract.guid, contract);
             contract.employee = employeeDao.findById(contract.employeeId);
             data.employeesMap.put(contract.employee.id, contract.employee);
-            contract.employee.contractBuildings = contractBuildingsDao.findByEmployee(contract.employeeId);
+            contract.employee.contractBuildings = contractBuildingsDao.listByEmployee(contract.employeeId);
             contract.company = companyDao.findById(contract.companyId);
             data.companiesMap.put(contract.company.id, contract.company);
             contract.contractType = contractTypeDao.findById(contract.contractTypeId);
@@ -107,27 +123,33 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, ApiData> {
             data.contractsMap.put(contract.id, contract);
         }
         // Load Services
-        for(Service service : serviceDao.getAll()) {
+        for(Service service : serviceDao.listAll()) {
             if (service.extra_service) {
                 data.serviceExtraMap.put(service.id, service);
             } else {
                 data.serviceMap.put(service.id, service);
             }
         }
-        return data;
+        // Load Timestamp directions
+        for(TimestampDirection timestampDirection : timestampDirectionDao.listAll()) {
+            data.timestampDirectionsMap.put(timestampDirection.id, timestampDirection);
+        }
+        data.enterDirection = timestampDirectionDao.findByTypeEnter();
+        data.exitDirection = timestampDirectionDao.findByTypeExit();
+        return new AsyncTaskResult(data, this.callback, data.exception);
     }
 
     @Override
-    protected void onPostExecute(ApiData data) {
-        super.onPostExecute(data);
+    protected void onPostExecute(AsyncTaskResult<ApiData> results) {
+        super.onPostExecute(results);
         // Check if callback listener was requested
-        if (this.callback != null & data != null) {
-            if (data.exception == null) {
+        if (this.callback != null & results != null) {
+            if (results.exception == null) {
                 // Return flow to the caller
-                this.callback.onSuccess(data);
+                this.callback.onSuccess(results);
             } else {
                 // Failure with exception
-                this.callback.onFailure(data.exception);
+                this.callback.onFailure(results.exception);
             }
         }
     }

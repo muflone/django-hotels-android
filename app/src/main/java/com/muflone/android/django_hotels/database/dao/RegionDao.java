@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.muflone.android.django_hotels.database.models.Region;
 
@@ -16,7 +17,7 @@ public interface RegionDao {
     @Query("SELECT * " +
            "FROM regions " +
            "ORDER BY name")
-    List<Region> getAll();
+    List<Region> listAll();
 
     @Query("SELECT * " +
            "FROM regions " +
@@ -37,6 +38,12 @@ public interface RegionDao {
 
     @Insert(onConflict = IGNORE)
     void insert(Region... items);
+
+    @Update
+    void update(Region item);
+
+    @Update
+    void update(Region... items);
 
     @Delete
     void delete(Region item);

@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.muflone.android.django_hotels.database.models.JobType;
 
@@ -16,7 +17,7 @@ public interface JobTypeDao {
     @Query("SELECT * " +
            "FROM job_types " +
            "ORDER BY name")
-    List<JobType> getAll();
+    List<JobType> listAll();
 
     @Query("SELECT * " +
            "FROM job_types " +
@@ -37,6 +38,12 @@ public interface JobTypeDao {
 
     @Insert(onConflict = IGNORE)
     void insert(JobType... items);
+
+    @Update
+    void update(JobType item);
+
+    @Update
+    void update(JobType... items);
 
     @Delete
     void delete(JobType item);

@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.muflone.android.django_hotels.database.models.Country;
 
@@ -16,7 +17,7 @@ public interface CountryDao {
     @Query("SELECT * " +
            "FROM countries " +
            "ORDER BY name")
-    List<Country> getAll();
+    List<Country> listAll();
 
     @Query("SELECT * " +
            "FROM countries " +
@@ -37,6 +38,12 @@ public interface CountryDao {
 
     @Insert(onConflict = IGNORE)
     void insert(Country... items);
+
+    @Update
+    void update(Country item);
+
+    @Update
+    void update(Country... items);
 
     @Delete
     void delete(Country item);

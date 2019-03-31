@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.muflone.android.django_hotels.database.models.Location;
 
@@ -16,7 +17,7 @@ public interface LocationDao {
     @Query("SELECT * " +
            "FROM locations " +
            "ORDER BY name")
-    List<Location> getAll();
+    List<Location> listAll();
 
     @Query("SELECT * " +
            "FROM locations " +
@@ -37,6 +38,12 @@ public interface LocationDao {
 
     @Insert(onConflict = IGNORE)
     void insert(Location... items);
+
+    @Update
+    void update(Location item);
+
+    @Update
+    void update(Location... items);
 
     @Delete
     void delete(Location item);

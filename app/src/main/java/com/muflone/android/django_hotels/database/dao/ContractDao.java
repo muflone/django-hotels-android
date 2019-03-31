@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.muflone.android.django_hotels.database.models.Contract;
 
@@ -15,7 +16,7 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 public interface ContractDao {
     @Query("SELECT * " +
            "FROM contracts")
-    List<Contract> getAll();
+    List<Contract> listAll();
 
     @Query("SELECT * " +
            "FROM contracts " +
@@ -36,6 +37,12 @@ public interface ContractDao {
 
     @Insert(onConflict = IGNORE)
     void insert(Contract... items);
+
+    @Update
+    void update(Contract item);
+
+    @Update
+    void update(Contract... items);
 
     @Delete
     void delete(Contract item);

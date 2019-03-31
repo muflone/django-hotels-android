@@ -7,6 +7,7 @@
     <!-- Navigation titles -->
     <string name="section_home">Home</string>
     <string name="section_structures">Structures</string>
+    <string name="section_scanner">Scan</string>
     <string name="section_extras">Extra</string>
     <string name="section_settings">Settings</string>
     <string name="section_about">About</string>
@@ -41,4 +42,10 @@
     <string name="end_date_label">End date:</string>
 
     <string name="empty_service">Nothing</string>
+
+    <string name="scan_prompt">Scan your personal QR Code</string>
+    <string name="register_enter">Register ENTER</string>
+    <string name="register_exit">Register EXIT</string>
+    <string name="latest_timestamps">Latest timestamps</string>
+    <string name="transmission_status">Transmission status</string>
 </resources>

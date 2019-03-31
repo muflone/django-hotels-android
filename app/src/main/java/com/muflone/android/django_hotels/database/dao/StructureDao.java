@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.muflone.android.django_hotels.database.models.Structure;
 
@@ -16,7 +17,7 @@ public interface StructureDao {
     @Query("SELECT * " +
            "FROM structures " +
            "ORDER BY name")
-    List<Structure> getAll();
+    List<Structure> listAll();
 
     @Query("SELECT * " +
            "FROM structures " +
@@ -37,6 +38,12 @@ public interface StructureDao {
 
     @Insert(onConflict = IGNORE)
     void insert(Structure... items);
+
+    @Update
+    void update(Structure item);
+
+    @Update
+    void update(Structure... items);
 
     @Delete
     void delete(Structure item);

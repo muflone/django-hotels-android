@@ -7,10 +7,6 @@ import android.arch.persistence.room.Index;
 
 @Entity(tableName = "contract_buildings",
         primaryKeys = {"contract_id", "building_id"},
-        indices = {
-                @Index(value = "contract_id", unique = false),
-                @Index(value = "building_id", unique = false)
-        },
         foreignKeys = {
                 @ForeignKey(entity = Contract.class,
                         parentColumns = "id",
@@ -22,10 +18,10 @@ import android.arch.persistence.room.Index;
                         onDelete = ForeignKey.RESTRICT)
         })
 public class ContractBuildings {
-    @ColumnInfo(name = "contract_id")
+    @ColumnInfo(name = "contract_id", index = true)
     public final long contractId;
 
-    @ColumnInfo(name = "building_id")
+    @ColumnInfo(name = "building_id", index = true)
     public final long buildingId;
 
     public ContractBuildings(final long contractId, final long buildingId) {

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:fragment="com.muflone.android.django_hotels.activities.SettingsActivity$PrefFragment">
 
-    <PreferenceCategory android:title="@string/section_settings">
+    <PreferenceCategory android:title="@string/settings_category_server">
 
         <EditTextPreference
             android:key="@string/settings_tablet_id_id"
@@ -19,11 +19,11 @@
             android:summary="@string/settings_tablet_key_summary"
             android:title="@string/settings_tablet_key_title" />
         <EditTextPreference
+            android:defaultValue="UTC"
             android:key="@string/settings_timezone_id"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:summary="@string/settings_timezone_summary"
-            android:defaultValue="UTC"
             android:title="@string/settings_timezone_title" />
         <EditTextPreference
             android:key="@string/settings_api_url_id"
@@ -31,6 +31,19 @@
             android:singleLine="true"
             android:summary="@string/settings_api_url_summary"
             android:title="@string/settings_api_url_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_category_scan">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/settings_scan_beep_id"
+            android:summary="@string/settings_scan_beep_summary"
+            android:title="@string/settings_scan_beep_title" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/settings_scan_orientation_lock_id"
+            android:summary="@string/settings_scan_orientation_lock_summary"
+            android:title="@string/settings_scan_orientation_lock_title" />
     </PreferenceCategory>
 
 </PreferenceScreen>

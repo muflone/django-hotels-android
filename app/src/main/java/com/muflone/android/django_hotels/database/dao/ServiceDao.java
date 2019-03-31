@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.muflone.android.django_hotels.database.models.Service;
 
@@ -16,7 +17,7 @@ public interface ServiceDao {
     @Query("SELECT * " +
            "FROM services " +
            "ORDER BY name")
-    List<Service> getAll();
+    List<Service> listAll();
 
     @Query("SELECT * " +
            "FROM services " +
@@ -37,6 +38,12 @@ public interface ServiceDao {
 
     @Insert(onConflict = IGNORE)
     void insert(Service... items);
+
+    @Update
+    void update(Service item);
+
+    @Update
+    void update(Service... items);
 
     @Delete
     void delete(Service item);

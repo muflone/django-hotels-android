@@ -9,6 +9,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -20,12 +21,11 @@ import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.api.Api;
-import com.muflone.android.django_hotels.api.ApiData;
-import com.muflone.android.django_hotels.api.tasks.AsyncTaskListener;
-import com.muflone.android.django_hotels.database.models.Structure;
+import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.fragments.AboutFragment;
 import com.muflone.android.django_hotels.fragments.ExtrasFragment;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
+import com.muflone.android.django_hotels.fragments.ScannerFragment;
 import com.muflone.android.django_hotels.fragments.StructuresFragment;
 import com.muflone.android.django_hotels.fragments.SyncFragment;
 
@@ -37,6 +37,12 @@ public class MainActivity extends AppCompatActivity
     private MenuItem menuItemHome = null;
     private MenuItem menuItemSettings = null;
     private MenuItem menuItemSync = null;
+
+    // Allow the use of (insecure) drawables for API < 21
+    // https://developer.android.com/reference/android/support/v7/app/AppCompatDelegate.html#setCompatVectorFromResourcesEnabled(boolean)
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,18 +93,8 @@ public class MainActivity extends AppCompatActivity
         } else {
             this.onNavigationItemSelected(this.menuItemHome);
         }
-        // Load data from database
-        Singleton.getInstance().api.loadFromDatabase(new AsyncTaskListener<ApiData>() {
-            @Override
-            public void onSuccess(ApiData data) {
-                Singleton.getInstance().apiData = data;
-            }
-
-            @Override
-            public void onFailure(Exception exception) {
-
-            }
-        });
+        // Reload data from database
+        AppDatabase.getAppDatabase(this).reload();
     }
 
     @Override
@@ -111,6 +107,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         // Restore previous active fragment
@@ -120,6 +121,9 @@ public class MainActivity extends AppCompatActivity
             switch (fragmentName) {
                 case "HomeFragment":
                     fragment = new HomeFragment();
+                    break;
+                case "ScannerFragment":
+                    fragment = new ScannerFragment();
                     break;
                 case "StructuresFragment":
                     fragment = new StructuresFragment();
@@ -158,12 +162,16 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         Fragment fragment = null;
+        Intent intent = null;
         // Activate MenuItem
         item.setChecked(true);
         // Open Fragment or related Activity
         switch (item.getItemId()) {
             case R.id.menuItemHome:
                 fragment = new HomeFragment();
+                break;
+            case R.id.menuItemScanner:
+                fragment = new ScannerFragment();
                 break;
             case R.id.menuItemStructures:
                 fragment = new StructuresFragment();
@@ -175,7 +183,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new SyncFragment();
                 break;
             case R.id.menuItemSettings:
-                Intent intent = new Intent(this, SettingsActivity.class);
+                intent = new Intent(this, SettingsActivity.class);
                 startActivityForResult(intent, SETTINGS_RETURN_CODE);
                 break;
             case R.id.menuItemAbout:

@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.muflone.android.django_hotels.database.models.Company;
 
@@ -16,7 +17,7 @@ public interface CompanyDao {
     @Query("SELECT * " +
            "FROM companies " +
            "ORDER BY name")
-    List<Company> getAll();
+    List<Company> listAll();
 
     @Query("SELECT * " +
            "FROM companies " +
@@ -37,6 +38,12 @@ public interface CompanyDao {
 
     @Insert(onConflict = IGNORE)
     void insert(Company... items);
+
+    @Update
+    void update(Company item);
+
+    @Update
+    void update(Company... items);
 
     @Delete
     void delete(Company item);
