@@ -47,4 +47,5 @@
     <string name="register_enter">Register ENTER</string>
     <string name="register_exit">Register EXIT</string>
     <string name="latest_timestamps">Latest timestamps</string>
+    <string name="transmission_status">Transmission status</string>
 </resources>
