@@ -21,7 +21,6 @@ public class AutoConfigurationActivity extends AppCompatActivity {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor preferencesEditor = preferences.edit();
 
-                String query = uri.getQuery();
                 for (String argument : uri.getQueryParameterNames()) {
                     String value = uri.getQueryParameter(argument);
                     switch (argument) {

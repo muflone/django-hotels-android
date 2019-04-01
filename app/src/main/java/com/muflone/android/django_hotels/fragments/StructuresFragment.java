@@ -295,7 +295,7 @@ public class StructuresFragment extends Fragment {
             }
 
             // Set rooom name
-            TextView roomView = (TextView) convertView.findViewById(R.id.roomView);
+            TextView roomView = convertView.findViewById(R.id.roomView);
             roomView.setText(roomStatus.name);
 
             // Set room service
@@ -340,7 +340,7 @@ public class StructuresFragment extends Fragment {
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.structures_building_group, parent, false);
             }
-            TextView buildingView = (TextView) convertView.findViewById(R.id.buildingView);
+            TextView buildingView = convertView.findViewById(R.id.buildingView);
             buildingView.setText(headerTitle);
 
             return convertView;

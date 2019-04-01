@@ -29,9 +29,4 @@ public class Singleton implements Serializable {
         }
         return instance;
     }
-
-    // Make singleton from serialize and deserialize operation.
-    protected Singleton readResolve() {
-        return getInstance();
-    }
 }

@@ -107,11 +107,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         // Restore previous active fragment
@@ -162,7 +157,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         Fragment fragment = null;
-        Intent intent = null;
         // Activate MenuItem
         item.setChecked(true);
         // Open Fragment or related Activity
@@ -183,7 +177,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new SyncFragment();
                 break;
             case R.id.menuItemSettings:
-                intent = new Intent(this, SettingsActivity.class);
+                Intent intent = new Intent(this, SettingsActivity.class);
                 startActivityForResult(intent, SETTINGS_RETURN_CODE);
                 break;
             case R.id.menuItemAbout:

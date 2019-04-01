@@ -12,7 +12,6 @@ import org.json.JSONObject;
 @Entity(tableName = "timestamp_directions")
 public class TimestampDirection {
     @PrimaryKey
-    @NonNull
     public final long id;
 
     @ColumnInfo(name = "name")

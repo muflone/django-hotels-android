@@ -14,7 +14,6 @@ import com.muflone.android.django_hotels.tasks.AsyncTaskDownload;
 import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.NotifyMessage;
 import com.muflone.android.django_hotels.R;
-import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;

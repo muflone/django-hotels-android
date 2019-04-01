@@ -42,7 +42,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 public class ScannerFragment extends Fragment {
     private View rootLayout;
@@ -148,8 +147,6 @@ public class ScannerFragment extends Fragment {
                 if (result.getContents() != null) {
                     Uri uri = Uri.parse(result.getContents());
                     try {
-                        // Decode key and parse as GUID
-                        Token token = new Token(uri);
                         // Check for invalid URI
                         if (! uri.getScheme().equals("otpauth") | ! uri.getHost().equals("totp")) {
                             throw new Token.TokenUriInvalidException();
@@ -158,7 +155,6 @@ public class ScannerFragment extends Fragment {
                                 uri.getQueryParameter("secret"))).replaceAll(
                                 "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
                                 "$1-$2-$3-$4-$5");
-                        UUID guid = UUID.fromString(secret);
                         Log.d("QR", secret);
                         if (this.apiData.contractsGuidMap.containsKey(secret)) {
                             // Valid contract found
