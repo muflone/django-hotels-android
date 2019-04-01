@@ -4,9 +4,12 @@
       <w>callum</w>
       <w>hotp</w>
       <w>muflone</w>
+      <w>otpauth</w>
+      <w>qrcode</w>
       <w>snackbar</w>
       <w>sqlite</w>
       <w>totp</w>
+      <w>zxing</w>
     </words>
   </dictionary>
 </component>
