@@ -10,7 +10,8 @@
         android:id="@+id/buildingView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:paddingEnd="0dp"
         android:textSize="17dp"
         android:textStyle="bold" />
 
