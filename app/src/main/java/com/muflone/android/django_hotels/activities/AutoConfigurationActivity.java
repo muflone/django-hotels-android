@@ -39,7 +39,7 @@ public class AutoConfigurationActivity extends AppCompatActivity {
                             break;
                     }
                 }
-                preferencesEditor.commit();
+                preferencesEditor.apply();
             }
         }
         // Go to the main activity and terminate this activity
