@@ -228,7 +228,7 @@ public class StructuresFragment extends Fragment {
     }
 
     private void setExpandableListViewHeight(ExpandableListView listView, int group) {
-        // Set the listview height
+        // Set the ListView height
         ExpandableListAdapter listAdapter = (ExpandableListAdapter) listView.getExpandableListAdapter();
         int totalHeight = 0;
         int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),

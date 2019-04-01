@@ -10,7 +10,7 @@ import android.os.Bundle;
 import com.muflone.android.django_hotels.R;
 
 public class AutoConfigurationActivity extends AppCompatActivity {
-    /* Autoconfiguration class */
+    /* Auto configuration class */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
