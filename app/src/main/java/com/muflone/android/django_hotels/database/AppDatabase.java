@@ -87,7 +87,10 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static void destroyInstance() {
         if (INSTANCE != null) {
-            INSTANCE.checkpoint();
+            // Execute checkpoint only for valid database status
+            if (INSTANCE.checkDB()) {
+                INSTANCE.checkpoint();
+            }
             INSTANCE.close();
         }
         INSTANCE = null;
