@@ -291,7 +291,7 @@ public class StructuresFragment extends Fragment {
             if (convertView == null) {
                 LayoutInflater infalInflater = (LayoutInflater) this.context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = infalInflater.inflate(R.layout.structures_building_item, null);
+                convertView = infalInflater.inflate(R.layout.structures_building_item, parent, false);
             }
 
             // Set rooom name
@@ -338,7 +338,7 @@ public class StructuresFragment extends Fragment {
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) this.context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.structures_building_group, null);
+                convertView = inflater.inflate(R.layout.structures_building_group, parent, false);
             }
             TextView buildingView = (TextView) convertView.findViewById(R.id.buildingView);
             buildingView.setText(headerTitle);

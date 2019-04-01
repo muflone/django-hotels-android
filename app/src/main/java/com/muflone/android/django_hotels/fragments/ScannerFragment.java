@@ -254,7 +254,7 @@ public class ScannerFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.scanner_timestamps, null);
+            convertView = inflater.inflate(R.layout.scanner_timestamps, parent, false);
             TextView employeeView = convertView.findViewById(R.id.employeeView);
             TextView dateView = convertView.findViewById(R.id.dateView);
             TextView timeView = convertView.findViewById(R.id.timeView);
