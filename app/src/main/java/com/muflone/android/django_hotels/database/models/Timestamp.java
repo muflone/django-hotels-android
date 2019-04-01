@@ -7,6 +7,8 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Date;
 
 @Entity(tableName = "timestamps",
@@ -36,7 +38,7 @@ public class Timestamp {
     @Nullable
     public Date transmission;
 
-    public Timestamp(long id, long contractId, @NonNull long directionId, Date datetime, @NonNull String description, @Nullable Date transmission) {
+    public Timestamp(long id, long contractId, long directionId, @NotNull Date datetime, @NonNull String description, @Nullable Date transmission) {
         this.id = id;
         this.contractId = contractId;
         this.directionId = directionId;

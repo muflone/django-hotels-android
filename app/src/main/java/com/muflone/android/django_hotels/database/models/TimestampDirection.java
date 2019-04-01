@@ -6,6 +6,7 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,7 +33,7 @@ public class TimestampDirection {
     @ColumnInfo(name = "type_exit")
     public final boolean exit;
 
-    public TimestampDirection(long id, String name, String description, String shortCode, boolean enter, boolean exit) {
+    public TimestampDirection(long id, @NotNull String name, @NotNull String description, @NotNull String shortCode, boolean enter, boolean exit) {
         this.id = id;
         this.name = name;
         this.description = description;
