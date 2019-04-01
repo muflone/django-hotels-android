@@ -251,22 +251,45 @@ public class ScannerFragment extends Fragment {
         @NotNull
         @Override
         public View getView(int position, View convertView, @NotNull ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) getContext()
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.scanner_timestamps, parent, false);
-            TextView employeeView = convertView.findViewById(R.id.employeeView);
-            TextView dateView = convertView.findViewById(R.id.dateView);
-            TextView timeView = convertView.findViewById(R.id.timeView);
-            TextView directionView = convertView.findViewById(R.id.directionView);
+            TimestampViewHolder timestampViewHolder;
+
+            if (convertView == null) {
+                // Save views for following uses
+                // LayoutInflater inflater = ((Activity) parent.getContext()).getLayoutInflater();
+                LayoutInflater inflater = (LayoutInflater) getContext()
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.scanner_timestamps, parent, false);
+                timestampViewHolder = new TimestampViewHolder();
+                timestampViewHolder.employeeView = convertView.findViewById(R.id.employeeView);
+                timestampViewHolder.dateView = convertView.findViewById(R.id.dateView);
+                timestampViewHolder.timeView = convertView.findViewById(R.id.timeView);
+                timestampViewHolder.directionView = convertView.findViewById(R.id.directionView);
+                timestampViewHolder.transmissionImage = convertView.findViewById(R.id.transmissionImage);
+                convertView.setTag(timestampViewHolder);
+            } else {
+                // Use cached views
+                timestampViewHolder = (TimestampViewHolder) convertView.getTag();
+            }
             TimestampEmployeeItem timestampEmployee = getItem(position);
-            employeeView.setText(timestampEmployee.fullName);
-            dateView.setText(new SimpleDateFormat("yyyy-MM-dd").format(timestampEmployee.datetime));
-            timeView.setText(new SimpleDateFormat("HH:mm.ss").format(timestampEmployee.datetime));
-            ImageView transmissionImage = convertView.findViewById(R.id.transmissionImage);
-            transmissionImage.setImageResource(timestampEmployee.transmission == null ?
-                    0 : R.drawable.ic_timestamp_transmitted);
-            directionView.setText(timestampEmployee.direction);
+            timestampViewHolder.employeeView.setText(timestampEmployee.fullName);
+            timestampViewHolder.dateView.setText(new SimpleDateFormat("yyyy-MM-dd").format(
+                    timestampEmployee.datetime));
+            timestampViewHolder.timeView.setText(new SimpleDateFormat("HH:mm.ss").format(
+                    timestampEmployee.datetime));
+            timestampViewHolder.transmissionImage.setImageResource(
+                    timestampEmployee.transmission == null ? 0 : R.drawable.ic_timestamp_transmitted);
+            timestampViewHolder.directionView.setText(timestampEmployee.direction);
             return convertView;
         }
+    }
+
+    private static class TimestampViewHolder {
+        // Views holder caching items for TimestampAdapter
+        // https://www.javacodegeeks.com/2013/09/android-viewholder-pattern-example.html
+        TextView employeeView;
+        TextView dateView;
+        TextView timeView;
+        TextView directionView;
+        ImageView transmissionImage;
     }
 }
