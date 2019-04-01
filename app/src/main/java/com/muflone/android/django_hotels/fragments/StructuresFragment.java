@@ -336,9 +336,9 @@ public class StructuresFragment extends Fragment {
                                  View convertView, ViewGroup parent) {
             String headerTitle = (String) getGroup(groupPosition);
             if (convertView == null) {
-                LayoutInflater infalInflater = (LayoutInflater) this.context
+                LayoutInflater inflater = (LayoutInflater) this.context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = infalInflater.inflate(R.layout.structures_building_group, null);
+                convertView = inflater.inflate(R.layout.structures_building_group, null);
             }
             TextView buildingView = (TextView) convertView.findViewById(R.id.buildingView);
             buildingView.setText(headerTitle);
