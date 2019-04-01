@@ -86,7 +86,7 @@ public class Api {
         return jsonObject;
     }
 
-    public String getCurrentTokenCode() {
+    private String getCurrentTokenCode() {
         // Return the current TokenCode
         Token token = null;
         try {

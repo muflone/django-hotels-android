@@ -112,7 +112,7 @@ public class ScannerFragment extends Fragment {
         return this.rootLayout;
     }
 
-    protected void loadUI(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container) {
+    private void loadUI(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container) {
         // Inflate the layout for this fragment
         this.rootLayout = inflater.inflate(R.layout.scanner_fragment, container, false);
         // Save references
@@ -225,10 +225,10 @@ public class ScannerFragment extends Fragment {
     }
 
     private class TimestampEmployeeItem {
-        public long id;
-        public String fullName;
-        public Date datetime;
-        public String direction;
+        public final long id;
+        public final String fullName;
+        public final Date datetime;
+        public final String direction;
         public Date transmission;
 
         public TimestampEmployeeItem(long id, String fullName, Date datetime,

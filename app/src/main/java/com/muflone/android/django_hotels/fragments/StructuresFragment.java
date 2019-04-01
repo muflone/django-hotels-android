@@ -121,7 +121,7 @@ public class StructuresFragment extends Fragment {
         return this.rootLayout;
     }
 
-    protected void loadUI(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container) {
+    private void loadUI(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container) {
         // Inflate the layout for this fragment
         this.rootLayout = inflater.inflate(R.layout.structures_fragment, container, false);
         // Save references
@@ -139,7 +139,7 @@ public class StructuresFragment extends Fragment {
         this.roomsView = rootLayout.findViewById(R.id.roomsView);
     }
 
-    protected void loadStructures() {
+    private void loadStructures() {
         // Load all the structures, skipping those without any employee
         this.structuresTabs.removeAllTabs();
         for (Structure structure : this.apiData.structuresMap.values()) {
@@ -152,7 +152,7 @@ public class StructuresFragment extends Fragment {
         }
     }
 
-    protected void loadEmployees(TabLayout.Tab tab) {
+    private void loadEmployees(TabLayout.Tab tab) {
         // Load employees list for the selected Structure tab
         this.employeesList.clear();
         this.selectedStructure = this.structures.get(tab.getPosition());
@@ -175,7 +175,7 @@ public class StructuresFragment extends Fragment {
         }
     }
 
-    protected void loadEmployee(Employee employee) {
+    private void loadEmployee(Employee employee) {
         // Load Employee details
         this.firstNameView.setText(employee.firstName);
         this.lastNameView.setText(employee.lastName);
@@ -261,9 +261,9 @@ public class StructuresFragment extends Fragment {
     }
 
     private class ExpandableListAdapter extends BaseExpandableListAdapter {
-        private Context context;
-        private List<String> buildingsList;
-        private HashMap<String, List<RoomStatus>> roomsList;
+        private final Context context;
+        private final List<String> buildingsList;
+        private final HashMap<String, List<RoomStatus>> roomsList;
 
         public ExpandableListAdapter(Context context, List<String> listDataHeader,
                                      HashMap<String, List<RoomStatus>> listChildData) {
@@ -358,8 +358,8 @@ public class StructuresFragment extends Fragment {
     }
 
     private class RoomStatus {
-        private String emptyServiceDescription;
-        public String name;
+        private final String emptyServiceDescription;
+        public final String name;
         public Service service;
         private int serviceCounter = 0;
 
