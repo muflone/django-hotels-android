@@ -101,7 +101,12 @@ public class StructuresFragment extends Fragment {
 
         // Build services list for rooms (the first element is empty)
         this.roomServicesList.add(null);
-        this.roomServicesList.addAll(this.apiData.serviceMap.values());
+        for (Service service : this.apiData.serviceMap.values()) {
+            // Show only services with show_in_app = true
+            if (service.show_in_app) {
+                this.roomServicesList.add(service);
+            }
+        }
 
         this.buildingRoomsAdapter = new ExpandableListAdapter(getActivity(), buildingsList, roomsList);
         this.roomsView.setAdapter(this.buildingRoomsAdapter);
