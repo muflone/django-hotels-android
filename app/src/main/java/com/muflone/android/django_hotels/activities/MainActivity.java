@@ -26,6 +26,7 @@ import com.muflone.android.django_hotels.fragments.AboutFragment;
 import com.muflone.android.django_hotels.fragments.ExtrasFragment;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
 import com.muflone.android.django_hotels.fragments.ScannerFragment;
+import com.muflone.android.django_hotels.fragments.SettingsFragment;
 import com.muflone.android.django_hotels.fragments.StructuresFragment;
 import com.muflone.android.django_hotels.fragments.SyncFragment;
 
@@ -129,6 +130,9 @@ public class MainActivity extends AppCompatActivity
                 case "SyncFragment":
                     fragment = new SyncFragment();
                     break;
+                case "SettingsFragment":
+                    fragment = new SettingsFragment();
+                    break;
                 case "AboutFragment":
                     fragment = new AboutFragment();
                     break;
@@ -177,8 +181,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new SyncFragment();
                 break;
             case R.id.menuItemSettings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivityForResult(intent, SETTINGS_RETURN_CODE);
+                fragment = new SettingsFragment();
                 break;
             case R.id.menuItemAbout:
                 fragment = new AboutFragment();
