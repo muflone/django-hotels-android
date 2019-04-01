@@ -73,7 +73,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
                 }
             }
         }
-        return new AsyncTaskResult(data, this.callback, data.exception);
+        return new AsyncTaskResult(data, data.exception);
     }
 
     @Override
