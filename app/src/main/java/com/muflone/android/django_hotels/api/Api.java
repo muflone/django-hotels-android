@@ -35,6 +35,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 
 public class Api {
     private final String TAG = "Api";
@@ -209,7 +210,8 @@ public class Api {
         ApiData data = new ApiData();
         // Send timestamps to the server
         try {
-            jsonRoot = this.getJSONObject(String.format("put/timestamp/%s/%s/%d/%d/%d/%s/",
+            jsonRoot = this.getJSONObject(String.format(Locale.ROOT,
+                    "put/timestamp/%s/%s/%d/%d/%d/%s/",
                     this.settings.getTabletID(),
                     this.getCurrentTokenCode(),
                     timestamp.contractId,
