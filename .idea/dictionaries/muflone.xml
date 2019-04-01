@@ -1,15 +1,22 @@
 <component name="ProjectDictionaryState">
   <dictionary name="muflone">
     <words>
+      <w>algo</w>
       <w>barcodescanner</w>
       <w>callum</w>
+      <w>hmac</w>
       <w>hotp</w>
+      <w>issueralt</w>
+      <w>journeyapps</w>
+      <w>labelalt</w>
       <w>muflone</w>
       <w>otpauth</w>
       <w>qrcode</w>
       <w>snackbar</w>
       <w>sqlite</w>
+      <w>steamchars</w>
       <w>totp</w>
+      <w>untrasmitted</w>
       <w>zxing</w>
     </words>
   </dictionary>
