@@ -273,8 +273,8 @@ public class StructuresFragment extends Fragment {
         }
 
         @Override
-        public RoomStatus getChild(int groupPosition, int childPosititon) {
-            return this.roomsList.get(this.buildingsList.get(groupPosition)).get(childPosititon);
+        public RoomStatus getChild(int groupPosition, int childPosition) {
+            return this.roomsList.get(this.buildingsList.get(groupPosition)).get(childPosition);
         }
 
         @Override
@@ -289,12 +289,12 @@ public class StructuresFragment extends Fragment {
             final RoomStatus roomStatus = getChild(groupPosition, childPosition);
 
             if (convertView == null) {
-                LayoutInflater infalInflater = (LayoutInflater) this.context
+                LayoutInflater inflater = (LayoutInflater) this.context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = infalInflater.inflate(R.layout.structures_building_item, parent, false);
+                convertView = inflater.inflate(R.layout.structures_building_item, parent, false);
             }
 
-            // Set rooom name
+            // Set room name
             TextView roomView = convertView.findViewById(R.id.roomView);
             roomView.setText(roomStatus.name);
 
