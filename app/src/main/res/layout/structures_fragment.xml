@@ -101,57 +101,57 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/firstNameLabel"
+                            android:id="@+id/employeeFirstNameLabel"
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
-                            android:text="@string/first_name_label"
+                            android:text="@string/employee_first_name_label"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/employeeLabel" />
 
                         <TextView
-                            android:id="@+id/firstNameView"
+                            android:id="@+id/employeeFirstNameView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginEnd="8dp"
-                            app:layout_constraintBaseline_toBaselineOf="@+id/firstNameLabel"
-                            app:layout_constraintEnd_toStartOf="@+id/genderImageView"
-                            app:layout_constraintStart_toEndOf="@+id/firstNameLabel"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/employeeFirstNameLabel"
+                            app:layout_constraintEnd_toStartOf="@+id/employeeGenderImageView"
+                            app:layout_constraintStart_toEndOf="@+id/employeeFirstNameLabel"
                             tools:text="FIRST NAME" />
 
                         <TextView
-                            android:id="@+id/lastNameLabel"
+                            android:id="@+id/employeeLastNameLabel"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="8dp"
-                            android:text="@string/last_name_label"
+                            android:text="@string/employee_last_name_label"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="@+id/firstNameLabel"
-                            app:layout_constraintStart_toStartOf="@+id/firstNameLabel"
-                            app:layout_constraintTop_toBottomOf="@+id/firstNameLabel" />
+                            app:layout_constraintEnd_toEndOf="@+id/employeeFirstNameLabel"
+                            app:layout_constraintStart_toStartOf="@+id/employeeFirstNameLabel"
+                            app:layout_constraintTop_toBottomOf="@+id/employeeFirstNameLabel" />
 
                         <TextView
-                            android:id="@+id/lastNameView"
+                            android:id="@+id/employeeLastNameView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            app:layout_constraintBaseline_toBaselineOf="@+id/lastNameLabel"
-                            app:layout_constraintEnd_toEndOf="@+id/firstNameView"
-                            app:layout_constraintStart_toStartOf="@+id/firstNameView"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/employeeLastNameLabel"
+                            app:layout_constraintEnd_toEndOf="@+id/employeeFirstNameView"
+                            app:layout_constraintStart_toStartOf="@+id/employeeFirstNameView"
                             tools:text="LAST NAME" />
 
                         <ImageView
-                            android:id="@+id/genderImageView"
+                            android:id="@+id/employeeGenderImageView"
                             android:layout_width="48dp"
                             android:layout_height="0dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
                             android:layout_marginBottom="8dp"
-                            android:contentDescription="@string/gender_label"
+                            android:contentDescription="@string/employee_gender_label"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/employeeLabel"
@@ -190,25 +190,25 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/companyLabel"
+                            android:id="@+id/contractCompanyLabel"
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
-                            android:text="@string/company_label"
+                            android:text="@string/contract_company_label"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/contractLabel" />
 
                         <TextView
-                            android:id="@+id/companyView"
+                            android:id="@+id/contractCompanyView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginEnd="8dp"
-                            app:layout_constraintBaseline_toBaselineOf="@+id/companyLabel"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/contractCompanyLabel"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/companyLabel"
+                            app:layout_constraintStart_toEndOf="@+id/contractCompanyLabel"
                             tools:text="COMPANY" />
 
                         <TextView
@@ -216,101 +216,101 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="@string/type_label"
+                            android:text="@string/contract_type_label"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            app:layout_constraintEnd_toEndOf="@+id/companyLabel"
-                            app:layout_constraintStart_toStartOf="@+id/companyLabel"
-                            app:layout_constraintTop_toBottomOf="@+id/companyLabel" />
+                            app:layout_constraintEnd_toEndOf="@+id/contractCompanyLabel"
+                            app:layout_constraintStart_toStartOf="@+id/contractCompanyLabel"
+                            app:layout_constraintTop_toBottomOf="@+id/contractCompanyLabel" />
 
                         <TextView
                             android:id="@+id/contractTypeView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             app:layout_constraintBaseline_toBaselineOf="@+id/contractTypeLabel"
-                            app:layout_constraintEnd_toEndOf="@+id/companyView"
-                            app:layout_constraintStart_toStartOf="@+id/companyView"
+                            app:layout_constraintEnd_toEndOf="@+id/contractCompanyView"
+                            app:layout_constraintStart_toStartOf="@+id/contractCompanyView"
                             tools:text="CONTRACT TYPE" />
 
                         <TextView
-                            android:id="@+id/dailyHoursLabel"
+                            android:id="@+id/contractDailyHoursLabel"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="@string/daily_hours_label"
+                            android:text="@string/contract_daily_hours_label"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             app:layout_constraintEnd_toEndOf="@+id/contractTypeLabel"
                             app:layout_constraintStart_toStartOf="@+id/contractTypeLabel"
                             app:layout_constraintTop_toBottomOf="@+id/contractTypeLabel" />
 
                         <TextView
-                            android:id="@+id/dailyHoursView"
+                            android:id="@+id/contractDailyHoursView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            app:layout_constraintBaseline_toBaselineOf="@+id/dailyHoursLabel"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/contractDailyHoursLabel"
                             app:layout_constraintEnd_toEndOf="@+id/contractTypeView"
                             app:layout_constraintStart_toStartOf="@+id/contractTypeView"
                             tools:text="DAILY HOURS" />
 
                         <TextView
-                            android:id="@+id/weeklyHoursLabel"
+                            android:id="@+id/contractWeeklyHoursLabel"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="@string/weekly_hours_label"
+                            android:text="@string/contract_weekly_hours_label"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            app:layout_constraintEnd_toEndOf="@+id/dailyHoursLabel"
-                            app:layout_constraintStart_toStartOf="@+id/dailyHoursLabel"
-                            app:layout_constraintTop_toBottomOf="@+id/dailyHoursLabel" />
+                            app:layout_constraintEnd_toEndOf="@+id/contractDailyHoursLabel"
+                            app:layout_constraintStart_toStartOf="@+id/contractDailyHoursLabel"
+                            app:layout_constraintTop_toBottomOf="@+id/contractDailyHoursLabel" />
 
                         <TextView
-                            android:id="@+id/weeklyHoursView"
+                            android:id="@+id/contractWeeklyHoursView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            app:layout_constraintBaseline_toBaselineOf="@+id/weeklyHoursLabel"
-                            app:layout_constraintEnd_toEndOf="@+id/dailyHoursView"
-                            app:layout_constraintStart_toStartOf="@+id/dailyHoursView"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/contractWeeklyHoursLabel"
+                            app:layout_constraintEnd_toEndOf="@+id/contractDailyHoursView"
+                            app:layout_constraintStart_toStartOf="@+id/contractDailyHoursView"
                             tools:text="WEEKLY HOURS" />
 
                         <TextView
-                            android:id="@+id/startDateLabel"
+                            android:id="@+id/contractStartDateLabel"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="@string/start_date_label"
+                            android:text="@string/contract_start_date_label"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            app:layout_constraintEnd_toEndOf="@+id/weeklyHoursLabel"
-                            app:layout_constraintStart_toStartOf="@+id/dailyHoursLabel"
-                            app:layout_constraintTop_toBottomOf="@+id/weeklyHoursLabel" />
+                            app:layout_constraintEnd_toEndOf="@+id/contractWeeklyHoursLabel"
+                            app:layout_constraintStart_toStartOf="@+id/contractDailyHoursLabel"
+                            app:layout_constraintTop_toBottomOf="@+id/contractWeeklyHoursLabel" />
 
                         <TextView
-                            android:id="@+id/startDateView"
+                            android:id="@+id/contractStartDateView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            app:layout_constraintBaseline_toBaselineOf="@+id/startDateLabel"
-                            app:layout_constraintEnd_toEndOf="@+id/weeklyHoursView"
-                            app:layout_constraintStart_toStartOf="@+id/weeklyHoursView"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/contractStartDateLabel"
+                            app:layout_constraintEnd_toEndOf="@+id/contractWeeklyHoursView"
+                            app:layout_constraintStart_toStartOf="@+id/contractWeeklyHoursView"
                             tools:text="START DATE" />
 
                         <TextView
-                            android:id="@+id/endDateLabel"
+                            android:id="@+id/contractEndDateLabel"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="8dp"
-                            android:text="@string/end_date_label"
+                            android:text="@string/contract_end_date_label"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="@+id/startDateLabel"
-                            app:layout_constraintStart_toStartOf="@+id/startDateLabel"
-                            app:layout_constraintTop_toBottomOf="@+id/startDateLabel" />
+                            app:layout_constraintEnd_toEndOf="@+id/contractStartDateLabel"
+                            app:layout_constraintStart_toStartOf="@+id/contractStartDateLabel"
+                            app:layout_constraintTop_toBottomOf="@+id/contractStartDateLabel" />
 
                         <TextView
-                            android:id="@+id/endDateView"
+                            android:id="@+id/contractEndDateView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            app:layout_constraintBaseline_toBaselineOf="@+id/endDateLabel"
-                            app:layout_constraintEnd_toEndOf="@+id/startDateView"
-                            app:layout_constraintStart_toStartOf="@+id/startDateView"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/contractEndDateLabel"
+                            app:layout_constraintEnd_toEndOf="@+id/contractStartDateView"
+                            app:layout_constraintStart_toStartOf="@+id/contractStartDateView"
                             tools:text="END DATE" />
                     </android.support.constraint.ConstraintLayout>
                 </android.support.v7.widget.CardView>

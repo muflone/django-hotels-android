@@ -51,15 +51,15 @@ public class StructuresFragment extends Fragment {
     private final List<Structure> structures = new ArrayList<>();
     private final List<Service> roomServicesList = new ArrayList<>();
 
-    private TextView firstNameView;
-    private TextView lastNameView;
-    private ImageView genderImageView;
-    private TextView companyView;
+    private TextView employeeFirstNameView;
+    private TextView employeeLastNameView;
+    private ImageView employeeGenderImageView;
+    private TextView contractCompanyView;
     private TextView contractTypeView;
-    private TextView dailyHoursView;
-    private TextView weeklyHoursView;
-    private TextView startDateView;
-    private TextView endDateView;
+    private TextView contractDailyHoursView;
+    private TextView contractWeeklyHoursView;
+    private TextView contractStartDateView;
+    private TextView contractEndDateView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -127,15 +127,15 @@ public class StructuresFragment extends Fragment {
         // Save references
         this.structuresTabs = rootLayout.findViewById(R.id.structuresLayout);
         this.employeesView = rootLayout.findViewById(R.id.employeesView);
-        this.firstNameView = rootLayout.findViewById(R.id.firstNameView);
-        this.lastNameView = rootLayout.findViewById(R.id.lastNameView);
-        this.genderImageView = rootLayout.findViewById(R.id.genderImageView);
-        this.companyView = rootLayout.findViewById(R.id.companyView);
+        this.employeeFirstNameView = rootLayout.findViewById(R.id.employeeFirstNameView);
+        this.employeeLastNameView = rootLayout.findViewById(R.id.employeeLastNameView);
+        this.employeeGenderImageView = rootLayout.findViewById(R.id.employeeGenderImageView);
+        this.contractCompanyView = rootLayout.findViewById(R.id.contractCompanyView);
         this.contractTypeView = rootLayout.findViewById(R.id.contractTypeView);
-        this.dailyHoursView = rootLayout.findViewById(R.id.dailyHoursView);
-        this.weeklyHoursView = rootLayout.findViewById(R.id.weeklyHoursView);
-        this.startDateView = rootLayout.findViewById(R.id.startDateView);
-        this.endDateView = rootLayout.findViewById(R.id.endDateView);
+        this.contractDailyHoursView = rootLayout.findViewById(R.id.contractDailyHoursView);
+        this.contractWeeklyHoursView = rootLayout.findViewById(R.id.contractWeeklyHoursView);
+        this.contractStartDateView = rootLayout.findViewById(R.id.contractStartDateView);
+        this.contractEndDateView = rootLayout.findViewById(R.id.contractEndDateView);
         this.roomsView = rootLayout.findViewById(R.id.roomsView);
     }
 
@@ -177,8 +177,8 @@ public class StructuresFragment extends Fragment {
 
     private void loadEmployee(Employee employee) {
         // Load Employee details
-        this.firstNameView.setText(employee.firstName);
-        this.lastNameView.setText(employee.lastName);
+        this.employeeFirstNameView.setText(employee.firstName);
+        this.employeeLastNameView.setText(employee.lastName);
         int genderResourceId;
         switch (employee.gender) {
             case "male":
@@ -191,19 +191,19 @@ public class StructuresFragment extends Fragment {
                 genderResourceId = R.drawable.ic_gender_unknown;
                 break;
         }
-        this.genderImageView.setImageResource(genderResourceId);
+        this.employeeGenderImageView.setImageResource(genderResourceId);
         // Get the first contract for the employee
         Contract contract = this.apiData.contractsMap.get(employee.contractBuildings.get(0).contractId);
-        this.companyView.setText(this.apiData.companiesMap.get(contract.companyId).name);
+        this.contractCompanyView.setText(this.apiData.companiesMap.get(contract.companyId).name);
         // Add contract info
         ContractType contractType = this.apiData.contractTypeMap.get(contract.contractTypeId);
         this.contractTypeView.setText(contractType.name);
-        this.dailyHoursView.setText(String.valueOf(contractType.dailyHours));
-        this.weeklyHoursView.setText(String.valueOf(contractType.weeklyHours));
+        this.contractDailyHoursView.setText(String.valueOf(contractType.dailyHours));
+        this.contractWeeklyHoursView.setText(String.valueOf(contractType.weeklyHours));
         // Add contract dates
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        this.startDateView.setText(formatter.format(contract.startDate));
-        this.endDateView.setText(formatter.format(contract.endDate));
+        this.contractStartDateView.setText(formatter.format(contract.startDate));
+        this.contractEndDateView.setText(formatter.format(contract.endDate));
         // Build buildings and rooms lists
         buildingsList.clear();
         roomsList.clear();
