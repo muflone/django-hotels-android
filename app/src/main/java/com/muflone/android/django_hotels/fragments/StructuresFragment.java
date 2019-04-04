@@ -51,6 +51,7 @@ public class StructuresFragment extends Fragment {
     private final List<Structure> structures = new ArrayList<>();
     private final List<Service> roomServicesList = new ArrayList<>();
 
+    private TextView employeeIdView;
     private TextView employeeFirstNameView;
     private TextView employeeLastNameView;
     private ImageView employeeGenderImageView;
@@ -126,6 +127,7 @@ public class StructuresFragment extends Fragment {
         this.rootLayout = inflater.inflate(R.layout.structures_fragment, container, false);
         // Save references
         this.structuresTabs = rootLayout.findViewById(R.id.structuresLayout);
+        this.employeeIdView = rootLayout.findViewById(R.id.employeeIdView);
         this.employeesView = rootLayout.findViewById(R.id.employeesView);
         this.employeeFirstNameView = rootLayout.findViewById(R.id.employeeFirstNameView);
         this.employeeLastNameView = rootLayout.findViewById(R.id.employeeLastNameView);
@@ -177,6 +179,7 @@ public class StructuresFragment extends Fragment {
 
     private void loadEmployee(Employee employee) {
         // Load Employee details
+        this.employeeIdView.setText(String.valueOf(employee.id));
         this.employeeFirstNameView.setText(employee.firstName);
         this.employeeLastNameView.setText(employee.lastName);
         int genderResourceId;
