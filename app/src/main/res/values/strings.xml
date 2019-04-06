@@ -69,4 +69,6 @@
     <string name="about_zxing_url" translatable="false">journeyapps/zxing-android-embedded</string>
     <string name="about_about_title" translatable="false">Android About Page</string>
     <string name="about_about_url" translatable="false">medyo/android-about-page</string>
+    <string name="about_guava_title" translatable="false">Google Core Libraries for Java (Guava)</string>
+    <string name="about_guava_url" translatable="false">google/guava</string>
 </resources>
