@@ -36,9 +36,11 @@
     <string name="employee">Employee</string>
     <string name="contract">Contract</string>
 
+    <string name="employee_id_label">ID:</string>
     <string name="employee_first_name_label">First name:</string>
     <string name="employee_last_name_label">Last name:</string>
     <string name="employee_gender_label">Gender</string>
+    <string name="contract_id_label">ID:</string>
     <string name="contract_company_label">Company:</string>
     <string name="contract_type_label">Type:</string>
     <string name="contract_daily_hours_label">Daily hours:</string>
