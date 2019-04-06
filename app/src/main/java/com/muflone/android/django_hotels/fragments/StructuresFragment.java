@@ -71,7 +71,7 @@ public class StructuresFragment extends Fragment {
         this.loadUI(inflater, container);
 
         this.employeesView.setAdapter(new ArrayAdapter<>(
-                getActivity(), android.R.layout.simple_list_item_1, this.employeesList));
+                this.api.context, android.R.layout.simple_list_item_1, this.employeesList));
         this.employeesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 employeesView.requestFocusFromTouch();
@@ -110,7 +110,7 @@ public class StructuresFragment extends Fragment {
             }
         }
 
-        this.buildingRoomsAdapter = new ExpandableListAdapter(getActivity(), buildingsList, roomsList);
+        this.buildingRoomsAdapter = new ExpandableListAdapter(this.api.context, buildingsList, roomsList);
         this.roomsView.setAdapter(this.buildingRoomsAdapter);
         this.roomsView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -219,7 +219,7 @@ public class StructuresFragment extends Fragment {
             List<RoomStatus> rooms = new ArrayList<>();
             for (Room room : building.rooms) {
                 // TODO: restore the previous service for the room
-                rooms.add(new RoomStatus(getActivity(), room.name, null));
+                rooms.add(new RoomStatus(this.api.context, room.name, null));
             }
             this.roomsList.put(building.name, rooms);
         }
