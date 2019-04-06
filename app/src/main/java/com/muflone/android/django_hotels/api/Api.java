@@ -108,14 +108,14 @@ public class Api {
         if (jsonRoot != null) {
             try {
                 // Get current system date only
-                Date date1 = Utility.getCurrentDate(this.settings.getTimeZone());
+                Date date1 = this.getCurrentDate();
                 // Get remote date
                 Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(jsonRoot.getString("date"));
                 long difference = Math.abs(date1.getTime() - date2.getTime());
                 // If the dates match then compare the time
                 if (difference == 0) {
                     // Get current system time only
-                    date1 = Utility.getCurrentTime(this.settings.getTimeZone());
+                    date1 = this.getCurrentTime();
                     // Get remote time
                     date2 = new SimpleDateFormat("HH:mm.ss").parse(jsonRoot.getString("time"));
                     // Find the difference in thirty seconds
@@ -137,5 +137,20 @@ public class Api {
             data.exception = new NoConnectionException();
         }
         return data;
+    }
+
+    private Date getCurrentDate() {
+        // Get the current date from the user timezone
+        return Utility.getCurrentDate(this.settings.getTimeZone());
+    }
+
+    private Date getCurrentTime() {
+        // Get the current time from the user timezone
+        return Utility.getCurrentTime(this.settings.getTimeZone());
+    }
+
+    public Date getCurrentDateTime() {
+        // Get the current date and time from the user timezone
+        return Utility.getCurrentDateTime(this.settings.getTimeZone());
     }
 }

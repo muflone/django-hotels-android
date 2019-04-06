@@ -71,7 +71,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
                 data = this.putTimestamp(timestamp);
                 if (data.exception == null) {
                     // Update transmission date
-                    timestamp.transmission = Utility.getCurrentDateTime(this.api.settings.getTimeZone());
+                    timestamp.transmission = this.api.getCurrentDateTime();
                     this.database.timestampDao().update(timestamp);
                 } else {
                     // There were some errors during the timestamps transmissions

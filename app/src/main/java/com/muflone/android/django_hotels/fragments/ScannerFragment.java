@@ -169,7 +169,7 @@ public class ScannerFragment extends Fragment {
                             Timestamp timestamp = new Timestamp(0, contract.id,
                                     this.scanType == ScanType.SCAN_TYPE_ENTER ?
                                             this.apiData.enterDirection.id : this.apiData.exitDirection.id,
-                                    Utility.getCurrentDateTime(this.settings.getTimeZone()),
+                                    this.api.getCurrentDateTime(),
                                     "", null);
                             new AsyncTask<Timestamp, Void, Void>() {
                                 @Override
