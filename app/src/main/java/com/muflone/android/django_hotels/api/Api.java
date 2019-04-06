@@ -1,6 +1,5 @@
 package com.muflone.android.django_hotels.api;
 
-import android.content.Context;
 import android.net.Uri;
 
 import com.google.android.apps.authenticator.Base32String;
@@ -30,10 +29,8 @@ public class Api {
     public static final String STATUS_EXISTING = "EXISTING";
 
     public final Settings settings;
-    private final Context context;
 
-    public Api(Context context) {
-        this.context = context;
+    public Api() {
         this.settings = Singleton.getInstance().settings;
     }
 

@@ -79,7 +79,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public static synchronized AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {
             INSTANCE = android.arch.persistence.room.Room.databaseBuilder(
-                    context.getApplicationContext(), AppDatabase.class, Constants.DATABASE_NAME)
+                    context, AppDatabase.class, Constants.DATABASE_NAME)
                 // Allow schema changes even without any migration
                 .fallbackToDestructiveMigration()
                 // allow queries on the main thread.

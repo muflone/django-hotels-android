@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.List;
 
 public class ScannerFragment extends Fragment {
+    private Context context;
     private View rootLayout;
     private Button enterButton;
     private Button exitButton;
@@ -63,7 +64,7 @@ public class ScannerFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         this.apiData = Singleton.getInstance().apiData;
         this.settings = Singleton.getInstance().settings;
-        this.database = AppDatabase.getAppDatabase(getActivity());
+        this.database = AppDatabase.getAppDatabase(this.context);
 
         // Initialize UI
         this.loadUI(inflater, container);
@@ -83,7 +84,7 @@ public class ScannerFragment extends Fragment {
         // Load latest timestamps
         this.timestampEmployeeList = new ArrayList<>();
         this.listLatestTimestamps();
-        this.timestampAdapter = new TimestampAdapter(getActivity(),
+        this.timestampAdapter = new TimestampAdapter(this.context,
                 R.layout.scanner_timestamps, this.timestampEmployeeList);
         this.timestampEmployeesView.setAdapter(this.timestampAdapter);
         // Clear transmission date on long press
@@ -114,6 +115,12 @@ public class ScannerFragment extends Fragment {
         return this.rootLayout;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        this.context = context;
+        super.onAttach(context);
+    }
+
     private void loadUI(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container) {
         // Inflate the layout for this fragment
         this.rootLayout = inflater.inflate(R.layout.scanner_fragment, container, false);
@@ -130,7 +137,7 @@ public class ScannerFragment extends Fragment {
         // Limit the type of recognized scans to QR Codes
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
         // Set scan title
-        integrator.setPrompt(getActivity().getString(R.string.scan_prompt));
+        integrator.setPrompt(this.context.getString(R.string.scan_prompt));
         // Set beep after scan
         integrator.setBeepEnabled(this.settings.getScanBeep());
         // Allow screen rotation during the scan
@@ -162,7 +169,7 @@ public class ScannerFragment extends Fragment {
                             // Valid contract found
                             Contract contract = this.apiData.contractsGuidMap.get(secret);
                             Log.d("QR", contract.employee.firstName + " " + contract.employee.lastName);
-                            Toast.makeText(getActivity(),
+                            Toast.makeText(this.context,
                                     contract.employee.firstName + " " + contract.employee.lastName,
                                     Toast.LENGTH_SHORT).show();
                             // Insert new Timestamp in background
@@ -184,14 +191,14 @@ public class ScannerFragment extends Fragment {
                             }.execute(timestamp);
                         } else {
                             // Cannot find any contract with the provided GUID
-                            Toast.makeText(getActivity(),
-                                    getString(R.string.message_unknown_employee),
+                            Toast.makeText(this.context,
+                                    this.context.getString(R.string.message_unknown_employee),
                                     Toast.LENGTH_LONG).show();
                         }
                     } catch (Token.TokenUriInvalidException | Base32String.DecodingException e) {
                         // Unsupported QR Code
-                        Toast.makeText(getActivity(),
-                                getString(R.string.message_unsupported_qrcode),
+                        Toast.makeText(this.context,
+                                this.context.getString(R.string.message_unsupported_qrcode),
                                 Toast.LENGTH_LONG).show();
                     }
                 }
@@ -255,7 +262,7 @@ public class ScannerFragment extends Fragment {
 
             if (convertView == null) {
                 // Save views for following uses
-                LayoutInflater inflater = (LayoutInflater) this.getContext()
+                LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.scanner_timestamps, parent, false);
                 timestampViewHolder = new TimestampViewHolder();

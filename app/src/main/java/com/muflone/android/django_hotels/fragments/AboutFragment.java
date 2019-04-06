@@ -1,5 +1,6 @@
 package com.muflone.android.django_hotels.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,11 +20,13 @@ import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 
 public class AboutFragment extends Fragment {
+    private Context context;
+
     @Override
     public View onCreateView(@NonNull  LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View aboutPage = new AboutPage(this.getContext())
+        View aboutPage = new AboutPage(this.context)
                 .isRTL(false)
                 .setImage(R.mipmap.ic_launcher)
                 .setDescription(String.format(Locale.ROOT,
@@ -57,7 +60,7 @@ public class AboutFragment extends Fragment {
 
     private Element getCopyRightsElement() {
         Element copyRightsElement = new Element();
-        final String copyrights = String.format(getString(R.string.about_app_copyright),
+        final String copyrights = String.format(this.getString(R.string.about_app_copyright),
                 this.getString(R.string.author_name),
                 Calendar.getInstance().get(Calendar.YEAR));
         copyRightsElement.setTitle(copyrights);
@@ -68,10 +71,15 @@ public class AboutFragment extends Fragment {
         copyRightsElement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), copyrights, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, copyrights, Toast.LENGTH_SHORT).show();
             }
         });
         return copyRightsElement;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        this.context = context;
+        super.onAttach(context);
+    }
 }

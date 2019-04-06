@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity
         // Singleton instance
         Settings settings = new Settings(this);
         Singleton.getInstance().settings = settings;
-        Singleton.getInstance().api = new Api(this);
+        Singleton.getInstance().api = new Api();
         // Add settings_toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity
         if (settings.getTabletID().isEmpty() |
                 settings.getTabletKey().isEmpty()) {
             String message = settings.getTabletID().isEmpty() ?
-                    getString(R.string.message_missing_tablet_id) :
-                    getString(R.string.message_missing_tablet_key);
+                    this.getString(R.string.message_missing_tablet_id) :
+                    this.getString(R.string.message_missing_tablet_key);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             this.onNavigationItemSelected(this.menuItemSettings);
         } else {

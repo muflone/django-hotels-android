@@ -47,6 +47,7 @@ public class StructuresFragment extends Fragment {
     private final Api api = Singleton.getInstance().api;
     private final ApiData apiData = Singleton.getInstance().apiData;
 
+    private Context context;
     private View rootLayout;
     private Structure selectedStructure;
     private TabLayout structuresTabs;
@@ -81,7 +82,7 @@ public class StructuresFragment extends Fragment {
         this.loadUI(inflater, container);
 
         this.employeesView.setAdapter(new ArrayAdapter<>(
-                this.getContext(), android.R.layout.simple_list_item_1, this.employeesList));
+                this.context, android.R.layout.simple_list_item_1, this.employeesList));
         this.employeesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 employeesView.requestFocusFromTouch();
@@ -120,7 +121,7 @@ public class StructuresFragment extends Fragment {
             }
         }
 
-        this.buildingRoomsAdapter = new ExpandableListAdapter(this.getContext(), buildingsList, roomsList);
+        this.buildingRoomsAdapter = new ExpandableListAdapter(this.context, buildingsList, roomsList);
         this.roomsView.setAdapter(this.buildingRoomsAdapter);
         this.roomsView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -133,6 +134,12 @@ public class StructuresFragment extends Fragment {
             }
         });
         return this.rootLayout;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        this.context = context;
+        super.onAttach(context);
     }
 
     private void loadUI(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container) {
@@ -182,7 +189,7 @@ public class StructuresFragment extends Fragment {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                AppDatabase database = AppDatabase.getAppDatabase(getContext());
+                AppDatabase database = AppDatabase.getAppDatabase(context);
                 // Load employees for the selected structure
                 for (Employee employee : selectedStructure.employees) {
                     employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
@@ -260,7 +267,7 @@ public class StructuresFragment extends Fragment {
                 } else {
                     service = null;
                 }
-                rooms.add(new RoomStatus(this.getContext(), room.name, contractBuilding.contractId,
+                rooms.add(new RoomStatus(this.context, room.name, contractBuilding.contractId,
                           room.id, this.roomServicesList, service));
             }
             this.roomsList.put(building.name, rooms);
