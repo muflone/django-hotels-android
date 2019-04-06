@@ -2,6 +2,7 @@ package com.muflone.android.django_hotels.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity
     private MenuItem menuItemHome = null;
     private MenuItem menuItemSettings = null;
     private MenuItem menuItemSync = null;
+    private boolean backButtonPressed = false;
 
     // Allow the use of (insecure) drawables for API < 21
     // https://developer.android.com/reference/android/support/v7/app/AppCompatDelegate.html#setCompatVectorFromResourcesEnabled(boolean)
@@ -148,11 +150,25 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        // Close drawer
+        // Handle back button press
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
+            // Close drawer if opened
             drawer.closeDrawer(GravityCompat.START);
+        } else if (! this.backButtonPressed) {
+            // Show message instead of closing
+            this.backButtonPressed = true;
+            Toast.makeText(this, this.getString(R.string.message_press_back_again_to_exit),
+                    Toast.LENGTH_SHORT).show();
+            // Restore confirmation after 2 seconds
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    backButtonPressed = false;
+                }
+            }, 2000);
         } else {
+            // Accept back button to close the activity
             super.onBackPressed();
         }
     }

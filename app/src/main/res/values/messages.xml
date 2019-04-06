@@ -9,4 +9,5 @@
     <string name="message_established_connection">Established connection with the server</string>
     <string name="message_unknown_employee">Unknown employee</string>
     <string name="message_unsupported_qrcode">Unsupported QR Code</string>
+    <string name="message_press_back_again_to_exit">Press back button again to exit</string>
 </resources>
