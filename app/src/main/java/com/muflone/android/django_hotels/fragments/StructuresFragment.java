@@ -59,7 +59,7 @@ public class StructuresFragment extends Fragment {
     private final List<Structure> structures = new ArrayList<>();
     private final List<Service> roomServicesList = new ArrayList<>();
     private Table<Long, Long, ServiceActivity> serviceActivityTable = HashBasedTable.create();
-    private final HashMap<String, Boolean> buildingsOpenedStatusMap = new HashMap<>();
+    private final HashMap<String, Boolean> buildingsClosedStatusMap = new HashMap<>();
 
     private TextView employeeIdView;
     private TextView employeeFirstNameView;
@@ -127,7 +127,7 @@ public class StructuresFragment extends Fragment {
             public boolean onGroupClick(ExpandableListView parent, View v,
                                         int groupPosition, long id) {
                 String groupName = parent.getExpandableListAdapter().getGroup(groupPosition).toString();
-                buildingsOpenedStatusMap.put(groupName, ! buildingsOpenedStatusMap.get(groupName));
+                buildingsClosedStatusMap.put(groupName, ! buildingsClosedStatusMap.get(groupName));
                 setExpandableListViewHeight(parent, groupPosition);
                 return false;
             }
@@ -174,9 +174,9 @@ public class StructuresFragment extends Fragment {
         this.serviceActivityTable.clear();
         this.selectedStructure = this.structures.get(tab.getPosition());
         // Initialize buildings groups to collapsed
-        this.buildingsOpenedStatusMap.clear();
+        this.buildingsClosedStatusMap.clear();
         for (Building building : this.selectedStructure.buildings) {
-            this.buildingsOpenedStatusMap.put(building.name, false);
+            this.buildingsClosedStatusMap.put(building.name, false);
         }
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -269,15 +269,10 @@ public class StructuresFragment extends Fragment {
         // TODO: implement initial collapse/expansion as preference
         for (int group = 0; group < this.buildingsList.size(); group++) {
             // Restore previous groups opened status
-            boolean openedStatus = false;
-            if (this.buildingsOpenedStatusMap.containsKey(this.buildingsList.get(group))) {
-                openedStatus = this.buildingsOpenedStatusMap.get(this.buildingsList.get(group));
-            }
-            // Open or close group
-            if (openedStatus) {
-                this.roomsView.expandGroup(group);
-            } else {
+            if (this.buildingsClosedStatusMap.get(this.buildingsList.get(group))) {
                 this.roomsView.collapseGroup(group);
+            } else {
+                this.roomsView.expandGroup(group);
             }
         }
         // Allocate space for the expanded list
