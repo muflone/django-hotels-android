@@ -1,5 +1,6 @@
 package com.muflone.android.django_hotels.tasks;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -35,24 +36,26 @@ import java.util.ArrayList;
 public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult<ApiData>> {
     private final Api api;
     private final AsyncTaskListener callback;
+    private final Context context;
 
-    public AsyncTaskLoadDatabase(Api api, AsyncTaskListener callback) {
+    public AsyncTaskLoadDatabase(Api api, Context context, AsyncTaskListener callback) {
         this.api = api;
+        this.context = context;
         this.callback = callback;
     }
 
     @Override
     protected AsyncTaskResult doInBackground(Void... params) {
         ApiData data = new ApiData();
-        AppDatabase database = AppDatabase.getAppDatabase(this.api.context);
+        AppDatabase database = AppDatabase.getAppDatabase(this.context);
         // TODO: Database deletion is dangerous, must implement migrations
         if (!database.checkDB()) {
             Log.d("", "Invalid database structure " + database.getOpenHelper().getDatabaseName());
             AppDatabase.destroyInstance();
-            File databaseFile = new File(this.api.context.getApplicationInfo().dataDir +
+            File databaseFile = new File(this.context.getApplicationInfo().dataDir +
                     "/databases/" + database.getOpenHelper().getDatabaseName());
             databaseFile.delete();
-            database = AppDatabase.getAppDatabase(this.api.context);
+            database = AppDatabase.getAppDatabase(this.context);
         }
         BrandDao brandDao = database.brandDao();
         BuildingDao buildingDao = database.buildingDao();

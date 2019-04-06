@@ -37,7 +37,7 @@ public class Api {
     private final String STATUS_OK = "OK";
     private final String STATUS_EXISTING = "EXISTING";
     public final Settings settings;
-    public final Context context;
+    private final Context context;
 
     public Api(Context context) {
         this.context = context;

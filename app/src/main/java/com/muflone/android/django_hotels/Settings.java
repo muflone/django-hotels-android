@@ -11,7 +11,7 @@ public class Settings {
 
     public Settings(Context context) {
         this.context = context;
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this.context);
     }
 
     public String getTabletID() {

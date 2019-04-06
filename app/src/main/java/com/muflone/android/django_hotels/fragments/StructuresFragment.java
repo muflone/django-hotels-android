@@ -81,7 +81,7 @@ public class StructuresFragment extends Fragment {
         this.loadUI(inflater, container);
 
         this.employeesView.setAdapter(new ArrayAdapter<>(
-                this.api.context, android.R.layout.simple_list_item_1, this.employeesList));
+                this.getContext(), android.R.layout.simple_list_item_1, this.employeesList));
         this.employeesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 employeesView.requestFocusFromTouch();
@@ -120,7 +120,7 @@ public class StructuresFragment extends Fragment {
             }
         }
 
-        this.buildingRoomsAdapter = new ExpandableListAdapter(this.api.context, buildingsList, roomsList);
+        this.buildingRoomsAdapter = new ExpandableListAdapter(this.getContext(), buildingsList, roomsList);
         this.roomsView.setAdapter(this.buildingRoomsAdapter);
         this.roomsView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -182,7 +182,7 @@ public class StructuresFragment extends Fragment {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                AppDatabase database = AppDatabase.getAppDatabase(api.context);
+                AppDatabase database = AppDatabase.getAppDatabase(getContext());
                 // Load employees for the selected structure
                 for (Employee employee : selectedStructure.employees) {
                     employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
@@ -260,7 +260,7 @@ public class StructuresFragment extends Fragment {
                 } else {
                     service = null;
                 }
-                rooms.add(new RoomStatus(this.api.context, room.name, contractBuilding.contractId,
+                rooms.add(new RoomStatus(this.getContext(), room.name, contractBuilding.contractId,
                           room.id, this.roomServicesList, service));
             }
             this.roomsList.put(building.name, rooms);

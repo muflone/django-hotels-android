@@ -255,8 +255,7 @@ public class ScannerFragment extends Fragment {
 
             if (convertView == null) {
                 // Save views for following uses
-                // LayoutInflater inflater = ((Activity) parent.getContext()).getLayoutInflater();
-                LayoutInflater inflater = (LayoutInflater) getContext()
+                LayoutInflater inflater = (LayoutInflater) this.getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.scanner_timestamps, parent, false);
                 timestampViewHolder = new TimestampViewHolder();

@@ -57,6 +57,7 @@ import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
+
     public abstract BrandDao brandDao();
     public abstract BuildingDao buildingDao();
     public abstract CompanyDao companyDao();
@@ -117,10 +118,12 @@ public abstract class AppDatabase extends RoomDatabase {
         return results;
     }
 
-    public void reload() {
+    public void reload(Context context) {
         // Load data from database
         AsyncTaskLoadDatabase task = new AsyncTaskLoadDatabase(
-                Singleton.getInstance().api, new AsyncTaskListener<AsyncTaskResult<ApiData>>() {
+                Singleton.getInstance().api,
+                context,
+                new AsyncTaskListener<AsyncTaskResult<ApiData>>() {
             @Override
             public void onSuccess(AsyncTaskResult<ApiData> results) {
                 Singleton.getInstance().apiData = results.data;
