@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
+import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
+import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
@@ -31,6 +33,12 @@ import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.util.Iterator;
 import java.util.List;
 
 public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<ApiData>> {
@@ -66,7 +74,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
             }
             if (! transmissionErrors) {
                 // Get new data from the server (DOWNLOAD)
-                data = this.api.getData();
+                data = this.downloadData();
                 if (data.exception == null) {
                     // Success, save data in database
                     this.saveToDatabase(data, this.api.context);
@@ -89,6 +97,60 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
                 this.callback.onFailure(results.exception);
             }
         }
+    }
+
+    private ApiData downloadData() {
+        ApiData result = new ApiData();
+        // Get data from the server
+        JSONObject jsonRoot = this.api.getJSONObject(String.format("get/%s/%s/",
+                this.api.settings.getTabletID(),
+                this.api.getCurrentTokenCode()));
+        if (jsonRoot != null) {
+            try {
+                // Loop over every structure
+                JSONObject jsonStructures = jsonRoot.getJSONObject("structures");
+                Iterator<?> jsonKeys = jsonStructures.keys();
+                while (jsonKeys.hasNext()) {
+                    String key = (String) jsonKeys.next();
+                    Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
+                    result.structuresMap.put(objStructure.id, objStructure);
+                }
+                // Loop over every contract
+                JSONArray jsonContracts = jsonRoot.getJSONArray("contracts");
+                for (int i = 0; i < jsonContracts.length(); i++) {
+                    Contract contract = new Contract(jsonContracts.getJSONObject(i));
+                    result.contractsMap.put(contract.id, contract);
+                }
+                // Loop over every service
+                JSONArray jsonServices = jsonRoot.getJSONArray("services");
+                for (int i = 0; i < jsonServices.length(); i++) {
+                    Service service = new Service(jsonServices.getJSONObject(i));
+                    if (service.extra_service) {
+                        result.serviceExtraMap.put(service.id, service);
+                    } else {
+                        result.serviceMap.put(service.id, service);
+                    }
+                }
+                // Loop over every timestamp direction
+                JSONArray jsonTimestampDirections = jsonRoot.getJSONArray("timestamp_directions");
+                for (int i = 0; i < jsonTimestampDirections.length(); i++) {
+                    TimestampDirection timestampDirection = new TimestampDirection(jsonTimestampDirections.getJSONObject(i));
+                    result.timestampDirectionsMap.put(timestampDirection.id, timestampDirection);
+                }
+                // Check the final node for successful reads
+                this.api.checkStatusResponse(jsonRoot);
+            } catch (JSONException e) {
+                result.exception = new InvalidResponseException();
+            } catch (ParseException e) {
+                result.exception = new InvalidResponseException();
+            } catch (InvalidResponseException e) {
+                result.exception = e;
+            }
+        } else {
+            // Unable to download data from the server
+            result.exception = new NoDownloadException();
+        }
+        return result;
     }
 
     private void saveToDatabase(ApiData data, Context context) {

@@ -13,13 +13,8 @@ import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
 import com.muflone.android.django_hotels.database.models.Timestamp;
-import com.muflone.android.django_hotels.database.models.Contract;
-import com.muflone.android.django_hotels.database.models.Service;
-import com.muflone.android.django_hotels.database.models.Structure;
-import com.muflone.android.django_hotels.database.models.TimestampDirection;
 import com.muflone.android.django_hotels.otp.Token;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -59,7 +54,7 @@ public class Api {
         return Uri.withAppendedPath(this.buildUri("api/v1/"), segment);
     }
 
-    private JSONObject getJSONObject(String segment) {
+    public JSONObject getJSONObject(String segment) {
         // Return a JSONObject from the remote URL
         JSONObject jsonObject = null;
         try {
@@ -86,7 +81,7 @@ public class Api {
         return jsonObject;
     }
 
-    private String getCurrentTokenCode() {
+    public String getCurrentTokenCode() {
         // Return the current TokenCode
         Token token = null;
         try {
@@ -101,7 +96,7 @@ public class Api {
         return token != null ? token.generateCodes().getCurrentCode() : null;
     }
 
-    private void checkStatusResponse(JSONObject jsonObject) throws InvalidResponseException {
+    public void checkStatusResponse(JSONObject jsonObject) throws InvalidResponseException {
         // Check the status object for valid data
         try {
             if (!jsonObject.getString("status").equals(this.STATUS_OK)) {
@@ -147,60 +142,6 @@ public class Api {
         } else {
             // Whether the result cannot be get raise exception
             data.exception = new NoConnectionException();
-        }
-        return data;
-    }
-
-    public ApiData getData() {
-        ApiData data = new ApiData();
-        // Get data from the server
-        JSONObject jsonRoot = this.getJSONObject(String.format("get/%s/%s/",
-                this.settings.getTabletID(),
-                this.getCurrentTokenCode()));
-        if (jsonRoot != null) {
-            try {
-                // Loop over every structure
-                JSONObject jsonStructures = jsonRoot.getJSONObject("structures");
-                Iterator<?> jsonKeys = jsonStructures.keys();
-                while (jsonKeys.hasNext()) {
-                    String key = (String) jsonKeys.next();
-                    Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
-                    data.structuresMap.put(objStructure.id, objStructure);
-                }
-                // Loop over every contract
-                JSONArray jsonContracts = jsonRoot.getJSONArray("contracts");
-                for (int i = 0; i < jsonContracts.length(); i++) {
-                    Contract contract = new Contract(jsonContracts.getJSONObject(i));
-                    data.contractsMap.put(contract.id, contract);
-                }
-                // Loop over every service
-                JSONArray jsonServices = jsonRoot.getJSONArray("services");
-                for (int i = 0; i < jsonServices.length(); i++) {
-                    Service service = new Service(jsonServices.getJSONObject(i));
-                    if (service.extra_service) {
-                        data.serviceExtraMap.put(service.id, service);
-                    } else {
-                        data.serviceMap.put(service.id, service);
-                    }
-                }
-                // Loop over every timestamp direction
-                JSONArray jsonTimestampDirections = jsonRoot.getJSONArray("timestamp_directions");
-                for (int i = 0; i < jsonTimestampDirections.length(); i++) {
-                    TimestampDirection timestampDirection = new TimestampDirection(jsonTimestampDirections.getJSONObject(i));
-                    data.timestampDirectionsMap.put(timestampDirection.id, timestampDirection);
-                }
-                // Check the final node for successful reads
-                this.checkStatusResponse(jsonRoot);
-            } catch (JSONException e) {
-                data.exception = new InvalidResponseException();
-            } catch (ParseException e) {
-                data.exception = new InvalidResponseException();
-            } catch (InvalidResponseException e) {
-                data.exception = e;
-            }
-        } else {
-            // Unable to download data from the server
-            data.exception = new NoDownloadException();
         }
         return data;
     }
