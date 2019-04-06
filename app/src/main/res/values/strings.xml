@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Application values -->
-    <string name="app_name">Hotels</string>
+    <string name="app_name" translatable="false">Hotels</string>
     <string name="app_description">Get your Hotel activities done</string>
 
     <string name="author_name" translatable="false">Fabio Castelli (Muflone)</string>
@@ -65,8 +65,8 @@
     <string name="about_app_playstore" translatable="false">com.muflone.android.hotels</string>
     <string name="about_license_url" translatable="false">https://www.gnu.org/licenses/old-licenses/gpl-2.0.html</string>
     <string name="about_credits">Credits</string>
-    <string name="about_zxing_title">ZXing Android Embedded</string>
+    <string name="about_zxing_title" translatable="false">ZXing Android Embedded</string>
     <string name="about_zxing_url" translatable="false">journeyapps/zxing-android-embedded</string>
-    <string name="about_about_title">Android About Page</string>
+    <string name="about_about_title" translatable="false">Android About Page</string>
     <string name="about_about_url" translatable="false">medyo/android-about-page</string>
 </resources>
