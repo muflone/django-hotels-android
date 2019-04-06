@@ -1,6 +1,7 @@
 package com.muflone.android.django_hotels.fragments;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,9 +19,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
+import com.muflone.android.django_hotels.Utility;
+import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
+import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.ContractBuildings;
@@ -28,6 +34,7 @@ import com.muflone.android.django_hotels.database.models.ContractType;
 import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
+import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.database.models.Structure;
 
 import java.text.DateFormat;
@@ -37,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class StructuresFragment extends Fragment {
+    private final Api api = Singleton.getInstance().api;
     private final ApiData apiData = Singleton.getInstance().apiData;
 
     private View rootLayout;
@@ -50,6 +58,8 @@ public class StructuresFragment extends Fragment {
     private final HashMap<String, List<RoomStatus>> roomsList = new HashMap<>();
     private final List<Structure> structures = new ArrayList<>();
     private final List<Service> roomServicesList = new ArrayList<>();
+    private Table<Long, Long, ServiceActivity> serviceActivityTable = HashBasedTable.create();
+    private final HashMap<String, Boolean> buildingsOpenedStatusMap = new HashMap<>();
 
     private TextView employeeIdView;
     private TextView employeeFirstNameView;
@@ -116,6 +126,8 @@ public class StructuresFragment extends Fragment {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v,
                                         int groupPosition, long id) {
+                String groupName = parent.getExpandableListAdapter().getGroup(groupPosition).toString();
+                buildingsOpenedStatusMap.put(groupName, ! buildingsOpenedStatusMap.get(groupName));
                 setExpandableListViewHeight(parent, groupPosition);
                 return false;
             }
@@ -159,24 +171,45 @@ public class StructuresFragment extends Fragment {
     private void loadEmployees(TabLayout.Tab tab) {
         // Load employees list for the selected Structure tab
         this.employeesList.clear();
+        this.serviceActivityTable.clear();
         this.selectedStructure = this.structures.get(tab.getPosition());
-        for (Employee employee : this.selectedStructure.employees) {
-            this.employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
+        // Initialize buildings groups to collapsed
+        this.buildingsOpenedStatusMap.clear();
+        for (Building building : this.selectedStructure.buildings) {
+            this.buildingsOpenedStatusMap.put(building.name, false);
         }
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                AppDatabase database = AppDatabase.getAppDatabase(api.context);
+                // Load employees for the selected structure
+                for (Employee employee : selectedStructure.employees) {
+                    employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
+                    // Reload services for contract
+                    Contract contract = apiData.contractsMap.get(employee.contractBuildings.get(0).contractId);
+                    for (ServiceActivity serviceActivity : database.serviceActivityDao().listByDateContract(
+                            Utility.getCurrentDate(api.settings.getTimeZone()), contract.id)) {
+                        serviceActivityTable.put(
+                                serviceActivity.contractId,
+                                serviceActivity.roomId,
+                                serviceActivity);
+                    }
+                }
+                return null;
+            }
 
-        // Update data in the list
-        ((ArrayAdapter) this.employeesView.getAdapter()).notifyDataSetChanged();
-        // Select the first employee for the selected tab
-        if (this.employeesList.size() > 0) {
-            this.employeesView.post(new Runnable() {
-                @Override
-                public void run() {
+            @Override
+            protected void onPostExecute(Void results) {
+                // Update data in the list
+                ((ArrayAdapter) employeesView.getAdapter()).notifyDataSetChanged();
+                // Select the first employee for the selected tab
+                if (employeesList.size() > 0) {
                     employeesView.requestFocusFromTouch();
                     employeesView.setSelection(0);
                     loadEmployee(selectedStructure.employees.get(0));
                 }
-            });
-        }
+            }
+        }.execute();
     }
 
     private void loadEmployee(Employee employee) {
@@ -217,9 +250,17 @@ public class StructuresFragment extends Fragment {
             Building building = this.apiData.buildingsMap.get(contractBuilding.buildingId);
             this.buildingsList.add(building.name);
             List<RoomStatus> rooms = new ArrayList<>();
+            Service service;
             for (Room room : building.rooms) {
-                // TODO: restore the previous service for the room
-                rooms.add(new RoomStatus(this.api.context, room.name, null));
+                // Restore the previous service for the room
+                if (this.serviceActivityTable.contains(contractBuilding.contractId, room.id)) {
+                    service = apiData.serviceMap.get(
+                            this.serviceActivityTable.get(contractBuilding.contractId, room.id).serviceId);
+                } else {
+                    service = null;
+                }
+                rooms.add(new RoomStatus(this.api.context, room.name, contractBuilding.contractId,
+                          room.id, this.roomServicesList, service));
             }
             this.roomsList.put(building.name, rooms);
         }
@@ -227,7 +268,17 @@ public class StructuresFragment extends Fragment {
         // Collapse all the buildings groups
         // TODO: implement initial collapse/expansion as preference
         for (int group = 0; group < this.buildingsList.size(); group++) {
-            this.roomsView.collapseGroup(group);
+            // Restore previous groups opened status
+            boolean openedStatus = false;
+            if (this.buildingsOpenedStatusMap.containsKey(this.buildingsList.get(group))) {
+                openedStatus = this.buildingsOpenedStatusMap.get(this.buildingsList.get(group));
+            }
+            // Open or close group
+            if (openedStatus) {
+                this.roomsView.expandGroup(group);
+            } else {
+                this.roomsView.collapseGroup(group);
+            }
         }
         // Allocate space for the expanded list
         this.setExpandableListViewHeight(this.roomsView, -1);
@@ -270,12 +321,14 @@ public class StructuresFragment extends Fragment {
         private final Context context;
         private final List<String> buildingsList;
         private final HashMap<String, List<RoomStatus>> roomsList;
+        private AppDatabase database;
 
         public ExpandableListAdapter(Context context, List<String> listDataHeader,
                                      HashMap<String, List<RoomStatus>> listChildData) {
             this.context = context;
             this.buildingsList = listDataHeader;
             this.roomsList = listChildData;
+            this.database =  AppDatabase.getAppDatabase(context);
         }
 
         @Override
@@ -299,6 +352,7 @@ public class StructuresFragment extends Fragment {
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.structures_building_item, parent, false);
             }
+            final ExpandableListAdapter adapter = this;
 
             // Set room name
             TextView roomView = convertView.findViewById(R.id.roomView);
@@ -309,8 +363,49 @@ public class StructuresFragment extends Fragment {
             buttonState.setText(roomStatus.getServiceName());
             buttonState.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View button) {
-                    roomStatus.nextService(roomServicesList);
+                    // Update ServiceActivity for room
+                    roomStatus.nextService();
                     ((Button) button).setText(roomStatus.getServiceName());
+                    new AsyncTask<RoomStatus, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(RoomStatus... params) {
+                            RoomStatus roomStatus = params[0];
+                            List <ServiceActivity> serviceActivityList =
+                                    database.serviceActivityDao().listByDateContract(
+                                            Utility.getCurrentDate(api.settings.getTimeZone()),
+                                            roomStatus.contractId, roomStatus.roomId);
+                            ServiceActivity serviceActivity;
+                            if (serviceActivityList.size() > 0) {
+                                serviceActivity = serviceActivityList.get(0);
+                                if (roomStatus.service != null) {
+                                    // Update existing ServiceActivity
+                                    serviceActivity.serviceId = roomStatus.service.id;
+                                    database.serviceActivityDao().update(serviceActivity);
+                                    serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
+                                            serviceActivity);
+                                } else {
+                                    // Delete existing ServiceActivity
+                                    database.serviceActivityDao().delete(serviceActivity);
+                                    serviceActivityTable.remove(roomStatus.contractId, roomStatus.roomId);
+                                }
+
+                            } else {
+                                // Create new ServiceActivity
+                                serviceActivity = new ServiceActivity(0,
+                                        Utility.getCurrentDate(api.settings.getTimeZone()),
+                                        roomStatus.contractId,
+                                        roomStatus.roomId,
+                                        roomStatus.service.id,
+                                        1, "", null);
+                                database.serviceActivityDao().insert(serviceActivity);
+                                serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
+                                        serviceActivity);
+                            }
+                            // Update in memory serviceActivityTable
+
+                            return null;
+                        }
+                    }.execute(roomStatus);
                 }
             });
 
@@ -366,22 +461,30 @@ public class StructuresFragment extends Fragment {
     private class RoomStatus {
         private final String emptyServiceDescription;
         public final String name;
+        public final long contractId;
+        public final long roomId;
+        public final List<Service> services;
         public Service service;
-        private int serviceCounter = 0;
+        private int serviceCounter;
 
-        public RoomStatus(Context context, String name, Service service) {
+        public RoomStatus(Context context, String name, long contractId, long roomId,
+                          List<Service> services, Service service) {
             this.emptyServiceDescription = context.getString(R.string.empty_service);
             this.name = name;
+            this.contractId = contractId;
+            this.roomId = roomId;
+            this.services = services;
             this.service = service;
+            this.serviceCounter = this.services.indexOf(this.service);
         }
 
-        public Service nextService(List<Service> services) {
+        public Service nextService() {
             // Cycle services
             this.serviceCounter++;
             if (this.serviceCounter == services.size()) {
                 this.serviceCounter = 0;
             }
-            this.service = services.get(this.serviceCounter);
+            this.service = this.services.get(this.serviceCounter);
             return this.service;
         }
 

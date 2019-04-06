@@ -29,14 +29,14 @@ public class ServiceActivity {
     public final long roomId;
 
     @ColumnInfo(name = "service_id", index = true)
-    public final long serviceId;
+    public long serviceId;
 
     @ColumnInfo(name = "service_qty")
-    public final long serviceQty;
+    public long serviceQty;
 
     @ColumnInfo(name = "description")
     @NonNull
-    public final String description;
+    public String description;
 
     @ColumnInfo(name = "transmission", index = true)
     @Nullable
