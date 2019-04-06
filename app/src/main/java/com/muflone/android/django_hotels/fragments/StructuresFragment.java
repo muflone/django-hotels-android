@@ -195,7 +195,7 @@ public class StructuresFragment extends Fragment {
                     // Reload services for contract
                     Contract contract = apiData.contractsMap.get(employee.contractBuildings.get(0).contractId);
                     for (ServiceActivity serviceActivity : database.serviceActivityDao().listByDateContract(
-                            api.getCurrentDateTime(), contract.id)) {
+                            api.getCurrentDate(), contract.id)) {
                         serviceActivityTable.put(
                                 serviceActivity.contractId,
                                 serviceActivity.roomId,
@@ -373,7 +373,7 @@ public class StructuresFragment extends Fragment {
                             RoomStatus roomStatus = params[0];
                             List <ServiceActivity> serviceActivityList =
                                     database.serviceActivityDao().listByDateContract(
-                                            api.getCurrentDateTime(),
+                                            api.getCurrentDate(),
                                             roomStatus.contractId, roomStatus.roomId);
                             ServiceActivity serviceActivity;
                             if (serviceActivityList.size() > 0) {
@@ -393,7 +393,7 @@ public class StructuresFragment extends Fragment {
                             } else {
                                 // Create new ServiceActivity
                                 serviceActivity = new ServiceActivity(0,
-                                        api.getCurrentDateTime(),
+                                        api.getCurrentDate(),
                                         roomStatus.contractId,
                                         roomStatus.roomId,
                                         roomStatus.service.id,

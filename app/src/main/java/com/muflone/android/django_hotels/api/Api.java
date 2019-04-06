@@ -136,7 +136,7 @@ public class Api {
         return data;
     }
 
-    private Date getCurrentDate() {
+    public Date getCurrentDate() {
         // Get the current date from the user timezone
         return Utility.getCurrentDate(this.settings.getTimeZone());
     }
