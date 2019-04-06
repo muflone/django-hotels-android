@@ -1,7 +1,7 @@
 package com.muflone.android.django_hotels.tasks;
 
-import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
@@ -37,11 +37,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<ApiData>> {
+    private final String TAG = getClass().getName();
+
     private final Api api;
     private final AsyncTaskListener callback;
     private final AppDatabase database;
@@ -63,7 +68,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
             // Transmit any incomplete timestamp (UPLOAD)
             List<Timestamp> timestampsList = this.database.timestampDao().listByUntrasmitted();
             for (Timestamp timestamp : timestampsList) {
-                data = this.api.putTimestamp(timestamp);
+                data = this.putTimestamp(timestamp);
                 if (data.exception == null) {
                     // Update transmission date
                     timestamp.transmission = Utility.getCurrentDateTime(this.api.settings.getTimeZone());
@@ -143,6 +148,46 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
             } catch (JSONException e) {
                 result.exception = new InvalidResponseException();
             } catch (ParseException e) {
+                result.exception = new InvalidResponseException();
+            } catch (InvalidResponseException e) {
+                result.exception = e;
+            }
+        } else {
+            // Unable to download data from the server
+            result.exception = new NoDownloadException();
+        }
+        return result;
+    }
+
+    public ApiData putTimestamp(Timestamp timestamp) {
+        ApiData result = new ApiData();
+        JSONObject jsonRoot = null;
+        // Send timestamps to the server
+        try {
+            jsonRoot = this.api.getJSONObject(String.format(Locale.ROOT,
+                    "put/timestamp/%s/%s/%d/%d/%d/%s/",
+                    this.api.settings.getTabletID(),
+                    this.api.getCurrentTokenCode(),
+                    timestamp.contractId,
+                    timestamp.directionId,
+                    timestamp.datetime.getTime() / 1000,
+                    URLEncoder.encode(timestamp.description, "UTF-8")));
+        } catch (UnsupportedEncodingException e) {
+            result.exception = new InvalidResponseException();
+        }
+        if (jsonRoot != null) {
+            try {
+                Log.d("", jsonRoot.getString("status"));
+                // Check the final node for successful reads
+                String status = jsonRoot.getString("status");
+                if (status.equals(this.api.STATUS_EXISTING)) {
+                    Log.w(TAG, String.format("Existing timestamp during the data transmission: %s", status));
+                } else if (! status.equals(this.api.STATUS_OK)) {
+                    // Invalid response received
+                    Log.e(TAG, String.format("Invalid response received during the data transmission: %s", status));
+                    throw new InvalidResponseException();
+                }
+            } catch (JSONException e) {
                 result.exception = new InvalidResponseException();
             } catch (InvalidResponseException e) {
                 result.exception = e;
