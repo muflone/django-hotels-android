@@ -37,4 +37,8 @@ public class Settings {
     public boolean getScanOrientationLock() {
         return this.preferences.getBoolean(this.context.getString(R.string.settings_scan_orientation_lock_id), false);
     }
+
+    public boolean getBuildingsInitiallyClosed() {
+        return this.preferences.getBoolean(this.context.getString(R.string.structures_buildings_initial_closed_id), false);
+    }
 }

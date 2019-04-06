@@ -176,7 +176,8 @@ public class StructuresFragment extends Fragment {
         // Initialize buildings groups to collapsed
         this.buildingsClosedStatusMap.clear();
         for (Building building : this.selectedStructure.buildings) {
-            this.buildingsClosedStatusMap.put(building.name, false);
+            this.buildingsClosedStatusMap.put(building.name,
+                    this.api.settings.getBuildingsInitiallyClosed());
         }
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -266,7 +267,6 @@ public class StructuresFragment extends Fragment {
         }
         this.buildingRoomsAdapter.notifyDataSetChanged();
         // Collapse all the buildings groups
-        // TODO: implement initial collapse/expansion as preference
         for (int group = 0; group < this.buildingsList.size(); group++) {
             // Restore previous groups opened status
             if (this.buildingsClosedStatusMap.get(this.buildingsList.get(group))) {

@@ -29,4 +29,11 @@
     <string name="settings_scan_orientation_lock_id">scan_orientation_lock</string>
     <string name="settings_scan_orientation_lock_title">Lock orientation during scan</string>
     <string name="settings_scan_orientation_lock_summary">Lock the screen orientation during the scan process</string>
+
+    <!-- Structures settings values -->
+    <string name="settings_category_structures">Structures settings</string>
+
+    <string name="structures_buildings_initial_closed_id">buildings_initially_closed</string>
+    <string name="structures_buildings_initial_closed_title">Buildings are initially closed</string>
+    <string name="structures_buildings_initial_closed_summary">The buildings groups are automatically closed</string>
 </resources>
