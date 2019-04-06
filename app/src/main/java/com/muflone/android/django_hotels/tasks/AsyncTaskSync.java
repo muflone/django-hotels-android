@@ -28,6 +28,7 @@ import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.ContractBuildings;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
+import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
@@ -77,6 +78,19 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult<ApiData
                     transmissionErrors = true;
                 }
             }
+            // Transmit any incomplete activity (UPLOAD)
+            List<ServiceActivity> servicesActivityList = this.database.serviceActivityDao().listByUntrasmitted();
+            for (ServiceActivity serviceActivity : servicesActivityList) {
+                data = this.putActivity(serviceActivity);
+                if (data.exception == null) {
+                    serviceActivity.transmission = this.api.getCurrentDateTime();
+                    this.database.serviceActivityDao().update(serviceActivity);
+                } else {
+                    // There were some errors during the timestamps transmissions
+                    transmissionErrors = true;
+                }
+            }
+            // If no errors were given during the upload proceed to the download
             if (! transmissionErrors) {
                 // Get new data from the server (DOWNLOAD)
                 data = this.downloadData();
@@ -181,6 +195,48 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult<ApiData
                 String status = jsonRoot.getString("status");
                 if (status.equals(Api.STATUS_EXISTING)) {
                     Log.w(TAG, String.format("Existing timestamp during the data transmission: %s", status));
+                } else if (! status.equals(Api.STATUS_OK)) {
+                    // Invalid response received
+                    Log.e(TAG, String.format("Invalid response received during the data transmission: %s", status));
+                    throw new InvalidResponseException();
+                }
+            } catch (JSONException e) {
+                result.exception = new InvalidResponseException();
+            } catch (InvalidResponseException e) {
+                result.exception = e;
+            }
+        } else {
+            // Unable to download data from the server
+            result.exception = new NoDownloadException();
+        }
+        return result;
+    }
+
+    private ApiData putActivity(ServiceActivity serviceActivity) {
+        ApiData result = new ApiData();
+        JSONObject jsonRoot = null;
+        // Send timestamps to the server
+        try {
+            jsonRoot = this.api.getJSONObject(String.format(Locale.ROOT,
+                    "put/activity/%s/%s/%d/%d/%d/%d/%d/%s/",
+                    this.api.settings.getTabletID(),
+                    this.api.getCurrentTokenCode(),
+                    serviceActivity.contractId,
+                    serviceActivity.roomId,
+                    serviceActivity.serviceId,
+                    serviceActivity.serviceQty,
+                    serviceActivity.date.getTime() / 1000,
+                    URLEncoder.encode(serviceActivity.description, "UTF-8")));
+        } catch (UnsupportedEncodingException e) {
+            result.exception = new InvalidResponseException();
+        }
+        if (jsonRoot != null) {
+            try {
+                Log.d("", jsonRoot.getString("status"));
+                // Check the final node for successful reads
+                String status = jsonRoot.getString("status");
+                if (status.equals(Api.STATUS_EXISTING)) {
+                    Log.w(TAG, String.format("Existing activity during the data transmission: %s", status));
                 } else if (! status.equals(Api.STATUS_OK)) {
                     // Invalid response received
                     Log.e(TAG, String.format("Invalid response received during the data transmission: %s", status));
