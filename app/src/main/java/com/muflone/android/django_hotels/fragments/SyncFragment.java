@@ -43,7 +43,6 @@ public class SyncFragment extends Fragment {
                                 Snackbar.LENGTH_INDEFINITE);
                         // Reload data from database
                         AppDatabase.getAppDatabase(context).reload(context);
-                        AppDatabase.destroyInstance();
                     }
 
                     @Override
@@ -65,7 +64,6 @@ public class SyncFragment extends Fragment {
                                     context.getString(R.string.message_unable_to_download),
                                     Snackbar.LENGTH_INDEFINITE);
                         }
-                        AppDatabase.destroyInstance();
                     }
                 });
         task.execute();

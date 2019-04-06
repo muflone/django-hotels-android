@@ -169,6 +169,7 @@ public class MainActivity extends AppCompatActivity
             }, 2000);
         } else {
             // Accept back button to close the activity
+            AppDatabase.destroyInstance();
             super.onBackPressed();
         }
     }
