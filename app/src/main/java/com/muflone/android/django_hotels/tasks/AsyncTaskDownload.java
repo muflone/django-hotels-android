@@ -44,29 +44,30 @@ import java.util.List;
 public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<ApiData>> {
     private final Api api;
     private final AsyncTaskListener callback;
+    private final AppDatabase database;
 
     public AsyncTaskDownload(Api api, AsyncTaskListener callback) {
         this.api = api;
         this.callback = callback;
+        this.database = AppDatabase.getAppDatabase(this.api.context);
     }
 
     @Override
     protected AsyncTaskResult doInBackground(Void... params) {
         // Do the background job
         boolean transmissionErrors = false;
-        AppDatabase database = AppDatabase.getAppDatabase(this.api.context);
 
         // Check if the system date/time matches with the remote date/time
         ApiData data = this.api.checkDates();
         if (data.exception == null) {
             // Transmit any incomplete timestamp (UPLOAD)
-            List<Timestamp> timestampsList = database.timestampDao().listByUntrasmitted();
+            List<Timestamp> timestampsList = this.database.timestampDao().listByUntrasmitted();
             for (Timestamp timestamp : timestampsList) {
                 data = this.api.putTimestamp(timestamp);
                 if (data.exception == null) {
                     // Update transmission date
                     timestamp.transmission = Utility.getCurrentDateTime(this.api.settings.getTimeZone());
-                    database.timestampDao().update(timestamp);
+                    this.database.timestampDao().update(timestamp);
                 } else {
                     // There were some errors during the timestamps transmissions
                     transmissionErrors = true;
@@ -77,7 +78,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
                 data = this.downloadData();
                 if (data.exception == null) {
                     // Success, save data in database
-                    this.saveToDatabase(data, this.api.context);
+                    this.saveToDatabase(data);
                 }
             }
         }
@@ -153,23 +154,22 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
         return result;
     }
 
-    private void saveToDatabase(ApiData data, Context context) {
-        AppDatabase database = AppDatabase.getAppDatabase(context);
-        BrandDao brandDao = database.brandDao();
-        BuildingDao buildingDao = database.buildingDao();
-        CompanyDao companyDao = database.companyDao();
-        ContractDao contractDao = database.contractDao();
-        ContractBuildingsDao contractBuildingsDao = database.contractBuildingsDao();
-        ContractTypeDao contractTypeDao = database.contractTypeDao();
-        JobTypeDao jobTypeDao = database.jobTypeDao();
-        CountryDao countryDao = database.countryDao();
-        EmployeeDao employeeDao = database.employeeDao();
-        LocationDao locationDao = database.locationDao();
-        RegionDao regionDao = database.regionDao();
-        RoomDao roomDao = database.roomDao();
-        ServiceDao serviceDao = database.serviceDao();
-        StructureDao structureDao = database.structureDao();
-        TimestampDirectionDao timestampDirectionDao = database.timestampDirectionDao();
+    private void saveToDatabase(ApiData data) {
+        BrandDao brandDao = this.database.brandDao();
+        BuildingDao buildingDao = this.database.buildingDao();
+        CompanyDao companyDao = this.database.companyDao();
+        ContractDao contractDao = this.database.contractDao();
+        ContractBuildingsDao contractBuildingsDao = this.database.contractBuildingsDao();
+        ContractTypeDao contractTypeDao = this.database.contractTypeDao();
+        JobTypeDao jobTypeDao = this.database.jobTypeDao();
+        CountryDao countryDao = this.database.countryDao();
+        EmployeeDao employeeDao = this.database.employeeDao();
+        LocationDao locationDao = this.database.locationDao();
+        RegionDao regionDao = this.database.regionDao();
+        RoomDao roomDao = this.database.roomDao();
+        ServiceDao serviceDao = this.database.serviceDao();
+        StructureDao structureDao = this.database.structureDao();
+        TimestampDirectionDao timestampDirectionDao = this.database.timestampDirectionDao();
 
         // Delete previous data
         roomDao.truncate();
