@@ -34,6 +34,13 @@ public interface ServiceActivityDao {
 
     @Query("SELECT * " +
             "FROM activities " +
+            "WHERE date = :date " +
+            "  AND contract_id = :contractId " +
+            "  AND room_id = :roomId")
+    List<ServiceActivity> listByDateContract(@NonNull Date date, long contractId, long roomId);
+
+    @Query("SELECT * " +
+            "FROM activities " +
             "WHERE id = :id")
     ServiceActivity findById(long id);
 
