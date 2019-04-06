@@ -46,10 +46,10 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
     private final AsyncTaskListener callback;
     private final AppDatabase database;
 
-    public AsyncTaskDownload(Api api, AsyncTaskListener callback) {
+    public AsyncTaskDownload(Api api, AppDatabase database, AsyncTaskListener callback) {
         this.api = api;
         this.callback = callback;
-        this.database = AppDatabase.getAppDatabase(this.api.context);
+        this.database = database;
     }
 
     @Override
