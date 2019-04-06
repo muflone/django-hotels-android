@@ -23,7 +23,6 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
-import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;
@@ -59,7 +58,7 @@ public class StructuresFragment extends Fragment {
     private final HashMap<String, List<RoomStatus>> roomsList = new HashMap<>();
     private final List<Structure> structures = new ArrayList<>();
     private final List<Service> roomServicesList = new ArrayList<>();
-    private Table<Long, Long, ServiceActivity> serviceActivityTable = HashBasedTable.create();
+    private final Table<Long, Long, ServiceActivity> serviceActivityTable = HashBasedTable.create();
     private final HashMap<String, Boolean> buildingsClosedStatusMap = new HashMap<>();
 
     private TextView employeeIdView;
@@ -323,7 +322,7 @@ public class StructuresFragment extends Fragment {
         private final Context context;
         private final List<String> buildingsList;
         private final HashMap<String, List<RoomStatus>> roomsList;
-        private AppDatabase database;
+        private final AppDatabase database;
 
         public ExpandableListAdapter(Context context, List<String> listDataHeader,
                                      HashMap<String, List<RoomStatus>> listChildData) {
@@ -403,8 +402,6 @@ public class StructuresFragment extends Fragment {
                                 serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
                                         serviceActivity);
                             }
-                            // Update in memory serviceActivityTable
-
                             return null;
                         }
                     }.execute(roomStatus);

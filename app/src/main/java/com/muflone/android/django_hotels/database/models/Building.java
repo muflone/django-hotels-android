@@ -66,7 +66,7 @@ public class Building {
                 jsonObject.getJSONObject("building").getString("name"),
                 structure,
                 new Location(jsonObject.getJSONObject("location")),
-                new ArrayList<Room>());
+                new ArrayList<>());
         // Loop over every room
         JSONArray jsonRooms = jsonObject.getJSONArray("rooms");
         for (int i = 0; i < jsonRooms.length(); i++) {

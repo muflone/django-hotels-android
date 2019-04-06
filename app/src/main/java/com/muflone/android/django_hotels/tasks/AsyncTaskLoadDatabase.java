@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
@@ -34,12 +33,10 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult<ApiData>> {
-    private final Api api;
     private final AsyncTaskListener callback;
     private final Context context;
 
-    public AsyncTaskLoadDatabase(Api api, Context context, AsyncTaskListener callback) {
-        this.api = api;
+    public AsyncTaskLoadDatabase(Context context, AsyncTaskListener callback) {
         this.context = context;
         this.callback = callback;
     }

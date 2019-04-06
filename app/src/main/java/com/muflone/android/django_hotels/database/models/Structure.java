@@ -84,7 +84,7 @@ public class Structure {
                 new Company(jsonObject.getJSONObject("company")),
                 new Brand(jsonObject.getJSONObject("brand")),
                 new Location(jsonObject.getJSONObject("location")),
-                new ArrayList<Building>());
+                new ArrayList<>());
         // Loop over every building
         JSONArray jsonBuildings = jsonObject.getJSONArray("buildings");
         for (int i = 0; i < jsonBuildings.length(); i++) {

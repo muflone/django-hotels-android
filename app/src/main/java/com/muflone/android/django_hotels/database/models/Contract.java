@@ -127,7 +127,7 @@ public class Contract {
                 new Company(jsonObject.getJSONObject("company")),
                 new ContractType(jsonObject.getJSONObject("type")),
                 new JobType(jsonObject.getJSONObject("job")),
-                new ArrayList<Long>());
+                new ArrayList<>());
         // Loop every building id
         JSONArray jsonBuildings = jsonObject.getJSONArray("buildings");
         for (int i = 0; i < jsonBuildings.length(); i++) {

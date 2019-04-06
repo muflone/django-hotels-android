@@ -29,7 +29,7 @@ import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.ScanType;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
-import com.muflone.android.django_hotels.Utility;
+import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.TimestampDao;
@@ -52,6 +52,7 @@ public class ScannerFragment extends Fragment {
     private Button exitButton;
     private ListView timestampEmployeesView;
     private ScanType scanType = ScanType.SCAN_TYPE_UNKNOWN;
+    private Api api;
     private ApiData apiData;
     private AppDatabase database;
     private Settings settings;
@@ -62,6 +63,7 @@ public class ScannerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        this.api = Singleton.getInstance().api;
         this.apiData = Singleton.getInstance().apiData;
         this.settings = Singleton.getInstance().settings;
         this.database = AppDatabase.getAppDatabase(this.context);

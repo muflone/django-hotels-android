@@ -3,7 +3,6 @@ package com.muflone.android.django_hotels.tasks;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
@@ -159,7 +158,7 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
         return result;
     }
 
-    public ApiData putTimestamp(Timestamp timestamp) {
+    private ApiData putTimestamp(Timestamp timestamp) {
         ApiData result = new ApiData();
         JSONObject jsonRoot = null;
         // Send timestamps to the server
@@ -180,9 +179,9 @@ public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<Api
                 Log.d("", jsonRoot.getString("status"));
                 // Check the final node for successful reads
                 String status = jsonRoot.getString("status");
-                if (status.equals(this.api.STATUS_EXISTING)) {
+                if (status.equals(Api.STATUS_EXISTING)) {
                     Log.w(TAG, String.format("Existing timestamp during the data transmission: %s", status));
-                } else if (! status.equals(this.api.STATUS_OK)) {
+                } else if (! status.equals(Api.STATUS_OK)) {
                     // Invalid response received
                     Log.e(TAG, String.format("Invalid response received during the data transmission: %s", status));
                     throw new InvalidResponseException();

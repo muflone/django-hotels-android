@@ -89,7 +89,7 @@ public class Api {
     public void checkStatusResponse(JSONObject jsonObject) throws InvalidResponseException {
         // Check the status object for valid data
         try {
-            if (!jsonObject.getString("status").equals(this.STATUS_OK)) {
+            if (!jsonObject.getString("status").equals(Api.STATUS_OK)) {
                 throw new InvalidResponseException();
             }
         } catch (JSONException e) {
