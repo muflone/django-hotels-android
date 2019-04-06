@@ -43,14 +43,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-public class AsyncTaskDownload extends AsyncTask<Void, Void, AsyncTaskResult<ApiData>> {
+public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult<ApiData>> {
     private final String TAG = getClass().getName();
 
     private final Api api;
     private final AsyncTaskListener callback;
     private final AppDatabase database;
 
-    public AsyncTaskDownload(Api api, AppDatabase database, AsyncTaskListener callback) {
+    public AsyncTaskSync(Api api, AppDatabase database, AsyncTaskListener callback) {
         this.api = api;
         this.callback = callback;
         this.database = database;

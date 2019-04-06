@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.muflone.android.django_hotels.Singleton;
-import com.muflone.android.django_hotels.tasks.AsyncTaskDownload;
+import com.muflone.android.django_hotels.tasks.AsyncTaskSync;
 import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.NotifyMessage;
 import com.muflone.android.django_hotels.R;
@@ -32,7 +32,7 @@ public class SyncFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         final View rootLayout = ((Activity) this.context).findViewById(R.id.drawer_layout);
         // Download data asynchronously from the server
-        AsyncTaskDownload task = new AsyncTaskDownload(
+        AsyncTaskSync task = new AsyncTaskSync(
                 Singleton.getInstance().api,
                 AppDatabase.getAppDatabase(this.context),
                 new AsyncTaskListener<AsyncTaskResult<Void>>() {
