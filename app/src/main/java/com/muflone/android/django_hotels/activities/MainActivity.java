@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
     private static final int SETTINGS_RETURN_CODE = 1;
+    private static final Singleton singleton = Singleton.getInstance();
     private Fragment fragment = null;
     private MenuItem menuItemHome = null;
     private MenuItem menuItemSettings = null;
@@ -53,8 +54,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.main_activity);
         // Singleton instance
         Settings settings = new Settings(this);
-        Singleton.getInstance().settings = settings;
-        Singleton.getInstance().api = new Api();
+        singleton.settings = settings;
+        singleton.api = new Api();
         // Add settings_toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -105,8 +106,8 @@ public class MainActivity extends AppCompatActivity
         // Save active fragment name
         if (this.fragment != null) {
             outState.putString("fragment", this.fragment.getClass().getSimpleName());
-            super.onSaveInstanceState(outState);
         }
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -252,16 +253,6 @@ public class MainActivity extends AppCompatActivity
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Open HomeFragment after closing the settings activity
-        if (requestCode == SETTINGS_RETURN_CODE) {
-            this.onNavigationItemSelected(this.menuItemHome);
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 }
