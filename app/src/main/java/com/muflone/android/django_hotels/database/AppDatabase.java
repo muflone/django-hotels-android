@@ -123,10 +123,10 @@ public abstract class AppDatabase extends RoomDatabase {
         // Load data from database
         AsyncTaskLoadDatabase task = new AsyncTaskLoadDatabase(
                 context,
-                new AsyncTaskListener<AsyncTaskResult<ApiData>>() {
+                new AsyncTaskListener() {
             @Override
-            public void onSuccess(AsyncTaskResult<ApiData> results) {
-                Singleton.getInstance().apiData = results.data;
+            public void onSuccess(AsyncTaskResult result) {
+                Singleton.getInstance().apiData = result.data;
             }
 
             @Override

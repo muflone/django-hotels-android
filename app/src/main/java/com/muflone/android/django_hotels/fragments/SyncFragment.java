@@ -35,9 +35,9 @@ public class SyncFragment extends Fragment {
         AsyncTaskSync task = new AsyncTaskSync(
                 Singleton.getInstance().api,
                 AppDatabase.getAppDatabase(this.context),
-                new AsyncTaskListener<AsyncTaskResult<Void>>() {
+                new AsyncTaskListener() {
                     @Override
-                    public void onSuccess(AsyncTaskResult<Void> results) {
+                    public void onSuccess(AsyncTaskResult result) {
                         NotifyMessage.snackbar(context, rootLayout,
                                 context.getString(R.string.message_established_connection),
                                 Snackbar.LENGTH_INDEFINITE);

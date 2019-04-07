@@ -219,10 +219,10 @@ public class ScannerFragment extends Fragment {
             }
 
             @Override
-            protected void onPostExecute(List<TimestampEmployee> results) {
+            protected void onPostExecute(List<TimestampEmployee> result) {
                 // Reload the timestamps list
                 timestampEmployeeList.clear();
-                for (TimestampEmployee timestamp : results) {
+                for (TimestampEmployee timestamp : result) {
                     timestampEmployeeList.add(new TimestampEmployeeItem(
                             timestamp.id,
                             String.format("%s %s", timestamp.firstName, timestamp.lastName),

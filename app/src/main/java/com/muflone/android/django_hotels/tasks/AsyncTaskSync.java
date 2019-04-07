@@ -44,7 +44,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult<ApiData>> {
+public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final String TAG = getClass().getName();
 
     private final Api api;
@@ -104,16 +104,16 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult<ApiData
     }
 
     @Override
-    protected void onPostExecute(AsyncTaskResult<ApiData> results) {
-        super.onPostExecute(results);
+    protected void onPostExecute(AsyncTaskResult result) {
+        super.onPostExecute(result);
         // Check if callback listener was requested
-        if (this.callback != null & results != null) {
-            if (results.exception == null) {
+        if (this.callback != null & result != null) {
+            if (result.exception == null) {
                 // Return flow to the caller
-                this.callback.onSuccess(results);
+                this.callback.onSuccess(result);
             } else {
                 // Failure with exception
-                this.callback.onFailure(results.exception);
+                this.callback.onFailure(result.exception);
             }
         }
     }

@@ -32,7 +32,7 @@ import com.muflone.android.django_hotels.database.models.TimestampDirection;
 import java.io.File;
 import java.util.ArrayList;
 
-public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult<ApiData>> {
+public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final AsyncTaskListener callback;
     private final Context context;
 
@@ -140,16 +140,16 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
     }
 
     @Override
-    protected void onPostExecute(AsyncTaskResult<ApiData> results) {
-        super.onPostExecute(results);
+    protected void onPostExecute(AsyncTaskResult result) {
+        super.onPostExecute(result);
         // Check if callback listener was requested
-        if (this.callback != null & results != null) {
-            if (results.exception == null) {
+        if (this.callback != null & result != null) {
+            if (result.exception == null) {
                 // Return flow to the caller
-                this.callback.onSuccess(results);
+                this.callback.onSuccess(result);
             } else {
                 // Failure with exception
-                this.callback.onFailure(results.exception);
+                this.callback.onFailure(result.exception);
             }
         }
     }
