@@ -36,7 +36,7 @@ import com.muflone.android.django_hotels.database.dao.TimestampDao;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampEmployee;
-import com.muflone.android.django_hotels.otp.Token;
+import org.fedorahosted.freeotp.Token;
 
 import org.jetbrains.annotations.NotNull;
 

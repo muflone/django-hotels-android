@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-package com.muflone.android.django_hotels.otp;
+package org.fedorahosted.freeotp;
 
 public class TokenCode {
     private final String mCode;
