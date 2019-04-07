@@ -1,5 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <pattern value="com.muflone.android.django_hotels.database.dao.BrandDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.BrandDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.BrandDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.BrandDao" method="findByName" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.BrandDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.BrandDao" method="listAll" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.BrandDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.BuildingDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.BuildingDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.BuildingDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.BuildingDao" method="findById" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.BuildingDao" method="findByName" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.BuildingDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.BuildingDao" method="listAll" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.BuildingDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CompanyDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CompanyDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CompanyDao" method="findByName" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CompanyDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CompanyDao" method="listAll" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CompanyDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractBuildingsDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractBuildingsDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractBuildingsDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractBuildingsDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractBuildingsDao" method="listAll" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractBuildingsDao" method="listByBuilding" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractBuildingsDao" method="listByContract" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractBuildingsDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractDao" method="findByGuid" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractDao" method="findById" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractTypeDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractTypeDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractTypeDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractTypeDao" method="findByName" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractTypeDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractTypeDao" method="listAll" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ContractTypeDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CountryDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CountryDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CountryDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CountryDao" method="findByName" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CountryDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CountryDao" method="listAll" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CountryDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.EmployeeDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.EmployeeDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.EmployeeDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.EmployeeDao" method="findByName" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.EmployeeDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.EmployeeDao" method="listAll" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.EmployeeDao" method="truncate" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.EmployeeDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.JobTypeDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.JobTypeDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.JobTypeDao" method="findByName" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.JobTypeDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.JobTypeDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.JobTypeDao" method="listAll" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.JobTypeDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.LocationDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.LocationDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.LocationDao" method="findByName" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.LocationDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.LocationDao" method="listAll" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.LocationDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.LocationDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.RegionDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.RegionDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.RegionDao" method="findByName" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.RegionDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.RegionDao" method="listAll" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.RegionDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.RegionDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.RoomDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.RoomDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.RoomDao" method="findById" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.RoomDao" method="findByName" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.RoomDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.RoomDao" method="listAll" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.RoomDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.RoomDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ServiceActivityDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ServiceActivityDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ServiceActivityDao" method="findById" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ServiceActivityDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ServiceActivityDao" method="listAll" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ServiceActivityDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ServiceActivityDao" method="truncate" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ServiceActivityDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ServiceDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ServiceDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ServiceDao" method="findById" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ServiceDao" method="findByName" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ServiceDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ServiceDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.ServiceDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.StructureDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.StructureDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.StructureDao" method="findById" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.StructureDao" method="findByName" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.StructureDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.StructureDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.StructureDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDao" method="listAll" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDao" method="listByName" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDao" method="truncate" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDirectionDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDirectionDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDirectionDao" method="findById" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDirectionDao" method="findByName" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDirectionDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDirectionDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDirectionDao" method="update" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
