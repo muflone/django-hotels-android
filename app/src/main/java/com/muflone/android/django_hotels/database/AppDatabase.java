@@ -8,7 +8,6 @@ import android.database.Cursor;
 
 import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.Singleton;
-import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
 import com.muflone.android.django_hotels.database.dao.CompanyDao;
@@ -114,9 +113,9 @@ public abstract class AppDatabase extends RoomDatabase {
     private synchronized int checkpoint() {
         Cursor cursor = INSTANCE.query("PRAGMA wal_checkpoint(truncate)", null);
         cursor.moveToFirst();
-        int results = cursor.getInt(0);
+        int result = cursor.getInt(0);
         cursor.close();
-        return results;
+        return result;
     }
 
     public void reload(Context context) {
@@ -134,6 +133,5 @@ public abstract class AppDatabase extends RoomDatabase {
             }
         });
         task.execute();
-
     }
 }

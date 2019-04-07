@@ -95,7 +95,7 @@ public class ScannerFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
                 new AsyncTask<Void, Void, Void>() {
                     @Override
-                    protected Void doInBackground(Void... voids) {
+                    protected Void doInBackground(Void... result) {
                         // Update adapter
                         TimestampEmployeeItem timestampEmployeeItem = timestampEmployeeList.get(position);
                         timestampEmployeeItem.transmission = null;
@@ -107,7 +107,7 @@ public class ScannerFragment extends Fragment {
                     }
 
                     @Override
-                    protected void onPostExecute(Void results) {
+                    protected void onPostExecute(Void result) {
                         timestampAdapter.notifyDataSetChanged();
                     }
                 }.execute();

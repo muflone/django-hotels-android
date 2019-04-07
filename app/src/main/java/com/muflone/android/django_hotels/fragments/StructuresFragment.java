@@ -206,7 +206,7 @@ public class StructuresFragment extends Fragment {
             }
 
             @Override
-            protected void onPostExecute(Void results) {
+            protected void onPostExecute(Void result) {
                 // Update data in the list
                 ((ArrayAdapter) employeesView.getAdapter()).notifyDataSetChanged();
                 // Select the first employee for the selected tab
