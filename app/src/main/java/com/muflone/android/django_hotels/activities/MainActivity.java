@@ -116,34 +116,11 @@ public class MainActivity extends AppCompatActivity
         String fragmentName = savedInstanceState.getString("fragment");
         Fragment fragment = null;
         if (fragmentName != null) {
-            switch (fragmentName) {
-                case "HomeFragment":
-                    fragment = new HomeFragment();
-                    break;
-                case "ScannerFragment":
-                    fragment = new ScannerFragment();
-                    break;
-                case "StructuresFragment":
-                    fragment = new StructuresFragment();
-                    break;
-                case "ExtrasFragment":
-                    fragment = new ExtrasFragment();
-                    break;
-                case "SyncFragment":
-                    fragment = new SyncFragment();
-                    break;
-                case "SettingsFragment":
-                    fragment = new SettingsFragment();
-                    break;
-                case "AboutFragment":
-                    fragment = new AboutFragment();
-                    break;
-                default:
-                    Toast.makeText(this, fragmentName, Toast.LENGTH_SHORT).show();
-
-            }
+            fragment = this.newFragmentByName(fragmentName);
             if (fragment != null) {
                 LoadFragment(fragment);
+            } else {
+                Toast.makeText(this, fragmentName, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -209,6 +186,38 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
 
         return LoadFragment(fragment);
+    }
+
+    private Fragment newFragmentByName(String fragmentName) {
+        // Create new fragment by its name
+        Fragment result;
+        switch (fragmentName) {
+            case "HomeFragment":
+                result = new HomeFragment();
+                break;
+            case "ScannerFragment":
+                result = new ScannerFragment();
+                break;
+            case "StructuresFragment":
+                result = new StructuresFragment();
+                break;
+            case "ExtrasFragment":
+                result = new ExtrasFragment();
+                break;
+            case "SyncFragment":
+                result = new SyncFragment();
+                break;
+            case "SettingsFragment":
+                result = new SettingsFragment();
+                break;
+            case "AboutFragment":
+                result = new AboutFragment();
+                break;
+            default:
+                result = null;
+                break;
+        }
+        return result;
     }
 
     private boolean LoadFragment(Fragment fragment) {
