@@ -4,12 +4,14 @@ import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Singleton implements Serializable {
     private static volatile Singleton instance;
     public Api api;
     public ApiData apiData;
     public Settings settings;
+    public Date selectedDate;
 
     private Singleton() {
         // Prevent form the reflection api.

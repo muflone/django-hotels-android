@@ -1,5 +1,6 @@
 package com.muflone.android.django_hotels.activities;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.muflone.android.django_hotels.Settings;
@@ -31,6 +33,10 @@ import com.muflone.android.django_hotels.fragments.SettingsFragment;
 import com.muflone.android.django_hotels.fragments.StructuresFragment;
 import com.muflone.android.django_hotels.fragments.SyncFragment;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
@@ -40,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     private MenuItem menuItemHome = null;
     private MenuItem menuItemSettings = null;
     private MenuItem menuItemSync = null;
+    private MenuItem toolButtonSetDate = null;
     private boolean backButtonPressed = false;
 
     // Allow the use of (insecure) drawables for API < 21
@@ -56,6 +63,7 @@ public class MainActivity extends AppCompatActivity
         Settings settings = new Settings(this);
         singleton.settings = settings;
         singleton.api = new Api();
+        singleton.selectedDate = singleton.api.getCurrentDate();
         // Add settings_toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -107,12 +115,16 @@ public class MainActivity extends AppCompatActivity
         if (this.fragment != null) {
             outState.putString("fragment", this.fragment.getClass().getSimpleName());
         }
+        // Save selected date
+        outState.putLong("selectedDate", this.singleton.selectedDate.getTime());
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        // Restore previous selected date
+        this.singleton.selectedDate = new Date(savedInstanceState.getLong("selectedDate"));
         // Restore previous active fragment
         String fragmentName = savedInstanceState.getString("fragment");
         Fragment fragment = null;
@@ -189,6 +201,15 @@ public class MainActivity extends AppCompatActivity
         return LoadFragment(fragment);
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Initialize date menu
+        this.toolButtonSetDate = menu.findItem(R.id.toolButtonSetDate);
+        this.toolButtonSetDate.setTitle("  " + new SimpleDateFormat("yyyy-MM-dd").format(
+                singleton.selectedDate));
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     private Fragment newFragmentByName(String fragmentName) {
         // Create new fragment by its name
         Fragment result;
@@ -248,6 +269,26 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.toolButtonSync:
                 this.onNavigationItemSelected(this.menuItemSync);
+                return true;
+            case R.id.toolButtonSetDate:
+                // Change current date
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(Singleton.getInstance().selectedDate);
+                DatePickerDialog dialog = new DatePickerDialog(MainActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int day) {
+                                calendar.set(year, month, day);
+                                toolButtonSetDate.setTitle("  " + new SimpleDateFormat(
+                                        "yyyy-MM-dd").format(calendar.getTime()));
+                                singleton.selectedDate = calendar.getTime();
+                                LoadFragment(newFragmentByName(fragment.getClass().getSimpleName()));
+                            }
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH));
+                dialog.show();
                 return true;
             default:
                 // If we got here, the user's action was not recognized.

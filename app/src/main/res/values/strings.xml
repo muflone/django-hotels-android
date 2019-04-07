@@ -9,6 +9,8 @@
     <string name="author_web" translatable="false">https://www.muflone.com/</string>
     <string name="author_twitter" translatable="false">il_muflone</string>
 
+    <string name="placeholder" translatable="false">Placeholder</string>
+
     <!-- Navigation titles -->
     <string name="section_home">Home</string>
     <string name="section_structures">Structures</string>
