@@ -353,7 +353,6 @@ public class StructuresFragment extends Fragment {
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.structures_building_item, parent, false);
             }
-            final ExpandableListAdapter adapter = this;
 
             // Set room name
             TextView roomView = convertView.findViewById(R.id.roomView);

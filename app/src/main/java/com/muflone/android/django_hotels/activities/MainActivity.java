@@ -1,7 +1,6 @@
 package com.muflone.android.django_hotels.activities;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -40,8 +39,7 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
-    private static final int SETTINGS_RETURN_CODE = 1;
-    private static final Singleton singleton = Singleton.getInstance();
+    private final Singleton singleton = Singleton.getInstance();
     private Fragment fragment = null;
     private MenuItem menuItemHome = null;
     private MenuItem menuItemSettings = null;
@@ -127,9 +125,8 @@ public class MainActivity extends AppCompatActivity
         this.singleton.selectedDate = new Date(savedInstanceState.getLong("selectedDate"));
         // Restore previous active fragment
         String fragmentName = savedInstanceState.getString("fragment");
-        Fragment fragment = null;
         if (fragmentName != null) {
-            fragment = this.newFragmentByName(fragmentName);
+            Fragment fragment = this.newFragmentByName(fragmentName);
             if (fragment != null) {
                 LoadFragment(fragment);
             } else {
