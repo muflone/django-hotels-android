@@ -26,7 +26,7 @@ public class AboutFragment extends Fragment {
     public View onCreateView(@NonNull  LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View aboutPage = new AboutPage(this.context)
+        return new AboutPage(this.context)
                 .isRTL(false)
                 .setImage(R.mipmap.ic_launcher)
                 .setDescription(String.format(Locale.ROOT,
@@ -55,7 +55,6 @@ public class AboutFragment extends Fragment {
                 .addGitHub(this.getString(R.string.about_guava_url),
                         this.getString(R.string.about_guava_title))
                 .create();
-        return aboutPage;
     }
 
     private Element getCopyRightsElement() {

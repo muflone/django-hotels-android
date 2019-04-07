@@ -324,8 +324,8 @@ public class StructuresFragment extends Fragment {
         private final HashMap<String, List<RoomStatus>> roomsList;
         private final AppDatabase database;
 
-        public ExpandableListAdapter(Context context, List<String> listDataHeader,
-                                     HashMap<String, List<RoomStatus>> listChildData) {
+        ExpandableListAdapter(Context context, List<String> listDataHeader,
+                              HashMap<String, List<RoomStatus>> listChildData) {
             this.context = context;
             this.buildingsList = listDataHeader;
             this.roomsList = listChildData;
@@ -458,15 +458,15 @@ public class StructuresFragment extends Fragment {
 
     private class RoomStatus {
         private final String emptyServiceDescription;
-        public final String name;
-        public final long contractId;
-        public final long roomId;
-        public final List<Service> services;
-        public Service service;
+        final String name;
+        final long contractId;
+        final long roomId;
+        final List<Service> services;
+        Service service;
         private int serviceCounter;
 
-        public RoomStatus(Context context, String name, long contractId, long roomId,
-                          List<Service> services, Service service) {
+        RoomStatus(Context context, String name, long contractId, long roomId,
+                   List<Service> services, Service service) {
             this.emptyServiceDescription = context.getString(R.string.empty_service);
             this.name = name;
             this.contractId = contractId;
@@ -476,7 +476,8 @@ public class StructuresFragment extends Fragment {
             this.serviceCounter = this.services.indexOf(this.service);
         }
 
-        public Service nextService() {
+        @SuppressWarnings("UnusedReturnValue")
+        Service nextService() {
             // Cycle services
             this.serviceCounter++;
             if (this.serviceCounter == services.size()) {
@@ -486,7 +487,7 @@ public class StructuresFragment extends Fragment {
             return this.service;
         }
 
-        public String getServiceName() {
+        String getServiceName() {
             // Get current service name
             return this.service == null ? this.emptyServiceDescription : this.service.name;
         }

@@ -20,6 +20,7 @@
 
 package org.fedorahosted.freeotp;
 
+@SuppressWarnings("ALL")
 public class TokenCode {
     private final String mCode;
     private final long mStart;

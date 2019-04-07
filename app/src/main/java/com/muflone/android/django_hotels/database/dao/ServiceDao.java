@@ -12,6 +12,7 @@ import java.util.List;
 
 import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 
+@SuppressWarnings("UnusedReturnValue")
 @Dao
 public interface ServiceDao {
     @Query("SELECT * " +

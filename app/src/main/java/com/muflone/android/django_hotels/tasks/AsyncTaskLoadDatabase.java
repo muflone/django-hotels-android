@@ -51,6 +51,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
             AppDatabase.destroyInstance();
             File databaseFile = new File(this.context.getApplicationInfo().dataDir +
                     "/databases/" + database.getOpenHelper().getDatabaseName());
+            //noinspection ResultOfMethodCallIgnored
             databaseFile.delete();
             database = AppDatabase.getAppDatabase(this.context);
         }

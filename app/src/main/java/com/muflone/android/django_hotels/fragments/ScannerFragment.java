@@ -236,14 +236,14 @@ public class ScannerFragment extends Fragment {
     }
 
     private class TimestampEmployeeItem {
-        public final long id;
-        public final String fullName;
-        public final Date datetime;
-        public final String direction;
-        public Date transmission;
+        final long id;
+        final String fullName;
+        final Date datetime;
+        final String direction;
+        Date transmission;
 
-        public TimestampEmployeeItem(long id, String fullName, Date datetime,
-                                     String direction, Date transmission) {
+        TimestampEmployeeItem(long id, String fullName, Date datetime,
+                              String direction, Date transmission) {
             this.id = id;
             this.fullName = fullName;
             this.datetime = datetime;
@@ -253,7 +253,7 @@ public class ScannerFragment extends Fragment {
     }
 
     private class TimestampAdapter extends ArrayAdapter<TimestampEmployeeItem> {
-        public TimestampAdapter(Context context, int resource, List<TimestampEmployeeItem> objects) {
+        TimestampAdapter(Context context, int resource, List<TimestampEmployeeItem> objects) {
             super(context, resource, objects);
         }
 

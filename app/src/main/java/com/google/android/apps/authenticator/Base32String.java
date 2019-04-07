@@ -32,6 +32,7 @@ import java.util.Locale;
  * @author sweis@google.com (Steve Weis)
  * @author Neal Gafter
  */
+@SuppressWarnings("ALL")
 public class Base32String {
   // singleton
 

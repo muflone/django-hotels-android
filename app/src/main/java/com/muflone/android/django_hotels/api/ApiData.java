@@ -1,5 +1,7 @@
 package com.muflone.android.django_hotels.api;
 
+import android.annotation.SuppressLint;
+
 import com.muflone.android.django_hotels.database.models.Brand;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Company;
@@ -32,6 +34,7 @@ public class ApiData {
     public TimestampDirection exitDirection;
     public Exception exception;
 
+    @SuppressLint("UseSparseArrays")
     public ApiData() {
         this.brandsMap = new HashMap<>();
         this.buildingsMap = new HashMap<>();

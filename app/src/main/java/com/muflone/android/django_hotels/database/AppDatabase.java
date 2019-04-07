@@ -110,6 +110,7 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     private synchronized int checkpoint() {
         Cursor cursor = INSTANCE.query("PRAGMA wal_checkpoint(truncate)", null);
         cursor.moveToFirst();
