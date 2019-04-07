@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle ToolButtons clicks
         switch (item.getItemId()) {
-            case R.id.section_sync:
+            case R.id.toolButtonSync:
                 this.onNavigationItemSelected(this.menuItemSync);
                 return true;
             default:
