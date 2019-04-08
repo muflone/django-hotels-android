@@ -258,16 +258,22 @@ public class StructuresFragment extends Fragment {
             this.buildingsList.add(building.name);
             List<RoomStatus> rooms = new ArrayList<>();
             Service service;
+            String description;
+            Date transmission;
             for (Room room : building.rooms) {
                 // Restore the previous service for the room
                 if (this.serviceActivityTable.contains(contractBuilding.contractId, room.id)) {
                     service = apiData.serviceMap.get(
                             this.serviceActivityTable.get(contractBuilding.contractId, room.id).serviceId);
+                    description = this.serviceActivityTable.get(contractBuilding.contractId, room.id).description;
+                    transmission = this.serviceActivityTable.get(contractBuilding.contractId, room.id).transmission;
                 } else {
                     service = null;
+                    description = "";
+                    transmission = null;
                 }
                 rooms.add(new RoomStatus(this.context, room.name, contractBuilding.contractId,
-                          room.id, this.roomServicesList, service));
+                          room.id, this.roomServicesList, service, description, transmission));
             }
             this.roomsList.put(building.name, rooms);
         }
@@ -380,6 +386,8 @@ public class StructuresFragment extends Fragment {
                                 if (roomStatus.service != null) {
                                     // Update existing ServiceActivity
                                     serviceActivity.serviceId = roomStatus.service.id;
+                                    serviceActivity.description = roomStatus.description;
+                                    serviceActivity.transmission = roomStatus.transmission;
                                     database.serviceActivityDao().update(serviceActivity);
                                     serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
                                             serviceActivity);
@@ -463,9 +471,12 @@ public class StructuresFragment extends Fragment {
         final List<Service> services;
         Service service;
         private int serviceCounter;
+        String description;
+        Date transmission;
 
         RoomStatus(Context context, String name, long contractId, long roomId,
-                   List<Service> services, Service service) {
+                   List<Service> services, Service service, String description,
+                   Date transmission) {
             this.emptyServiceDescription = context.getString(R.string.empty_service);
             this.name = name;
             this.contractId = contractId;
@@ -473,6 +484,8 @@ public class StructuresFragment extends Fragment {
             this.services = services;
             this.service = service;
             this.serviceCounter = this.services.indexOf(this.service);
+            this.description = description;
+            this.transmission = transmission;
         }
 
         @SuppressWarnings("UnusedReturnValue")
