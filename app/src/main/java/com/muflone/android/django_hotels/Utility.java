@@ -2,6 +2,9 @@ package com.muflone.android.django_hotels;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -45,5 +48,14 @@ public class Utility {
 
     public static boolean isScreenOrientationLandscape(Context context) {
         return getScreenOrientation(context) == Configuration.ORIENTATION_LANDSCAPE;
+    }
+
+    public static Drawable convertDrawableToGrayScale(Drawable drawable) {
+        if (drawable == null) {
+            return null;
+        }
+        Drawable res = drawable.getConstantState().newDrawable().mutate();
+        res.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
+        return res;
     }
 }

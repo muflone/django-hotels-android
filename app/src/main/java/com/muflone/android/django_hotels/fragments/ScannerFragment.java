@@ -286,7 +286,9 @@ public class ScannerFragment extends Fragment {
             timestampViewHolder.timeView.setText(new SimpleDateFormat("HH:mm.ss").format(
                     timestampEmployee.datetime));
             timestampViewHolder.transmissionImage.setImageResource(
-                    timestampEmployee.transmission == null ? 0 : R.drawable.ic_timestamp_transmitted);
+                    timestampEmployee.transmission == null ?
+                            R.drawable.ic_timestamp_untransmitted :
+                            R.drawable.ic_timestamp_transmitted);
             timestampViewHolder.directionView.setText(timestampEmployee.direction);
             return convertView;
         }

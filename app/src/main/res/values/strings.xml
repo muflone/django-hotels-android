@@ -10,6 +10,7 @@
     <string name="author_twitter" translatable="false">il_muflone</string>
 
     <string name="placeholder" translatable="false">Placeholder</string>
+    <string name="description">Description</string>
 
     <!-- Navigation titles -->
     <string name="section_home">Home</string>

@@ -11,4 +11,6 @@
     <string name="message_unsupported_qrcode">Unsupported QR Code</string>
     <string name="message_press_back_again_to_exit">Press back button again to exit</string>
     <string name="message_marked_timestamp_as_untransmitted">Marked timestamp as untrasmitted</string>
+    <string name="message_marked_activity_as_untransmitted">Marked activity as untrasmitted</string>
+    <string name="message_unable_to_change_transmitted_activity">Unable to modify an already transmitted activity</string>
 </resources>

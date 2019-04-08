@@ -1,12 +1,15 @@
 package com.muflone.android.django_hotels.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +17,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
+import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;
@@ -39,6 +46,7 @@ import com.muflone.android.django_hotels.database.models.Structure;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -329,6 +337,8 @@ public class StructuresFragment extends Fragment {
         private final List<String> buildingsList;
         private final HashMap<String, List<RoomStatus>> roomsList;
         private final AppDatabase database;
+        private Drawable descriptionEnabledDrawable;
+        private Drawable descriptionDisabledDrawable;
 
         ExpandableListAdapter(Context context, List<String> listDataHeader,
                               HashMap<String, List<RoomStatus>> listChildData) {
@@ -366,9 +376,96 @@ public class StructuresFragment extends Fragment {
             // Set room service
             Button serviceButton = convertView.findViewById(R.id.serviceButton);
             serviceButton.setText(roomStatus.getServiceName());
+            // Define descriptionButton
+            ImageButton descriptionButton = convertView.findViewById(R.id.noteButton);
+            if (this.descriptionEnabledDrawable == null) {
+                this.descriptionEnabledDrawable = context.getResources().getDrawable(R.drawable.ic_note);
+                this.descriptionDisabledDrawable = Utility.convertDrawableToGrayScale(
+                        this.descriptionEnabledDrawable);
+            }
+            descriptionButton.setEnabled(roomStatus.service != null);
+            descriptionButton.setImageDrawable(roomStatus.service == null ?
+                    this.descriptionDisabledDrawable : this.descriptionEnabledDrawable);
+            // Define transmissionImage
+            ImageView transmissionImage = convertView.findViewById(R.id.transmissionImage);
+            transmissionImage.setImageResource(roomStatus.transmission == null ?
+                    R.drawable.ic_timestamp_untransmitted : R.drawable.ic_timestamp_transmitted);
+
+            // Set room service Click
             serviceButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View button) {
-                    updateRoomStatus(roomStatus);
+                    if (roomStatus.transmission == null) {
+                        // Update ServiceActivity for room
+                        roomStatus.nextService();
+                        ((Button) button).setText(roomStatus.getServiceName());
+                        descriptionButton.setEnabled(roomStatus.service != null);
+                        descriptionButton.setImageDrawable(roomStatus.service == null ?
+                                descriptionDisabledDrawable : descriptionEnabledDrawable);
+                        updateRoomStatus(roomStatus);
+                    } else {
+                        // Cannot change an already transmitted activity
+                        Toast.makeText(context, R.string.message_unable_to_change_transmitted_activity,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            // Set room service LongClick
+            serviceButton.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... result) {
+                            // Delete transmission date
+                            roomStatus.transmission = null;
+                            updateRoomStatus(roomStatus);
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void result) {
+                            transmissionImage.setImageResource(R.drawable.ic_timestamp_untransmitted);
+                            Toast.makeText(context,
+                                    R.string.message_marked_activity_as_untransmitted,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }.execute();
+                    // Don't execute the click event
+                    return true;
+                }
+            });
+
+            // Set room service Click
+            descriptionButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View button) {
+                    final EditText descriptionView = new EditText(context);
+                    descriptionView.setText(roomStatus.description);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                    alertDialogBuilder.setTitle(R.string.description);
+                    alertDialogBuilder.setView(descriptionView);
+                    alertDialogBuilder.setCancelable(true)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    if (roomStatus.transmission == null) {
+                                        roomStatus.description = descriptionView.getText().toString();
+                                        updateRoomStatus(roomStatus);
+                                    } else {
+                                        // Cannot change an already transmitted activity
+                                        Toast.makeText(context,
+                                                R.string.message_unable_to_change_transmitted_activity,
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel,
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+
+                    // Show the alert dialog
+                    alertDialogBuilder.create().show();
                 }
             });
             return convertView;
