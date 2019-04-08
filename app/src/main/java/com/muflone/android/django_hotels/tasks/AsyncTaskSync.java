@@ -184,7 +184,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     timestamp.contractId,
                     timestamp.directionId,
                     timestamp.datetime.getTime() / 1000,
-                    URLEncoder.encode(timestamp.description, "UTF-8")));
+                    URLEncoder.encode(timestamp.description.replace("\n", "\\n"), "UTF-8")));
         } catch (UnsupportedEncodingException e) {
             result.exception = new InvalidResponseException();
         }
@@ -226,7 +226,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     serviceActivity.serviceId,
                     serviceActivity.serviceQty,
                     serviceActivity.date.getTime() / 1000,
-                    URLEncoder.encode(serviceActivity.description, "UTF-8")));
+                    URLEncoder.encode(serviceActivity.description.replace("\n", "\\n") , "UTF-8")));
         } catch (UnsupportedEncodingException e) {
             result.exception = new InvalidResponseException();
         }
