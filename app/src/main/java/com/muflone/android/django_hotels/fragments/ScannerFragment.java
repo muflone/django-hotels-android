@@ -109,6 +109,9 @@ public class ScannerFragment extends Fragment {
                     @Override
                     protected void onPostExecute(Void result) {
                         timestampAdapter.notifyDataSetChanged();
+                        Toast.makeText(context,
+                                R.string.message_marked_timestamp_as_untransmitted,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }.execute();
                 return false;
