@@ -406,7 +406,6 @@ public class StructuresFragment extends Fragment {
                     }.execute(roomStatus);
                 }
             });
-
             return convertView;
         }
 

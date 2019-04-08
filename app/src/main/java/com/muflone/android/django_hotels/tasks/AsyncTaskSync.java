@@ -190,7 +190,6 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         }
         if (jsonRoot != null) {
             try {
-                Log.d("", jsonRoot.getString("status"));
                 // Check the final node for successful reads
                 String status = jsonRoot.getString("status");
                 if (status.equals(Api.STATUS_EXISTING)) {
@@ -232,7 +231,6 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         }
         if (jsonRoot != null) {
             try {
-                Log.d("", jsonRoot.getString("status"));
                 // Check the final node for successful reads
                 String status = jsonRoot.getString("status");
                 if (status.equals(Api.STATUS_EXISTING)) {

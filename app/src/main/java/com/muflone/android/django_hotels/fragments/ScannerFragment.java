@@ -166,11 +166,9 @@ public class ScannerFragment extends Fragment {
                                 uri.getQueryParameter("secret"))).replaceAll(
                                 "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
                                 "$1-$2-$3-$4-$5");
-                        Log.d("QR", secret);
                         if (this.apiData.contractsGuidMap.containsKey(secret)) {
                             // Valid contract found
                             Contract contract = this.apiData.contractsGuidMap.get(secret);
-                            Log.d("QR", contract.employee.firstName + " " + contract.employee.lastName);
                             Toast.makeText(this.context,
                                     contract.employee.firstName + " " + contract.employee.lastName,
                                     Toast.LENGTH_SHORT).show();

@@ -91,8 +91,6 @@ public class MainActivity extends AppCompatActivity
             }
         }
         // Load preferences
-        Log.d(TAG, "ID: " + settings.getTabletID());
-        Log.d(TAG, "Key: " + settings.getTabletKey());
         if (settings.getTabletID().isEmpty() |
                 settings.getTabletKey().isEmpty()) {
             String message = settings.getTabletID().isEmpty() ?
