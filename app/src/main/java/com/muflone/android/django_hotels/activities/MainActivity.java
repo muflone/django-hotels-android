@@ -140,6 +140,9 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             // Close drawer if opened
             drawer.closeDrawer(GravityCompat.START);
+        } else if (! (this.fragment instanceof HomeFragment)) {
+            // Move to the Home section
+            this.onNavigationItemSelected(this.menuItemHome);
         } else if (! this.backButtonPressed) {
             // Show message instead of closing
             this.backButtonPressed = true;
