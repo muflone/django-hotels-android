@@ -37,7 +37,6 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private static final String TAG = "MainActivity";
     private final Singleton singleton = Singleton.getInstance();
     private Fragment fragment = null;
     private MenuItem menuItemHome = null;
