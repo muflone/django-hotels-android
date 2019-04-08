@@ -369,49 +369,7 @@ public class StructuresFragment extends Fragment {
             buttonState.setText(roomStatus.getServiceName());
             buttonState.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View button) {
-                    // Update ServiceActivity for room
-                    roomStatus.nextService();
-                    ((Button) button).setText(roomStatus.getServiceName());
-                    new AsyncTask<RoomStatus, Void, Void>() {
-                        @Override
-                        protected Void doInBackground(RoomStatus... params) {
-                            RoomStatus roomStatus = params[0];
-                            List <ServiceActivity> serviceActivityList =
-                                    database.serviceActivityDao().listByDateContract(
-                                            Singleton.getInstance().selectedDate,
-                                            roomStatus.contractId, roomStatus.roomId);
-                            ServiceActivity serviceActivity;
-                            if (serviceActivityList.size() > 0) {
-                                serviceActivity = serviceActivityList.get(0);
-                                if (roomStatus.service != null) {
-                                    // Update existing ServiceActivity
-                                    serviceActivity.serviceId = roomStatus.service.id;
-                                    serviceActivity.description = roomStatus.description;
-                                    serviceActivity.transmission = roomStatus.transmission;
-                                    database.serviceActivityDao().update(serviceActivity);
-                                    serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
-                                            serviceActivity);
-                                } else {
-                                    // Delete existing ServiceActivity
-                                    database.serviceActivityDao().delete(serviceActivity);
-                                    serviceActivityTable.remove(roomStatus.contractId, roomStatus.roomId);
-                                }
-
-                            } else {
-                                // Create new ServiceActivity
-                                serviceActivity = new ServiceActivity(0,
-                                        Singleton.getInstance().selectedDate,
-                                        roomStatus.contractId,
-                                        roomStatus.roomId,
-                                        roomStatus.service.id,
-                                        1, "", null);
-                                database.serviceActivityDao().insert(serviceActivity);
-                                serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
-                                        serviceActivity);
-                            }
-                            return null;
-                        }
-                    }.execute(roomStatus);
+                    updateRoomStatus(roomStatus);
                 }
             });
             return convertView;
@@ -460,6 +418,49 @@ public class StructuresFragment extends Fragment {
         @Override
         public boolean isChildSelectable(int groupPosition, int childPosition) {
             return true;
+        }
+
+        private void updateRoomStatus(RoomStatus roomStatus) {
+            new AsyncTask<RoomStatus, Void, Void>() {
+                @Override
+                protected Void doInBackground(RoomStatus... params) {
+                    RoomStatus roomStatus = params[0];
+                    List <ServiceActivity> serviceActivityList =
+                            database.serviceActivityDao().listByDateContract(
+                                    Singleton.getInstance().selectedDate,
+                                    roomStatus.contractId, roomStatus.roomId);
+                    ServiceActivity serviceActivity;
+                    if (serviceActivityList.size() > 0) {
+                        serviceActivity = serviceActivityList.get(0);
+                        if (roomStatus.service != null) {
+                            // Update existing ServiceActivity
+                            serviceActivity.serviceId = roomStatus.service.id;
+                            serviceActivity.description = roomStatus.description;
+                            serviceActivity.transmission = roomStatus.transmission;
+                            database.serviceActivityDao().update(serviceActivity);
+                            serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
+                                    serviceActivity);
+                        } else {
+                            // Delete existing ServiceActivity
+                            database.serviceActivityDao().delete(serviceActivity);
+                            serviceActivityTable.remove(roomStatus.contractId, roomStatus.roomId);
+                        }
+
+                    } else {
+                        // Create new ServiceActivity
+                        serviceActivity = new ServiceActivity(0,
+                                Singleton.getInstance().selectedDate,
+                                roomStatus.contractId,
+                                roomStatus.roomId,
+                                roomStatus.service.id,
+                                1, roomStatus.description, null);
+                        database.serviceActivityDao().insert(serviceActivity);
+                        serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
+                                serviceActivity);
+                    }
+                    return null;
+                }
+            }.execute(roomStatus);
         }
     }
 
