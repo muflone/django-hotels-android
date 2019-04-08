@@ -363,11 +363,10 @@ public class StructuresFragment extends Fragment {
             // Set room name
             TextView roomView = convertView.findViewById(R.id.roomView);
             roomView.setText(roomStatus.name);
-
             // Set room service
-            Button buttonState = convertView.findViewById(R.id.serviceButton);
-            buttonState.setText(roomStatus.getServiceName());
-            buttonState.setOnClickListener(new View.OnClickListener() {
+            Button serviceButton = convertView.findViewById(R.id.serviceButton);
+            serviceButton.setText(roomStatus.getServiceName());
+            serviceButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View button) {
                     updateRoomStatus(roomStatus);
                 }
