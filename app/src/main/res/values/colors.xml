@@ -6,7 +6,7 @@
 
     <color name="color_simple_list_item_activated">#E64A19</color>
     <color name="color_simple_list_item_selected">@color/color_simple_list_item_activated</color>
-    <color name="color_simple_list_item_pressed">@color/color_simple_list_item_activated</color>
+    <color name="color_simple_list_item_pressed">#FFEB3B</color>
 
     <color name="colorSnackbarTextColor1">#FFEB3B</color>
     <color name="colorSnackbarTextColor2">#F44336</color>
