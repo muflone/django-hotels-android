@@ -263,27 +263,30 @@ public class StructuresFragment extends Fragment {
         roomsList.clear();
         for (ContractBuildings contractBuilding : employee.contractBuildings) {
             Building building = this.apiData.buildingsMap.get(contractBuilding.buildingId);
-            this.buildingsList.add(building.name);
-            List<RoomStatus> rooms = new ArrayList<>();
-            Service service;
-            String description;
-            Date transmission;
-            for (Room room : building.rooms) {
-                // Restore the previous service for the room
-                if (this.serviceActivityTable.contains(contractBuilding.contractId, room.id)) {
-                    service = apiData.serviceMap.get(
-                            this.serviceActivityTable.get(contractBuilding.contractId, room.id).serviceId);
-                    description = this.serviceActivityTable.get(contractBuilding.contractId, room.id).description;
-                    transmission = this.serviceActivityTable.get(contractBuilding.contractId, room.id).transmission;
-                } else {
-                    service = null;
-                    description = "";
-                    transmission = null;
+            // Only show the buildings for the current structure
+            if (building.structureId == this.selectedStructure.id) {
+                this.buildingsList.add(building.name);
+                List<RoomStatus> rooms = new ArrayList<>();
+                Service service;
+                String description;
+                Date transmission;
+                for (Room room : building.rooms) {
+                    // Restore the previous service for the room
+                    if (this.serviceActivityTable.contains(contractBuilding.contractId, room.id)) {
+                        service = apiData.serviceMap.get(
+                                this.serviceActivityTable.get(contractBuilding.contractId, room.id).serviceId);
+                        description = this.serviceActivityTable.get(contractBuilding.contractId, room.id).description;
+                        transmission = this.serviceActivityTable.get(contractBuilding.contractId, room.id).transmission;
+                    } else {
+                        service = null;
+                        description = "";
+                        transmission = null;
+                    }
+                    rooms.add(new RoomStatus(this.context, room.name, contractBuilding.contractId,
+                            room.id, this.roomServicesList, service, description, transmission));
                 }
-                rooms.add(new RoomStatus(this.context, room.name, contractBuilding.contractId,
-                          room.id, this.roomServicesList, service, description, transmission));
+                this.roomsList.put(building.name, rooms);
             }
-            this.roomsList.put(building.name, rooms);
         }
         this.buildingRoomsAdapter.notifyDataSetChanged();
         // Collapse all the buildings groups
