@@ -253,23 +253,43 @@
                             tools:text="COMPANY" />
 
                         <TextView
-                            android:id="@+id/contractTypeLabel"
+                            android:id="@+id/contractStatusLabel"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="@string/contract_type_label"
+                            android:text="@string/contract_status_label"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             app:layout_constraintEnd_toEndOf="@+id/contractCompanyLabel"
                             app:layout_constraintStart_toStartOf="@+id/contractCompanyLabel"
                             app:layout_constraintTop_toBottomOf="@+id/contractCompanyLabel" />
 
                         <TextView
+                            android:id="@+id/contractStatusView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/contractStatusLabel"
+                            app:layout_constraintEnd_toEndOf="@+id/contractCompanyView"
+                            app:layout_constraintStart_toStartOf="@+id/contractCompanyView"
+                            tools:text="CONTRACT STATUS" />
+
+                        <TextView
+                            android:id="@+id/contractTypeLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/contract_type_label"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            app:layout_constraintEnd_toEndOf="@+id/contractStatusLabel"
+                            app:layout_constraintStart_toStartOf="@+id/contractStatusLabel"
+                            app:layout_constraintTop_toBottomOf="@+id/contractStatusLabel" />
+
+                        <TextView
                             android:id="@+id/contractTypeView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             app:layout_constraintBaseline_toBaselineOf="@+id/contractTypeLabel"
-                            app:layout_constraintEnd_toEndOf="@+id/contractCompanyView"
-                            app:layout_constraintStart_toStartOf="@+id/contractCompanyView"
+                            app:layout_constraintEnd_toEndOf="@+id/contractStatusView"
+                            app:layout_constraintStart_toStartOf="@+id/contractStatusView"
                             tools:text="CONTRACT TYPE" />
 
                         <TextView

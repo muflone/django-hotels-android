@@ -11,6 +11,8 @@
 
     <string name="placeholder" translatable="false">Placeholder</string>
     <string name="description">Description</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
 
     <!-- Navigation titles -->
     <string name="section_home">Home</string>
@@ -37,6 +39,7 @@
     <string name="employee_gender_label">Gender</string>
     <string name="contract_id_label">ID:</string>
     <string name="contract_company_label">Company:</string>
+    <string name="contract_status_label">Status:</string>
     <string name="contract_type_label">Type:</string>
     <string name="contract_daily_hours_label">Daily hours:</string>
     <string name="contract_weekly_hours_label">Weekly hours:</string>

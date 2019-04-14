@@ -75,6 +75,7 @@ public class StructuresFragment extends Fragment {
     private ImageView employeeGenderImageView;
     private TextView contractIdView;
     private TextView contractCompanyView;
+    private TextView contractStatusView;
     private TextView contractTypeView;
     private TextView contractDailyHoursView;
     private TextView contractWeeklyHoursView;
@@ -159,6 +160,7 @@ public class StructuresFragment extends Fragment {
         this.employeeGenderImageView = rootLayout.findViewById(R.id.employeeGenderImageView);
         this.contractIdView = rootLayout.findViewById(R.id.contractIdView);
         this.contractCompanyView = rootLayout.findViewById(R.id.contractCompanyView);
+        this.contractStatusView = rootLayout.findViewById(R.id.contractStatusView);
         this.contractTypeView = rootLayout.findViewById(R.id.contractTypeView);
         this.contractDailyHoursView = rootLayout.findViewById(R.id.contractDailyHoursView);
         this.contractWeeklyHoursView = rootLayout.findViewById(R.id.contractWeeklyHoursView);
@@ -251,6 +253,7 @@ public class StructuresFragment extends Fragment {
         this.contractCompanyView.setText(this.apiData.companiesMap.get(contract.companyId).name);
         // Add contract info
         ContractType contractType = this.apiData.contractTypeMap.get(contract.contractTypeId);
+        this.contractStatusView.setText(contract.enabled ? R.string.enabled : R.string.disabled);
         this.contractTypeView.setText(contractType.name);
         this.contractDailyHoursView.setText(String.valueOf(contractType.dailyHours));
         this.contractWeeklyHoursView.setText(String.valueOf(contractType.weeklyHours));
