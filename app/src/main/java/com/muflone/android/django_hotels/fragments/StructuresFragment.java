@@ -340,6 +340,7 @@ public class StructuresFragment extends Fragment {
         private final List<String> buildingsList;
         private final HashMap<String, List<RoomStatus>> roomsList;
         private final AppDatabase database;
+        private final ApiData apiData;
         private Drawable descriptionEnabledDrawable;
         private Drawable descriptionDisabledDrawable;
 
@@ -349,6 +350,7 @@ public class StructuresFragment extends Fragment {
             this.buildingsList = listDataHeader;
             this.roomsList = listChildData;
             this.database =  AppDatabase.getAppDatabase(context);
+            this.apiData = Singleton.getInstance().apiData;
         }
 
         @Override
@@ -397,7 +399,15 @@ public class StructuresFragment extends Fragment {
             // Set room service Click
             serviceButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View button) {
-                    if (roomStatus.transmission == null) {
+                    if (! apiData.isValidContract(roomStatus.contractId)) {
+                        // Cannot change a disabled contract
+                        Toast.makeText(context, R.string.message_unable_to_use_disabled_contract,
+                                Toast.LENGTH_SHORT).show();
+                    } else if (roomStatus.transmission != null) {
+                        // Cannot change an already transmitted activity
+                        Toast.makeText(context, R.string.message_unable_to_change_transmitted_activity,
+                                Toast.LENGTH_SHORT).show();
+                    } else {
                         // Update ServiceActivity for room
                         roomStatus.nextService();
                         ((Button) button).setText(roomStatus.getServiceName());
@@ -405,10 +415,6 @@ public class StructuresFragment extends Fragment {
                         descriptionButton.setImageDrawable(roomStatus.service == null ?
                                 descriptionDisabledDrawable : descriptionEnabledDrawable);
                         updateRoomStatus(roomStatus);
-                    } else {
-                        // Cannot change an already transmitted activity
-                        Toast.makeText(context, R.string.message_unable_to_change_transmitted_activity,
-                                Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -449,14 +455,18 @@ public class StructuresFragment extends Fragment {
                     alertDialogBuilder.setCancelable(true)
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    if (roomStatus.transmission == null) {
-                                        roomStatus.description = descriptionView.getText().toString();
-                                        updateRoomStatus(roomStatus);
-                                    } else {
+                                    if (! apiData.isValidContract(roomStatus.contractId)) {
+                                        // Cannot change a disabled contract
+                                        Toast.makeText(context, R.string.message_unable_to_use_disabled_contract,
+                                                Toast.LENGTH_SHORT).show();
+                                    } else if (roomStatus.transmission != null) {
                                         // Cannot change an already transmitted activity
                                         Toast.makeText(context,
                                                 R.string.message_unable_to_change_transmitted_activity,
                                                 Toast.LENGTH_SHORT).show();
+                                    } else {
+                                            roomStatus.description = descriptionView.getText().toString();
+                                            updateRoomStatus(roomStatus);
                                     }
                                 }
                             })

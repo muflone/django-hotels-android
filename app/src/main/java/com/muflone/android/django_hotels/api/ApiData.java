@@ -2,6 +2,7 @@ package com.muflone.android.django_hotels.api;
 
 import android.annotation.SuppressLint;
 
+import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.database.models.Brand;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Company;
@@ -50,4 +51,19 @@ public class ApiData {
         this.structuresMap = new HashMap<>();
         this.timestampDirectionsMap = new HashMap<>();
     }
+
+    public boolean isValidContract(Long contractId) {
+        boolean result;
+        if (this.contractsMap != null) {
+            Contract contract = this.contractsMap.get(contractId);
+            result = contract.enabled &&
+                    Singleton.getInstance().selectedDate.compareTo(contract.startDate) >= 0 &&
+                    Singleton.getInstance().selectedDate.compareTo(contract.endDate) <= 0;
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+
 }
