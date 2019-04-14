@@ -89,11 +89,9 @@ public class StructuresFragment extends Fragment {
         this.loadUI(inflater, container);
 
         this.employeesView.setAdapter(new ArrayAdapter<>(
-                this.context, android.R.layout.simple_list_item_1, this.employeesList));
+                this.context, android.R.layout.simple_list_item_activated_1, this.employeesList));
         this.employeesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                employeesView.requestFocusFromTouch();
-                employeesView.setSelection(position);
                 loadEmployee(selectedStructure.employees.get(position));
             }
         });
@@ -219,9 +217,11 @@ public class StructuresFragment extends Fragment {
                 ((ArrayAdapter) employeesView.getAdapter()).notifyDataSetChanged();
                 // Select the first employee for the selected tab
                 if (employeesList.size() > 0) {
-                    employeesView.requestFocusFromTouch();
-                    employeesView.setSelection(0);
-                    loadEmployee(selectedStructure.employees.get(0));
+                    employeesView.performItemClick(
+                            employeesView.getAdapter().getView(0, null, null),
+                            0,
+                            employeesView.getAdapter().getItemId(0)
+                    );
                 }
             }
         }.execute();
@@ -544,8 +544,7 @@ public class StructuresFragment extends Fragment {
                             database.serviceActivityDao().delete(serviceActivity);
                             serviceActivityTable.remove(roomStatus.contractId, roomStatus.roomId);
                         }
-
-                    } else {
+                    } else if (roomStatus.service != null) {
                         // Create new ServiceActivity
                         serviceActivity = new ServiceActivity(0,
                                 Singleton.getInstance().selectedDate,

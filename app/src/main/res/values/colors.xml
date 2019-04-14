@@ -3,11 +3,15 @@
     <color name="colorPrimary">#3C3838</color>
     <color name="colorPrimaryDark">@color/colorPrimary</color>
     <color name="colorAccent">#3D3D3D</color>
+
+    <color name="color_simple_list_item_activated">#E64A19</color>
+    <color name="color_simple_list_item_selected">@color/color_simple_list_item_activated</color>
+    <color name="color_simple_list_item_pressed">@color/color_simple_list_item_activated</color>
+
     <color name="colorSnackbarTextColor1">#FFEB3B</color>
     <color name="colorSnackbarTextColor2">#F44336</color>
 
     <color name="color_employees_background">#FFCCBC</color>
-    <color name="color_employees_selected">#E64A19</color>
 
     <color name="color_employee_detail_background">#B3E5FC</color>
 
