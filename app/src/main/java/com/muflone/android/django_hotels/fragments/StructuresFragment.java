@@ -398,6 +398,30 @@ public class StructuresFragment extends Fragment {
             ImageView transmissionImage = convertView.findViewById(R.id.transmissionImage);
             transmissionImage.setImageResource(roomStatus.transmission == null ?
                     R.drawable.ic_timestamp_untransmitted : R.drawable.ic_timestamp_transmitted);
+            // Set transmission Image LongClick
+            transmissionImage.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View button) {
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... result) {
+                            // Delete transmission date
+                            roomStatus.transmission = null;
+                            updateRoomStatus(roomStatus);
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void result) {
+                            transmissionImage.setImageResource(R.drawable.ic_timestamp_untransmitted);
+                            Toast.makeText(context,
+                                    R.string.message_marked_activity_as_untransmitted,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }.execute();
+                    return false;
+                }
+            });
 
             // Set room service Click
             serviceButton.setOnClickListener(new View.OnClickListener() {
@@ -419,31 +443,6 @@ public class StructuresFragment extends Fragment {
                                 descriptionDisabledDrawable : descriptionEnabledDrawable);
                         updateRoomStatus(roomStatus);
                     }
-                }
-            });
-            // Set room service LongClick
-            serviceButton.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    new AsyncTask<Void, Void, Void>() {
-                        @Override
-                        protected Void doInBackground(Void... result) {
-                            // Delete transmission date
-                            roomStatus.transmission = null;
-                            updateRoomStatus(roomStatus);
-                            return null;
-                        }
-
-                        @Override
-                        protected void onPostExecute(Void result) {
-                            transmissionImage.setImageResource(R.drawable.ic_timestamp_untransmitted);
-                            Toast.makeText(context,
-                                    R.string.message_marked_activity_as_untransmitted,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }.execute();
-                    // Don't execute the click event
-                    return true;
                 }
             });
 
