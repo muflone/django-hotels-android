@@ -640,7 +640,7 @@ public class StructuresFragment extends Fragment {
         Service nextService() {
             // Cycle services
             this.serviceCounter++;
-            if (this.serviceCounter == services.size()) {
+            if (this.serviceCounter == this.services.size()) {
                 this.serviceCounter = 0;
             }
             this.service = this.services.get(this.serviceCounter);
