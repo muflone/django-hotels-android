@@ -174,7 +174,8 @@ public class StructuresFragment extends Fragment {
     private void loadStructures() {
         // Load all the structures, skipping those without any employee
         this.structuresTabs.removeAllTabs();
-        for (Structure structure : this.apiData.structuresMap.values()) {
+        SortedSet<Structure> sortedStructures = new TreeSet<>(apiData.structuresMap.values());
+        for (Structure structure : sortedStructures) {
             if (structure.employees.size() > 0) {
                 TabLayout.Tab tabItem = this.structuresTabs.newTab();
                 this.structures.add(structure);

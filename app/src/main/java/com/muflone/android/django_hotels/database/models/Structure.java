@@ -28,7 +28,7 @@ import java.util.List;
                         childColumns = "location_id",
                         onDelete = ForeignKey.RESTRICT)
         })
-public class Structure {
+public class Structure implements Comparable<Structure>  {
     @PrimaryKey
     public final long id;
 
@@ -91,5 +91,10 @@ public class Structure {
             Building building = new Building(jsonBuildings.getJSONObject(i), this);
             this.buildings.add(building);
         }
+    }
+
+    @Override
+    public int compareTo(Structure structure) {
+        return this.name.compareTo(structure.name);
     }
 }
