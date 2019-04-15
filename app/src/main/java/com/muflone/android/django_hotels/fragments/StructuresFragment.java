@@ -431,7 +431,7 @@ public class StructuresFragment extends Fragment {
                 public void onClick(View button) {
                     if (! apiData.isValidContract(roomStatus.contractId)) {
                         // Cannot change a disabled contract
-                        Toast.makeText(context, R.string.message_unable_to_use_disabled_contract,
+                        Toast.makeText(context, R.string.message_unable_to_use_contract,
                                 Toast.LENGTH_SHORT).show();
                     } else if (roomStatus.transmission != null) {
                         // Cannot change an already transmitted activity
@@ -452,33 +452,39 @@ public class StructuresFragment extends Fragment {
             serviceButton.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View button) {
-                    // Show contextual menu for services
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle(R.string.message_select_a_service_room);
-                    // Sort services list
-                    List<String> servicesList = new ArrayList<>();
-                    List<Long> servicesIdList = new ArrayList<>();
-                    SortedSet<Service> sortedServices = new TreeSet<>(apiData.serviceMap.values());
-                    for (Service service : sortedServices) {
-                        servicesList.add(service.name);
-                        servicesIdList.add(service.id);
-                    }
-                    builder.setItems(servicesList.toArray(new String[0]), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int position) {
-                            // Get the selected service and update the user interface
-                            roomStatus.service = apiData.serviceMap.get(servicesIdList.get(position));
-                            roomStatus.prepareForNothing();
-                            ((Button) button).setText(roomStatus.service.name);
-                            descriptionButton.setEnabled(true);
-                            descriptionButton.setImageDrawable(descriptionEnabledDrawable);
-                            updateRoomStatus(roomStatus);
-                            dialog.dismiss();
+                    if (! apiData.isValidContract(roomStatus.contractId)) {
+                        // Cannot change a disabled contract
+                        Toast.makeText(context, R.string.message_unable_to_use_contract,
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Show contextual menu for services
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle(R.string.message_select_a_service_room);
+                        // Sort services list
+                        List<String> servicesList = new ArrayList<>();
+                        List<Long> servicesIdList = new ArrayList<>();
+                        SortedSet<Service> sortedServices = new TreeSet<>(apiData.serviceMap.values());
+                        for (Service service : sortedServices) {
+                            servicesList.add(service.name);
+                            servicesIdList.add(service.id);
                         }
-                    });
+                        builder.setItems(servicesList.toArray(new String[0]), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int position) {
+                                // Get the selected service and update the user interface
+                                roomStatus.service = apiData.serviceMap.get(servicesIdList.get(position));
+                                roomStatus.prepareForNothing();
+                                ((Button) button).setText(roomStatus.service.name);
+                                descriptionButton.setEnabled(true);
+                                descriptionButton.setImageDrawable(descriptionEnabledDrawable);
+                                updateRoomStatus(roomStatus);
+                                dialog.dismiss();
+                            }
+                        });
 
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
                     // Don't execute the click event
                     return true;
                 }
@@ -497,7 +503,7 @@ public class StructuresFragment extends Fragment {
                                 public void onClick(DialogInterface dialog, int id) {
                                     if (! apiData.isValidContract(roomStatus.contractId)) {
                                         // Cannot change a disabled contract
-                                        Toast.makeText(context, R.string.message_unable_to_use_disabled_contract,
+                                        Toast.makeText(context, R.string.message_unable_to_use_contract,
                                                 Toast.LENGTH_SHORT).show();
                                     } else if (roomStatus.transmission != null) {
                                         // Cannot change an already transmitted activity
