@@ -49,6 +49,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class StructuresFragment extends Fragment {
     private final Api api = Singleton.getInstance().api;
@@ -445,6 +447,41 @@ public class StructuresFragment extends Fragment {
                     }
                 }
             });
+            // Set room service LongClick
+            serviceButton.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View button) {
+                    // Show contextual menu for services
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle(R.string.message_select_a_service_room);
+                    // Sort services list
+                    List<String> servicesList = new ArrayList<>();
+                    List<Long> servicesIdList = new ArrayList<>();
+                    SortedSet<Service> sortedServices = new TreeSet<>(apiData.serviceMap.values());
+                    for (Service service : sortedServices) {
+                        servicesList.add(service.name);
+                        servicesIdList.add(service.id);
+                    }
+                    builder.setItems(servicesList.toArray(new String[0]), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int position) {
+                            // Get the selected service and update the user interface
+                            roomStatus.service = apiData.serviceMap.get(servicesIdList.get(position));
+                            roomStatus.prepareForNothing();
+                            ((Button) button).setText(roomStatus.service.name);
+                            descriptionButton.setEnabled(true);
+                            descriptionButton.setImageDrawable(descriptionEnabledDrawable);
+                            updateRoomStatus(roomStatus);
+                            dialog.dismiss();
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    // Don't execute the click event
+                    return true;
+                }
+            });
 
             // Set room service Click
             descriptionButton.setOnClickListener(new View.OnClickListener() {
@@ -613,6 +650,11 @@ public class StructuresFragment extends Fragment {
         String getServiceName() {
             // Get current service name
             return this.service == null ? this.emptyServiceDescription : this.service.name;
+        }
+
+        void prepareForNothing() {
+            // Set the cycle counter to the last element so that the next service will be Nothing
+            this.serviceCounter = this.services.size() - 1;
         }
     }
 }

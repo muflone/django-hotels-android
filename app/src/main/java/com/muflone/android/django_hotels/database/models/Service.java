@@ -8,7 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 @Entity(tableName = "services")
-public class Service {
+public class Service implements Comparable<Service> {
     @PrimaryKey
     public final long id;
 
@@ -33,5 +33,10 @@ public class Service {
                 jsonObject.getString("name"),
                 jsonObject.getBoolean("extra_service"),
                 jsonObject.getBoolean("show_in_app"));
+    }
+
+    @Override
+    public int compareTo(Service service) {
+        return this.name.compareTo(service.name);
     }
 }
