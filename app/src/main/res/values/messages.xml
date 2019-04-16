@@ -10,6 +10,7 @@
     <string name="message_unable_to_change_transmitted_activity">Unable to modify an already transmitted activity</string>
     <string name="message_unable_to_use_contract">Unable to use the contract</string>
     <string name="message_select_a_service_room">Select a service for the room</string>
+    <string name="message_employees_for_already_assigned_rooms">Employees for already assigned rooms</string>
 
     <!-- Sync section -->
     <string name="sync_step_started">Synchronization started</string>

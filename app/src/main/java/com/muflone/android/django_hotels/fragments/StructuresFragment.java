@@ -69,6 +69,7 @@ public class StructuresFragment extends Fragment {
     private final List<Structure> structures = new ArrayList<>();
     private final List<Service> roomServicesList = new ArrayList<>();
     private final Table<Long, Long, ServiceActivity> serviceActivityTable = HashBasedTable.create();
+    private final HashMap<Long, List<Long>> roomsEmployeesAssignedList = new HashMap<>();
     private final HashMap<String, Boolean> buildingsClosedStatusMap = new HashMap<>();
 
     private TextView employeeIdView;
@@ -188,6 +189,7 @@ public class StructuresFragment extends Fragment {
     private void loadEmployees(TabLayout.Tab tab) {
         // Load employees list for the selected Structure tab
         this.employeesList.clear();
+        this.roomsEmployeesAssignedList.clear();
         this.serviceActivityTable.clear();
         this.selectedStructure = this.structures.get(tab.getPosition());
         // Initialize buildings groups to collapsed
@@ -195,6 +197,10 @@ public class StructuresFragment extends Fragment {
         for (Building building : this.selectedStructure.buildings) {
             this.buildingsClosedStatusMap.put(building.name,
                     this.api.settings.getBuildingsInitiallyClosed());
+            // Initialize empty already assigned rooms list (<Room ID><List of employees>)
+            for (Room room : building.rooms) {
+                this.roomsEmployeesAssignedList.put(room.id, new ArrayList<>());
+            }
         }
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -211,6 +217,11 @@ public class StructuresFragment extends Fragment {
                                 serviceActivity.contractId,
                                 serviceActivity.roomId,
                                 serviceActivity);
+                        // Add employee to the already assigned room list
+                        // only if the room belongs to the selected structure
+                        if (roomsEmployeesAssignedList.containsKey(serviceActivity.roomId)) {
+                            roomsEmployeesAssignedList.get(serviceActivity.roomId).add(employee.id);
+                        }
                     }
                 }
                 return null;
@@ -386,6 +397,24 @@ public class StructuresFragment extends Fragment {
             // Set room name
             TextView roomView = convertView.findViewById(R.id.roomView);
             roomView.setText(roomStatus.name);
+            // Change background color for already assigned rooms
+            roomView.setBackground(null);
+            roomView.setOnLongClickListener(null);
+            for (Long employeeId : roomsEmployeesAssignedList.get(roomStatus.roomId)) {
+                if (employeeId != apiData.contractsMap.get(roomStatus.contractId).employeeId) {
+                    // Change room background color
+                    roomView.setBackgroundColor(context.getResources().getColor(
+                            R.color.color_rooms_background_already_assigned));
+                    roomView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View view) {
+                            showAlreadyAssignedEmployees(roomsEmployeesAssignedList.get(roomStatus.roomId));
+                            return false;
+                        }
+                    });
+                    break;
+                }
+           }
             // Set room service
             Button serviceButton = convertView.findViewById(R.id.serviceButton);
             serviceButton.setText(roomStatus.getServiceName());
@@ -446,6 +475,24 @@ public class StructuresFragment extends Fragment {
                         descriptionButton.setEnabled(roomStatus.service != null);
                         descriptionButton.setImageDrawable(roomStatus.service == null ?
                                 descriptionDisabledDrawable : descriptionEnabledDrawable);
+                        // Check if the employee is already assigned for the room
+                        List<Long> roomAssignationList = roomsEmployeesAssignedList.get(roomStatus.roomId);
+                        Employee employee = apiData.contractsMap.get(roomStatus.contractId).employee;
+                        if (roomStatus.service == null) {
+                            // Un-assign
+                            roomAssignationList.remove(employee.id);
+                        } else if (! roomAssignationList.contains(employee.id)) {
+                            // Assign
+                            roomAssignationList.add(employee.id);
+                        }
+                        // Update room background
+                        roomView.setBackground(null);
+                        for (Long employeeId : roomAssignationList) {
+                            if (employeeId != employee.id) {
+                                roomView.setBackgroundColor(context.getResources().getColor(
+                                        R.color.color_rooms_background_already_assigned));
+                            }
+                        }
                         updateRoomStatus(roomStatus);
                     }
                 }
@@ -479,6 +526,8 @@ public class StructuresFragment extends Fragment {
                                 ((Button) button).setText(roomStatus.service.name);
                                 descriptionButton.setEnabled(true);
                                 descriptionButton.setImageDrawable(descriptionEnabledDrawable);
+                                roomsEmployeesAssignedList.get(roomStatus.roomId).add(
+                                        apiData.contractsMap.get(roomStatus.contractId).employee.id);
                                 updateRoomStatus(roomStatus);
                                 dialog.dismiss();
                             }
@@ -514,6 +563,8 @@ public class StructuresFragment extends Fragment {
                                                 Toast.LENGTH_SHORT).show();
                                     } else {
                                             roomStatus.description = descriptionView.getText().toString();
+                                            roomsEmployeesAssignedList.get(roomStatus.roomId).add(
+                                                    apiData.contractsMap.get(roomStatus.contractId).employee.id);
                                             updateRoomStatus(roomStatus);
                                     }
                                 }
@@ -617,6 +668,22 @@ public class StructuresFragment extends Fragment {
                     return null;
                 }
             }.execute(roomStatus);
+        }
+
+        public void showAlreadyAssignedEmployees(List<Long> employeesIdList) {
+            List<String> employees = new ArrayList<>();
+            for (Long employeeId : employeesIdList) {
+                Employee employee = this.apiData.employeesMap.get(employeeId);
+                employees.add(employee.firstName + " " + employee.lastName);
+            }
+            System.out.println(employees.toString());
+            // Show contextual menu for services
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(R.string.message_employees_for_already_assigned_rooms);
+            builder.setItems(employees.toArray(new String[0]),null);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
         }
     }
 
