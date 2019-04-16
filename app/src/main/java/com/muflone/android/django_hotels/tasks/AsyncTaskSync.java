@@ -50,11 +50,14 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final Api api;
     private final AsyncTaskListener callback;
     private final AppDatabase database;
+    public final static int totalSteps = 4;
+    private int currentStep;
 
     public AsyncTaskSync(Api api, AppDatabase database, AsyncTaskListener callback) {
         this.api = api;
         this.callback = callback;
         this.database = database;
+        this.currentStep = 0;
     }
 
     @Override
@@ -65,6 +68,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         // Check if the system date/time matches with the remote date/time
         ApiData data = this.api.checkDates();
         if (data.exception == null) {
+            this.updateProgress();
             // Transmit any incomplete timestamp (UPLOAD)
             List<Timestamp> timestampsList = this.database.timestampDao().listByUntrasmitted();
             for (Timestamp timestamp : timestampsList) {
@@ -78,6 +82,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     transmissionErrors = true;
                 }
             }
+            this.updateProgress();
             // Transmit any incomplete activity (UPLOAD)
             List<ServiceActivity> servicesActivityList = this.database.serviceActivityDao().listByUntrasmitted();
             for (ServiceActivity serviceActivity : servicesActivityList) {
@@ -90,6 +95,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     transmissionErrors = true;
                 }
             }
+            this.updateProgress();
             // If no errors were given during the upload proceed to the download
             if (! transmissionErrors) {
                 // Get new data from the server (DOWNLOAD)
@@ -99,6 +105,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     this.saveToDatabase(data);
                 }
             }
+            this.updateProgress();
         }
         return new AsyncTaskResult(data, data.exception);
     }
@@ -324,6 +331,13 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         // Save data for timestamp directions
         for (TimestampDirection timestampDirection : data.timestampDirectionsMap.values()) {
             timestampDirectionDao.insert(timestampDirection);
+        }
+    }
+
+    private void updateProgress() {
+        this.currentStep += 1;
+        if (this.callback != null) {
+            this.callback.onProgress(this.currentStep, AsyncTaskSync.totalSteps);
         }
     }
 }

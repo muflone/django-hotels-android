@@ -131,6 +131,10 @@ public abstract class AppDatabase extends RoomDatabase {
             @Override
             public void onFailure(Exception exception) {
             }
+
+            @Override
+            public void onProgress(int step, int total) {
+            }
         });
         task.execute();
     }

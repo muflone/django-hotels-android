@@ -54,6 +54,8 @@ public class AboutFragment extends Fragment {
                         this.getString(R.string.about_about_title))
                 .addGitHub(this.getString(R.string.about_guava_url),
                         this.getString(R.string.about_guava_title))
+                .addGitHub(this.getString(R.string.about_numberprogressbar_url),
+                        this.getString(R.string.about_numberprogressbar_title))
                 .create();
     }
 
