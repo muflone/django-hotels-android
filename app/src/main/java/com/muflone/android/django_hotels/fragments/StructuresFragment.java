@@ -116,7 +116,7 @@ public class StructuresFragment extends Fragment {
             }
         });
         // Select the first structure tab
-        if (this.structuresTabs.getTabCount() > 0 ) {
+        if (this.structuresTabs.getTabCount() > 0) {
             this.loadEmployees(this.structuresTabs.getTabAt(0));
         }
 
@@ -265,8 +265,8 @@ public class StructuresFragment extends Fragment {
         this.contractStartDateView.setText(formatter.format(contract.startDate));
         this.contractEndDateView.setText(formatter.format(contract.endDate));
         // Build buildings and rooms lists
-        buildingsList.clear();
-        roomsList.clear();
+        this.buildingsList.clear();
+        this.roomsList.clear();
         for (ContractBuildings contractBuilding : employee.contractBuildings) {
             Building building = this.apiData.buildingsMap.get(contractBuilding.buildingId);
             // Only show the buildings for the current structure
@@ -288,8 +288,10 @@ public class StructuresFragment extends Fragment {
                         description = "";
                         transmission = null;
                     }
-                    rooms.add(new RoomStatus(this.context, room.name, contractBuilding.contractId,
-                            room.id, this.roomServicesList, service, description, transmission));
+                    RoomStatus roomStatus = new RoomStatus(this.context, room.name,
+                            contractBuilding.contractId, room.id, this.roomServicesList,
+                            service, description, transmission);
+                    rooms.add(roomStatus);
                 }
                 this.roomsList.put(building.name, rooms);
             }

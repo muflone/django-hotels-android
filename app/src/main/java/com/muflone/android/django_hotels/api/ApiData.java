@@ -53,16 +53,10 @@ public class ApiData {
     }
 
     public boolean isValidContract(Long contractId) {
-        boolean result;
-        if (this.contractsMap != null) {
-            Contract contract = this.contractsMap.get(contractId);
-            result = contract.enabled &&
-                    Singleton.getInstance().selectedDate.compareTo(contract.startDate) >= 0 &&
-                    Singleton.getInstance().selectedDate.compareTo(contract.endDate) <= 0;
-        } else {
-            result = false;
-        }
-        return result;
+        Contract contract = this.contractsMap.get(contractId);
+        return contract.enabled &&
+                Singleton.getInstance().selectedDate.compareTo(contract.startDate) >= 0 &&
+                Singleton.getInstance().selectedDate.compareTo(contract.endDate) <= 0;
     }
 
 
