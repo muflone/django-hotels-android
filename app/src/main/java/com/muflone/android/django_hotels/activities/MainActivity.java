@@ -125,8 +125,6 @@ public class MainActivity extends AppCompatActivity
             Fragment fragment = this.newFragmentByName(fragmentName);
             if (fragment != null) {
                 LoadFragment(fragment);
-            } else {
-                Toast.makeText(this, fragmentName, Toast.LENGTH_SHORT).show();
             }
         }
     }
