@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity
             String message = settings.getTabletID().isEmpty() ?
                     this.getString(R.string.missing_tablet_id) :
                     this.getString(R.string.missing_tablet_key);
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             this.onNavigationItemSelected(this.menuItemSettings);
         } else {
             this.onNavigationItemSelected(this.menuItemHome);
