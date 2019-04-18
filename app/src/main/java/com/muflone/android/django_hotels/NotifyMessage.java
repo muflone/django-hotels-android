@@ -29,7 +29,7 @@ public class NotifyMessage {
     public static void snackbar(Context context, View rootView, String message, int duration) {
         // Show a Snackbar with the dismiss action
         NotifyMessage.snackbar(context, rootView, message,
-                context.getString(R.string.snackbar_dismiss),
+                context.getString(R.string.dismiss),
                 duration);
     }
 }

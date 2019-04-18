@@ -449,7 +449,7 @@ public class StructuresFragment extends Fragment {
                         protected void onPostExecute(Void result) {
                             transmissionImage.setImageResource(R.drawable.ic_timestamp_untransmitted);
                             Toast.makeText(context,
-                                    R.string.message_marked_activity_as_untransmitted,
+                                    R.string.structures_marked_activity_as_untransmitted,
                                     Toast.LENGTH_SHORT).show();
                         }
                     }.execute();
@@ -462,11 +462,11 @@ public class StructuresFragment extends Fragment {
                 public void onClick(View button) {
                     if (! apiData.isValidContract(roomStatus.contractId)) {
                         // Cannot change a disabled contract
-                        Toast.makeText(context, R.string.message_unable_to_use_contract,
+                        Toast.makeText(context, R.string.structures_unable_to_use_contract,
                                 Toast.LENGTH_SHORT).show();
                     } else if (roomStatus.transmission != null) {
                         // Cannot change an already transmitted activity
-                        Toast.makeText(context, R.string.message_unable_to_change_transmitted_activity,
+                        Toast.makeText(context, R.string.structures_unable_to_change_transmitted_activity,
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         // Update ServiceActivity for room
@@ -503,12 +503,12 @@ public class StructuresFragment extends Fragment {
                 public boolean onLongClick(View button) {
                     if (! apiData.isValidContract(roomStatus.contractId)) {
                         // Cannot change a disabled contract
-                        Toast.makeText(context, R.string.message_unable_to_use_contract,
+                        Toast.makeText(context, R.string.structures_unable_to_use_contract,
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         // Show contextual menu for services
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setTitle(R.string.message_select_a_service_room);
+                        builder.setTitle(R.string.structures_select_a_service_room);
                         // Sort services list
                         List<String> servicesList = new ArrayList<>();
                         List<Long> servicesIdList = new ArrayList<>();
@@ -554,12 +554,12 @@ public class StructuresFragment extends Fragment {
                                 public void onClick(DialogInterface dialog, int id) {
                                     if (! apiData.isValidContract(roomStatus.contractId)) {
                                         // Cannot change a disabled contract
-                                        Toast.makeText(context, R.string.message_unable_to_use_contract,
+                                        Toast.makeText(context, R.string.structures_unable_to_use_contract,
                                                 Toast.LENGTH_SHORT).show();
                                     } else if (roomStatus.transmission != null) {
                                         // Cannot change an already transmitted activity
                                         Toast.makeText(context,
-                                                R.string.message_unable_to_change_transmitted_activity,
+                                                R.string.structures_unable_to_change_transmitted_activity,
                                                 Toast.LENGTH_SHORT).show();
                                     } else {
                                             roomStatus.description = descriptionView.getText().toString();
@@ -679,7 +679,7 @@ public class StructuresFragment extends Fragment {
             System.out.println(employees.toString());
             // Show contextual menu for services
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(R.string.message_employees_for_already_assigned_rooms);
+            builder.setTitle(R.string.structures_employees_already_assigned);
             builder.setItems(employees.toArray(new String[0]),null);
             AlertDialog dialog = builder.create();
             dialog.show();

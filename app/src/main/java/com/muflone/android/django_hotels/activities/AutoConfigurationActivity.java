@@ -31,7 +31,7 @@ public class AutoConfigurationActivity extends AppCompatActivity {
                             preferencesEditor.putString(this.getString(R.string.settings_tablet_key_id), value);
                             break;
                         case "timezone":
-                            preferencesEditor.putString(this.getString(R.string.settings_timezone_id), value);
+                            preferencesEditor.putString(this.getString(R.string.settings_tablet_timezone_id), value);
                             break;
                         case "api_url":
                             preferencesEditor.putString(this.getString(R.string.settings_api_url_id), value);

@@ -1,37 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Application values -->
-    <string name="app_name" translatable="false">Hotels</string>
     <string name="app_description">Get your Hotel activities done</string>
 
-    <string name="author_name" translatable="false">Fabio Castelli (Muflone)</string>
-    <string name="author_email" translatable="false">muflone@muflone.com</string>
-    <string name="author_web" translatable="false">https://www.muflone.com/</string>
-    <string name="author_twitter" translatable="false">il_muflone</string>
-
-    <string name="placeholder" translatable="false">Placeholder</string>
+    <!-- Generic descriptions -->
+    <string name="dismiss">Dismiss</string>
     <string name="description">Description</string>
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
-
-    <!-- Navigation titles -->
-    <string name="section_home">Home</string>
-    <string name="section_structures">Structures</string>
-    <string name="section_scanner">Scan</string>
-    <string name="section_extras">Extra</string>
-    <string name="section_settings">Settings</string>
-    <string name="section_about">About</string>
-    <string name="section_sync">Synchronize</string>
-
-    <!-- Other descriptions -->
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="snackbar_dismiss">Dismiss</string>
-
-    <string name="structures">Structures</string>
-
     <string name="employee">Employee</string>
     <string name="contract">Contract</string>
+
+    <!-- Home section -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="section_home">Home</string>
+    <string name="section_scanner">Scan</string>
+    <string name="section_structures">Structures</string>
+    <string name="section_extras">Extra</string>
+    <string name="section_sync">Synchronization</string>
+    <string name="section_settings">Settings</string>
+    <string name="section_about">About</string>
+
+    <string name="missing_tablet_id">Missing Tablet ID, please set it in the settings before the use</string>
+    <string name="missing_tablet_key">Missing Tablet key, please set it in the settings before the use</string>
+    <string name="press_back_again_to_exit">Press back button again to exit</string>
+
+    <!-- Scan section -->
+    <string name="scan_prompt">Scan your personal QR Code</string>
+    <string name="scan_register_enter">Register ENTER</string>
+    <string name="scan_register_exit">Register EXIT</string>
+    <string name="scan_latest_timestamps">Latest timestamps</string>
+    <string name="scan_transmission_status">Transmission status</string>
+    <string name="scan_unknown_employee">Unknown employee</string>
+    <string name="scan_unsupported_qrcode">Unsupported QR Code</string>
+
+    <!-- Structures section -->
+    <string name="available_structures">Available structures</string>
 
     <string name="employee_id_label">ID:</string>
     <string name="employee_first_name_label">First name:</string>
@@ -48,27 +53,57 @@
 
     <string name="empty_service">Nothing</string>
 
-    <string name="scan_prompt">Scan your personal QR Code</string>
-    <string name="register_enter">Register ENTER</string>
-    <string name="register_exit">Register EXIT</string>
-    <string name="latest_timestamps">Latest timestamps</string>
-    <string name="transmission_status">Transmission status</string>
+    <string name="structures_marked_timestamp_as_untransmitted">Marked timestamp as untrasmitted</string>
+    <string name="structures_marked_activity_as_untransmitted">Marked activity as untrasmitted</string>
+    <string name="structures_unable_to_change_transmitted_activity">Unable to modify an already transmitted activity</string>
+    <string name="structures_unable_to_use_contract">Unable to use the contract</string>
+    <string name="structures_select_a_service_room">Select a service for the room</string>
+    <string name="structures_employees_already_assigned">Employees already assigned</string>
+
+    <!-- Settings section -->
+    <string name="settings_tablet">Tablet settings</string>
+
+    <string name="settings_tablet_id_title">Tablet ID</string>
+    <string name="settings_tablet_id_summary">This field will contain the tablet ID</string>
+
+    <string name="settings_tablet_key_title">Tablet Key</string>
+    <string name="settings_tablet_key_summary">This is the key used to communicate with the server</string>
+
+    <string name="settings_tablet_timezone_title">Timezone</string>
+    <string name="settings_tablet_timezone_summary">Date and time zone</string>
+
+    <string name="settings_server">Server settings</string>
+
+    <string name="settings_api_url_title">API URL</string>
+    <string name="settings_api_url_summary">This is the server URL to connect</string>
+
+    <string name="settings_scan">Scan settings</string>
+
+    <string name="settings_scan_beep_title">Beep after scan</string>
+    <string name="settings_scan_beep_summary">Enable beep after a successful scan</string>
+
+    <string name="settings_scan_orientation_lock_title">Lock orientation during scan</string>
+    <string name="settings_scan_orientation_lock_summary">Lock the screen orientation during the scan process</string>
+
+    <string name="settings_structures">Structures settings</string>
+
+    <string name="settings_structures_buildings_closed_title">Buildings are initially closed</string>
+    <string name="settings_structures_buildings_closed_summary">The buildings groups are automatically closed</string>
+
+    <!-- Sync section -->
+    <string name="sync_step_started">Synchronization started</string>
+    <string name="sync_step_timestamps_transmission">Timestamps transmission</string>
+    <string name="sync_step_activities_transmission">Activities transmission</string>
+    <string name="sync_step_download">Data download</string>
+    <string name="sync_step_completed">Synchronization completed</string>
+    <string name="sync_error_no_server_connection">Unable to establish connection with the server, please check your internet connection</string>
+    <string name="sync_error_invalid_date_time">Invalid date or time, please check system settings</string>
+    <string name="sync_error_unable_to_download">Unable to download data from the server</string>
+    <string name="sync_error_invalid_server_response">Invalid response from the server, please check your internet connection</string>
 
     <!-- About section -->
     <string name="about_contacts">Contacts</string>
     <string name="about_license">License</string>
-    <string name="about_app_copyright">Copyright © %1$s %2$d</string>
     <string name="about_app_license">License GPL-2+</string>
-    <string name="about_app_github" translatable="false">muflone/django-hotels-android</string>
-    <string name="about_app_playstore" translatable="false">com.muflone.android.django_hotels</string>
-    <string name="about_license_url" translatable="false">https://www.gnu.org/licenses/old-licenses/gpl-2.0.html</string>
     <string name="about_credits">Credits</string>
-    <string name="about_zxing_title" translatable="false">ZXing Android Embedded</string>
-    <string name="about_zxing_url" translatable="false">journeyapps/zxing-android-embedded</string>
-    <string name="about_about_title" translatable="false">Android About Page</string>
-    <string name="about_about_url" translatable="false">medyo/android-about-page</string>
-    <string name="about_guava_title" translatable="false">Google Core Libraries for Java (Guava)</string>
-    <string name="about_guava_url" translatable="false">google/guava</string>
-    <string name="about_numberprogressbar_title" translatable="false">Android NumberProgressBar</string>
-    <string name="about_numberprogressbar_url" translatable="false">daimajia/NumberProgressBar</string>
 </resources>

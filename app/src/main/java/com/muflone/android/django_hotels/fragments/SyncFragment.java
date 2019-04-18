@@ -49,9 +49,9 @@ public class SyncFragment extends Fragment {
         this.errorMessage.setText("");
         this.errorView = rootView.findViewById(R.id.errorView);
         this.errorView.setVisibility(View.INVISIBLE);
-        this.progressPhases.add(this.context.getString(R.string.sync_step_transmit_timestamps));
-        this.progressPhases.add(this.context.getString(R.string.sync_step_transmit_activities));
-        this.progressPhases.add(this.context.getString(R.string.sync_step_downloading));
+        this.progressPhases.add(this.context.getString(R.string.sync_step_timestamps_transmission));
+        this.progressPhases.add(this.context.getString(R.string.sync_step_activities_transmission));
+        this.progressPhases.add(this.context.getString(R.string.sync_step_download));
         this.progressPhases.add(this.context.getString(R.string.sync_step_completed));
 
         // Download data asynchronously from the server

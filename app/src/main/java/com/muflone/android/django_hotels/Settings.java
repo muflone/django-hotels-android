@@ -23,7 +23,7 @@ public class Settings {
     }
 
     public String getTimeZone() {
-        return preferences.getString(this.context.getString(R.string.settings_timezone_id), "UTC");
+        return preferences.getString(this.context.getString(R.string.settings_tablet_timezone_id), "UTC");
     }
 
     public Uri getApiUri() {
@@ -39,6 +39,6 @@ public class Settings {
     }
 
     public boolean getBuildingsInitiallyClosed() {
-        return this.preferences.getBoolean(this.context.getString(R.string.structures_buildings_initial_closed_id), false);
+        return this.preferences.getBoolean(this.context.getString(R.string.settings_structures_buildings_closed_id), false);
     }
 }

@@ -109,7 +109,7 @@ public class ScannerFragment extends Fragment {
                     protected void onPostExecute(Void result) {
                         timestampAdapter.notifyDataSetChanged();
                         Toast.makeText(context,
-                                R.string.message_marked_timestamp_as_untransmitted,
+                                R.string.structures_marked_timestamp_as_untransmitted,
                                 Toast.LENGTH_SHORT).show();
                     }
                 }.execute();
@@ -194,13 +194,13 @@ public class ScannerFragment extends Fragment {
                         } else {
                             // Cannot find any contract with the provided GUID
                             Toast.makeText(this.context,
-                                    this.context.getString(R.string.message_unknown_employee),
+                                    this.context.getString(R.string.scan_unknown_employee),
                                     Toast.LENGTH_LONG).show();
                         }
                     } catch (Token.TokenUriInvalidException | Base32String.DecodingException e) {
                         // Unsupported QR Code
                         Toast.makeText(this.context,
-                                this.context.getString(R.string.message_unsupported_qrcode),
+                                this.context.getString(R.string.scan_unsupported_qrcode),
                                 Toast.LENGTH_LONG).show();
                     }
                 }

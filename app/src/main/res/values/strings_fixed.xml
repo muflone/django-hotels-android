@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Application values -->
+    <string name="app_name" translatable="false">Hotels</string>
+
+    <string name="author_name" translatable="false">Fabio Castelli (Muflone)</string>
+    <string name="author_email" translatable="false">muflone@muflone.com</string>
+    <string name="author_web" translatable="false">https://www.muflone.com/</string>
+    <string name="author_twitter" translatable="false">il_muflone</string>
+
+    <!-- Generic descriptions -->
+    <string name="placeholder" translatable="false">Placeholder</string>
+
+    <!-- Settings section -->
+    <string name="settings_tablet_id_id" translatable="false">tablet_id</string>
+    <string name="settings_tablet_key_id" translatable="false">tablet_key</string>
+    <string name="settings_tablet_timezone_id" translatable="false">timezone</string>
+    <string name="settings_api_url_id" translatable="false">api_url</string>
+    <string name="settings_scan_beep_id" translatable="false">scan_beep</string>
+    <string name="settings_scan_orientation_lock_id" translatable="false">scan_orientation_lock</string>
+    <string name="settings_structures_buildings_closed_id" translatable="false">buildings_initially_closed</string>
+
+    <!-- About section -->
+    <string name="about_app_copyright" translatable="false">Copyright © %1$s %2$d</string>
+    <string name="about_app_github" translatable="false">muflone/django-hotels-android</string>
+    <string name="about_app_playstore" translatable="false">com.muflone.android.django_hotels</string>
+    <string name="about_license_url" translatable="false">https://www.gnu.org/licenses/old-licenses/gpl-2.0.html</string>
+
+    <string name="about_zxing_title" translatable="false">ZXing Android Embedded</string>
+    <string name="about_zxing_url" translatable="false">journeyapps/zxing-android-embedded</string>
+
+    <string name="about_about_title" translatable="false">Android About Page</string>
+    <string name="about_about_url" translatable="false">medyo/android-about-page</string>
+
+    <string name="about_guava_title" translatable="false">Google Core Libraries for Java (Guava)</string>
+    <string name="about_guava_url" translatable="false">google/guava</string>
+
+    <string name="about_numberprogressbar_title" translatable="false">Android NumberProgressBar</string>
+    <string name="about_numberprogressbar_url" translatable="false">daimajia/NumberProgressBar</string>
+</resources>

@@ -10,7 +10,7 @@
         android:id="@+id/structuresImageView"
         android:layout_width="64dp"
         android:layout_height="0dp"
-        android:contentDescription="@string/structures"
+        android:contentDescription="@string/available_structures"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -15,7 +15,7 @@
         android:layout_marginBottom="8dp"
         android:background="@color/action_enter"
         android:drawableStart="@drawable/ic_action_enter2"
-        android:text="@string/register_enter"
+        android:text="@string/scan_register_enter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/exitButton"
         app:layout_constraintStart_toStartOf="parent" />
@@ -29,7 +29,7 @@
         android:layout_marginBottom="8dp"
         android:background="@color/action_exit"
         android:drawableEnd="@drawable/ic_action_exit2"
-        android:text="@string/register_exit"
+        android:text="@string/scan_register_exit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/enterButton" />
@@ -101,7 +101,7 @@
             android:id="@+id/timestampsView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/latest_timestamps"
+            android:text="@string/scan_latest_timestamps"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

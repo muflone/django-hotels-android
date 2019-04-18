@@ -2,8 +2,7 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/settings_category_server">
-
+    <PreferenceCategory android:title="@string/settings_tablet">
         <EditTextPreference
             android:key="@string/settings_tablet_id_id"
             android:selectAllOnFocus="true"
@@ -19,11 +18,14 @@
             android:title="@string/settings_tablet_key_title" />
         <EditTextPreference
             android:defaultValue="UTC"
-            android:key="@string/settings_timezone_id"
+            android:key="@string/settings_tablet_timezone_id"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:summary="@string/settings_timezone_summary"
-            android:title="@string/settings_timezone_title" />
+            android:summary="@string/settings_tablet_timezone_summary"
+            android:title="@string/settings_tablet_timezone_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_server">
         <EditTextPreference
             android:key="@string/settings_api_url_id"
             android:selectAllOnFocus="true"
@@ -32,7 +34,7 @@
             android:title="@string/settings_api_url_title" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/settings_category_scan">
+    <PreferenceCategory android:title="@string/settings_scan">
         <SwitchPreference
             android:defaultValue="false"
             android:key="@string/settings_scan_beep_id"
@@ -46,12 +48,12 @@
     </PreferenceCategory>
 
 
-    <PreferenceCategory android:title="@string/settings_category_structures">
+    <PreferenceCategory android:title="@string/settings_structures">
         <SwitchPreference
             android:defaultValue="false"
-            android:key="@string/structures_buildings_initial_closed_id"
-            android:summary="@string/structures_buildings_initial_closed_summary"
-            android:title="@string/structures_buildings_initial_closed_title" />
+            android:key="@string/settings_structures_buildings_closed_id"
+            android:summary="@string/settings_structures_buildings_closed_summary"
+            android:title="@string/settings_structures_buildings_closed_title" />
     </PreferenceCategory>
 
 </PreferenceScreen>

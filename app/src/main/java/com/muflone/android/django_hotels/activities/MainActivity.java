@@ -92,8 +92,8 @@ public class MainActivity extends AppCompatActivity
         if (settings.getTabletID().isEmpty() |
                 settings.getTabletKey().isEmpty()) {
             String message = settings.getTabletID().isEmpty() ?
-                    this.getString(R.string.message_missing_tablet_id) :
-                    this.getString(R.string.message_missing_tablet_key);
+                    this.getString(R.string.missing_tablet_id) :
+                    this.getString(R.string.missing_tablet_key);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             this.onNavigationItemSelected(this.menuItemSettings);
         } else {
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity
         } else if (! this.backButtonPressed) {
             // Show message instead of closing
             this.backButtonPressed = true;
-            Toast.makeText(this, this.getString(R.string.message_press_back_again_to_exit),
+            Toast.makeText(this, this.getString(R.string.press_back_again_to_exit),
                     Toast.LENGTH_SHORT).show();
             // Restore confirmation after 2 seconds
             new Handler().postDelayed(new Runnable() {
