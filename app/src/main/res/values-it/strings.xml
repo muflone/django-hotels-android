@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Application values -->
+    <string name="app_description">Esegui le tue attività in Hotel</string>
+
+    <!-- Generic descriptions -->
+    <string name="dismiss">Chiudi</string>
+    <string name="description">Descrizione</string>
+    <string name="enabled">Abilitato</string>
+    <string name="disabled">Disabilitato</string>
+    <string name="employee">Impiegato</string>
+    <string name="contract">Contratto</string>
+
+    <!-- Home section -->
+    <string name="navigation_drawer_open">Apri pannello di navigazione</string>
+    <string name="navigation_drawer_close">Chiudi pannello di navigazione</string>
+    <string name="section_home">Inizio</string>
+    <string name="section_scanner">Scansione</string>
+    <string name="section_structures">Strutture</string>
+    <string name="section_extras">Extra</string>
+    <string name="section_sync">Sincronizzazione</string>
+    <string name="section_settings">Impostazioni</string>
+    <string name="section_about">Informazioni</string>
+
+    <string name="missing_tablet_id">ID tablet mancante, compilarlo nelle impostazioni prima dell\'uso</string>
+    <string name="missing_tablet_key">Chiave tablet mancante, compilarla nelle impostazioni prima dell\'uso</string>
+    <string name="press_back_again_to_exit">Premi nuovamente il tasto indietro per uscire</string>
+
+    <!-- Scan section -->
+    <string name="scan_prompt">Scansiona il tuo codice QR personale</string>
+    <string name="scan_register_enter">Registra ENTRATA</string>
+    <string name="scan_register_exit">Registra USCITA</string>
+    <string name="scan_latest_timestamps">Ultime timbrature</string>
+    <string name="scan_transmission_status">Stato trasmissione</string>
+    <string name="scan_unknown_employee">Impiegato sconosciuto</string>
+    <string name="scan_unsupported_qrcode">Codice QR non supportato</string>
+
+    <!-- Structures section -->
+    <string name="available_structures">Strutture disponibili</string>
+
+    <string name="employee_id_label">ID:</string>
+    <string name="employee_first_name_label">Nome:</string>
+    <string name="employee_last_name_label">Cognome:</string>
+    <string name="employee_gender_label">Sesso</string>
+    <string name="contract_id_label">ID:</string>
+    <string name="contract_company_label">Azienda:</string>
+    <string name="contract_status_label">Stato:</string>
+    <string name="contract_type_label">Tipo:</string>
+    <string name="contract_daily_hours_label">Ore giornaliere:</string>
+    <string name="contract_weekly_hours_label">Ore settimanali:</string>
+    <string name="contract_start_date_label">Data inizio:</string>
+    <string name="contract_end_date_label">Data fine:</string>
+
+    <string name="empty_service">Niente</string>
+
+    <string name="structures_marked_timestamp_as_untransmitted">Timbratura contrassegnata come non trasmessa</string>
+    <string name="structures_marked_activity_as_untransmitted">Attività contrassegnata come non trasmessa</string>
+    <string name="structures_unable_to_change_transmitted_activity">Impossibile modificare un\'attività già trasmessa</string>
+    <string name="structures_unable_to_use_contract">Impossibile utilizzare il contratto</string>
+    <string name="structures_select_a_service_room">Scegliere un servizio per la stanza</string>
+    <string name="structures_employees_already_assigned">Impiegati già assegnati</string>
+
+    <!-- Settings section -->
+    <string name="settings_tablet">Impostazioni tablet</string>
+
+    <string name="settings_tablet_id_title">ID tablet</string>
+    <string name="settings_tablet_id_summary">Questo campo conterrà l\'identificativo del tablet</string>
+
+    <string name="settings_tablet_key_title">Chiave tablet</string>
+    <string name="settings_tablet_key_summary">Questa è la chiave utilizzata per comunicare con il server</string>
+
+    <string name="settings_tablet_timezone_title">Fuso orario</string>
+    <string name="settings_tablet_timezone_summary">Fuso orario per data e ora</string>
+
+    <string name="settings_server">Impostazioni server</string>
+
+    <string name="settings_api_url_title">Indirizzo URL API</string>
+    <string name="settings_api_url_summary">Questo è l\'indirizzo del server a cui collegarsi</string>
+
+    <string name="settings_scan">Impostazioni scansione</string>
+
+    <string name="settings_scan_beep_title">Suona dopo la scansione</string>
+    <string name="settings_scan_beep_summary">Abililita il suono dopo una scansione valida</string>
+
+    <string name="settings_scan_orientation_lock_title">Blocca orientamento durante la scansione</string>
+    <string name="settings_scan_orientation_lock_summary">Blocca l\'orientamento dello schermo durante il processo di scansione</string>
+
+    <string name="settings_structures">Impostazioni strutture</string>
+
+    <string name="settings_structures_buildings_closed_title">Edifici inizialmente chiusi</string>
+    <string name="settings_structures_buildings_closed_summary">I gruppi di edifici sono automaticamente chiusi</string>
+
+    <!-- Sync section -->
+    <string name="sync_step_started">Sincronizzazione avviata</string>
+    <string name="sync_step_timestamps_transmission">Trasmissione delle timbrature</string>
+    <string name="sync_step_activities_transmission">Trasmissione delle attività</string>
+    <string name="sync_step_download">Scaricamento dati</string>
+    <string name="sync_step_completed">Sincronizzazione completata</string>
+    <string name="sync_error_no_server_connection">Impossibile stabilire una connessione con il server, controllare la connessione internet</string>
+    <string name="sync_error_invalid_date_time">Data o orario non validi, controllare le impostazioni di sistema</string>
+    <string name="sync_error_unable_to_download">Impossibile scaricare le informazioni dal server</string>
+    <string name="sync_error_invalid_server_response">Risposta non valida dal server, controllare la connessione internet</string>
+
+    <!-- About section -->
+    <string name="about_contacts">Contatti</string>
+    <string name="about_license">Licenza</string>
+    <string name="about_app_license">Licenza GPL-2+</string>
+    <string name="about_credits">Referenze</string>
+</resources>
