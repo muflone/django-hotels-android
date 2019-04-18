@@ -385,9 +385,7 @@ public class StructuresFragment extends Fragment {
         @Override
         public View getChildView(int groupPosition, final int childPosition,
                                  boolean isLastChild, View convertView, ViewGroup parent) {
-
-            final RoomStatus roomStatus = getChild(groupPosition, childPosition);
-
+            RoomStatus roomStatus = getChild(groupPosition, childPosition);
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) this.context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -456,8 +454,7 @@ public class StructuresFragment extends Fragment {
                     return false;
                 }
             });
-
-            // Set room service Click
+            // Set service button Click
             serviceButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View button) {
                     if (! apiData.isValidContract(roomStatus.contractId)) {
@@ -497,7 +494,7 @@ public class StructuresFragment extends Fragment {
                     }
                 }
             });
-            // Set room service LongClick
+            // Set service button Long Click
             serviceButton.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View button) {
@@ -540,8 +537,7 @@ public class StructuresFragment extends Fragment {
                     return true;
                 }
             });
-
-            // Set room service Click
+            // Set service description Click
             descriptionButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View button) {
                     final EditText descriptionView = new EditText(context);
@@ -629,6 +625,7 @@ public class StructuresFragment extends Fragment {
         }
 
         private void updateRoomStatus(RoomStatus roomStatus) {
+            // Update database row
             new AsyncTask<RoomStatus, Void, Void>() {
                 @Override
                 protected Void doInBackground(RoomStatus... params) {
@@ -680,7 +677,7 @@ public class StructuresFragment extends Fragment {
             // Show contextual menu for services
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle(R.string.structures_employees_already_assigned);
-            builder.setItems(employees.toArray(new String[0]),null);
+            builder.setItems(employees.toArray(new String[0]), null);
             AlertDialog dialog = builder.create();
             dialog.show();
 

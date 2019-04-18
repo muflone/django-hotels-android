@@ -27,11 +27,11 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:textSize="17sp"
-        tools:text="ITEM"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/serviceButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="ITEM" />
 
     <Button
         android:id="@+id/serviceButton"

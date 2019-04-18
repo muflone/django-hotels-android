@@ -34,7 +34,7 @@ public class SyncFragment extends Fragment {
     private TextView progressView;
     private TextView errorMessage;
     private ImageView errorView;
-    private List<String> progressPhases = new ArrayList<>();
+    private final List<String> progressPhases = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
