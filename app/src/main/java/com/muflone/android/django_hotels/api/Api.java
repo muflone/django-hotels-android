@@ -50,6 +50,10 @@ public class Api {
         try {
             URL requestUrl = new URL(this.buildJsonUri(segment).toString());
             URLConnection connection = requestUrl.openConnection();
+            // Add custom headers
+            connection.setRequestProperty("client-agent", this.settings.getPackageName());
+            connection.setRequestProperty("client-version", this.settings.getPackageVersion());
+
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()));
             StringBuilder jsonStringBuilder = new StringBuilder();

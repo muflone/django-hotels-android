@@ -41,4 +41,12 @@ public class Settings {
     public boolean getBuildingsInitiallyClosed() {
         return this.preferences.getBoolean(this.context.getString(R.string.settings_structures_buildings_closed_id), false);
     }
+
+    public String getPackageName() {
+        return this.context.getPackageName();
+    }
+
+    public String getPackageVersion() {
+        return this.context.getString(R.string.app_version);
+    }
 }
