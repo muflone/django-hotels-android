@@ -105,7 +105,8 @@ public class Api {
     public ApiData checkDates() {
         // Check if the system date/time matches with the remote date/time
         ApiData data = new ApiData();
-        JSONObject jsonRoot = this.getJSONObject("dates/");
+        JSONObject jsonRoot = this.getJSONObject(String.format("dates/%s/",
+                this.settings.getTabletID()));
         if (jsonRoot != null) {
             try {
                 // Get current system date only
