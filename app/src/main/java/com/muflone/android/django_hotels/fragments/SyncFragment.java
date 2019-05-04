@@ -35,6 +35,7 @@ public class SyncFragment extends Fragment {
     private TextView errorMessage;
     private ImageView errorView;
     private final List<String> progressPhases = new ArrayList<>();
+    private static final int SYNC_SLEEP = 400;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -95,9 +96,8 @@ public class SyncFragment extends Fragment {
 
                     @Override
                     public void onProgress(int step, int total) {
-                        System.out.println(step + " / " + total);
                         try {
-                            Thread.sleep(2000);
+                            Thread.sleep(SYNC_SLEEP);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
