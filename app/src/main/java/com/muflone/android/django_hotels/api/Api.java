@@ -9,6 +9,7 @@ import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
+
 import org.fedorahosted.freeotp.Token;
 
 import org.json.JSONException;

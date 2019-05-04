@@ -95,7 +95,7 @@ public class SyncFragment extends Fragment {
 
                     @Override
                     public void onProgress(int step, int total) {
-                        System.out.println(String.valueOf(step) + " / " + String.valueOf(total));
+                        System.out.println(step + " / " + total);
                         try {
                             Thread.sleep(2000);
                         } catch (InterruptedException e) {
