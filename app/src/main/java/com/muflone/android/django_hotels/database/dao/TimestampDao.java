@@ -9,6 +9,7 @@ import android.arch.persistence.room.Update;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampEmployee;
 
+import java.util.Date;
 import java.util.List;
 
 import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
@@ -33,9 +34,11 @@ public interface TimestampDao {
            "   ON employees.id = contracts.employee_id " +
            "INNER JOIN timestamp_directions " +
            "   ON timestamp_directions.id = timestamps.direction_id " +
+           "WHERE datetime BETWEEN :date AND :date + 86400000 - 1 " +
+           "  AND (timestamp_directions.type_enter = 1 OR timestamp_directions.type_exit = 1) " +
            "ORDER BY timestamps.datetime DESC " +
            "LIMIT :count")
-    List<TimestampEmployee> listByLatest(long count);
+    List<TimestampEmployee> listByLatestEnterExit(Date date, long count);
 
     @Query("SELECT * " +
            "FROM timestamps " +

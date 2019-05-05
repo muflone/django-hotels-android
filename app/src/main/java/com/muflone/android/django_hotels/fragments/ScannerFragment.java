@@ -215,7 +215,7 @@ public class ScannerFragment extends Fragment {
         new AsyncTask<Long, Void, List<TimestampEmployee>>() {
             @Override
             protected List<TimestampEmployee> doInBackground(Long... params) {
-                return database.timestampDao().listByLatest(params[0]);
+                return database.timestampDao().listByLatestEnterExit(Singleton.getInstance().selectedDate, params[0]);
             }
 
             @Override
