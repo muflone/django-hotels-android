@@ -394,7 +394,7 @@ public class StructuresFragment extends Fragment {
             // This reference is used from the inner classes
             View rowView = convertView;
             // Update database row
-            this.updateRoomStatus(roomStatus);
+            roomStatus.updateDatabase();
             // Update view row
             this.updateRoomView(convertView, roomStatus);
             // Handle service present image LongClick
@@ -418,7 +418,7 @@ public class StructuresFragment extends Fragment {
                         protected Void doInBackground(Void... result) {
                             // Delete transmission date
                             roomStatus.transmission = null;
-                            updateRoomStatus(roomStatus);
+                            roomStatus.updateDatabase();
                             return null;
                         }
 
@@ -451,7 +451,7 @@ public class StructuresFragment extends Fragment {
                         // Update ServiceActivity for room
                         roomStatus.nextService();
                         updateService(roomStatus);
-                        updateRoomStatus(roomStatus);
+                        roomStatus.updateDatabase();
                         updateRoomView(rowView, roomStatus);
                     }
                 }
@@ -483,7 +483,7 @@ public class StructuresFragment extends Fragment {
                                 roomStatus.service = apiData.serviceMap.get(servicesIdList.get(position));
                                 roomStatus.prepareForNothing();
                                 updateService(roomStatus);
-                                updateRoomStatus(roomStatus);
+                                roomStatus.updateDatabase();
                                 updateRoomView(rowView, roomStatus);
                                 dialog.dismiss();
                             }
@@ -518,7 +518,7 @@ public class StructuresFragment extends Fragment {
                                                 Toast.LENGTH_SHORT).show();
                                     } else {
                                             roomStatus.description = descriptionView.getText().toString();
-                                            updateRoomStatus(roomStatus);
+                                            roomStatus.updateDatabase();
                                             updateRoomView(rowView, roomStatus);
                                     }
                                 }
@@ -617,13 +617,90 @@ public class StructuresFragment extends Fragment {
                     R.drawable.ic_timestamp_untransmitted : R.drawable.ic_timestamp_transmitted);
         }
 
-        private void updateRoomStatus(RoomStatus roomStatus) {
+        public void showAlreadyAssignedEmployees(List<Long> employeesIdList) {
+            List<String> employees = new ArrayList<>();
+            for (Long employeeId : employeesIdList) {
+                Employee employee = this.apiData.employeesMap.get(employeeId);
+                employees.add(employee.firstName + " " + employee.lastName);
+            }
+            System.out.println(employees.toString());
+            // Show contextual menu for services
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(R.string.structures_employees_already_assigned);
+            builder.setItems(employees.toArray(new String[0]), null);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
+        public void updateService(RoomStatus roomStatus) {
+            // Check if the employee is already assigned for the room
+            List<Long> roomAssignationList = roomsEmployeesAssignedList.get(roomStatus.roomId);
+            Employee employee = apiData.contractsMap.get(roomStatus.contractId).employee;
+            if (roomStatus.service == null) {
+                // Un-assign
+                roomAssignationList.remove(employee.id);
+            } else if (! roomAssignationList.contains(employee.id)) {
+                // Assign
+                roomAssignationList.add(employee.id);
+            }
+        }
+    }
+
+    private class RoomStatus {
+        private final String emptyServiceDescription;
+        private final AppDatabase database;
+        final String name;
+        final long contractId;
+        final long roomId;
+        final List<Service> services;
+        Service service;
+        private int serviceCounter;
+        String description;
+        Date transmission;
+
+        RoomStatus(Context context, String name, long contractId, long roomId,
+                   List<Service> services, Service service, String description,
+                   Date transmission) {
+            this.emptyServiceDescription = context.getString(R.string.empty_service);
+            this.database =  AppDatabase.getAppDatabase(context);
+            this.name = name;
+            this.contractId = contractId;
+            this.roomId = roomId;
+            this.services = services;
+            this.service = service;
+            this.serviceCounter = this.services.indexOf(this.service);
+            this.description = description;
+            this.transmission = transmission;
+        }
+
+        @SuppressWarnings("UnusedReturnValue")
+        Service nextService() {
+            // Cycle services
+            this.serviceCounter++;
+            if (this.serviceCounter == this.services.size()) {
+                this.serviceCounter = 0;
+            }
+            this.service = this.services.get(this.serviceCounter);
+            return this.service;
+        }
+
+        String getServiceName() {
+            // Get current service name
+            return this.service == null ? this.emptyServiceDescription : this.service.name;
+        }
+
+        void prepareForNothing() {
+            // Set the cycle counter to the last element so that the next service will be Nothing
+            this.serviceCounter = this.services.size() - 1;
+        }
+
+        private void updateDatabase() {
             // Update database row
             new AsyncTask<RoomStatus, Void, Void>() {
                 @Override
                 protected Void doInBackground(RoomStatus... params) {
                     RoomStatus roomStatus = params[0];
-                    List <ServiceActivity> serviceActivityList =
+                    List<ServiceActivity> serviceActivityList =
                             database.serviceActivityDao().listByDateContract(
                                     Singleton.getInstance().selectedDate,
                                     roomStatus.contractId, roomStatus.roomId);
@@ -657,82 +734,7 @@ public class StructuresFragment extends Fragment {
                     }
                     return null;
                 }
-            }.execute(roomStatus);
-        }
-
-        public void showAlreadyAssignedEmployees(List<Long> employeesIdList) {
-            List<String> employees = new ArrayList<>();
-            for (Long employeeId : employeesIdList) {
-                Employee employee = this.apiData.employeesMap.get(employeeId);
-                employees.add(employee.firstName + " " + employee.lastName);
-            }
-            System.out.println(employees.toString());
-            // Show contextual menu for services
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(R.string.structures_employees_already_assigned);
-            builder.setItems(employees.toArray(new String[0]), null);
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        }
-
-        public void updateService(RoomStatus roomStatus) {
-            // Check if the employee is already assigned for the room
-            List<Long> roomAssignationList = roomsEmployeesAssignedList.get(roomStatus.roomId);
-            Employee employee = apiData.contractsMap.get(roomStatus.contractId).employee;
-            if (roomStatus.service == null) {
-                // Un-assign
-                roomAssignationList.remove(employee.id);
-            } else if (! roomAssignationList.contains(employee.id)) {
-                // Assign
-                roomAssignationList.add(employee.id);
-            }
-        }
-    }
-
-    private class RoomStatus {
-        private final String emptyServiceDescription;
-        final String name;
-        final long contractId;
-        final long roomId;
-        final List<Service> services;
-        Service service;
-        private int serviceCounter;
-        String description;
-        Date transmission;
-
-        RoomStatus(Context context, String name, long contractId, long roomId,
-                   List<Service> services, Service service, String description,
-                   Date transmission) {
-            this.emptyServiceDescription = context.getString(R.string.empty_service);
-            this.name = name;
-            this.contractId = contractId;
-            this.roomId = roomId;
-            this.services = services;
-            this.service = service;
-            this.serviceCounter = this.services.indexOf(this.service);
-            this.description = description;
-            this.transmission = transmission;
-        }
-
-        @SuppressWarnings("UnusedReturnValue")
-        Service nextService() {
-            // Cycle services
-            this.serviceCounter++;
-            if (this.serviceCounter == this.services.size()) {
-                this.serviceCounter = 0;
-            }
-            this.service = this.services.get(this.serviceCounter);
-            return this.service;
-        }
-
-        String getServiceName() {
-            // Get current service name
-            return this.service == null ? this.emptyServiceDescription : this.service.name;
-        }
-
-        void prepareForNothing() {
-            // Set the cycle counter to the last element so that the next service will be Nothing
-            this.serviceCounter = this.services.size() - 1;
+            }.execute(this);
         }
     }
 }
