@@ -115,7 +115,6 @@ public class StructuresFragment extends Fragment {
                             @SuppressWarnings("EmptyMethod")
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                                return;
                             }
                         });
                 // Save choices when the OK button is pressed
@@ -396,7 +395,6 @@ public class StructuresFragment extends Fragment {
         private final Context context;
         private final List<String> buildingsList;
         private final HashMap<String, List<RoomStatus>> roomsList;
-        private final AppDatabase database;
         private final ApiData apiData;
         private Drawable descriptionEnabledDrawable;
         private Drawable descriptionDisabledDrawable;
@@ -406,7 +404,6 @@ public class StructuresFragment extends Fragment {
             this.context = context;
             this.buildingsList = listDataHeader;
             this.roomsList = listChildData;
-            this.database =  AppDatabase.getAppDatabase(context);
             this.apiData = Singleton.getInstance().apiData;
         }
 
@@ -661,7 +658,6 @@ public class StructuresFragment extends Fragment {
                 Employee employee = this.apiData.employeesMap.get(employeeId);
                 employees.add(employee.firstName + " " + employee.lastName);
             }
-            System.out.println(employees.toString());
             // Show contextual menu for services
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle(R.string.structures_employees_already_assigned);
@@ -700,7 +696,7 @@ public class StructuresFragment extends Fragment {
                    List<Service> services, Service service, String description,
                    Date transmission) {
             this.emptyServiceDescription = context.getString(R.string.empty_service);
-            this.database =  AppDatabase.getAppDatabase(context);
+            this.database = AppDatabase.getAppDatabase(context);
             this.name = name;
             this.contractId = contractId;
             this.roomId = roomId;

@@ -35,23 +35,23 @@ public interface EmployeeDao {
            "   ON contracts.employee_id = employees.id " +
            "INNER JOIN contract_buildings " +
            "   ON contract_buildings.contract_id = contracts.id " +
-            "INNER JOIN buildings " +
-            "   ON buildings.id = contract_buildings.building_id " +
-            "INNER JOIN structures " +
-            "   ON structures.id = buildings.structure_id " +
+           "INNER JOIN buildings " +
+           "   ON buildings.id = contract_buildings.building_id " +
+           "INNER JOIN structures " +
+           "   ON structures.id = buildings.structure_id " +
            "WHERE structures.id = :structure_id " +
            "ORDER BY first_name, last_name")
     List<Employee> listByStructure(long structure_id);
 
     @Query("SELECT * " +
-            "FROM employees " +
-            "WHERE id = :id")
+           "FROM employees " +
+           "WHERE id = :id")
     Employee findById(long id);
 
     @Query("SELECT * " +
-            "FROM employees " +
-            "WHERE first_name = :first_name " +
-            "  AND last_name = :last_name")
+           "FROM employees " +
+           "WHERE first_name = :first_name " +
+           "  AND last_name = :last_name")
     Employee findByName(String first_name, String last_name);
 
     @Query("SELECT COUNT(*) " +

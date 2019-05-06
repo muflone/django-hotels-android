@@ -20,10 +20,10 @@ public interface TimestampDirectionDao {
     List<TimestampDirection> listAll();
 
     @Query("SELECT * " +
-            "FROM timestamp_directions " +
-            "WHERE type_enter != 1 " +
-            "  AND type_exit != 1 " +
-            "ORDER BY name")
+           "FROM timestamp_directions " +
+           "WHERE type_enter != 1 " +
+           "  AND type_exit != 1 " +
+           "ORDER BY name")
     List<TimestampDirection> listNotEnterExit();
 
     @Query("SELECT * " +

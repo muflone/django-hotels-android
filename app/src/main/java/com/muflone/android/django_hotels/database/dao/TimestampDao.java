@@ -63,8 +63,8 @@ public interface TimestampDao {
     List<Timestamp> listByUntrasmitted();
 
     @Query("SELECT * " +
-            "FROM timestamps " +
-            "WHERE id = :id")
+           "FROM timestamps " +
+           "WHERE id = :id")
     Timestamp findById(long id);
 
     @Query("SELECT COUNT(*) " +

@@ -28,21 +28,21 @@ public interface ServiceActivityDao {
     List<ServiceActivity> listByUntrasmitted();
 
     @Query("SELECT * " +
-            "FROM activities " +
-            "WHERE date = :date " +
-            "  AND contract_id = :contractId")
+           "FROM activities " +
+           "WHERE date = :date " +
+           "  AND contract_id = :contractId")
     List<ServiceActivity> listByDateContract(@NonNull Date date, long contractId);
 
     @Query("SELECT * " +
-            "FROM activities " +
-            "WHERE date = :date " +
-            "  AND contract_id = :contractId " +
-            "  AND room_id = :roomId")
+           "FROM activities " +
+           "WHERE date = :date " +
+           "  AND contract_id = :contractId " +
+           "  AND room_id = :roomId")
     List<ServiceActivity> listByDateContract(@NonNull Date date, long contractId, long roomId);
 
     @Query("SELECT * " +
-            "FROM activities " +
-            "WHERE id = :id")
+           "FROM activities " +
+           "WHERE id = :id")
     ServiceActivity findById(long id);
 
     @Query("SELECT COUNT(*) " +
