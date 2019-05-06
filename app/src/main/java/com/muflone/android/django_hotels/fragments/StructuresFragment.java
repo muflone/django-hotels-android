@@ -107,7 +107,7 @@ public class StructuresFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 // Show contextual menu for employee
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(R.string.structures_employee_set_status);
+                builder.setTitle(R.string.structures_employee_set_conditions);
                 // Get service directions list
                 EmployeeStatus employeeStatus = employeesStatusList.get(position);
                 builder.setMultiChoiceItems(employeeStatus.directionsArray, employeeStatus.directionsCheckedArray,

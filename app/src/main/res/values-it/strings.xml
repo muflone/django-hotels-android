@@ -59,7 +59,7 @@
     <string name="structures_unable_to_use_contract">Impossibile utilizzare il contratto</string>
     <string name="structures_select_a_service_room">Scegliere un servizio per la stanza</string>
     <string name="structures_employees_already_assigned">Impiegati già assegnati</string>
-    <string name="structures_employee_set_status">Assegna uno stato al dipendente</string>
+    <string name="structures_employee_set_conditions">Assegna una o più condizioni al dipendente</string>
 
     <!-- Settings section -->
     <string name="settings_tablet">Impostazioni tablet</string>
