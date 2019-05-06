@@ -59,6 +59,7 @@
     <string name="structures_unable_to_use_contract">Unable to use the contract</string>
     <string name="structures_select_a_service_room">Select a service for the room</string>
     <string name="structures_employees_already_assigned">Employees already assigned</string>
+    <string name="structures_employee_set_status">Assign a status to the employee</string>
 
     <!-- Settings section -->
     <string name="settings_tablet">Tablet settings</string>

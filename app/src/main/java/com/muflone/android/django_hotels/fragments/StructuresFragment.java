@@ -42,6 +42,8 @@ import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.database.models.Structure;
+import com.muflone.android.django_hotels.database.models.Timestamp;
+import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -64,6 +66,7 @@ public class StructuresFragment extends Fragment {
     private ExpandableListView roomsView;
     private ExpandableListAdapter buildingRoomsAdapter;
     private final List<String> employeesList = new ArrayList<>();
+    private final List<EmployeeStatus> employeesStatusList = new ArrayList<>();
     private final List<String> buildingsList = new ArrayList<>();
     private final HashMap<String, List<RoomStatus>> roomsList = new HashMap<>();
     private final List<Structure> structures = new ArrayList<>();
@@ -97,6 +100,34 @@ public class StructuresFragment extends Fragment {
         this.employeesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 loadEmployee(selectedStructure.employees.get(position));
+            }
+        });
+        this.employeesView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                // Show contextual menu for employee
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle(R.string.structures_employee_set_status);
+                // Get service directions list
+                EmployeeStatus employeeStatus = employeesStatusList.get(position);
+                builder.setMultiChoiceItems(employeeStatus.directionsArray, employeeStatus.directionsCheckedArray,
+                        new DialogInterface.OnMultiChoiceClickListener() {
+                            @SuppressWarnings("EmptyMethod")
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                                return;
+                            }
+                        });
+                // Save choices when the OK button is pressed
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        employeeStatus.updateDatabase();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                return true;
             }
         });
 
@@ -189,6 +220,7 @@ public class StructuresFragment extends Fragment {
     private void loadEmployees(TabLayout.Tab tab) {
         // Load employees list for the selected Structure tab
         this.employeesList.clear();
+        this.employeesStatusList.clear();
         this.roomsEmployeesAssignedList.clear();
         this.serviceActivityTable.clear();
         this.selectedStructure = this.structures.get(tab.getPosition());
@@ -223,6 +255,12 @@ public class StructuresFragment extends Fragment {
                             roomsEmployeesAssignedList.get(serviceActivity.roomId).add(employee.id);
                         }
                     }
+                    // Add employee status
+                    employeesStatusList.add(new EmployeeStatus(contract,
+                            Singleton.getInstance().selectedDate,
+                            apiData.timestampDirectionsNotEnterExit,
+                            database.timestampDao().listByContractNotEnterExit(
+                                    Singleton.getInstance().selectedDate, contract.id)));
                 }
                 return null;
             }
@@ -732,6 +770,64 @@ public class StructuresFragment extends Fragment {
                         serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
                                 serviceActivity);
                     }
+                    return null;
+                }
+            }.execute(this);
+        }
+    }
+
+    private class EmployeeStatus {
+        private final Contract contract;
+        private final Date date;
+        private final List<TimestampDirection> timestampDirections;
+        private final String[] directionsArray;
+        private final boolean[] directionsCheckedArray;
+        private final AppDatabase database;
+
+        public EmployeeStatus(Contract contract, Date date,
+                              List<TimestampDirection> timestampDirections,
+                              List<Timestamp> timestampsEmployee) {
+            this.contract = contract;
+            this.date = date;
+            // Initialize directionsArray and directionsCheckedArray
+            this.timestampDirections = timestampDirections;
+            this.directionsArray = new String[timestampDirections.size()];
+            this.directionsCheckedArray = new boolean[timestampDirections.size()];
+            // Get the already assigned timestamp directions to restore
+            List<Long> assignedTimestampDirectionsList = new ArrayList<>();
+            for (Timestamp timestamp : timestampsEmployee) {
+                assignedTimestampDirectionsList.add(timestamp.directionId);
+            }
+            // Translate timestamp directions to array, needed by the AlertDialog for selections
+            int index = 0;
+            for (TimestampDirection direction : timestampDirections) {
+                this.directionsArray[index] = direction.name;
+                this.directionsCheckedArray[index] = assignedTimestampDirectionsList.contains(direction.id);
+                index++;
+            }
+            this.database = AppDatabase.getAppDatabase(context);
+        }
+
+        private void updateDatabase() {
+            // Update database row
+            new AsyncTask<EmployeeStatus, Void, Void>() {
+                @Override
+                protected Void doInBackground(EmployeeStatus... params) {
+                    EmployeeStatus employeeStatus = params[0];
+                    List<Timestamp> timestampsEmployee =
+                            database.timestampDao().listByContractNotEnterExit(date, contract.id);
+                    // Delete any previous timestamp
+                    database.timestampDao().delete(timestampsEmployee.toArray(new Timestamp[0]));
+                    // Re-add every active timestamp
+                    timestampsEmployee.clear();
+                    for (int index = 0; index < employeeStatus.timestampDirections.size(); index++) {
+                        if (employeeStatus.directionsCheckedArray[index]) {
+                            TimestampDirection timestampDirection = employeeStatus.timestampDirections.get(index);
+                            timestampsEmployee.add(new Timestamp(0, employeeStatus.contract.id,
+                                    timestampDirection.id, date,"", null));
+                        }
+                    }
+                    database.timestampDao().insert(timestampsEmployee.toArray(new Timestamp[0]));
                     return null;
                 }
             }.execute(this);

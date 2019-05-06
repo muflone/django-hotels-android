@@ -136,6 +136,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
         }
         data.enterDirection = timestampDirectionDao.findByTypeEnter();
         data.exitDirection = timestampDirectionDao.findByTypeExit();
+        data.timestampDirectionsNotEnterExit = timestampDirectionDao.listNotEnterExit();
         return new AsyncTaskResult(data, data.exception);
     }
 

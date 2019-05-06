@@ -45,6 +45,17 @@ public interface TimestampDao {
            "WHERE contract_id = :contractId")
     List<Timestamp> listByName(long contractId);
 
+    @Query("SELECT " +
+           "  timestamps.* " +
+           "FROM timestamps " +
+           "INNER JOIN timestamp_directions " +
+           "   ON timestamp_directions.id = timestamps.direction_id " +
+           "WHERE contract_id = :contractId " +
+           "  AND datetime = :date " +
+           "  AND timestamp_directions.type_enter = 0 " +
+           "  AND timestamp_directions.type_exit = 0")
+    List<Timestamp> listByContractNotEnterExit(Date date, long contractId);
+
     @Query("SELECT * " +
            "FROM timestamps " +
            "WHERE transmission IS NULL " +

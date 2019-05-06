@@ -16,6 +16,7 @@ import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class ApiData {
     public final HashMap<Long, Brand> brandsMap;
@@ -33,6 +34,7 @@ public class ApiData {
     public final HashMap<Long, TimestampDirection> timestampDirectionsMap;
     public TimestampDirection enterDirection;
     public TimestampDirection exitDirection;
+    public List<TimestampDirection> timestampDirectionsNotEnterExit;
     public Exception exception;
 
     @SuppressLint("UseSparseArrays")
