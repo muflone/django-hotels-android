@@ -125,6 +125,7 @@
     <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDirectionDao" method="insert" />
     <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDirectionDao" />
     <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDirectionDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.models.TimestampEmployee" method="TimestampEmployee" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
