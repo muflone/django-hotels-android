@@ -126,6 +126,24 @@
     <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDirectionDao" />
     <pattern value="com.muflone.android.django_hotels.database.dao.TimestampDirectionDao" method="update" />
     <pattern value="com.muflone.android.django_hotels.database.models.TimestampEmployee" method="TimestampEmployee" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TabletSettingDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TabletSettingDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TabletSettingDao" method="findByName" />
+    <pattern value="com.muflone.android.django_hotels.database.models.TabletSetting" method="getBoolean" />
+    <pattern value="com.muflone.android.django_hotels.database.models.TabletSetting" method="getDate" />
+    <pattern value="com.muflone.android.django_hotels.database.models.TabletSetting" method="getDateTime" />
+    <pattern value="com.muflone.android.django_hotels.database.models.TabletSetting" method="getDouble" />
+    <pattern value="com.muflone.android.django_hotels.database.models.TabletSetting" method="getFloat" />
+    <pattern value="com.muflone.android.django_hotels.database.models.TabletSetting" method="getLong" />
+    <pattern value="com.muflone.android.django_hotels.database.models.TabletSetting" method="getTime" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TabletSettingDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.models.TabletSetting" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TabletSettingDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.TabletSettingDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.database.models.Service" method="compareTo" />
+    <pattern value="com.muflone.android.django_hotels.database.models.Structure" method="compareTo" />
+    <pattern value="com.muflone.android.django_hotels.database.models.Service" />
+    <pattern value="com.muflone.android.django_hotels.database.models.Structure" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
