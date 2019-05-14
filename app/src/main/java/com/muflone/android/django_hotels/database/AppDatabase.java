@@ -23,6 +23,7 @@ import com.muflone.android.django_hotels.database.dao.RoomDao;
 import com.muflone.android.django_hotels.database.dao.ServiceActivityDao;
 import com.muflone.android.django_hotels.database.dao.ServiceDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
+import com.muflone.android.django_hotels.database.dao.TabletSettingDao;
 import com.muflone.android.django_hotels.database.dao.TimestampDao;
 import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Brand;
@@ -40,6 +41,7 @@ import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.database.models.Structure;
+import com.muflone.android.django_hotels.database.models.TabletSetting;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
@@ -50,7 +52,7 @@ import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
                       Contract.class, ContractBuildings.class,
                       ContractType.class, Country.class, Employee.class, JobType.class,
                       Location.class, Region.class, Room.class, Service.class,
-                      ServiceActivity.class, Structure.class, Timestamp.class,
+                      ServiceActivity.class, Structure.class, TabletSetting.class, Timestamp.class,
                       TimestampDirection.class},
           version = Constants.DATABASE_VERSION)
 @TypeConverters({Converters.class})
@@ -72,6 +74,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract ServiceActivityDao serviceActivityDao();
     public abstract ServiceDao serviceDao();
     public abstract StructureDao structureDao();
+    public abstract TabletSettingDao tabletSettingDao();
     public abstract TimestampDao timestampDao();
     public abstract TimestampDirectionDao timestampDirectionDao();
 
