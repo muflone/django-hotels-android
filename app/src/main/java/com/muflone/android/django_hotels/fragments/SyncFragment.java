@@ -1,6 +1,7 @@
 package com.muflone.android.django_hotels.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.muflone.android.django_hotels.Singleton;
+import com.muflone.android.django_hotels.activities.CreateShortcutActivity;
 import com.muflone.android.django_hotels.tasks.AsyncTaskSync;
 import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.R;
@@ -69,7 +71,12 @@ public class SyncFragment extends Fragment {
                                 context.getResources().getDrawable(R.drawable.ic_check_ok));
                         progressBar2.setVisibility(View.INVISIBLE);
                         errorView.setVisibility(View.VISIBLE);
-
+                        // Add shortcut on home screen if not yet done
+                        if (! singleton.settings.getHomeScreenShortcutAdded()) {
+                            Intent intent = new Intent(getContext(), CreateShortcutActivity.class);
+                            startActivity(intent);
+                            singleton.settings.setHomeScreenShortcutAdded(true);
+                        }
                     }
 
                     @Override
