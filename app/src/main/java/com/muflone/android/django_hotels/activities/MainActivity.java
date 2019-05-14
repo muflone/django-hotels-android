@@ -1,6 +1,7 @@
 package com.muflone.android.django_hotels.activities;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -180,6 +181,11 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.menuItemSync:
                 fragment = new SyncFragment();
+                break;
+            case R.id.menuItemShortcut:
+                fragment = new HomeFragment();
+                Intent intent = new Intent(this, CreateShortcutActivity.class);
+                this.startActivity(intent);
                 break;
             case R.id.menuItemSettings:
                 fragment = new SettingsFragment();

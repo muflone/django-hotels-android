@@ -32,6 +32,10 @@
         android:id="@+id/group_settings"
         android:checkableBehavior="single">
         <item
+            android:id="@+id/menuItemShortcut"
+            android:icon="@drawable/ic_add_shortcut"
+            android:title="@string/section_add_shortcut" />
+        <item
             android:id="@+id/menuItemSettings"
             android:icon="@drawable/ic_settings"
             android:title="@string/section_settings" />
