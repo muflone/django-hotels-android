@@ -66,7 +66,7 @@ public class SyncFragment extends Fragment {
                     @Override
                     public void onSuccess(AsyncTaskResult result) {
                         // Reload data from database
-                        AppDatabase.getAppDatabase(context).reload(context);
+                        AppDatabase.getAppDatabase(context).reload(context, null);
                         errorView.setImageDrawable(
                                 context.getResources().getDrawable(R.drawable.ic_check_ok));
                         progressBar2.setVisibility(View.INVISIBLE);

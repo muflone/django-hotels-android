@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity
             this.onNavigationItemSelected(this.menuItemHome);
         }
         // Reload data from database
-        AppDatabase.getAppDatabase(this).reload(this);
+        AppDatabase.getAppDatabase(this).reload(this, null);
     }
 
     @Override

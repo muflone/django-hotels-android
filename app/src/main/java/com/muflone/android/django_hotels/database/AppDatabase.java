@@ -121,7 +121,7 @@ public abstract class AppDatabase extends RoomDatabase {
         return result;
     }
 
-    public void reload(Context context) {
+    public void reload(Context context, AsyncTaskListener callback) {
         // Load data from database
         AsyncTaskLoadDatabase task = new AsyncTaskLoadDatabase(
                 context,
@@ -129,14 +129,23 @@ public abstract class AppDatabase extends RoomDatabase {
             @Override
             public void onSuccess(AsyncTaskResult result) {
                 Singleton.getInstance().apiData = result.data;
+                if (callback != null) {
+                    callback.onSuccess(result);
+                }
             }
 
             @Override
             public void onFailure(Exception exception) {
+                if (callback != null) {
+                    callback.onFailure(exception);
+                }
             }
 
             @Override
             public void onProgress(int step, int total) {
+                if (callback != null) {
+                    callback.onProgress(step, total);
+                }
             }
         });
         task.execute();
