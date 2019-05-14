@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.daimajia.numberprogressbar.NumberProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.daimajia.numberprogressbar.NumberProgressBar
         android:id="@+id/progressBar"
         style="@style/NumberProgressBar_Default"
         android:layout_width="0dp"

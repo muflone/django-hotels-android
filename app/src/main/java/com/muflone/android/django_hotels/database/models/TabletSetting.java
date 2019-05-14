@@ -28,7 +28,7 @@ public class TabletSetting {
         this.data = data;
     }
 
-    public TabletSetting(JSONObject jsonObject) throws JSONException,  ParseException {
+    public TabletSetting(JSONObject jsonObject) throws JSONException {
         this(jsonObject.getString("name"),
                 jsonObject.getString("data"));
     }
@@ -60,7 +60,7 @@ public class TabletSetting {
 
     public boolean getBoolean() {
         // Return the data as boolean
-        return this.data != "0";
+        return ! this.data.equals("0");
     }
 
     public Date getDate() {
