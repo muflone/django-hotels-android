@@ -40,8 +40,13 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView = null;
     private Toolbar toolbar = null;
     private MenuItem menuItemHome = null;
-    private MenuItem menuItemSettings = null;
+    private MenuItem menuItemScanner = null;
+    private MenuItem menuItemStructures = null;
+    private MenuItem menuItemExtras = null;
     private MenuItem menuItemSync = null;
+    private MenuItem menuItemShortcut = null;
+    private MenuItem menuItemSettings = null;
+    private MenuItem menuItemAbout = null;
     private MenuItem toolButtonSetDate = null;
     private boolean backButtonPressed = false;
 
@@ -71,22 +76,7 @@ public class MainActivity extends AppCompatActivity
                 R.string.navigation_drawer_close);
         this.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        // Find the settings MenuItems
-        navigationView.setNavigationItemSelectedListener(this);
-        Menu menu = navigationView.getMenu();
-        for (int item = 0; item < menu.size(); item++) {
-            switch (menu.getItem(item).getItemId()) {
-                case R.id.menuItemHome:
-                    this.menuItemHome = menu.getItem(item);
-                    break;
-                case R.id.menuItemSettings:
-                    this.menuItemSettings = menu.getItem(item);
-                    break;
-                case R.id.menuItemSync:
-                    this.menuItemSync = menu.getItem(item);
-                    break;
-            }
-        }
+        this.navigationView.setNavigationItemSelectedListener(this);
         // Load preferences
         if (settings.getTabletID().isEmpty() |
                 settings.getTabletKey().isEmpty()) {
@@ -106,6 +96,36 @@ public class MainActivity extends AppCompatActivity
         this.drawerLayout = this.findViewById(R.id.drawer_layout);
         this.navigationView = this.findViewById(R.id.navigation);
         this.toolbar = this.findViewById(R.id.toolbar);
+        // Find the navigation drawer MenuItems
+        Menu menu = this.navigationView.getMenu();
+        for (int item = 0; item < menu.size(); item++) {
+            switch (menu.getItem(item).getItemId()) {
+                case R.id.menuItemHome:
+                    this.menuItemHome = menu.getItem(item);
+                    break;
+                case R.id.menuItemScanner:
+                    this.menuItemScanner = menu.getItem(item);
+                    break;
+                case R.id.menuItemStructures:
+                    this.menuItemStructures = menu.getItem(item);
+                    break;
+                case R.id.menuItemExtras:
+                    this.menuItemExtras = menu.getItem(item);
+                    break;
+                case R.id.menuItemSync:
+                    this.menuItemSync = menu.getItem(item);
+                    break;
+                case R.id.menuItemShortcut:
+                    this.menuItemShortcut = menu.getItem(item);
+                    break;
+                case R.id.menuItemSettings:
+                    this.menuItemSettings = menu.getItem(item);
+                    break;
+                case R.id.menuItemAbout:
+                    this.menuItemAbout = menu.getItem(item);
+                    break;
+            }
+        }
     }
 
     @Override
@@ -126,7 +146,7 @@ public class MainActivity extends AppCompatActivity
         this.singleton.selectedDate = new Date(savedInstanceState.getLong("selectedDate"));
         // Restore previous active fragment
         String fragmentName = savedInstanceState.getString("fragment");
-        FragmentLoader.loadFragment(this, R.id.fragment_container, fragmentName);
+        this.setActiveFragment(FragmentLoader.loadFragment(this, R.id.fragment_container, fragmentName));
     }
 
     @Override
@@ -163,39 +183,29 @@ public class MainActivity extends AppCompatActivity
         String fragmentName = null;
         // Activate MenuItem
         item.setChecked(true);
-        // Open Fragment or related Activity
-        switch (item.getItemId()) {
-            case R.id.menuItemHome:
-                fragmentName = FragmentLoader.FRAGMENT_HOME;
-                break;
-            case R.id.menuItemScanner:
-                fragmentName = FragmentLoader.FRAGMENT_SCANNER;
-                break;
-            case R.id.menuItemStructures:
-                fragmentName = FragmentLoader.FRAGMENT_STRUCTURES;
-                break;
-            case R.id.menuItemExtras:
-                fragmentName = FragmentLoader.FRAGMENT_EXTRA;
-                break;
-            case R.id.menuItemSync:
-                fragmentName = FragmentLoader.FRAGMENT_SYNC;
-                break;
-            case R.id.menuItemShortcut:
-                fragmentName = FragmentLoader.FRAGMENT_HOME;
-                Intent intent = new Intent(this, CreateShortcutActivity.class);
-                this.startActivity(intent);
-                break;
-            case R.id.menuItemSettings:
-                fragmentName = FragmentLoader.FRAGMENT_SETTINGS;
-                break;
-            case R.id.menuItemAbout:
-                fragmentName = FragmentLoader.FRAGMENT_ABOUT;
-                break;
-        }
-
         this.drawerLayout.closeDrawer(GravityCompat.START);
-
-        return FragmentLoader.loadFragment(this, R.id.fragment_container, fragmentName);
+        // Open Fragment or related Activity
+        if (item == this.menuItemHome) {
+            fragmentName = FragmentLoader.FRAGMENT_HOME;
+        } else if (item == this.menuItemScanner) {
+            fragmentName = FragmentLoader.FRAGMENT_SCANNER;
+        } else if (item == this.menuItemStructures) {
+            fragmentName = FragmentLoader.FRAGMENT_STRUCTURES;
+        } else if (item == this.menuItemExtras) {
+            fragmentName = FragmentLoader.FRAGMENT_EXTRA;
+        } else if (item == this.menuItemSync) {
+            fragmentName = FragmentLoader.FRAGMENT_SYNC;
+        } else if (item == this.menuItemShortcut) {
+            fragmentName = FragmentLoader.FRAGMENT_HOME;
+            Intent intent = new Intent(this, CreateShortcutActivity.class);
+            this.startActivity(intent);
+        } else if (item == this.menuItemSettings) {
+            fragmentName = FragmentLoader.FRAGMENT_SETTINGS;
+        } else if (item == this.menuItemAbout) {
+            fragmentName = FragmentLoader.FRAGMENT_ABOUT;
+        }
+        this.setActiveFragment(FragmentLoader.loadFragment(this, R.id.fragment_container, fragmentName));
+        return this.fragment != null;
     }
 
     @Override
@@ -250,5 +260,28 @@ public class MainActivity extends AppCompatActivity
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void syncNavigationDrawer(String fragmentName) {
+        // Activate the menu on the navigation drawer
+        if (fragmentName.equals(FragmentLoader.FRAGMENT_HOME)) {
+            this.menuItemHome.setChecked(true);
+        } else if (fragmentName.equals(FragmentLoader.FRAGMENT_SCANNER)) {
+            this.menuItemScanner.setChecked(true);
+        } else if (fragmentName.equals(FragmentLoader.FRAGMENT_STRUCTURES)) {
+            this.menuItemStructures.setChecked(true);
+        } else if (fragmentName.equals(FragmentLoader.FRAGMENT_EXTRA)) {
+            this.menuItemExtras.setChecked(true);
+        } else if (fragmentName.equals(FragmentLoader.FRAGMENT_SYNC)) {
+            this.menuItemSync.setChecked(true);
+        } else if (fragmentName.equals(FragmentLoader.FRAGMENT_SETTINGS)) {
+            this.menuItemSettings.setChecked(true);
+        } else if (fragmentName.equals(FragmentLoader.FRAGMENT_ABOUT)) {
+            this.menuItemAbout.setChecked(true);
+        }
+    }
+
+    public void setActiveFragment(Fragment fragment) {
+        this.fragment = fragment;
     }
 }

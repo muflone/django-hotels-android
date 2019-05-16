@@ -3,6 +3,7 @@ package com.muflone.android.django_hotels;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
+import com.muflone.android.django_hotels.activities.MainActivity;
 import com.muflone.android.django_hotels.fragments.AboutFragment;
 import com.muflone.android.django_hotels.fragments.ExtrasFragment;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
@@ -12,13 +13,13 @@ import com.muflone.android.django_hotels.fragments.StructuresFragment;
 import com.muflone.android.django_hotels.fragments.SyncFragment;
 
 public class FragmentLoader {
-    public final static String FRAGMENT_HOME = HomeFragment.class.getName();
-    public final static String FRAGMENT_SCANNER = ScannerFragment.class.getName();
-    public final static String FRAGMENT_STRUCTURES = StructuresFragment.class.getName();
-    public final static String FRAGMENT_EXTRA = ExtrasFragment.class.getName();
-    public final static String FRAGMENT_SYNC = SyncFragment.class.getName();
-    public final static String FRAGMENT_SETTINGS = SettingsFragment.class.getName();
-    public final static String FRAGMENT_ABOUT = AboutFragment.class.getName();
+    public final static String FRAGMENT_HOME = HomeFragment.class.getSimpleName();
+    public final static String FRAGMENT_SCANNER = ScannerFragment.class.getSimpleName();
+    public final static String FRAGMENT_STRUCTURES = StructuresFragment.class.getSimpleName();
+    public final static String FRAGMENT_EXTRA = ExtrasFragment.class.getSimpleName();
+    public final static String FRAGMENT_SYNC = SyncFragment.class.getSimpleName();
+    public final static String FRAGMENT_SETTINGS = SettingsFragment.class.getSimpleName();
+    public final static String FRAGMENT_ABOUT = AboutFragment.class.getSimpleName();
 
     public static Fragment getFragment(String fragmentName) {
         // Create new fragment by its name
@@ -43,19 +44,21 @@ public class FragmentLoader {
         return result;
     }
 
-    public static boolean loadFragment(AppCompatActivity activity, int containerId, Fragment fragment) {
+    public static Fragment loadFragment(MainActivity activity, int containerId, Fragment fragment) {
         if (fragment != null) {
+            // Update navigation drawer
+            activity.syncNavigationDrawer(fragment.getClass().getName());
+            activity.setActiveFragment(fragment);
             // Load the selected fragment
             activity.getSupportFragmentManager()
                     .beginTransaction()
                     .replace(containerId, fragment)
                     .commitAllowingStateLoss();
-            return true;
         }
-        return false;
+        return fragment;
     }
 
-    public static boolean loadFragment(AppCompatActivity activity, int containerId, String fragmentName) {
+    public static Fragment loadFragment(MainActivity activity, int containerId, String fragmentName) {
         // Load the selected fragment by its name
         Fragment fragment = FragmentLoader.getFragment(fragmentName);
         return FragmentLoader.loadFragment(activity, containerId, fragment);
