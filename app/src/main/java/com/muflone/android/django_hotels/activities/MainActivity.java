@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private final Singleton singleton = Singleton.getInstance();
     private Fragment fragment = null;
+    private DrawerLayout drawerLayout = null;
+    private NavigationView navigationView = null;
+    private Toolbar toolbar = null;
     private MenuItem menuItemHome = null;
     private MenuItem menuItemSettings = null;
     private MenuItem menuItemSync = null;
@@ -57,19 +60,18 @@ public class MainActivity extends AppCompatActivity
         singleton.settings = settings;
         singleton.api = new Api();
         singleton.selectedDate = singleton.api.getCurrentDate();
+        // Initialize UI
+        this.loadUI();
         // Add settings_toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        this.setSupportActionBar(this.toolbar);
         // Add Navigation Drawer
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar,
+                this, this.drawerLayout, this.toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+        this.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         // Find the settings MenuItems
-        NavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
         Menu menu = navigationView.getMenu();
         for (int item = 0; item < menu.size(); item++) {
@@ -100,6 +102,12 @@ public class MainActivity extends AppCompatActivity
         AppDatabase.getAppDatabase(this).reload(this, null);
     }
 
+    private void loadUI() {
+        this.drawerLayout = this.findViewById(R.id.drawer_layout);
+        this.navigationView = this.findViewById(R.id.navigation);
+        this.toolbar = this.findViewById(R.id.toolbar);
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // Save active fragment name
@@ -124,10 +132,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         // Handle back button press
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             // Close drawer if opened
-            drawer.closeDrawer(GravityCompat.START);
+            this.drawerLayout.closeDrawer(GravityCompat.START);
         } else if (! (this.fragment instanceof HomeFragment)) {
             // Move to the Home section
             this.onNavigationItemSelected(this.menuItemHome);
@@ -186,8 +193,7 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        this.drawerLayout.closeDrawer(GravityCompat.START);
 
         return FragmentLoader.loadFragment(this, R.id.fragment_container, fragmentName);
     }
