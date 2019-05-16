@@ -6,15 +6,105 @@
     android:layout_height="match_parent"
     tools:context=".fragments.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/body"
+    <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/section_home"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <ImageView
+                android:id="@+id/imageSectionScanner"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/section_scanner"
+                app:srcCompat="@drawable/ic_scanner" />
+
+            <TextView
+                android:id="@+id/textViewScanner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/section_scanner"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <ImageView
+                android:id="@+id/imageSectionStructures"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/section_structures"
+                app:srcCompat="@drawable/ic_structures" />
+
+            <TextView
+                android:id="@+id/textViewStructures"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/section_structures"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <ImageView
+                android:id="@+id/imageSectionExtra"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/section_extras"
+                app:srcCompat="@drawable/ic_extras" />
+
+            <TextView
+                android:id="@+id/textViewExtra"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/section_extras"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <ImageView
+                android:id="@+id/imageSectionSync"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/section_sync"
+                android:tint="#000000"
+                app:srcCompat="@drawable/ic_sync" />
+
+            <TextView
+                android:id="@+id/textViewSync"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/section_sync"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+        </TableRow>
+    </TableLayout>
 </android.support.constraint.ConstraintLayout>
