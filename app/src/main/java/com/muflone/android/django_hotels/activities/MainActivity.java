@@ -20,18 +20,13 @@ import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
+import com.muflone.android.django_hotels.FragmentLoader;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.database.AppDatabase;
-import com.muflone.android.django_hotels.fragments.AboutFragment;
-import com.muflone.android.django_hotels.fragments.ExtrasFragment;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
-import com.muflone.android.django_hotels.fragments.ScannerFragment;
-import com.muflone.android.django_hotels.fragments.SettingsFragment;
-import com.muflone.android.django_hotels.fragments.StructuresFragment;
-import com.muflone.android.django_hotels.fragments.SyncFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -123,12 +118,7 @@ public class MainActivity extends AppCompatActivity
         this.singleton.selectedDate = new Date(savedInstanceState.getLong("selectedDate"));
         // Restore previous active fragment
         String fragmentName = savedInstanceState.getString("fragment");
-        if (fragmentName != null) {
-            Fragment fragment = this.newFragmentByName(fragmentName);
-            if (fragment != null) {
-                LoadFragment(fragment);
-            }
-        }
+        FragmentLoader.loadFragment(this, R.id.fragment_container, fragmentName);
     }
 
     @Override
@@ -163,43 +153,43 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
-        Fragment fragment = null;
+        String fragmentName = null;
         // Activate MenuItem
         item.setChecked(true);
         // Open Fragment or related Activity
         switch (item.getItemId()) {
             case R.id.menuItemHome:
-                fragment = new HomeFragment();
+                fragmentName = FragmentLoader.FRAGMENT_HOME;
                 break;
             case R.id.menuItemScanner:
-                fragment = new ScannerFragment();
+                fragmentName = FragmentLoader.FRAGMENT_SCANNER;
                 break;
             case R.id.menuItemStructures:
-                fragment = new StructuresFragment();
+                fragmentName = FragmentLoader.FRAGMENT_STRUCTURES;
                 break;
             case R.id.menuItemExtras:
-                fragment = new ExtrasFragment();
+                fragmentName = FragmentLoader.FRAGMENT_EXTRA;
                 break;
             case R.id.menuItemSync:
-                fragment = new SyncFragment();
+                fragmentName = FragmentLoader.FRAGMENT_SYNC;
                 break;
             case R.id.menuItemShortcut:
-                fragment = new HomeFragment();
+                fragmentName = FragmentLoader.FRAGMENT_HOME;
                 Intent intent = new Intent(this, CreateShortcutActivity.class);
                 this.startActivity(intent);
                 break;
             case R.id.menuItemSettings:
-                fragment = new SettingsFragment();
+                fragmentName = FragmentLoader.FRAGMENT_SETTINGS;
                 break;
             case R.id.menuItemAbout:
-                fragment = new AboutFragment();
+                fragmentName = FragmentLoader.FRAGMENT_ABOUT;
                 break;
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
-        return LoadFragment(fragment);
+        return FragmentLoader.loadFragment(this, R.id.fragment_container, fragmentName);
     }
 
     @Override
@@ -209,51 +199,6 @@ public class MainActivity extends AppCompatActivity
         this.toolButtonSetDate.setTitle("  " + new SimpleDateFormat("yyyy-MM-dd").format(
                 singleton.selectedDate));
         return super.onPrepareOptionsMenu(menu);
-    }
-
-    private Fragment newFragmentByName(String fragmentName) {
-        // Create new fragment by its name
-        Fragment result;
-        switch (fragmentName) {
-            case "HomeFragment":
-                result = new HomeFragment();
-                break;
-            case "ScannerFragment":
-                result = new ScannerFragment();
-                break;
-            case "StructuresFragment":
-                result = new StructuresFragment();
-                break;
-            case "ExtrasFragment":
-                result = new ExtrasFragment();
-                break;
-            case "SyncFragment":
-                result = new SyncFragment();
-                break;
-            case "SettingsFragment":
-                result = new SettingsFragment();
-                break;
-            case "AboutFragment":
-                result = new AboutFragment();
-                break;
-            default:
-                result = null;
-                break;
-        }
-        return result;
-    }
-
-    private boolean LoadFragment(Fragment fragment) {
-        if (fragment != null) {
-            // Load the selected fragment
-            this.fragment = fragment;
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, this.fragment)
-                    .commitAllowingStateLoss();
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -283,7 +228,10 @@ public class MainActivity extends AppCompatActivity
                                 toolButtonSetDate.setTitle("  " + new SimpleDateFormat(
                                         "yyyy-MM-dd").format(calendar.getTime()));
                                 singleton.selectedDate = calendar.getTime();
-                                LoadFragment(newFragmentByName(fragment.getClass().getSimpleName()));
+                                FragmentLoader.loadFragment(
+                                        MainActivity.this,
+                                        R.id.fragment_container,
+                                        fragment.getClass().getSimpleName());
                             }
                         },
                         calendar.get(Calendar.YEAR),
