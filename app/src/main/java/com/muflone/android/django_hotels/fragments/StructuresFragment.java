@@ -55,8 +55,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class StructuresFragment extends Fragment {
-    private final Api api = Singleton.getInstance().api;
-    private final ApiData apiData = Singleton.getInstance().apiData;
+    private final Singleton singleton = Singleton.getInstance();
+    private final Api api = this.singleton.api;
+    private final ApiData apiData = this.singleton.apiData;
 
     private Context context;
     private View rootLayout;
@@ -243,7 +244,7 @@ public class StructuresFragment extends Fragment {
                     // Reload services for contract
                     Contract contract = apiData.contractsMap.get(employee.contractBuildings.get(0).contractId);
                     for (ServiceActivity serviceActivity : database.serviceActivityDao().listByDateContract(
-                            Singleton.getInstance().selectedDate, contract.id)) {
+                            singleton.selectedDate, contract.id)) {
                         serviceActivityTable.put(
                                 serviceActivity.contractId,
                                 serviceActivity.roomId,
@@ -256,10 +257,10 @@ public class StructuresFragment extends Fragment {
                     }
                     // Add employee status
                     employeesStatusList.add(new EmployeeStatus(contract,
-                            Singleton.getInstance().selectedDate,
+                            singleton.selectedDate,
                             apiData.timestampDirectionsNotEnterExit,
                             database.timestampDao().listByContractNotEnterExit(
-                                    Singleton.getInstance().selectedDate, contract.id)));
+                                    singleton.selectedDate, contract.id)));
                 }
                 return null;
             }
@@ -404,7 +405,7 @@ public class StructuresFragment extends Fragment {
             this.context = context;
             this.buildingsList = listDataHeader;
             this.roomsList = listChildData;
-            this.apiData = Singleton.getInstance().apiData;
+            this.apiData = singleton.apiData;
         }
 
         @Override
@@ -736,7 +737,7 @@ public class StructuresFragment extends Fragment {
                     RoomStatus roomStatus = params[0];
                     List<ServiceActivity> serviceActivityList =
                             database.serviceActivityDao().listByDateContract(
-                                    Singleton.getInstance().selectedDate,
+                                    singleton.selectedDate,
                                     roomStatus.contractId, roomStatus.roomId);
                     ServiceActivity serviceActivity;
                     if (serviceActivityList.size() > 0) {
@@ -757,7 +758,7 @@ public class StructuresFragment extends Fragment {
                     } else if (roomStatus.service != null) {
                         // Create new ServiceActivity
                         serviceActivity = new ServiceActivity(0,
-                                Singleton.getInstance().selectedDate,
+                                singleton.selectedDate,
                                 roomStatus.contractId,
                                 roomStatus.roomId,
                                 roomStatus.service.id,
