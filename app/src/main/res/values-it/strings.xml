@@ -63,7 +63,7 @@
     <string name="structures_employee_set_conditions">Assegna una o più condizioni al dipendente</string>
 
     <!-- Add shortcut section -->
-    <string name="add_shortcut_succeeded">Una nuova scorciatoia è stata aggiunga alla schermata iniziale</string>
+    <string name="add_shortcut_succeeded">Una nuova scorciatoia è stata aggiunta alla schermata iniziale</string>
 
     <!-- Settings section -->
     <string name="settings_tablet">Impostazioni tablet</string>
