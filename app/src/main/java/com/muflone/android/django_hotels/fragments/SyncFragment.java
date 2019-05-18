@@ -66,17 +66,30 @@ public class SyncFragment extends Fragment {
                     @Override
                     public void onSuccess(AsyncTaskResult result) {
                         // Reload data from database
-                        AppDatabase.getAppDatabase(context).reload(context, null);
-                        errorView.setImageDrawable(
-                                context.getResources().getDrawable(R.drawable.ic_check_ok));
-                        progressBar2.setVisibility(View.INVISIBLE);
-                        errorView.setVisibility(View.VISIBLE);
-                        // Add shortcut on home screen if not yet done
-                        if (! singleton.settings.getHomeScreenShortcutAdded()) {
-                            Intent intent = new Intent(getContext(), CreateShortcutActivity.class);
-                            startActivity(intent);
-                            singleton.settings.setHomeScreenShortcutAdded(true);
-                        }
+                        AppDatabase.getAppDatabase(context).reload(context, new AsyncTaskListener() {
+                            @Override
+                            public void onSuccess(AsyncTaskResult result) {
+                                // Complete synchronization only after the data was reloaded from DB
+                                errorView.setImageDrawable(
+                                        context.getResources().getDrawable(R.drawable.ic_check_ok));
+                                progressBar2.setVisibility(View.INVISIBLE);
+                                errorView.setVisibility(View.VISIBLE);
+                                // Add shortcut on home screen if not yet done
+                                if (! singleton.settings.getHomeScreenShortcutAdded()) {
+                                    Intent intent = new Intent(getContext(), CreateShortcutActivity.class);
+                                    startActivity(intent);
+                                    singleton.settings.setHomeScreenShortcutAdded(true);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                            }
+
+                            @Override
+                            public void onProgress(int step, int total) {
+                            }
+                        });
                     }
 
                     @Override
