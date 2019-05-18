@@ -4,6 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/toolButtonSetStructure"
+        android:icon="@drawable/ic_structures_white"
+        android:title="@string/no_available_structures"
+        app:showAsAction="ifRoom|withText"
+        tools:title="STRUCTURE" />
+    <item
         android:id="@+id/toolButtonSetDate"
         android:icon="@drawable/ic_date"
         android:title="@string/placeholder"

@@ -26,6 +26,7 @@
     <string name="missing_tablet_id">ID tablet mancante, compilarlo nelle impostazioni prima dell\'uso</string>
     <string name="missing_tablet_key">Chiave tablet mancante, compilarla nelle impostazioni prima dell\'uso</string>
     <string name="press_back_again_to_exit">Premi nuovamente il tasto indietro per uscire</string>
+    <string name="no_available_structures">Nessuna struttura disponibile</string>
 
     <!-- Scan section -->
     <string name="scan_prompt">Scansiona il tuo codice QR personale</string>
