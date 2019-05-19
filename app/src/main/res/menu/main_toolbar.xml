@@ -13,12 +13,12 @@
         android:id="@+id/toolButtonSetDate"
         android:icon="@drawable/ic_date"
         android:title="@string/placeholder"
-        app:showAsAction="ifRoom|withText"
+        app:showAsAction="always|withText"
         tools:title="DATE" />
     <item
         android:id="@+id/toolButtonSync"
         android:icon="@drawable/ic_sync"
         android:title="@string/section_sync"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
 </menu>
