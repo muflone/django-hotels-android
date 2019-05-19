@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.activities.CreateShortcutActivity;
+import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.tasks.AsyncTaskSync;
 import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.R;
@@ -28,6 +29,8 @@ import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class SyncFragment extends Fragment {
     private Context context;
@@ -79,6 +82,18 @@ public class SyncFragment extends Fragment {
                                     Intent intent = new Intent(getContext(), CreateShortcutActivity.class);
                                     startActivity(intent);
                                     singleton.settings.setHomeScreenShortcutAdded(true);
+                                }
+                                // Update options menu if available
+                                if (getActivity() != null) {
+                                    if (singleton.apiData.structuresMap.size() > 0) {
+                                        // Select the first available structure
+                                        SortedSet<Structure> sortedStructures = new TreeSet<>(singleton.apiData.structuresMap.values());
+                                        singleton.selectedStructure = sortedStructures.first();
+                                    } else {
+                                        // No available structures
+                                        singleton.selectedStructure = null;
+                                    }
+                                    getActivity().invalidateOptionsMenu();
                                 }
                             }
 

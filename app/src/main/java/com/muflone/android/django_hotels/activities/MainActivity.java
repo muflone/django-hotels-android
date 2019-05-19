@@ -1,6 +1,7 @@
 package com.muflone.android.django_hotels.activities;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
@@ -24,13 +26,21 @@ import com.muflone.android.django_hotels.FragmentLoader;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
+import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.database.AppDatabase;
+import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
+import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
+import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,6 +57,7 @@ public class MainActivity extends AppCompatActivity
     private MenuItem menuItemShortcut = null;
     private MenuItem menuItemSettings = null;
     private MenuItem menuItemAbout = null;
+    private MenuItem toolButtonSetStructure = null;
     private MenuItem toolButtonSetDate = null;
     private boolean backButtonPressed = false;
 
@@ -89,7 +100,27 @@ public class MainActivity extends AppCompatActivity
             this.onNavigationItemSelected(this.menuItemHome);
         }
         // Reload data from database
-        AppDatabase.getAppDatabase(this).reload(this, null);
+        AppDatabase.getAppDatabase(this).reload(this, new AsyncTaskListener() {
+            @Override
+            public void onSuccess(AsyncTaskResult result) {
+                // Select the first structure only if not already selected
+                if (singleton.selectedStructure == null && singleton.apiData.structuresMap.size() > 0) {
+                    // Select the first available structure
+                    SortedSet<Structure> sortedStructures = new TreeSet<>(singleton.apiData.structuresMap.values());
+                    singleton.selectedStructure = sortedStructures.first();
+                }
+                // Reload the options menu
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+            }
+
+            @Override
+            public void onProgress(int step, int total) {
+            }
+        });
     }
 
     private void loadUI() {
@@ -134,6 +165,9 @@ public class MainActivity extends AppCompatActivity
         if (this.fragment != null) {
             outState.putString("fragment", this.fragment.getClass().getSimpleName());
         }
+        // Save currently selected structure ID
+        outState.putLong("selectedStructure", this.singleton.selectedStructure != null ?
+                this.singleton.selectedStructure.id: 0);
         // Save currently selected date
         outState.putLong("selectedDate", this.singleton.selectedDate.getTime());
         super.onSaveInstanceState(outState);
@@ -142,8 +176,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        // Restore previously selected structure
+        Long structureId = savedInstanceState.getLong("selectedStructure");
+        this.singleton.selectedStructure = this.singleton.apiData.structuresMap.containsKey(structureId) ?
+                this.singleton.apiData.structuresMap.get(structureId) : null;
         // Restore previously selected date
         this.singleton.selectedDate = new Date(savedInstanceState.getLong("selectedDate"));
+        // Reload options menu
+        this.invalidateOptionsMenu();
         // Restore previously active fragment
         String fragmentName = savedInstanceState.getString("fragment");
         this.setActiveFragment(FragmentLoader.loadFragment(this, R.id.fragment_container, fragmentName));
@@ -210,6 +250,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        // Check if the option menu was already built
+        if (this.toolButtonSetStructure != null) {
+            // Assign structure to the toolbar button
+            this.toolButtonSetStructure.setTitle(this.singleton.selectedStructure != null ?
+                    this.singleton.selectedStructure.name :
+                    this.getString(R.string.no_available_structures));
+        }
         // Set the date on option menu
         if (this.toolButtonSetDate != null) {
             this.toolButtonSetDate.setTitle("  " + new SimpleDateFormat("yyyy-MM-dd").format(
@@ -223,6 +270,7 @@ public class MainActivity extends AppCompatActivity
         // Add settings_toolbar icons
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_toolbar, menu);
+        this.toolButtonSetStructure = menu.findItem(R.id.toolButtonSetStructure);
         this.toolButtonSetDate = menu.findItem(R.id.toolButtonSetDate);
         return true;
     }
@@ -233,6 +281,35 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.toolButtonSync: {
                 this.onNavigationItemSelected(this.menuItemSync);
+                return true;
+            }
+            case R.id.toolButtonSetStructure: {
+                // Change current structure
+                // Show contextual menu for services
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.select_a_structure);
+                // Sort structures list
+                List<String> structuresList = new ArrayList<>();
+                List<Long> structureIdList = new ArrayList<>();
+                SortedSet<Structure> sortedStructures = new TreeSet<>(this.singleton.apiData.structuresMap.values());
+                for (Structure structure : sortedStructures) {
+                    structuresList.add(structure.name);
+                    structureIdList.add(structure.id);
+                }
+                builder.setItems(structuresList.toArray(new String[0]), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int position) {
+                        // Get the selected structure and update the user interface
+                        singleton.selectedStructure = singleton.apiData.structuresMap.get(structureIdList.get(position));
+                        invalidateOptionsMenu();
+                        dialog.dismiss();
+                        // Reload fragment
+                        Utility.reloadFragment(MainActivity.this, fragment);
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
                 return true;
             }
             case R.id.toolButtonSetDate: {

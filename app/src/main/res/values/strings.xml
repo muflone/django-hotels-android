@@ -26,6 +26,7 @@
     <string name="missing_tablet_id">Missing Tablet ID, please set it in the settings before the use</string>
     <string name="missing_tablet_key">Missing Tablet key, please set it in the settings before the use</string>
     <string name="press_back_again_to_exit">Press back button again to exit</string>
+    <string name="select_a_structure">Select a structure</string>
     <string name="no_available_structures">No available structure</string>
 
     <!-- Scan section -->

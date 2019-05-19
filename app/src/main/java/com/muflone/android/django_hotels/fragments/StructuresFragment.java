@@ -41,7 +41,6 @@ import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.ServiceActivity;
-import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
@@ -61,7 +60,6 @@ public class StructuresFragment extends Fragment {
 
     private Context context;
     private View rootLayout;
-    private TabLayout structuresTabs;
     private ListView employeesView;
     private ExpandableListView roomsView;
     private ExpandableListAdapter buildingRoomsAdapter;
@@ -69,7 +67,6 @@ public class StructuresFragment extends Fragment {
     private final List<EmployeeStatus> employeesStatusList = new ArrayList<>();
     private final List<String> buildingsList = new ArrayList<>();
     private final HashMap<String, List<RoomStatus>> roomsList = new HashMap<>();
-    private final List<Structure> structures = new ArrayList<>();
     private final List<Service> roomServicesList = new ArrayList<>();
     private final Table<Long, Long, ServiceActivity> serviceActivityTable = HashBasedTable.create();
     @SuppressLint("UseSparseArrays")
@@ -131,25 +128,9 @@ public class StructuresFragment extends Fragment {
             }
         });
 
-        // Initialize Structures
-        this.loadStructures();
-        this.structuresTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                loadEmployees(tab);
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-            }
-        });
-        // Select the first structure tab
-        if (this.structuresTabs.getTabCount() > 0) {
-            this.loadEmployees(this.structuresTabs.getTabAt(0));
+        // Load the employees for the selected structure
+        if (singleton.selectedStructure != null) {
+            this.loadEmployees();
         }
 
         // Build services list for rooms (the first element is empty)
@@ -186,7 +167,6 @@ public class StructuresFragment extends Fragment {
         // Inflate the layout for this fragment
         this.rootLayout = inflater.inflate(R.layout.structures_fragment, container, false);
         // Save references
-        this.structuresTabs = rootLayout.findViewById(R.id.structuresLayout);
         this.employeeIdView = rootLayout.findViewById(R.id.employeeIdView);
         this.employeesView = rootLayout.findViewById(R.id.employeesView);
         this.employeeFirstNameView = rootLayout.findViewById(R.id.employeeFirstNameView);
@@ -203,27 +183,12 @@ public class StructuresFragment extends Fragment {
         this.roomsView = rootLayout.findViewById(R.id.roomsView);
     }
 
-    private void loadStructures() {
-        // Load all the structures, skipping those without any employee
-        this.structuresTabs.removeAllTabs();
-        SortedSet<Structure> sortedStructures = new TreeSet<>(apiData.structuresMap.values());
-        for (Structure structure : sortedStructures) {
-            if (structure.employees.size() > 0) {
-                TabLayout.Tab tabItem = this.structuresTabs.newTab();
-                this.structures.add(structure);
-                tabItem.setText(structure.name);
-                this.structuresTabs.addTab(tabItem);
-            }
-        }
-    }
-
-    private void loadEmployees(TabLayout.Tab tab) {
+    private void loadEmployees() {
         // Load employees list for the selected Structure tab
         this.employeesList.clear();
         this.employeesStatusList.clear();
         this.roomsEmployeesAssignedList.clear();
         this.serviceActivityTable.clear();
-        singleton.selectedStructure = this.structures.get(tab.getPosition());
         // Initialize buildings groups to collapsed
         this.buildingsClosedStatusMap.clear();
         for (Building building : singleton.selectedStructure.buildings) {
