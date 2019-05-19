@@ -2,6 +2,7 @@ package com.muflone.android.django_hotels;
 
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
+import com.muflone.android.django_hotels.database.models.Structure;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,6 +13,7 @@ public class Singleton implements Serializable {
     public ApiData apiData;
     public Settings settings;
     public Date selectedDate;
+    public Structure selectedStructure;
 
     private Singleton() {
         // Prevent form the reflection api.

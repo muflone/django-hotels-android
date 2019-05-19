@@ -60,7 +60,6 @@ public class StructuresFragment extends Fragment {
 
     private Context context;
     private View rootLayout;
-    private Structure selectedStructure;
     private TabLayout structuresTabs;
     private ListView employeesView;
     private ExpandableListView roomsView;
@@ -99,7 +98,7 @@ public class StructuresFragment extends Fragment {
                 this.context, android.R.layout.simple_list_item_activated_1, this.employeesList));
         this.employeesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                loadEmployee(selectedStructure.employees.get(position));
+                loadEmployee(singleton.selectedStructure.employees.get(position));
             }
         });
         this.employeesView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -222,10 +221,10 @@ public class StructuresFragment extends Fragment {
         this.employeesStatusList.clear();
         this.roomsEmployeesAssignedList.clear();
         this.serviceActivityTable.clear();
-        this.selectedStructure = this.structures.get(tab.getPosition());
+        singleton.selectedStructure = this.structures.get(tab.getPosition());
         // Initialize buildings groups to collapsed
         this.buildingsClosedStatusMap.clear();
-        for (Building building : this.selectedStructure.buildings) {
+        for (Building building : singleton.selectedStructure.buildings) {
             this.buildingsClosedStatusMap.put(building.name,
                     this.api.settings.getBuildingsInitiallyClosed());
             // Initialize empty already assigned rooms list (<Room ID><List of employees>)
@@ -238,7 +237,7 @@ public class StructuresFragment extends Fragment {
             protected Void doInBackground(Void... params) {
                 AppDatabase database = AppDatabase.getAppDatabase(context);
                 // Load employees for the selected structure
-                for (Employee employee : selectedStructure.employees) {
+                for (Employee employee : singleton.selectedStructure.employees) {
                     employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
                     // Reload services for contract
                     Contract contract = apiData.contractsMap.get(employee.contractBuildings.get(0).contractId);
@@ -318,7 +317,7 @@ public class StructuresFragment extends Fragment {
         for (ContractBuildings contractBuilding : employee.contractBuildings) {
             Building building = this.apiData.buildingsMap.get(contractBuilding.buildingId);
             // Only show the buildings for the current structure
-            if (building.structureId == this.selectedStructure.id) {
+            if (building.structureId == singleton.selectedStructure.id) {
                 this.buildingsList.add(building.name);
                 List<RoomStatus> rooms = new ArrayList<>();
                 Service service;
