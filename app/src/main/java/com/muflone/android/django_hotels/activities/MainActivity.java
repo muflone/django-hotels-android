@@ -130,11 +130,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        // Save active fragment name
+        // Save currently active fragment name
         if (this.fragment != null) {
             outState.putString("fragment", this.fragment.getClass().getSimpleName());
         }
-        // Save selected date
+        // Save currently selected date
         outState.putLong("selectedDate", this.singleton.selectedDate.getTime());
         super.onSaveInstanceState(outState);
     }
@@ -142,9 +142,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        // Restore previous selected date
+        // Restore previously selected date
         this.singleton.selectedDate = new Date(savedInstanceState.getLong("selectedDate"));
-        // Restore previous active fragment
+        // Restore previously active fragment
         String fragmentName = savedInstanceState.getString("fragment");
         this.setActiveFragment(FragmentLoader.loadFragment(this, R.id.fragment_container, fragmentName));
     }
@@ -210,10 +210,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        // Initialize date menu
-        this.toolButtonSetDate = menu.findItem(R.id.toolButtonSetDate);
-        this.toolButtonSetDate.setTitle("  " + new SimpleDateFormat("yyyy-MM-dd").format(
-                singleton.selectedDate));
+        // Set the date on option menu
+        if (this.toolButtonSetDate != null) {
+            this.toolButtonSetDate.setTitle("  " + new SimpleDateFormat("yyyy-MM-dd").format(
+                    this.singleton.selectedDate));
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -222,6 +223,7 @@ public class MainActivity extends AppCompatActivity
         // Add settings_toolbar icons
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_toolbar, menu);
+        this.toolButtonSetDate = menu.findItem(R.id.toolButtonSetDate);
         return true;
     }
 
@@ -229,10 +231,11 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle ToolButtons clicks
         switch (item.getItemId()) {
-            case R.id.toolButtonSync:
+            case R.id.toolButtonSync: {
                 this.onNavigationItemSelected(this.menuItemSync);
                 return true;
-            case R.id.toolButtonSetDate:
+            }
+            case R.id.toolButtonSetDate: {
                 // Change current date
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(Singleton.getInstance().selectedDate);
@@ -255,10 +258,12 @@ public class MainActivity extends AppCompatActivity
                         calendar.get(Calendar.DAY_OF_MONTH));
                 dialog.show();
                 return true;
-            default:
+            }
+            default: {
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
+            }
         }
     }
 

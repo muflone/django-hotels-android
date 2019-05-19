@@ -16,7 +16,6 @@ import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.activities.MainActivity;
 
 public class HomeFragment extends Fragment {
-    private Context context;
     private View rootLayout;
     private ImageView imageSectionScanner;
     private TextView textViewScanner;
@@ -79,7 +78,6 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        this.context = context;
         super.onAttach(context);
     }
 }
