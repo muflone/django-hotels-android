@@ -1,5 +1,6 @@
 package com.muflone.android.django_hotels.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
@@ -71,6 +72,7 @@ public class StructuresFragment extends Fragment {
     private final List<Structure> structures = new ArrayList<>();
     private final List<Service> roomServicesList = new ArrayList<>();
     private final Table<Long, Long, ServiceActivity> serviceActivityTable = HashBasedTable.create();
+    @SuppressLint("UseSparseArrays")
     private final HashMap<Long, List<Long>> roomsEmployeesAssignedList = new HashMap<>();
     private final HashMap<String, Boolean> buildingsClosedStatusMap = new HashMap<>();
 
