@@ -62,7 +62,7 @@
     <string name="structures_unable_to_use_contract">Impossibile utilizzare il contratto</string>
     <string name="structures_select_a_service_room">Scegliere un servizio per la stanza</string>
     <string name="structures_employees_already_assigned">Impiegati già assegnati</string>
-    <string name="structures_employee_set_conditions">Assegna una o più condizioni al dipendente</string>
+    <string name="structures_employee_set_conditions">Assegnare una o più condizioni al dipendente</string>
 
     <!-- Add shortcut section -->
     <string name="add_shortcut_succeeded">Una nuova scorciatoia è stata aggiunta alla schermata iniziale</string>
