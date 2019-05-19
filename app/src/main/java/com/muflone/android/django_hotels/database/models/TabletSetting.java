@@ -6,6 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 import android.util.Base64;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,7 +24,7 @@ public class TabletSetting {
     @ColumnInfo(name = "data")
     public final String data;
 
-    public TabletSetting(String name, String data) {
+    public TabletSetting(@NotNull String name, String data) {
         this.name = name;
         this.data = data;
     }

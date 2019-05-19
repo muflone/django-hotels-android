@@ -12,6 +12,8 @@ import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.api.ApiData;
 
+import java.util.Objects;
+
 public class CreateShortcutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,20 +31,20 @@ public class CreateShortcutActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
         // Get shortcut title
         String title = apiData.tabletSettingsMap.containsKey("app.shortcut.title") ?
-                apiData.tabletSettingsMap.get("app.shortcut.title").getString() :
+                Objects.requireNonNull(apiData.tabletSettingsMap.get("app.shortcut.title")).getString() :
                 this.getString(R.string.app_name);
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
         // Get shortcut icon
         if (apiData.tabletSettingsMap.containsKey("app.shortcut.icon")) {
             // Use custom bitmap icon
-            byte[] icon = apiData.tabletSettingsMap.get("app.shortcut.icon").decodeBase64();
+            byte[] icon = Objects.requireNonNull(apiData.tabletSettingsMap.get("app.shortcut.icon")).decodeBase64();
             Bitmap bitmap = BitmapFactory.decodeByteArray(icon, 0, icon.length);
             // Resize bitmap if needed
             int width = apiData.tabletSettingsMap.containsKey("app.shortcut.icon.width") ?
-                    apiData.tabletSettingsMap.get("app.shortcut.icon.width").getInteger() :
+                    Objects.requireNonNull(apiData.tabletSettingsMap.get("app.shortcut.icon.width")).getInteger() :
                     bitmap.getWidth();
             int height = apiData.tabletSettingsMap.containsKey("app.shortcut.icon.height") ?
-                    apiData.tabletSettingsMap.get("app.shortcut.icon.height").getInteger() :
+                    Objects.requireNonNull(apiData.tabletSettingsMap.get("app.shortcut.icon.height")).getInteger() :
                     bitmap.getHeight();
             if (bitmap.getWidth() != width | bitmap.getHeight() != height) {
                 bitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);

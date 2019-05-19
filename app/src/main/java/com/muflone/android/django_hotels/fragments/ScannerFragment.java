@@ -42,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class ScannerFragment extends Fragment {
     private Context context;
@@ -67,7 +68,7 @@ public class ScannerFragment extends Fragment {
         this.database = AppDatabase.getAppDatabase(this.context);
 
         // Initialize UI
-        this.loadUI(inflater, container);
+        this.loadUI(inflater, Objects.requireNonNull(container));
 
         this.enterButton.setOnClickListener(view -> startQRScanner(true));
         this.exitButton.setOnClickListener(view -> startQRScanner(false));
@@ -147,7 +148,7 @@ public class ScannerFragment extends Fragment {
                     Uri uri = Uri.parse(result.getContents());
                     try {
                         // Check for invalid URI
-                        if (! uri.getScheme().equals("otpauth") | ! uri.getHost().equals("totp")) {
+                        if (! Objects.requireNonNull(uri.getScheme()).equals("otpauth") | ! Objects.requireNonNull(uri.getHost()).equals("totp")) {
                             throw new Token.TokenUriInvalidException();
                         }
                         String secret = new String(Base32String.decode(
@@ -156,7 +157,7 @@ public class ScannerFragment extends Fragment {
                                 "$1-$2-$3-$4-$5");
                         if (this.apiData.contractsGuidMap.containsKey(secret)) {
                             // Valid contract found
-                            Contract contract = this.apiData.contractsGuidMap.get(secret);
+                            Contract contract = Objects.requireNonNull(this.apiData.contractsGuidMap.get(secret));
                             Toast.makeText(this.context,
                                     contract.employee.firstName + " " + contract.employee.lastName,
                                     Toast.LENGTH_SHORT).show();
@@ -264,7 +265,7 @@ public class ScannerFragment extends Fragment {
                 // Use cached views
                 timestampViewHolder = (TimestampViewHolder) convertView.getTag();
             }
-            TimestampEmployeeItem timestampEmployee = getItem(position);
+            TimestampEmployeeItem timestampEmployee = Objects.requireNonNull(getItem(position));
             timestampViewHolder.employeeView.setText(timestampEmployee.fullName);
             timestampViewHolder.dateView.setText(new SimpleDateFormat("yyyy-MM-dd").format(
                     timestampEmployee.datetime));

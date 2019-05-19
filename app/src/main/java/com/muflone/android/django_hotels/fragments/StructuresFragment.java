@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -89,7 +90,7 @@ public class StructuresFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         // Initialize UI
-        this.loadUI(inflater, container);
+        this.loadUI(inflater, Objects.requireNonNull(container));
 
         this.employeesView.setAdapter(new ArrayAdapter<>(
                 this.context, android.R.layout.simple_list_item_activated_1, this.employeesList));
@@ -130,7 +131,7 @@ public class StructuresFragment extends Fragment {
         this.roomsView.setAdapter(this.buildingRoomsAdapter);
         this.roomsView.setOnGroupClickListener((parent, v, groupPosition, id) -> {
             String groupName = parent.getExpandableListAdapter().getGroup(groupPosition).toString();
-            buildingsClosedStatusMap.put(groupName, ! buildingsClosedStatusMap.get(groupName));
+            buildingsClosedStatusMap.put(groupName, ! Objects.requireNonNull(buildingsClosedStatusMap.get(groupName)));
             setExpandableListViewHeight(parent, groupPosition);
             return false;
         });
@@ -187,7 +188,7 @@ public class StructuresFragment extends Fragment {
                 for (Employee employee : singleton.selectedStructure.employees) {
                     employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
                     // Reload services for contract
-                    Contract contract = apiData.contractsMap.get(employee.contractBuildings.get(0).contractId);
+                    Contract contract = Objects.requireNonNull(apiData.contractsMap.get(employee.contractBuildings.get(0).contractId));
                     for (ServiceActivity serviceActivity : database.serviceActivityDao().listByDateContract(
                             singleton.selectedDate, contract.id)) {
                         serviceActivityTable.put(
@@ -197,7 +198,7 @@ public class StructuresFragment extends Fragment {
                         // Add employee to the already assigned room list
                         // only if the room belongs to the selected structure
                         if (roomsEmployeesAssignedList.containsKey(serviceActivity.roomId)) {
-                            roomsEmployeesAssignedList.get(serviceActivity.roomId).add(employee.id);
+                            Objects.requireNonNull(roomsEmployeesAssignedList.get(serviceActivity.roomId)).add(employee.id);
                         }
                     }
                     // Add employee status
@@ -245,11 +246,11 @@ public class StructuresFragment extends Fragment {
         }
         this.employeeGenderImageView.setImageResource(genderResourceId);
         // Get the first contract for the employee
-        Contract contract = this.apiData.contractsMap.get(employee.contractBuildings.get(0).contractId);
+        Contract contract = Objects.requireNonNull(this.apiData.contractsMap.get(employee.contractBuildings.get(0).contractId));
         this.contractIdView.setText(String.valueOf(contract.id));
-        this.contractCompanyView.setText(this.apiData.companiesMap.get(contract.companyId).name);
+        this.contractCompanyView.setText(Objects.requireNonNull(this.apiData.companiesMap.get(contract.companyId)).name);
         // Add contract info
-        ContractType contractType = this.apiData.contractTypeMap.get(contract.contractTypeId);
+        ContractType contractType = Objects.requireNonNull(this.apiData.contractTypeMap.get(contract.contractTypeId));
         this.contractStatusView.setText(contract.enabled ? R.string.enabled : R.string.disabled);
         this.contractTypeView.setText(contractType.name);
         this.contractDailyHoursView.setText(String.valueOf(contractType.dailyHours));
@@ -262,7 +263,7 @@ public class StructuresFragment extends Fragment {
         this.buildingsList.clear();
         this.roomsList.clear();
         for (ContractBuildings contractBuilding : employee.contractBuildings) {
-            Building building = this.apiData.buildingsMap.get(contractBuilding.buildingId);
+            Building building = Objects.requireNonNull(this.apiData.buildingsMap.get(contractBuilding.buildingId));
             // Only show the buildings for the current structure
             if (building.structureId == singleton.selectedStructure.id) {
                 this.buildingsList.add(building.name);
@@ -294,7 +295,7 @@ public class StructuresFragment extends Fragment {
         // Collapse all the buildings groups
         for (int group = 0; group < this.buildingsList.size(); group++) {
             // Restore previous groups opened status
-            if (this.buildingsClosedStatusMap.get(this.buildingsList.get(group))) {
+            if (Objects.requireNonNull(this.buildingsClosedStatusMap.get(this.buildingsList.get(group)))) {
                 this.roomsView.collapseGroup(group);
             } else {
                 this.roomsView.expandGroup(group);
@@ -355,7 +356,7 @@ public class StructuresFragment extends Fragment {
 
         @Override
         public RoomStatus getChild(int groupPosition, int childPosition) {
-            return this.roomsList.get(this.buildingsList.get(groupPosition)).get(childPosition);
+            return Objects.requireNonNull(this.roomsList.get(this.buildingsList.get(groupPosition))).get(childPosition);
         }
 
         @Override
@@ -381,7 +382,7 @@ public class StructuresFragment extends Fragment {
             // Handle service present image LongClick
             ImageView servicePresentImage = convertView.findViewById(R.id.servicePresentImage);
             servicePresentImage.setOnLongClickListener(view -> {
-                if (roomsEmployeesAssignedList.get(roomStatus.roomId).size() > 0) {
+                if (Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId)).size() > 0) {
                     showAlreadyAssignedEmployees(roomsEmployeesAssignedList.get(roomStatus.roomId));
                 }
                 return false;
@@ -497,7 +498,7 @@ public class StructuresFragment extends Fragment {
 
         @Override
         public int getChildrenCount(int groupPosition) {
-            return this.roomsList.get(this.buildingsList.get(groupPosition)).size();
+            return Objects.requireNonNull(this.roomsList.get(this.buildingsList.get(groupPosition))).size();
         }
 
         @Override
@@ -544,13 +545,13 @@ public class StructuresFragment extends Fragment {
             // Highlight rooms with at least a service
             ImageView servicePresentImage = rowView.findViewById(R.id.servicePresentImage);
             servicePresentImage.setImageResource(
-                    roomsEmployeesAssignedList.get(roomStatus.roomId).size() > 0 ?
+                    Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId)).size() > 0 ?
                             R.drawable.ic_service_present : R.drawable.ic_service_absent);
             // Set room name
             TextView roomView = rowView.findViewById(R.id.roomView);
             roomView.setText(roomStatus.name);
             // Change room background color
-            if (roomsEmployeesAssignedList.get(roomStatus.roomId).size() > 1) {
+            if (Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId)).size() > 1) {
                 roomView.setBackgroundColor(context.getResources().getColor(
                         R.color.color_rooms_background_already_assigned));
             } else {
@@ -578,7 +579,7 @@ public class StructuresFragment extends Fragment {
         public void showAlreadyAssignedEmployees(List<Long> employeesIdList) {
             List<String> employees = new ArrayList<>();
             for (Long employeeId : employeesIdList) {
-                Employee employee = this.apiData.employeesMap.get(employeeId);
+                Employee employee = Objects.requireNonNull(this.apiData.employeesMap.get(employeeId));
                 employees.add(employee.firstName + " " + employee.lastName);
             }
             // Show contextual menu for services
@@ -591,8 +592,8 @@ public class StructuresFragment extends Fragment {
 
         public void updateService(RoomStatus roomStatus) {
             // Check if the employee is already assigned for the room
-            List<Long> roomAssignationList = roomsEmployeesAssignedList.get(roomStatus.roomId);
-            Employee employee = apiData.contractsMap.get(roomStatus.contractId).employee;
+            List<Long> roomAssignationList = Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId));
+            Employee employee = Objects.requireNonNull(apiData.contractsMap.get(roomStatus.contractId)).employee;
             if (roomStatus.service == null) {
                 // Un-assign
                 roomAssignationList.remove(employee.id);

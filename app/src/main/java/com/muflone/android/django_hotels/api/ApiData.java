@@ -18,6 +18,7 @@ import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class ApiData {
     public final HashMap<Long, Brand> brandsMap;
@@ -58,7 +59,7 @@ public class ApiData {
     }
 
     public boolean isValidContract(Long contractId) {
-        Contract contract = this.contractsMap.get(contractId);
+        Contract contract = Objects.requireNonNull(this.contractsMap.get(contractId));
         return contract.enabled &&
                 Singleton.getInstance().selectedDate.compareTo(contract.startDate) >= 0 &&
                 Singleton.getInstance().selectedDate.compareTo(contract.endDate) <= 0;

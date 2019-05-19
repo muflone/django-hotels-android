@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class Utility {
@@ -58,7 +59,7 @@ public class Utility {
         if (drawable == null) {
             return null;
         }
-        Drawable res = drawable.getConstantState().newDrawable().mutate();
+        Drawable res = Objects.requireNonNull(drawable.getConstantState()).newDrawable().mutate();
         res.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
         return res;
     }

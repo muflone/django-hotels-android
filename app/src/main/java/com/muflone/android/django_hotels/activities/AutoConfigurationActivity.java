@@ -10,6 +10,8 @@ import android.os.Bundle;
 
 import com.muflone.android.django_hotels.R;
 
+import java.util.Objects;
+
 public class AutoConfigurationActivity extends AppCompatActivity {
     /* Auto configuration class */
     @Override
@@ -17,7 +19,7 @@ public class AutoConfigurationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Uri uri = getIntent().getData();
         if (uri != null) {
-            String path = uri.getPath();
+            String path = Objects.requireNonNull(uri.getPath());
             if (path.equals("/api/v1/configuration/")) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor preferencesEditor = preferences.edit();

@@ -15,6 +15,8 @@ import com.muflone.android.django_hotels.FragmentLoader;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.activities.MainActivity;
 
+import java.util.Objects;
+
 public class HomeFragment extends Fragment {
     private View rootLayout;
     private ImageView imageSectionScanner;
@@ -31,7 +33,7 @@ public class HomeFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         // Initialize UI
-        this.loadUI(inflater, container);
+        this.loadUI(inflater, Objects.requireNonNull(container));
         View.OnClickListener clickListener = view -> {
             String fragmentName;
             if (view == imageSectionScanner || view == textViewScanner) {
