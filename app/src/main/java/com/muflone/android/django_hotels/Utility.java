@@ -5,6 +5,10 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -57,5 +61,16 @@ public class Utility {
         Drawable res = drawable.getConstantState().newDrawable().mutate();
         res.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
         return res;
+    }
+
+    public static void reloadFragment(AppCompatActivity activity, Fragment fragment) {
+        // Reload fragment
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            fragmentManager.beginTransaction().detach(fragment).commitNow();
+            fragmentManager.beginTransaction().attach(fragment).commitNow();
+        } else {
+            fragmentManager.beginTransaction().detach(fragment).attach(fragment).commit();
+        }
     }
 }
