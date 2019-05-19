@@ -69,12 +69,7 @@ public class AboutFragment extends Fragment {
         copyRightsElement.setIconTint(mehdi.sakout.aboutpage.R.color.about_item_icon_color);
         copyRightsElement.setIconNightTint(android.R.color.white);
         copyRightsElement.setGravity(Gravity.START);
-        copyRightsElement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, copyrights, Toast.LENGTH_SHORT).show();
-            }
-        });
+        copyRightsElement.setOnClickListener(view -> Toast.makeText(context, copyrights, Toast.LENGTH_SHORT).show());
         return copyRightsElement;
     }
 

@@ -2,7 +2,6 @@ package com.muflone.android.django_hotels.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
@@ -95,37 +93,23 @@ public class StructuresFragment extends Fragment {
 
         this.employeesView.setAdapter(new ArrayAdapter<>(
                 this.context, android.R.layout.simple_list_item_activated_1, this.employeesList));
-        this.employeesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                loadEmployee(singleton.selectedStructure.employees.get(position));
-            }
-        });
-        this.employeesView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                // Show contextual menu for employee
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(R.string.structures_employee_set_conditions);
-                // Get service directions list
-                EmployeeStatus employeeStatus = employeesStatusList.get(position);
-                builder.setMultiChoiceItems(employeeStatus.directionsArray, employeeStatus.directionsCheckedArray,
-                        new DialogInterface.OnMultiChoiceClickListener() {
-                            @SuppressWarnings("EmptyMethod")
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                            }
-                        });
-                // Save choices when the OK button is pressed
-                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        employeeStatus.updateDatabase();
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                return true;
-            }
+        this.employeesView.setOnItemClickListener(
+                (parent, view, position, id) -> loadEmployee(singleton.selectedStructure.employees.get(position)));
+        this.employeesView.setOnItemLongClickListener((parent, view, position, id) -> {
+            // Show contextual menu for employee
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(R.string.structures_employee_set_conditions);
+            // Get service directions list
+            EmployeeStatus employeeStatus = employeesStatusList.get(position);
+            builder.setMultiChoiceItems(employeeStatus.directionsArray, employeeStatus.directionsCheckedArray,
+                    (dialogInterface, i, b) -> {
+                        // This lambda/listener does nothing
+                    });
+            // Save choices when the OK button is pressed
+            builder.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> employeeStatus.updateDatabase());
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            return true;
         });
 
         // Load the employees for the selected structure
@@ -144,15 +128,11 @@ public class StructuresFragment extends Fragment {
 
         this.buildingRoomsAdapter = new ExpandableListAdapter(this.context, buildingsList, roomsList);
         this.roomsView.setAdapter(this.buildingRoomsAdapter);
-        this.roomsView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v,
-                                        int groupPosition, long id) {
-                String groupName = parent.getExpandableListAdapter().getGroup(groupPosition).toString();
-                buildingsClosedStatusMap.put(groupName, ! buildingsClosedStatusMap.get(groupName));
-                setExpandableListViewHeight(parent, groupPosition);
-                return false;
-            }
+        this.roomsView.setOnGroupClickListener((parent, v, groupPosition, id) -> {
+            String groupName = parent.getExpandableListAdapter().getGroup(groupPosition).toString();
+            buildingsClosedStatusMap.put(groupName, ! buildingsClosedStatusMap.get(groupName));
+            setExpandableListViewHeight(parent, groupPosition);
+            return false;
         });
         return this.rootLayout;
     }
@@ -400,140 +380,117 @@ public class StructuresFragment extends Fragment {
             this.updateRoomView(convertView, roomStatus);
             // Handle service present image LongClick
             ImageView servicePresentImage = convertView.findViewById(R.id.servicePresentImage);
-            servicePresentImage.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    if (roomsEmployeesAssignedList.get(roomStatus.roomId).size() > 0) {
-                        showAlreadyAssignedEmployees(roomsEmployeesAssignedList.get(roomStatus.roomId));
-                    }
-                    return false;
+            servicePresentImage.setOnLongClickListener(view -> {
+                if (roomsEmployeesAssignedList.get(roomStatus.roomId).size() > 0) {
+                    showAlreadyAssignedEmployees(roomsEmployeesAssignedList.get(roomStatus.roomId));
                 }
+                return false;
             });
             // Set transmission LongClick
             ImageView transmissionImage = convertView.findViewById(R.id.transmissionImage);
-            transmissionImage.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View button) {
-                    new AsyncTask<Void, Void, Void>() {
-                        @Override
-                        protected Void doInBackground(Void... result) {
-                            // Delete transmission date
-                            roomStatus.transmission = null;
-                            roomStatus.updateDatabase();
-                            return null;
-                        }
+            transmissionImage.setOnLongClickListener(button -> {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... result) {
+                        // Delete transmission date
+                        roomStatus.transmission = null;
+                        roomStatus.updateDatabase();
+                        return null;
+                    }
 
-                        @Override
-                        protected void onPostExecute(Void result) {
-                            transmissionImage.setImageResource(R.drawable.ic_timestamp_untransmitted);
-                            Toast.makeText(context,
-                                    R.string.structures_marked_activity_as_untransmitted,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }.execute();
-                    return false;
-                }
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        transmissionImage.setImageResource(R.drawable.ic_timestamp_untransmitted);
+                        Toast.makeText(context,
+                                R.string.structures_marked_activity_as_untransmitted,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }.execute();
+                return false;
             });
             // Set service button Click
             ImageButton descriptionButton = convertView.findViewById(R.id.noteButton);
             Button serviceButton = convertView.findViewById(R.id.serviceButton);
             serviceButton.setTag(convertView);
-            serviceButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View button) {
-                    if (! apiData.isValidContract(roomStatus.contractId)) {
-                        // Cannot change a disabled contract
-                        Toast.makeText(context, R.string.structures_unable_to_use_contract,
-                                Toast.LENGTH_SHORT).show();
-                    } else if (roomStatus.transmission != null) {
-                        // Cannot change an already transmitted activity
-                        Toast.makeText(context, R.string.structures_unable_to_change_transmitted_activity,
-                                Toast.LENGTH_SHORT).show();
-                    } else {
-                        // Update ServiceActivity for room
-                        roomStatus.nextService();
-                        updateService(roomStatus);
-                        roomStatus.updateDatabase();
-                        updateRoomView(rowView, roomStatus);
-                    }
+            serviceButton.setOnClickListener(button -> {
+                if (! apiData.isValidContract(roomStatus.contractId)) {
+                    // Cannot change a disabled contract
+                    Toast.makeText(context, R.string.structures_unable_to_use_contract,
+                            Toast.LENGTH_SHORT).show();
+                } else if (roomStatus.transmission != null) {
+                    // Cannot change an already transmitted activity
+                    Toast.makeText(context, R.string.structures_unable_to_change_transmitted_activity,
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // Update ServiceActivity for room
+                    roomStatus.nextService();
+                    updateService(roomStatus);
+                    roomStatus.updateDatabase();
+                    updateRoomView(rowView, roomStatus);
                 }
             });
             // Set service button Long Click
-            serviceButton.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View button) {
-                    if (! apiData.isValidContract(roomStatus.contractId)) {
-                        // Cannot change a disabled contract
-                        Toast.makeText(context, R.string.structures_unable_to_use_contract,
-                                Toast.LENGTH_SHORT).show();
-                    } else {
-                        // Show contextual menu for services
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setTitle(R.string.structures_select_a_service_room);
-                        // Sort services list
-                        List<String> servicesList = new ArrayList<>();
-                        List<Long> servicesIdList = new ArrayList<>();
-                        SortedSet<Service> sortedServices = new TreeSet<>(apiData.serviceMap.values());
-                        for (Service service : sortedServices) {
-                            servicesList.add(service.name);
-                            servicesIdList.add(service.id);
-                        }
-                        builder.setItems(servicesList.toArray(new String[0]), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int position) {
-                                // Get the selected service and update the user interface
-                                roomStatus.service = apiData.serviceMap.get(servicesIdList.get(position));
-                                roomStatus.prepareForNothing();
-                                updateService(roomStatus);
-                                roomStatus.updateDatabase();
-                                updateRoomView(rowView, roomStatus);
-                                dialog.dismiss();
-                            }
-                        });
-
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+            serviceButton.setOnLongClickListener(button -> {
+                if (! apiData.isValidContract(roomStatus.contractId)) {
+                    // Cannot change a disabled contract
+                    Toast.makeText(context, R.string.structures_unable_to_use_contract,
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // Show contextual menu for services
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle(R.string.structures_select_a_service_room);
+                    // Sort services list
+                    List<String> servicesList = new ArrayList<>();
+                    List<Long> servicesIdList = new ArrayList<>();
+                    SortedSet<Service> sortedServices = new TreeSet<>(apiData.serviceMap.values());
+                    for (Service service : sortedServices) {
+                        servicesList.add(service.name);
+                        servicesIdList.add(service.id);
                     }
-                    // Don't execute the click event
-                    return true;
+                    builder.setItems(servicesList.toArray(new String[0]), (dialog, position) -> {
+                        // Get the selected service and update the user interface
+                        roomStatus.service = apiData.serviceMap.get(servicesIdList.get(position));
+                        roomStatus.prepareForNothing();
+                        updateService(roomStatus);
+                        roomStatus.updateDatabase();
+                        updateRoomView(rowView, roomStatus);
+                        dialog.dismiss();
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
+                // Don't execute the click event
+                return true;
             });
             // Set service description Click
-            descriptionButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View button) {
-                    final EditText descriptionView = new EditText(context);
-                    descriptionView.setText(roomStatus.description);
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-                    alertDialogBuilder.setTitle(R.string.description);
-                    alertDialogBuilder.setView(descriptionView);
-                    alertDialogBuilder.setCancelable(true)
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    if (! apiData.isValidContract(roomStatus.contractId)) {
-                                        // Cannot change a disabled contract
-                                        Toast.makeText(context, R.string.structures_unable_to_use_contract,
-                                                Toast.LENGTH_SHORT).show();
-                                    } else if (roomStatus.transmission != null) {
-                                        // Cannot change an already transmitted activity
-                                        Toast.makeText(context,
-                                                R.string.structures_unable_to_change_transmitted_activity,
-                                                Toast.LENGTH_SHORT).show();
-                                    } else {
-                                            roomStatus.description = descriptionView.getText().toString();
-                                            roomStatus.updateDatabase();
-                                            updateRoomView(rowView, roomStatus);
-                                    }
-                                }
-                            })
-                            .setNegativeButton(android.R.string.cancel,
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
+            descriptionButton.setOnClickListener(button -> {
+                final EditText descriptionView = new EditText(context);
+                descriptionView.setText(roomStatus.description);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                alertDialogBuilder.setTitle(R.string.description);
+                alertDialogBuilder.setView(descriptionView);
+                alertDialogBuilder.setCancelable(true)
+                        .setPositiveButton(android.R.string.ok, (dialog, id) -> {
+                            if (! apiData.isValidContract(roomStatus.contractId)) {
+                                // Cannot change a disabled contract
+                                Toast.makeText(context, R.string.structures_unable_to_use_contract,
+                                        Toast.LENGTH_SHORT).show();
+                            } else if (roomStatus.transmission != null) {
+                                // Cannot change an already transmitted activity
+                                Toast.makeText(context,
+                                        R.string.structures_unable_to_change_transmitted_activity,
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                    roomStatus.description = descriptionView.getText().toString();
+                                    roomStatus.updateDatabase();
+                                    updateRoomView(rowView, roomStatus);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
 
-                    // Show the alert dialog
-                    alertDialogBuilder.create().show();
-                }
+                // Show the alert dialog
+                alertDialogBuilder.create().show();
             });
             return convertView;
         }

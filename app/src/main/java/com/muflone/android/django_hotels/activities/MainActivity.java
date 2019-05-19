@@ -1,7 +1,6 @@
 package com.muflone.android.django_hotels.activities;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.muflone.android.django_hotels.FragmentLoader;
@@ -204,12 +202,7 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, this.getString(R.string.press_back_again_to_exit),
                     Toast.LENGTH_SHORT).show();
             // Restore confirmation after 2 seconds
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    backButtonPressed = false;
-                }
-            }, 2000);
+            new Handler().postDelayed(() -> backButtonPressed = false, 2000);
         } else {
             // Accept back button to close the activity
             AppDatabase.destroyInstance();
@@ -296,16 +289,13 @@ public class MainActivity extends AppCompatActivity
                     structuresList.add(structure.name);
                     structureIdList.add(structure.id);
                 }
-                builder.setItems(structuresList.toArray(new String[0]), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int position) {
-                        // Get the selected structure and update the user interface
-                        singleton.selectedStructure = singleton.apiData.structuresMap.get(structureIdList.get(position));
-                        invalidateOptionsMenu();
-                        dialog.dismiss();
-                        // Reload fragment
-                        Utility.reloadFragment(MainActivity.this, fragment);
-                    }
+                builder.setItems(structuresList.toArray(new String[0]), (dialog, position) -> {
+                    // Get the selected structure and update the user interface
+                    singleton.selectedStructure = singleton.apiData.structuresMap.get(structureIdList.get(position));
+                    invalidateOptionsMenu();
+                    dialog.dismiss();
+                    // Reload fragment
+                    Utility.reloadFragment(MainActivity.this, fragment);
                 });
 
                 AlertDialog dialog = builder.create();
@@ -317,18 +307,15 @@ public class MainActivity extends AppCompatActivity
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(Singleton.getInstance().selectedDate);
                 DatePickerDialog dialog = new DatePickerDialog(MainActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int day) {
-                                calendar.set(year, month, day);
-                                toolButtonSetDate.setTitle("  " + new SimpleDateFormat(
-                                        "yyyy-MM-dd").format(calendar.getTime()));
-                                singleton.selectedDate = calendar.getTime();
-                                FragmentLoader.loadFragment(
-                                        MainActivity.this,
-                                        R.id.fragment_container,
-                                        fragment.getClass().getSimpleName());
-                            }
+                        (view, year, month, day) -> {
+                            calendar.set(year, month, day);
+                            toolButtonSetDate.setTitle("  " + new SimpleDateFormat(
+                                    "yyyy-MM-dd").format(calendar.getTime()));
+                            singleton.selectedDate = calendar.getTime();
+                            FragmentLoader.loadFragment(
+                                    MainActivity.this,
+                                    R.id.fragment_container,
+                                    fragment.getClass().getSimpleName());
                         },
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),

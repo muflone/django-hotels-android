@@ -11,11 +11,8 @@ public class NotifyMessage {
     public static void snackbar(Context context, View rootView, String message, String actionTitle, int duration) {
         // Show a Snackbar with message and action
         Snackbar snackbar = Snackbar.make(rootView, message, duration);
-        snackbar.setAction(actionTitle, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // This method does nothing
-            }
+        snackbar.setAction(actionTitle, view -> {
+            // This lambda/listener does nothing
         });
         Resources resources = context.getResources();
         TextView textView = snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);

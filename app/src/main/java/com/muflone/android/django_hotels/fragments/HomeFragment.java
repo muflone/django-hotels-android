@@ -32,23 +32,20 @@ public class HomeFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         // Initialize UI
         this.loadUI(inflater, container);
-        View.OnClickListener clickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String fragmentName;
-                if (view == imageSectionScanner || view == textViewScanner) {
-                    fragmentName = FragmentLoader.FRAGMENT_SCANNER;
-                } else if (view == imageSectionStructures || view == textViewStructures) {
-                    fragmentName = FragmentLoader.FRAGMENT_STRUCTURES;
-                } else if (view == imageSectionExtra || view == textViewExtra) {
-                    fragmentName = FragmentLoader.FRAGMENT_EXTRA;
-                } else if (view == imageSectionSync || view == textViewSync) {
-                    fragmentName = FragmentLoader.FRAGMENT_SYNC;
-                } else {
-                    fragmentName = null;
-                }
-                FragmentLoader.loadFragment((MainActivity) getActivity(), R.id.fragment_container, fragmentName);
+        View.OnClickListener clickListener = view -> {
+            String fragmentName;
+            if (view == imageSectionScanner || view == textViewScanner) {
+                fragmentName = FragmentLoader.FRAGMENT_SCANNER;
+            } else if (view == imageSectionStructures || view == textViewStructures) {
+                fragmentName = FragmentLoader.FRAGMENT_STRUCTURES;
+            } else if (view == imageSectionExtra || view == textViewExtra) {
+                fragmentName = FragmentLoader.FRAGMENT_EXTRA;
+            } else if (view == imageSectionSync || view == textViewSync) {
+                fragmentName = FragmentLoader.FRAGMENT_SYNC;
+            } else {
+                fragmentName = null;
             }
+            FragmentLoader.loadFragment((MainActivity) getActivity(), R.id.fragment_container, fragmentName);
         };
         this.imageSectionScanner.setOnClickListener(clickListener);
         this.textViewScanner.setOnClickListener(clickListener);

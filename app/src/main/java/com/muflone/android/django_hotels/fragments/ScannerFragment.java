@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -70,18 +69,8 @@ public class ScannerFragment extends Fragment {
         // Initialize UI
         this.loadUI(inflater, container);
 
-        this.enterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startQRScanner(true);
-            }
-        });
-        this.exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startQRScanner(false);
-            }
-        });
+        this.enterButton.setOnClickListener(view -> startQRScanner(true));
+        this.exitButton.setOnClickListener(view -> startQRScanner(false));
         // Load latest timestamps
         this.timestampEmployeeList = new ArrayList<>();
         this.listLatestTimestamps();
@@ -89,32 +78,29 @@ public class ScannerFragment extends Fragment {
                 R.layout.scanner_timestamps, this.timestampEmployeeList);
         this.timestampEmployeesView.setAdapter(this.timestampAdapter);
         // Clear transmission date on long press
-        this.timestampEmployeesView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
-                new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... result) {
-                        // Update adapter
-                        TimestampEmployeeItem timestampEmployeeItem = timestampEmployeeList.get(position);
-                        timestampEmployeeItem.transmission = null;
-                        // Update database
-                        Timestamp timestamp = database.timestampDao().findById(timestampEmployeeItem.id);
-                        timestamp.transmission = null;
-                        database.timestampDao().update(timestamp);
-                        return null;
-                    }
+        this.timestampEmployeesView.setOnItemLongClickListener((adapterView, view, position, l) -> {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... result) {
+                    // Update adapter
+                    TimestampEmployeeItem timestampEmployeeItem = timestampEmployeeList.get(position);
+                    timestampEmployeeItem.transmission = null;
+                    // Update database
+                    Timestamp timestamp = database.timestampDao().findById(timestampEmployeeItem.id);
+                    timestamp.transmission = null;
+                    database.timestampDao().update(timestamp);
+                    return null;
+                }
 
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        timestampAdapter.notifyDataSetChanged();
-                        Toast.makeText(context,
-                                R.string.structures_marked_timestamp_as_untransmitted,
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }.execute();
-                return false;
-            }
+                @Override
+                protected void onPostExecute(Void result) {
+                    timestampAdapter.notifyDataSetChanged();
+                    Toast.makeText(context,
+                            R.string.structures_marked_timestamp_as_untransmitted,
+                            Toast.LENGTH_SHORT).show();
+                }
+            }.execute();
+            return false;
         });
         return this.rootLayout;
     }
