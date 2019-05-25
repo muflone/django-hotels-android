@@ -3,6 +3,7 @@ package com.muflone.android.django_hotels.tasks;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
@@ -77,7 +78,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 data = this.putTimestamp(timestamp);
                 if (data.exception == null) {
                     // Update transmission date
-                    timestamp.transmission = this.api.getCurrentDateTime();
+                    timestamp.transmission = Utility.getCurrentDateTime();
                     this.database.timestampDao().update(timestamp);
                 } else {
                     // There were some errors during the timestamps transmissions
@@ -90,7 +91,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
             for (ServiceActivity serviceActivity : servicesActivityList) {
                 data = this.putActivity(serviceActivity);
                 if (data.exception == null) {
-                    serviceActivity.transmission = this.api.getCurrentDateTime();
+                    serviceActivity.transmission = Utility.getCurrentDateTime();
                     this.database.serviceActivityDao().update(serviceActivity);
                 } else {
                     // There were some errors during the timestamps transmissions

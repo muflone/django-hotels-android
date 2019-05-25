@@ -15,7 +15,6 @@
     <string name="settings_home_screen_shortcut" translatable="false">home_screen_shortcut</string>
     <string name="settings_tablet_id_id" translatable="false">tablet_id</string>
     <string name="settings_tablet_key_id" translatable="false">tablet_key</string>
-    <string name="settings_tablet_timezone_id" translatable="false">timezone</string>
     <string name="settings_api_url_id" translatable="false">api_url</string>
     <string name="settings_scan_beep_id" translatable="false">scan_beep</string>
     <string name="settings_scan_orientation_lock_id" translatable="false">scan_orientation_lock</string>

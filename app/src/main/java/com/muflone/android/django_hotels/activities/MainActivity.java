@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
         Settings settings = new Settings(this);
         singleton.settings = settings;
         singleton.api = new Api();
-        singleton.selectedDate = singleton.api.getCurrentDate();
+        singleton.selectedDate = Utility.getCurrentDate();
         // Initialize UI
         this.loadUI();
         // Add settings_toolbar

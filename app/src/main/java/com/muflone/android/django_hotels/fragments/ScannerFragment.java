@@ -27,6 +27,7 @@ import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.ScanType;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
+import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;
@@ -165,7 +166,7 @@ public class ScannerFragment extends Fragment {
                             Timestamp timestamp = new Timestamp(0, contract.id,
                                     this.scanType == ScanType.SCAN_TYPE_ENTER ?
                                             this.apiData.enterDirection.id : this.apiData.exitDirection.id,
-                                    this.api.getCurrentDateTime(),
+                                    Utility.getCurrentDateTime(),
                                     "", null);
                             new AsyncTask<Timestamp, Void, Void>() {
                                 @Override

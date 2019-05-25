@@ -16,13 +16,6 @@
             android:singleLine="true"
             android:summary="@string/settings_tablet_key_summary"
             android:title="@string/settings_tablet_key_title" />
-        <EditTextPreference
-            android:defaultValue="UTC"
-            android:key="@string/settings_tablet_timezone_id"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:summary="@string/settings_tablet_timezone_summary"
-            android:title="@string/settings_tablet_timezone_title" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_server">

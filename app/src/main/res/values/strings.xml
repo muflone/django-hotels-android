@@ -76,9 +76,6 @@
     <string name="settings_tablet_key_title">Tablet Key</string>
     <string name="settings_tablet_key_summary">This is the key used to communicate with the server</string>
 
-    <string name="settings_tablet_timezone_title">Timezone</string>
-    <string name="settings_tablet_timezone_summary">Date and time zone</string>
-
     <string name="settings_server">Server settings</string>
 
     <string name="settings_api_url_title">API URL</string>

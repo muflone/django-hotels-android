@@ -24,6 +24,8 @@ import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class Api {
     public static final String STATUS_OK = "OK";
@@ -106,23 +108,25 @@ public class Api {
     public ApiData checkDates() {
         // Check if the system date/time matches with the remote date/time
         ApiData data = new ApiData();
-        Date currentDateTime = this.getCurrentDateTime();
-        JSONObject jsonRoot = this.getJSONObject(String.format("dates/%s/%s/%s/%s/",
+        Date currentDateTime = Utility.getCurrentDateTime();
+        TimeZone timeZone = TimeZone.getDefault();
+        JSONObject jsonRoot = this.getJSONObject(String.format("dates/%s/%s/%s/%s/%s/",
                 this.settings.getTabletID(),
                 new SimpleDateFormat("yyyy-MM-dd").format(currentDateTime),
                 new SimpleDateFormat("HH:mm.ss").format(currentDateTime),
-                this.settings.getTimeZone().replace("/", ":")));
+                timeZone.getID().replace("/", ":"),
+                timeZone.getDisplayName(Locale.ROOT).replace("/", ":")));
         if (jsonRoot != null) {
             try {
                 // Get current system date only
-                Date date1 = this.getCurrentDate();
+                Date date1 = Utility.getCurrentDate();
                 // Get remote date
                 Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(jsonRoot.getString("date"));
                 long difference = Math.abs(date1.getTime() - date2.getTime());
                 // If the dates match then compare the time
                 if (difference == 0) {
                     // Get current system time only
-                    date1 = this.getCurrentTime();
+                    date1 = Utility.getCurrentTime();
                     // Get remote time
                     date2 = new SimpleDateFormat("HH:mm.ss").parse(jsonRoot.getString("time"));
                     // Find the difference in thirty seconds
@@ -144,20 +148,5 @@ public class Api {
             data.exception = new NoConnectionException();
         }
         return data;
-    }
-
-    public Date getCurrentDate() {
-        // Get the current date from the user timezone
-        return Utility.getCurrentDate(this.settings.getTimeZone());
-    }
-
-    private Date getCurrentTime() {
-        // Get the current time from the user timezone
-        return Utility.getCurrentTime(this.settings.getTimeZone());
-    }
-
-    public Date getCurrentDateTime() {
-        // Get the current date and time from the user timezone
-        return Utility.getCurrentDateTime(this.settings.getTimeZone());
     }
 }
