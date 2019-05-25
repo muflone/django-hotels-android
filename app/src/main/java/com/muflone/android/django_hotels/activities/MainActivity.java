@@ -21,15 +21,12 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.muflone.android.django_hotels.FragmentLoader;
-import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
-import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
-import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
 
 import java.text.SimpleDateFormat;
@@ -69,11 +66,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        // Singleton instance
-        Settings settings = new Settings(this);
-        singleton.settings = settings;
-        singleton.api = new Api();
-        singleton.selectedDate = Utility.getCurrentDate();
         // Initialize UI
         this.loadUI();
         // Add settings_toolbar
@@ -87,9 +79,9 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         this.navigationView.setNavigationItemSelectedListener(this);
         // Load preferences
-        if (settings.getTabletID().isEmpty() |
-                settings.getTabletKey().isEmpty()) {
-            String message = settings.getTabletID().isEmpty() ?
+        if (singleton.settings.getTabletID().isEmpty() |
+                singleton.settings.getTabletKey().isEmpty()) {
+            String message = singleton.settings.getTabletID().isEmpty() ?
                     this.getString(R.string.missing_tablet_id) :
                     this.getString(R.string.missing_tablet_key);
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -97,28 +89,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             this.onNavigationItemSelected(this.menuItemHome);
         }
-        // Reload data from database
-        AppDatabase.getAppDatabase(this).reload(this, new AsyncTaskListener() {
-            @Override
-            public void onSuccess(AsyncTaskResult result) {
-                // Select the first structure only if not already selected
-                if (singleton.selectedStructure == null && singleton.apiData.structuresMap.size() > 0) {
-                    // Select the first available structure
-                    SortedSet<Structure> sortedStructures = new TreeSet<>(singleton.apiData.structuresMap.values());
-                    singleton.selectedStructure = sortedStructures.first();
-                }
-                // Reload the options menu
-                invalidateOptionsMenu();
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-            }
-
-            @Override
-            public void onProgress(int step, int total) {
-            }
-        });
+        invalidateOptionsMenu();
     }
 
     private void loadUI() {

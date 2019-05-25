@@ -18,10 +18,8 @@
         <activity android:name=".activities.AutoConfigurationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:scheme="http"
                     android:host="hotels.android.muflone.com"
@@ -29,10 +27,8 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:scheme="https"
                     android:host="hotels.android.muflone.com"
@@ -41,19 +37,20 @@
         </activity>
 
         <activity
-            android:name=".activities.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".activities.LoaderActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".activities.CreateShortcutActivity">
-        </activity>
+            android:name=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".activities.CreateShortcutActivity" />
 
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
@@ -61,5 +58,4 @@
             tools:replace="android:screenOrientation" />
 
     </application>
-
 </manifest>

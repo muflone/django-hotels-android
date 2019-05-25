@@ -22,7 +22,7 @@ public class CreateShortcutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Intent shortcutIntent;
-        shortcutIntent = new Intent(this, MainActivity.class);
+        shortcutIntent = new Intent(this, LoaderActivity.class);
 
         shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
