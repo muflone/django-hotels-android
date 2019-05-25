@@ -90,4 +90,12 @@ public class Utility {
             fragmentManager.beginTransaction().detach(fragment).attach(fragment).commit();
         }
     }
+
+    public static void sleep(long milliseconds) {
+        // Pause for some time
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+        }
+    }
 }
