@@ -26,8 +26,8 @@
 
             <ImageView
                 android:id="@+id/imageSectionScanner"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginEnd="8dp"
                 android:contentDescription="@string/section_scanner"
                 app:srcCompat="@drawable/ic_scanner" />
@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/section_scanner"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
         </TableRow>
 
         <TableRow
@@ -48,8 +48,8 @@
 
             <ImageView
                 android:id="@+id/imageSectionStructures"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginEnd="8dp"
                 android:contentDescription="@string/section_structures"
                 app:srcCompat="@drawable/ic_structures" />
@@ -59,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/section_structures"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
         </TableRow>
 
         <TableRow
@@ -70,8 +70,8 @@
 
             <ImageView
                 android:id="@+id/imageSectionExtra"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginEnd="8dp"
                 android:contentDescription="@string/section_extras"
                 app:srcCompat="@drawable/ic_extras" />
@@ -81,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/section_extras"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
         </TableRow>
 
         <TableRow
@@ -92,8 +92,8 @@
 
             <ImageView
                 android:id="@+id/imageSectionSync"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginEnd="8dp"
                 android:contentDescription="@string/section_sync"
                 android:tint="#000000"
@@ -104,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/section_sync"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
         </TableRow>
     </TableLayout>
 </android.support.constraint.ConstraintLayout>
