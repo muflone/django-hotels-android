@@ -4,12 +4,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
@@ -27,7 +24,6 @@ import java.util.TreeSet;
 public class LoaderActivity extends AppCompatActivity {
     private final Singleton singleton = Singleton.getInstance();
     private TextView textViewAppName;
-    private ProgressBar progressBarLoading;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,8 +34,7 @@ public class LoaderActivity extends AppCompatActivity {
         this.textViewAppName.setText(String.format(Locale.ROOT, "%s %s",
                 this.getString(R.string.app_name), this.getString(R.string.app_version)));
         // Singleton instance
-        Settings settings = new Settings(this);
-        singleton.settings = settings;
+        singleton.settings = new Settings(this);
         singleton.api = new Api();
         singleton.selectedDate = Utility.getCurrentDate();
         // Reload data from database
@@ -82,6 +77,5 @@ public class LoaderActivity extends AppCompatActivity {
 
     private void loadUI() {
         this.textViewAppName = this.findViewById(R.id.textViewAppName);
-        this.progressBarLoading = this.findViewById(R.id.progressBarLoading);
     }
 }

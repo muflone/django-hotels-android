@@ -95,7 +95,7 @@ public class Utility {
         // Pause for some time
         try {
             Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
     }
 }

@@ -27,7 +27,6 @@ import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
-import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
