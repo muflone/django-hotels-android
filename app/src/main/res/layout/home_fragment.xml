@@ -106,5 +106,28 @@
                 android:text="@string/section_sync"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
         </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <ImageView
+                android:id="@+id/imageSectionAbout"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/section_about"
+                android:tint="#000000"
+                app:srcCompat="@drawable/ic_info" />
+
+            <TextView
+                android:id="@+id/textViewAbout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/section_about"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+        </TableRow>
     </TableLayout>
 </android.support.constraint.ConstraintLayout>

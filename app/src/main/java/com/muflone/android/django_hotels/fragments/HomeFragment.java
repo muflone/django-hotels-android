@@ -27,6 +27,8 @@ public class HomeFragment extends Fragment {
     private TextView textViewExtra;
     private ImageView imageSectionSync;
     private TextView textViewSync;
+    private ImageView imageSectionAbout;
+    private TextView textViewAbout;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -44,6 +46,8 @@ public class HomeFragment extends Fragment {
                 fragmentName = FragmentLoader.FRAGMENT_EXTRA;
             } else if (view == imageSectionSync || view == textViewSync) {
                 fragmentName = FragmentLoader.FRAGMENT_SYNC;
+            } else if (view == imageSectionAbout || view == textViewAbout) {
+                fragmentName = FragmentLoader.FRAGMENT_ABOUT;
             } else {
                 fragmentName = null;
             }
@@ -57,6 +61,8 @@ public class HomeFragment extends Fragment {
         this.textViewExtra.setOnClickListener(clickListener);
         this.imageSectionSync.setOnClickListener(clickListener);
         this.textViewSync.setOnClickListener(clickListener);
+        this.imageSectionAbout.setOnClickListener(clickListener);
+        this.textViewAbout.setOnClickListener(clickListener);
 
         return this.rootLayout;
     }
@@ -73,6 +79,8 @@ public class HomeFragment extends Fragment {
         this.textViewExtra = this.rootLayout.findViewById(R.id.textViewExtra);
         this.imageSectionSync = this.rootLayout.findViewById(R.id.imageSectionSync);
         this.textViewSync = this.rootLayout.findViewById(R.id.textViewSync);
+        this.imageSectionAbout = this.rootLayout.findViewById(R.id.imageSectionAbout);
+        this.textViewAbout = this.rootLayout.findViewById(R.id.textViewAbout);
     }
 
     @Override
