@@ -1,10 +1,13 @@
 package com.muflone.android.django_hotels.fragments;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,7 @@ import com.muflone.android.django_hotels.R;
 
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
@@ -26,9 +30,10 @@ public class AboutFragment extends Fragment {
     public View onCreateView(@NonNull  LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
         return new AboutPage(this.context)
                 .isRTL(false)
-                .setImage(R.mipmap.ic_launcher)
+                .setImage(R.mipmap.ic_launcher_round)
                 .setDescription(String.format(Locale.ROOT,
                         "%s %s\n%s",
                         this.getString(R.string.app_name),
@@ -56,6 +61,49 @@ public class AboutFragment extends Fragment {
                         this.getString(R.string.about_guava_title))
                 .addGitHub(this.getString(R.string.about_numberprogressbar_url),
                         this.getString(R.string.about_numberprogressbar_title))
+                // System Information section
+                .addGroup(this.getString(R.string.about_system_information))
+                .addItem(this.newSystemInformationElement(
+                        R.string.about_system_information_android,
+                        Build.VERSION.RELEASE,
+                        Build.ID))
+                .addItem(this.newSystemInformationElement(
+                        R.string.about_system_information_sdk,
+                        String.valueOf(Build.VERSION.SDK_INT)))
+                .addItem(this.newSystemInformationElement(
+                        R.string.about_system_information_rom, Build.VERSION.INCREMENTAL))
+                .addItem(this.newSystemInformationElement(
+                        R.string.about_system_information_kernel,
+                        System.getProperty("os.version")))
+                .addItem(this.newSystemInformationElement(
+                        R.string.about_system_information_architecture,
+                        System.getProperty("os.arch")))
+                .addItem(this.newSystemInformationElement(
+                        R.string.about_system_information_manufacturer, Build.MANUFACTURER))
+                .addItem(this.newSystemInformationElement(
+                        R.string.about_system_information_model, Build.MODEL))
+                .addItem(this.newSystemInformationElement(
+                        R.string.about_system_information_product, Build.PRODUCT))
+                .addItem(this.newSystemInformationElement(
+                        R.string.about_system_information_brand, Build.BRAND))
+                .addItem(this.newSystemInformationElement(
+                        R.string.about_system_information_device, Build.DEVICE))
+                .addItem(this.newSystemInformationElement(
+                        R.string.about_system_information_resolution,
+                        String.valueOf(metrics.widthPixels),
+                        String.valueOf(metrics.heightPixels),
+                        String.valueOf(metrics.density)))
+                .addItem(this.newSystemInformationElement(
+                        R.string.about_system_information_timezone,
+                        TimeZone.getDefault().getID(),
+                        TimeZone.getDefault().getDisplayName(Locale.ROOT)))
+                .addItem(this.newSystemInformationElement(
+                        R.string.about_system_information_android_id,
+                        Settings.Secure.getString(this.getActivity().getBaseContext().getContentResolver(),
+                                Settings.Secure.ANDROID_ID)))
+                .addItem(this.newSystemInformationElement(
+                        R.string.about_system_information_user_agent,
+                        System.getProperty("http.agent")))
                 .create();
     }
 
@@ -71,6 +119,13 @@ public class AboutFragment extends Fragment {
         copyRightsElement.setGravity(Gravity.START);
         copyRightsElement.setOnClickListener(view -> Toast.makeText(context, copyrights, Toast.LENGTH_SHORT).show());
         return copyRightsElement;
+    }
+
+    private Element newSystemInformationElement(int resId, String... values) {
+        // Return an element for System Information
+        return new Element()
+                .setIconDrawable(R.drawable.ic_info)
+                .setTitle(String.format(Locale.ROOT, this.getString(resId), values));
     }
 
     @Override

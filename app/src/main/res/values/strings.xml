@@ -110,4 +110,20 @@
     <string name="about_license">License</string>
     <string name="about_app_license">License GPL-2+</string>
     <string name="about_credits">Credits</string>
+    <string name="about_system_information">System information</string>
+
+    <string name="about_system_information_android">Android version: %s %s</string>
+    <string name="about_system_information_sdk">SDK API Level: %s</string>
+    <string name="about_system_information_rom">ROM version: %s</string>
+    <string name="about_system_information_kernel">Kernel version: %s</string>
+    <string name="about_system_information_architecture">Architecture: %s</string>
+    <string name="about_system_information_manufacturer">Manufacturer: %s</string>
+    <string name="about_system_information_model">Model: %s</string>
+    <string name="about_system_information_product">Product: %s</string>
+    <string name="about_system_information_brand">Brand: %s</string>
+    <string name="about_system_information_device">Device: %s</string>
+    <string name="about_system_information_timezone">Timezone: %s (%s)</string>
+    <string name="about_system_information_resolution">Resolution: %sx%s (%s DPI)</string>
+    <string name="about_system_information_android_id">Andoid ID: %s</string>
+    <string name="about_system_information_user_agent">User Agent: %s</string>
 </resources>
