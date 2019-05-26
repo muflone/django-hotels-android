@@ -338,13 +338,14 @@ public class StructuresFragment extends Fragment {
 
             if (((listView.isGroupExpanded(index)) && (index != group))
                     || ((!listView.isGroupExpanded(index)) && (index == group))) {
+                int childrenCount = listAdapter.getChildrenCount(index);
                 if (standardHeight) {
                     // Use the same standard height for every item in the group
-                    totalHeight += standardItemHeight * listAdapter.getChildrenCount(index);
+                    totalHeight += standardItemHeight * childrenCount;
                 } else {
                     // Do not use standard height (slower)
                     // Need to cycle on every item to get its real height
-                    for (int j = 0; j < listAdapter.getChildrenCount(index); j++) {
+                    for (int j = 0; j < childrenCount; j++) {
                         View listItem = listAdapter.getChildView(index, j, false, null,
                                 listView);
                         listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
@@ -352,7 +353,7 @@ public class StructuresFragment extends Fragment {
                     }
                 }
                 // Add Divider Height
-                totalHeight += dividerHeight * (listAdapter.getChildrenCount(index) - 1);
+                totalHeight += dividerHeight * (childrenCount - 1);
             }
         }
         // Add Divider Height
