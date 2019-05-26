@@ -132,7 +132,7 @@ public class StructuresFragment extends Fragment {
         this.roomsView.setOnGroupClickListener((parent, v, groupPosition, id) -> {
             String groupName = parent.getExpandableListAdapter().getGroup(groupPosition).toString();
             buildingsClosedStatusMap.put(groupName, ! Objects.requireNonNull(buildingsClosedStatusMap.get(groupName)));
-            setExpandableListViewHeight(parent, groupPosition);
+            setExpandableListViewHeight(parent, groupPosition, this.api.settings.getRoomsListStandardHeight());
             return false;
         });
         return this.rootLayout;
@@ -302,28 +302,53 @@ public class StructuresFragment extends Fragment {
             }
         }
         // Allocate space for the expanded list
-        this.setExpandableListViewHeight(this.roomsView, -1);
+        this.setExpandableListViewHeight(this.roomsView, -1, this.api.settings.getRoomsListStandardHeight());
     }
 
-    private void setExpandableListViewHeight(ExpandableListView listView, int group) {
+    private void setExpandableListViewHeight(ExpandableListView listView, int group, boolean standardHeight) {
         // Set the ListView height
         ExpandableListAdapter listAdapter = (ExpandableListAdapter) listView.getExpandableListAdapter();
         int totalHeight = 0;
         int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
                 View.MeasureSpec.EXACTLY);
         int dividerHeight = listView.getDividerHeight();
-        for (int index = 0; index < listAdapter.getGroupCount(); index++) {
-            View groupItem = listAdapter.getGroupView(index, false, null, listView);
+        // Get standard group and item height
+        int standardGroupHeight = 0;
+        int standardItemHeight = 0;
+        if (standardHeight && listAdapter.getGroupCount() > 0) {
+            View groupItem = listAdapter.getGroupView(0, false, null, listView);
             groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += groupItem.getMeasuredHeight();
+            standardGroupHeight = groupItem.getMeasuredHeight();
+            View listItem = listAdapter.getChildView(0, 0, false, null, listView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            standardItemHeight = listItem.getMeasuredHeight();
+        }
+        for (int index = 0; index < listAdapter.getGroupCount(); index++) {
+            // Use the same standard height for every group
+            if (standardHeight) {
+                totalHeight += standardGroupHeight;
+            } else {
+                // Do not use standard height (slower)
+                // Need to cycle on every group to get its real height
+                View groupItem = listAdapter.getGroupView(index, false, null, listView);
+                groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+                totalHeight += groupItem.getMeasuredHeight();
+            }
 
             if (((listView.isGroupExpanded(index)) && (index != group))
                     || ((!listView.isGroupExpanded(index)) && (index == group))) {
-                for (int j = 0; j < listAdapter.getChildrenCount(index); j++) {
-                    View listItem = listAdapter.getChildView(index, j, false, null,
-                            listView);
-                    listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-                    totalHeight += listItem.getMeasuredHeight();
+                if (standardHeight) {
+                    // Use the same standard height for every item in the group
+                    totalHeight += standardItemHeight * listAdapter.getChildrenCount(index);
+                } else {
+                    // Do not use standard height (slower)
+                    // Need to cycle on every item to get its real height
+                    for (int j = 0; j < listAdapter.getChildrenCount(index); j++) {
+                        View listItem = listAdapter.getChildView(index, j, false, null,
+                                listView);
+                        listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+                        totalHeight += listItem.getMeasuredHeight();
+                    }
                 }
                 // Add Divider Height
                 totalHeight += dividerHeight * (listAdapter.getChildrenCount(index) - 1);
