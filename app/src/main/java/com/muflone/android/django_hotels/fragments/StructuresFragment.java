@@ -311,6 +311,7 @@ public class StructuresFragment extends Fragment {
         int totalHeight = 0;
         int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
                 View.MeasureSpec.EXACTLY);
+        int dividerHeight = listView.getDividerHeight();
         for (int index = 0; index < listAdapter.getGroupCount(); index++) {
             View groupItem = listAdapter.getGroupView(index, false, null, listView);
             groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
@@ -325,14 +326,14 @@ public class StructuresFragment extends Fragment {
                     totalHeight += listItem.getMeasuredHeight();
                 }
                 // Add Divider Height
-                totalHeight += listView.getDividerHeight() * (listAdapter.getChildrenCount(index) - 1);
+                totalHeight += dividerHeight * (listAdapter.getChildrenCount(index) - 1);
             }
         }
         // Add Divider Height
-        totalHeight += listView.getDividerHeight() * (listAdapter.getGroupCount() - 1);
+        totalHeight += dividerHeight * (listAdapter.getGroupCount() - 1);
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        int height = totalHeight + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
+        int height = totalHeight + (dividerHeight * (listAdapter.getGroupCount() - 1));
         params.height = height < 10 ? 200 : height;
         listView.setLayoutParams(params);
         listView.requestLayout();
