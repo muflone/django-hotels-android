@@ -53,4 +53,8 @@ public class Settings {
     public void setHomeScreenShortcutAdded(boolean value) {
         this.preferences.edit().putBoolean(this.context.getString(R.string.settings_home_screen_shortcut), value).commit();
     }
+
+    public boolean getRoomsListStandardHeight() {
+        return this.preferences.getBoolean(this.context.getString(R.string.settings_structures_rooms_list_standard_height_id), true);
+    }
 }
