@@ -312,10 +312,11 @@ public class StructuresFragment extends Fragment {
         int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
                 View.MeasureSpec.EXACTLY);
         int dividerHeight = listView.getDividerHeight();
+        int groupsCount = listAdapter.getGroupCount();
         // Get standard group and item height
         int standardGroupHeight = 0;
         int standardItemHeight = 0;
-        if (standardHeight && listAdapter.getGroupCount() > 0) {
+        if (standardHeight && groupsCount > 0) {
             View groupItem = listAdapter.getGroupView(0, false, null, listView);
             groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
             standardGroupHeight = groupItem.getMeasuredHeight();
@@ -323,7 +324,7 @@ public class StructuresFragment extends Fragment {
             listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
             standardItemHeight = listItem.getMeasuredHeight();
         }
-        for (int index = 0; index < listAdapter.getGroupCount(); index++) {
+        for (int index = 0; index < groupsCount; index++) {
             // Use the same standard height for every group
             if (standardHeight) {
                 totalHeight += standardGroupHeight;
@@ -355,10 +356,10 @@ public class StructuresFragment extends Fragment {
             }
         }
         // Add Divider Height
-        totalHeight += dividerHeight * (listAdapter.getGroupCount() - 1);
+        totalHeight += dividerHeight * (groupsCount - 1);
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        int height = totalHeight + (dividerHeight * (listAdapter.getGroupCount() - 1));
+        int height = totalHeight + (dividerHeight * (groupsCount - 1));
         params.height = height < 10 ? 200 : height;
         listView.setLayoutParams(params);
         listView.requestLayout();
