@@ -395,29 +395,39 @@ public class StructuresFragment extends Fragment {
         @Override
         public View getChildView(int groupPosition, final int childPosition,
                                  boolean isLastChild, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder;
             RoomStatus roomStatus = getChild(groupPosition, childPosition);
             if (convertView == null) {
+                // Get a new ViewHolder
                 LayoutInflater inflater = (LayoutInflater) this.context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.structures_building_item, parent, false);
+                viewHolder = new ViewHolder();
+                viewHolder.servicePresentImage = convertView.findViewById(R.id.servicePresentImage);
+                viewHolder.roomView = convertView.findViewById(R.id.roomView);
+                viewHolder.transmissionImage = convertView.findViewById(R.id.transmissionImage);
+                viewHolder.descriptionButton = convertView.findViewById(R.id.noteButton);
+                viewHolder.serviceButton = convertView.findViewById(R.id.serviceButton);
+                convertView.setTag(viewHolder);
+            } else {
+                // Get the ViewHolder from the saved instance in the ConvertView
+                viewHolder = (ViewHolder) convertView.getTag();
             }
             // This reference is used from the inner classes
             View rowView = convertView;
             // Update database row
             roomStatus.updateDatabase();
             // Update view row
-            this.updateRoomView(convertView, roomStatus);
+            this.updateRoomView(convertView, roomStatus, viewHolder);
             // Handle service present image LongClick
-            ImageView servicePresentImage = convertView.findViewById(R.id.servicePresentImage);
-            servicePresentImage.setOnLongClickListener(view -> {
+            viewHolder.servicePresentImage.setOnLongClickListener(view -> {
                 if (Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId)).size() > 0) {
                     showAlreadyAssignedEmployees(roomsEmployeesAssignedList.get(roomStatus.roomId));
                 }
                 return false;
             });
             // Set transmission LongClick
-            ImageView transmissionImage = convertView.findViewById(R.id.transmissionImage);
-            transmissionImage.setOnLongClickListener(button -> {
+            viewHolder.transmissionImage.setOnLongClickListener(button -> {
                 new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... result) {
@@ -429,7 +439,7 @@ public class StructuresFragment extends Fragment {
 
                     @Override
                     protected void onPostExecute(Void result) {
-                        transmissionImage.setImageResource(R.drawable.ic_timestamp_untransmitted);
+                        viewHolder.transmissionImage.setImageResource(R.drawable.ic_timestamp_untransmitted);
                         Toast.makeText(context,
                                 R.string.structures_marked_activity_as_untransmitted,
                                 Toast.LENGTH_SHORT).show();
@@ -438,10 +448,8 @@ public class StructuresFragment extends Fragment {
                 return false;
             });
             // Set service button Click
-            ImageButton descriptionButton = convertView.findViewById(R.id.noteButton);
-            Button serviceButton = convertView.findViewById(R.id.serviceButton);
-            serviceButton.setTag(convertView);
-            serviceButton.setOnClickListener(button -> {
+            viewHolder.serviceButton.setTag(convertView);
+            viewHolder.serviceButton.setOnClickListener(button -> {
                 if (! apiData.isValidContract(roomStatus.contractId)) {
                     // Cannot change a disabled contract
                     Toast.makeText(context, R.string.structures_unable_to_use_contract,
@@ -455,11 +463,11 @@ public class StructuresFragment extends Fragment {
                     roomStatus.nextService();
                     updateService(roomStatus);
                     roomStatus.updateDatabase();
-                    updateRoomView(rowView, roomStatus);
+                    updateRoomView(rowView, roomStatus, viewHolder);
                 }
             });
             // Set service button Long Click
-            serviceButton.setOnLongClickListener(button -> {
+            viewHolder.serviceButton.setOnLongClickListener(button -> {
                 if (! apiData.isValidContract(roomStatus.contractId)) {
                     // Cannot change a disabled contract
                     Toast.makeText(context, R.string.structures_unable_to_use_contract,
@@ -482,7 +490,7 @@ public class StructuresFragment extends Fragment {
                         roomStatus.prepareForNothing();
                         updateService(roomStatus);
                         roomStatus.updateDatabase();
-                        updateRoomView(rowView, roomStatus);
+                        updateRoomView(rowView, roomStatus, viewHolder);
                         dialog.dismiss();
                     });
 
@@ -493,7 +501,7 @@ public class StructuresFragment extends Fragment {
                 return true;
             });
             // Set service description Click
-            descriptionButton.setOnClickListener(button -> {
+            viewHolder.descriptionButton.setOnClickListener(button -> {
                 final EditText descriptionView = new EditText(context);
                 descriptionView.setText(roomStatus.description);
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
@@ -513,7 +521,7 @@ public class StructuresFragment extends Fragment {
                             } else {
                                     roomStatus.description = descriptionView.getText().toString();
                                     roomStatus.updateDatabase();
-                                    updateRoomView(rowView, roomStatus);
+                                    updateRoomView(rowView, roomStatus, viewHolder);
                             }
                         })
                         .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
@@ -569,38 +577,33 @@ public class StructuresFragment extends Fragment {
             return true;
         }
 
-        private void updateRoomView(View rowView, RoomStatus roomStatus) {
+        private void updateRoomView(View rowView, RoomStatus roomStatus, ViewHolder viewHolder) {
             // Highlight rooms with at least a service
-            ImageView servicePresentImage = rowView.findViewById(R.id.servicePresentImage);
-            servicePresentImage.setImageResource(
+            viewHolder.servicePresentImage.setImageResource(
                     Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId)).size() > 0 ?
                             R.drawable.ic_service_present : R.drawable.ic_service_absent);
             // Set room name
-            TextView roomView = rowView.findViewById(R.id.roomView);
-            roomView.setText(roomStatus.name);
+            viewHolder.roomView.setText(roomStatus.name);
             // Change room background color
             if (Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId)).size() > 1) {
-                roomView.setBackgroundColor(context.getResources().getColor(
+                viewHolder.roomView.setBackgroundColor(context.getResources().getColor(
                         R.color.color_rooms_background_already_assigned));
             } else {
-                roomView.setBackground(null);
+                viewHolder.roomView.setBackground(null);
             }
             // Set room service
-            Button serviceButton = rowView.findViewById(R.id.serviceButton);
-            serviceButton.setText(roomStatus.getServiceName());
+            viewHolder.serviceButton.setText(roomStatus.getServiceName());
             // Define descriptionButton
-            ImageButton descriptionButton = rowView.findViewById(R.id.noteButton);
             if (this.descriptionEnabledDrawable == null) {
                 this.descriptionEnabledDrawable = context.getResources().getDrawable(R.drawable.ic_note);
                 this.descriptionDisabledDrawable = Utility.convertDrawableToGrayScale(
                         this.descriptionEnabledDrawable);
             }
-            descriptionButton.setEnabled(roomStatus.service != null);
-            descriptionButton.setImageDrawable(roomStatus.service == null ?
+            viewHolder.descriptionButton.setEnabled(roomStatus.service != null);
+            viewHolder.descriptionButton.setImageDrawable(roomStatus.service == null ?
                     this.descriptionDisabledDrawable : this.descriptionEnabledDrawable);
             // Define transmissionImage
-            ImageView transmissionImage = rowView.findViewById(R.id.transmissionImage);
-            transmissionImage.setImageResource(roomStatus.transmission == null ?
+            viewHolder.transmissionImage.setImageResource(roomStatus.transmission == null ?
                     R.drawable.ic_timestamp_untransmitted : R.drawable.ic_timestamp_transmitted);
         }
 
@@ -630,6 +633,15 @@ public class StructuresFragment extends Fragment {
                 roomAssignationList.add(employee.id);
             }
         }
+    }
+
+    private static class ViewHolder {
+        // Views holder for room
+        ImageView servicePresentImage;
+        TextView roomView;
+        Button serviceButton;
+        ImageButton descriptionButton;
+        ImageView transmissionImage;
     }
 
     private class RoomStatus {
