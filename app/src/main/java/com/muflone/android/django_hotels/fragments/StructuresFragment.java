@@ -127,7 +127,7 @@ public class StructuresFragment extends Fragment {
             }
         }
 
-        this.buildingRoomsAdapter = new ExpandableListAdapter(this.context, buildingsList, roomsList);
+        this.buildingRoomsAdapter = new ExpandableListAdapter(this.context, this.buildingsList, this.roomsList);
         this.roomsView.setAdapter(this.buildingRoomsAdapter);
         this.roomsView.setOnGroupClickListener((parent, v, groupPosition, id) -> {
             String groupName = parent.getExpandableListAdapter().getGroup(groupPosition).toString();
@@ -206,7 +206,8 @@ public class StructuresFragment extends Fragment {
                             singleton.selectedDate,
                             apiData.timestampDirectionsNotEnterExit,
                             database.timestampDao().listByContractNotEnterExit(
-                                    singleton.selectedDate, contract.id)));
+                                    singleton.selectedDate, contract.id),
+                            context));
                 }
                 return null;
             }
@@ -418,7 +419,7 @@ public class StructuresFragment extends Fragment {
             // Update database row
             roomStatus.updateDatabase();
             // Update view row
-            this.updateRoomView(convertView, roomStatus, viewHolder);
+            this.updateRoomView(roomStatus, viewHolder);
             // Handle service present image LongClick
             viewHolder.servicePresentImage.setOnLongClickListener(view -> {
                 if (Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId)).size() > 0) {
@@ -463,7 +464,7 @@ public class StructuresFragment extends Fragment {
                     roomStatus.nextService();
                     updateService(roomStatus);
                     roomStatus.updateDatabase();
-                    updateRoomView(rowView, roomStatus, viewHolder);
+                    updateRoomView(roomStatus, viewHolder);
                 }
             });
             // Set service button Long Click
@@ -490,7 +491,7 @@ public class StructuresFragment extends Fragment {
                         roomStatus.prepareForNothing();
                         updateService(roomStatus);
                         roomStatus.updateDatabase();
-                        updateRoomView(rowView, roomStatus, viewHolder);
+                        updateRoomView(roomStatus, viewHolder);
                         dialog.dismiss();
                     });
 
@@ -521,7 +522,7 @@ public class StructuresFragment extends Fragment {
                             } else {
                                     roomStatus.description = descriptionView.getText().toString();
                                     roomStatus.updateDatabase();
-                                    updateRoomView(rowView, roomStatus, viewHolder);
+                                    updateRoomView(roomStatus, viewHolder);
                             }
                         })
                         .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
@@ -534,7 +535,8 @@ public class StructuresFragment extends Fragment {
 
         @Override
         public int getChildrenCount(int groupPosition) {
-            return Objects.requireNonNull(this.roomsList.get(this.buildingsList.get(groupPosition))).size();
+            return this.roomsList.get(this.buildingsList.get(groupPosition)) != null ?
+                    this.roomsList.get(this.buildingsList.get(groupPosition)).size() : 0;
         }
 
         @Override
@@ -577,7 +579,7 @@ public class StructuresFragment extends Fragment {
             return true;
         }
 
-        private void updateRoomView(View rowView, RoomStatus roomStatus, ViewHolder viewHolder) {
+        private void updateRoomView(RoomStatus roomStatus, ViewHolder viewHolder) {
             // Highlight rooms with at least a service
             viewHolder.servicePresentImage.setImageResource(
                     Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId)).size() > 0 ?
@@ -736,7 +738,7 @@ public class StructuresFragment extends Fragment {
         }
     }
 
-    private class EmployeeStatus {
+    private static class EmployeeStatus {
         private final Contract contract;
         private final Date date;
         private final List<TimestampDirection> timestampDirections;
@@ -746,7 +748,8 @@ public class StructuresFragment extends Fragment {
 
         public EmployeeStatus(Contract contract, Date date,
                               List<TimestampDirection> timestampDirections,
-                              List<Timestamp> timestampsEmployee) {
+                              List<Timestamp> timestampsEmployee,
+                              Context context) {
             this.contract = contract;
             this.date = date;
             // Initialize directionsArray and directionsCheckedArray
