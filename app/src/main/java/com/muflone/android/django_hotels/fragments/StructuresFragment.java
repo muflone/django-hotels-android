@@ -42,6 +42,7 @@ import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
+import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -180,52 +181,9 @@ public class StructuresFragment extends Fragment {
                 this.roomsEmployeesAssignedList.put(room.id, new ArrayList<>());
             }
         }
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                AppDatabase database = AppDatabase.getAppDatabase(context);
-                // Load employees for the selected structure
-                for (Employee employee : singleton.selectedStructure.employees) {
-                    employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
-                    // Reload services for contract
-                    Contract contract = Objects.requireNonNull(apiData.contractsMap.get(employee.contractBuildings.get(0).contractId));
-                    for (ServiceActivity serviceActivity : database.serviceActivityDao().listByDateContract(
-                            singleton.selectedDate, contract.id)) {
-                        serviceActivityTable.put(
-                                serviceActivity.contractId,
-                                serviceActivity.roomId,
-                                serviceActivity);
-                        // Add employee to the already assigned room list
-                        // only if the room belongs to the selected structure
-                        if (roomsEmployeesAssignedList.containsKey(serviceActivity.roomId)) {
-                            Objects.requireNonNull(roomsEmployeesAssignedList.get(serviceActivity.roomId)).add(employee.id);
-                        }
-                    }
-                    // Add employee status
-                    employeesStatusList.add(new EmployeeStatus(contract,
-                            singleton.selectedDate,
-                            apiData.timestampDirectionsNotEnterExit,
-                            database.timestampDao().listByContractNotEnterExit(
-                                    singleton.selectedDate, contract.id),
-                            context));
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                // Update data in the list
-                ((ArrayAdapter) employeesView.getAdapter()).notifyDataSetChanged();
-                // Select the first employee for the selected tab
-                if (employeesList.size() > 0) {
-                    employeesView.performItemClick(
-                            employeesView.getAdapter().getView(0, null, null),
-                            0,
-                            employeesView.getAdapter().getItemId(0)
-                    );
-                }
-            }
-        }.execute();
+        new StructuresLoadEmployeesTask(this.employeesList, this.employeesView,
+                this.serviceActivityTable, this.employeesStatusList,
+                this.roomsEmployeesAssignedList).execute();
     }
 
     private void loadEmployee(Employee employee) {
@@ -365,6 +323,74 @@ public class StructuresFragment extends Fragment {
         params.height = height < 10 ? 200 : height;
         listView.setLayoutParams(params);
         listView.requestLayout();
+    }
+
+    private static class StructuresLoadEmployeesTask extends AsyncTask<Void, Void, Void> {
+        private final Singleton singleton = Singleton.getInstance();
+        private final List<String> employeesList;
+        private final WeakReference<ListView> employeesView;
+        private final Table<Long, Long, ServiceActivity> serviceActivityTable;
+        private final List<EmployeeStatus> employeesStatusList;
+        private final HashMap<Long, List<Long>> roomsEmployeesAssignedList;
+
+        public StructuresLoadEmployeesTask(List<String> employeesList,
+                                           ListView employeesView,
+                                           Table<Long, Long, ServiceActivity> serviceActivityTable,
+                                           List<EmployeeStatus> employeesStatusList,
+                                           HashMap<Long, List<Long>> roomsEmployeesAssignedList) {
+            this.employeesList = employeesList;
+            this.employeesView = new WeakReference(employeesView);
+            this.serviceActivityTable = serviceActivityTable;
+            this.employeesStatusList = employeesStatusList;
+            this.roomsEmployeesAssignedList = roomsEmployeesAssignedList;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            AppDatabase database = AppDatabase.getAppDatabase(this.employeesView.get().getContext());
+            // Load employees for the selected structure
+            for (Employee employee : singleton.selectedStructure.employees) {
+                this.employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
+                // Reload services for contract
+                Contract contract = Objects.requireNonNull(singleton.apiData.contractsMap.get(
+                        employee.contractBuildings.get(0).contractId));
+                for (ServiceActivity serviceActivity : database.serviceActivityDao().listByDateContract(
+                        singleton.selectedDate, contract.id)) {
+                    this.serviceActivityTable.put(
+                            serviceActivity.contractId,
+                            serviceActivity.roomId,
+                            serviceActivity);
+                    // Add employee to the already assigned room list
+                    // only if the room belongs to the selected structure
+                    if (this.roomsEmployeesAssignedList.containsKey(serviceActivity.roomId)) {
+                        Objects.requireNonNull(this.roomsEmployeesAssignedList.get(
+                                serviceActivity.roomId)).add(employee.id);
+                    }
+                }
+                // Add employee status
+                this.employeesStatusList.add(new EmployeeStatus(contract,
+                        singleton.selectedDate,
+                        singleton.apiData.timestampDirectionsNotEnterExit,
+                        database.timestampDao().listByContractNotEnterExit(
+                                singleton.selectedDate, contract.id),
+                        this.employeesView.get().getContext()));
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            // Update data in the list
+            ((ArrayAdapter) this.employeesView.get().getAdapter()).notifyDataSetChanged();
+            // Select the first employee for the selected tab
+            if (this.employeesList.size() > 0) {
+                this.employeesView.get().performItemClick(
+                        this.employeesView.get().getAdapter().getView(0, null, null),
+                        0,
+                        this.employeesView.get().getAdapter().getItemId(0)
+                );
+            }
+        }
     }
 
     private class ExpandableListAdapter extends BaseExpandableListAdapter {
@@ -696,45 +722,54 @@ public class StructuresFragment extends Fragment {
 
         private void updateDatabase() {
             // Update database row
-            new AsyncTask<RoomStatus, Void, Void>() {
-                @Override
-                protected Void doInBackground(RoomStatus... params) {
-                    RoomStatus roomStatus = params[0];
-                    List<ServiceActivity> serviceActivityList =
-                            database.serviceActivityDao().listByDateContract(
-                                    singleton.selectedDate,
-                                    roomStatus.contractId, roomStatus.roomId);
-                    ServiceActivity serviceActivity;
-                    if (serviceActivityList.size() > 0) {
-                        serviceActivity = serviceActivityList.get(0);
-                        if (roomStatus.service != null) {
-                            // Update existing ServiceActivity
-                            serviceActivity.serviceId = roomStatus.service.id;
-                            serviceActivity.description = roomStatus.description;
-                            serviceActivity.transmission = roomStatus.transmission;
-                            database.serviceActivityDao().update(serviceActivity);
-                            serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
-                                    serviceActivity);
-                        } else {
-                            // Delete existing ServiceActivity
-                            database.serviceActivityDao().delete(serviceActivity);
-                            serviceActivityTable.remove(roomStatus.contractId, roomStatus.roomId);
-                        }
-                    } else if (roomStatus.service != null) {
-                        // Create new ServiceActivity
-                        serviceActivity = new ServiceActivity(0,
-                                singleton.selectedDate,
-                                roomStatus.contractId,
-                                roomStatus.roomId,
-                                roomStatus.service.id,
-                                1, roomStatus.description, null);
-                        database.serviceActivityDao().insert(serviceActivity);
-                        serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
-                                serviceActivity);
-                    }
-                    return null;
+            new RoomStatusUpdateDatabaseTask(serviceActivityTable).execute(this);
+        }
+    }
+
+    private static class RoomStatusUpdateDatabaseTask extends AsyncTask<RoomStatus, Void, Void> {
+        private final Singleton singleton = Singleton.getInstance();
+        private final Table<Long, Long, ServiceActivity> serviceActivityTable;
+
+        public RoomStatusUpdateDatabaseTask(Table<Long, Long, ServiceActivity> serviceActivityTable) {
+            this.serviceActivityTable = serviceActivityTable;
+        }
+
+        @Override
+        protected Void doInBackground(RoomStatus... params) {
+            RoomStatus roomStatus = params[0];
+            List<ServiceActivity> serviceActivityList =
+                    roomStatus.database.serviceActivityDao().listByDateContract(
+                            singleton.selectedDate,
+                            roomStatus.contractId, roomStatus.roomId);
+            ServiceActivity serviceActivity;
+            if (serviceActivityList.size() > 0) {
+                serviceActivity = serviceActivityList.get(0);
+                if (roomStatus.service != null) {
+                    // Update existing ServiceActivity
+                    serviceActivity.serviceId = roomStatus.service.id;
+                    serviceActivity.description = roomStatus.description;
+                    serviceActivity.transmission = roomStatus.transmission;
+                    roomStatus.database.serviceActivityDao().update(serviceActivity);
+                    serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
+                            serviceActivity);
+                } else {
+                    // Delete existing ServiceActivity
+                    roomStatus.database.serviceActivityDao().delete(serviceActivity);
+                    serviceActivityTable.remove(roomStatus.contractId, roomStatus.roomId);
                 }
-            }.execute(this);
+            } else if (roomStatus.service != null) {
+                // Create new ServiceActivity
+                serviceActivity = new ServiceActivity(0,
+                        singleton.selectedDate,
+                        roomStatus.contractId,
+                        roomStatus.roomId,
+                        roomStatus.service.id,
+                        1, roomStatus.description, null);
+                roomStatus.database.serviceActivityDao().insert(serviceActivity);
+                serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
+                        serviceActivity);
+            }
+            return null;
         }
     }
 
@@ -773,27 +808,30 @@ public class StructuresFragment extends Fragment {
 
         private void updateDatabase() {
             // Update database row
-            new AsyncTask<EmployeeStatus, Void, Void>() {
-                @Override
-                protected Void doInBackground(EmployeeStatus... params) {
-                    EmployeeStatus employeeStatus = params[0];
-                    List<Timestamp> timestampsEmployee =
-                            database.timestampDao().listByContractNotEnterExit(date, contract.id);
-                    // Delete any previous timestamp
-                    database.timestampDao().delete(timestampsEmployee.toArray(new Timestamp[0]));
-                    // Re-add every active timestamp
-                    timestampsEmployee.clear();
-                    for (int index = 0; index < employeeStatus.timestampDirections.size(); index++) {
-                        if (employeeStatus.directionsCheckedArray[index]) {
-                            TimestampDirection timestampDirection = employeeStatus.timestampDirections.get(index);
-                            timestampsEmployee.add(new Timestamp(0, employeeStatus.contract.id,
-                                    timestampDirection.id, date,"", null));
-                        }
-                    }
-                    database.timestampDao().insert(timestampsEmployee.toArray(new Timestamp[0]));
-                    return null;
+            new EmployeeStatusUpdateDatabaseTask().execute(this);
+        }
+    }
+
+    private static class EmployeeStatusUpdateDatabaseTask extends AsyncTask<EmployeeStatus, Void, Void> {
+        // Update database for EmployeeStatus
+        @Override
+        protected Void doInBackground(EmployeeStatus... params) {
+            EmployeeStatus employeeStatus = params[0];
+            List<Timestamp> timestampsEmployee = employeeStatus.database.timestampDao().listByContractNotEnterExit(
+                    employeeStatus.date, employeeStatus.contract.id);
+            // Delete any previous timestamp
+            employeeStatus.database.timestampDao().delete(timestampsEmployee.toArray(new Timestamp[0]));
+            // Re-add every active timestamp
+            timestampsEmployee.clear();
+            for (int index = 0; index < employeeStatus.timestampDirections.size(); index++) {
+                if (employeeStatus.directionsCheckedArray[index]) {
+                    TimestampDirection timestampDirection = employeeStatus.timestampDirections.get(index);
+                    timestampsEmployee.add(new Timestamp(0, employeeStatus.contract.id,
+                            timestampDirection.id, employeeStatus.date,"", null));
                 }
-            }.execute(this);
+            }
+            employeeStatus.database.timestampDao().insert(timestampsEmployee.toArray(new Timestamp[0]));
+            return null;
         }
     }
 }

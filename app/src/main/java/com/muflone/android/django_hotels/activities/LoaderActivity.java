@@ -47,22 +47,7 @@ public class LoaderActivity extends AppCompatActivity {
                     SortedSet<Structure> sortedStructures = new TreeSet<>(singleton.apiData.structuresMap.values());
                     singleton.selectedStructure = sortedStructures.first();
                 }
-                // Await a bit before loading
-                new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        Utility.sleep(500);
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        super.onPostExecute(result);
-                        // Load the main activity
-                        startActivity(new Intent(LoaderActivity.this, MainActivity.class));
-                        finish();
-                    }
-                }.execute();
+                new LoaderActivityStartTask().execute(LoaderActivity.this);
             }
 
             @Override
@@ -77,5 +62,22 @@ public class LoaderActivity extends AppCompatActivity {
 
     private void loadUI() {
         this.textViewAppName = this.findViewById(R.id.textViewAppName);
+    }
+
+    private static class LoaderActivityStartTask extends AsyncTask<LoaderActivity, Void, LoaderActivity> {
+        // Await a bit before loading
+        @Override
+        protected LoaderActivity doInBackground(LoaderActivity... params) {
+            Utility.sleep(500);
+            return params[0];
+        }
+
+        @Override
+        protected void onPostExecute(LoaderActivity result) {
+            super.onPostExecute(result);
+            // Load the main activity
+            result.startActivity(new Intent(result, MainActivity.class));
+            result.finish();
+        }
     }
 }
