@@ -396,14 +396,14 @@ public class StructuresFragment extends Fragment {
         @Override
         public View getChildView(int groupPosition, final int childPosition,
                                  boolean isLastChild, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder;
+            StructuresViewHolder viewHolder;
             RoomStatus roomStatus = getChild(groupPosition, childPosition);
             if (convertView == null) {
-                // Get a new ViewHolder
+                // Get a new StructuresViewHolder
                 LayoutInflater inflater = (LayoutInflater) this.context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.structures_building_item, parent, false);
-                viewHolder = new ViewHolder();
+                viewHolder = new StructuresViewHolder();
                 viewHolder.servicePresentImage = convertView.findViewById(R.id.servicePresentImage);
                 viewHolder.roomView = convertView.findViewById(R.id.roomView);
                 viewHolder.transmissionImage = convertView.findViewById(R.id.transmissionImage);
@@ -411,8 +411,8 @@ public class StructuresFragment extends Fragment {
                 viewHolder.serviceButton = convertView.findViewById(R.id.serviceButton);
                 convertView.setTag(viewHolder);
             } else {
-                // Get the ViewHolder from the saved instance in the ConvertView
-                viewHolder = (ViewHolder) convertView.getTag();
+                // Get the StructuresViewHolder from the saved instance in the ConvertView
+                viewHolder = (StructuresViewHolder) convertView.getTag();
             }
             // This reference is used from the inner classes
             View rowView = convertView;
@@ -579,7 +579,7 @@ public class StructuresFragment extends Fragment {
             return true;
         }
 
-        private void updateRoomView(RoomStatus roomStatus, ViewHolder viewHolder) {
+        private void updateRoomView(RoomStatus roomStatus, StructuresViewHolder viewHolder) {
             // Highlight rooms with at least a service
             viewHolder.servicePresentImage.setImageResource(
                     Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId)).size() > 0 ?
@@ -637,7 +637,7 @@ public class StructuresFragment extends Fragment {
         }
     }
 
-    private static class ViewHolder {
+    private static class StructuresViewHolder {
         // Views holder for room
         ImageView servicePresentImage;
         TextView roomView;
