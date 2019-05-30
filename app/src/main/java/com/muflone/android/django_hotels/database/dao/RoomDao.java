@@ -22,7 +22,8 @@ public interface RoomDao {
 
     @Query("SELECT * " +
            "FROM rooms " +
-           "WHERE building_id = :buildingId")
+           "WHERE building_id = :buildingId " +
+           "ORDER BY name")
     List<Room> listByBuilding(long buildingId);
 
     @Query("SELECT * " +
