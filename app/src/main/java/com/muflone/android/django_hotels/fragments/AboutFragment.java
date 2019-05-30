@@ -127,7 +127,7 @@ public class AboutFragment extends Fragment {
         // Return an element for System Information
         return new Element()
                 .setIconDrawable(R.drawable.ic_info)
-                .setTitle(String.format(Locale.ROOT, this.getString(resId), values));
+                .setTitle(String.format(Locale.ROOT, this.getString(resId), (Object[]) values));
     }
 
     @Override
