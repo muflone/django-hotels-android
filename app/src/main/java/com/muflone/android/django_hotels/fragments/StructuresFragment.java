@@ -42,6 +42,7 @@ import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
+import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -127,12 +128,12 @@ public class StructuresFragment extends Fragment {
             }
         }
 
-        this.buildingRoomsAdapter = new ExpandableListAdapter(this.context, buildingsList, roomsList);
+        this.buildingRoomsAdapter = new ExpandableListAdapter(this.context, this.buildingsList, this.roomsList);
         this.roomsView.setAdapter(this.buildingRoomsAdapter);
         this.roomsView.setOnGroupClickListener((parent, v, groupPosition, id) -> {
             String groupName = parent.getExpandableListAdapter().getGroup(groupPosition).toString();
             buildingsClosedStatusMap.put(groupName, ! Objects.requireNonNull(buildingsClosedStatusMap.get(groupName)));
-            setExpandableListViewHeight(parent, groupPosition);
+            setExpandableListViewHeight(parent, groupPosition, this.api.settings.getRoomsListStandardHeight());
             return false;
         });
         return this.rootLayout;
@@ -180,51 +181,9 @@ public class StructuresFragment extends Fragment {
                 this.roomsEmployeesAssignedList.put(room.id, new ArrayList<>());
             }
         }
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                AppDatabase database = AppDatabase.getAppDatabase(context);
-                // Load employees for the selected structure
-                for (Employee employee : singleton.selectedStructure.employees) {
-                    employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
-                    // Reload services for contract
-                    Contract contract = Objects.requireNonNull(apiData.contractsMap.get(employee.contractBuildings.get(0).contractId));
-                    for (ServiceActivity serviceActivity : database.serviceActivityDao().listByDateContract(
-                            singleton.selectedDate, contract.id)) {
-                        serviceActivityTable.put(
-                                serviceActivity.contractId,
-                                serviceActivity.roomId,
-                                serviceActivity);
-                        // Add employee to the already assigned room list
-                        // only if the room belongs to the selected structure
-                        if (roomsEmployeesAssignedList.containsKey(serviceActivity.roomId)) {
-                            Objects.requireNonNull(roomsEmployeesAssignedList.get(serviceActivity.roomId)).add(employee.id);
-                        }
-                    }
-                    // Add employee status
-                    employeesStatusList.add(new EmployeeStatus(contract,
-                            singleton.selectedDate,
-                            apiData.timestampDirectionsNotEnterExit,
-                            database.timestampDao().listByContractNotEnterExit(
-                                    singleton.selectedDate, contract.id)));
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                // Update data in the list
-                ((ArrayAdapter) employeesView.getAdapter()).notifyDataSetChanged();
-                // Select the first employee for the selected tab
-                if (employeesList.size() > 0) {
-                    employeesView.performItemClick(
-                            employeesView.getAdapter().getView(0, null, null),
-                            0,
-                            employeesView.getAdapter().getItemId(0)
-                    );
-                }
-            }
-        }.execute();
+        new StructuresLoadEmployeesTask(this.employeesList, this.employeesView,
+                this.serviceActivityTable, this.employeesStatusList,
+                this.roomsEmployeesAssignedList).execute();
     }
 
     private void loadEmployee(Employee employee) {
@@ -302,40 +261,136 @@ public class StructuresFragment extends Fragment {
             }
         }
         // Allocate space for the expanded list
-        this.setExpandableListViewHeight(this.roomsView, -1);
+        this.setExpandableListViewHeight(this.roomsView, -1, this.api.settings.getRoomsListStandardHeight());
     }
 
-    private void setExpandableListViewHeight(ExpandableListView listView, int group) {
+    private void setExpandableListViewHeight(ExpandableListView listView, int group, boolean standardHeight) {
         // Set the ListView height
         ExpandableListAdapter listAdapter = (ExpandableListAdapter) listView.getExpandableListAdapter();
         int totalHeight = 0;
         int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
                 View.MeasureSpec.EXACTLY);
-        for (int index = 0; index < listAdapter.getGroupCount(); index++) {
-            View groupItem = listAdapter.getGroupView(index, false, null, listView);
+        int dividerHeight = listView.getDividerHeight();
+        int groupsCount = listAdapter.getGroupCount();
+        // Get standard group and item height
+        int standardGroupHeight = 0;
+        int standardItemHeight = 0;
+        if (standardHeight && groupsCount > 0) {
+            View groupItem = listAdapter.getGroupView(0, false, null, listView);
             groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += groupItem.getMeasuredHeight();
+            standardGroupHeight = groupItem.getMeasuredHeight();
+            View listItem = listAdapter.getChildView(0, 0, false, null, listView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            standardItemHeight = listItem.getMeasuredHeight();
+        }
+        for (int index = 0; index < groupsCount; index++) {
+            // Use the same standard height for every group
+            if (standardHeight) {
+                totalHeight += standardGroupHeight;
+            } else {
+                // Do not use standard height (slower)
+                // Need to cycle on every group to get its real height
+                View groupItem = listAdapter.getGroupView(index, false, null, listView);
+                groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+                totalHeight += groupItem.getMeasuredHeight();
+            }
 
             if (((listView.isGroupExpanded(index)) && (index != group))
                     || ((!listView.isGroupExpanded(index)) && (index == group))) {
-                for (int j = 0; j < listAdapter.getChildrenCount(index); j++) {
-                    View listItem = listAdapter.getChildView(index, j, false, null,
-                            listView);
-                    listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-                    totalHeight += listItem.getMeasuredHeight();
+                int childrenCount = listAdapter.getChildrenCount(index);
+                if (standardHeight) {
+                    // Use the same standard height for every item in the group
+                    totalHeight += standardItemHeight * childrenCount;
+                } else {
+                    // Do not use standard height (slower)
+                    // Need to cycle on every item to get its real height
+                    for (int j = 0; j < childrenCount; j++) {
+                        View listItem = listAdapter.getChildView(index, j, false, null,
+                                listView);
+                        listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+                        totalHeight += listItem.getMeasuredHeight();
+                    }
                 }
                 // Add Divider Height
-                totalHeight += listView.getDividerHeight() * (listAdapter.getChildrenCount(index) - 1);
+                totalHeight += dividerHeight * (childrenCount - 1);
             }
         }
         // Add Divider Height
-        totalHeight += listView.getDividerHeight() * (listAdapter.getGroupCount() - 1);
+        totalHeight += dividerHeight * (groupsCount - 1);
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        int height = totalHeight + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
+        int height = totalHeight + (dividerHeight * (groupsCount - 1));
         params.height = height < 10 ? 200 : height;
         listView.setLayoutParams(params);
         listView.requestLayout();
+    }
+
+    private static class StructuresLoadEmployeesTask extends AsyncTask<Void, Void, Void> {
+        private final Singleton singleton = Singleton.getInstance();
+        private final List<String> employeesList;
+        private final WeakReference<ListView> employeesView;
+        private final Table<Long, Long, ServiceActivity> serviceActivityTable;
+        private final List<EmployeeStatus> employeesStatusList;
+        private final HashMap<Long, List<Long>> roomsEmployeesAssignedList;
+
+        public StructuresLoadEmployeesTask(List<String> employeesList,
+                                           ListView employeesView,
+                                           Table<Long, Long, ServiceActivity> serviceActivityTable,
+                                           List<EmployeeStatus> employeesStatusList,
+                                           HashMap<Long, List<Long>> roomsEmployeesAssignedList) {
+            this.employeesList = employeesList;
+            this.employeesView = new WeakReference<>(employeesView);
+            this.serviceActivityTable = serviceActivityTable;
+            this.employeesStatusList = employeesStatusList;
+            this.roomsEmployeesAssignedList = roomsEmployeesAssignedList;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            AppDatabase database = AppDatabase.getAppDatabase(this.employeesView.get().getContext());
+            // Load employees for the selected structure
+            for (Employee employee : singleton.selectedStructure.employees) {
+                this.employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
+                // Reload services for contract
+                Contract contract = Objects.requireNonNull(singleton.apiData.contractsMap.get(
+                        employee.contractBuildings.get(0).contractId));
+                for (ServiceActivity serviceActivity : database.serviceActivityDao().listByDateContract(
+                        singleton.selectedDate, contract.id)) {
+                    this.serviceActivityTable.put(
+                            serviceActivity.contractId,
+                            serviceActivity.roomId,
+                            serviceActivity);
+                    // Add employee to the already assigned room list
+                    // only if the room belongs to the selected structure
+                    if (this.roomsEmployeesAssignedList.containsKey(serviceActivity.roomId)) {
+                        Objects.requireNonNull(this.roomsEmployeesAssignedList.get(
+                                serviceActivity.roomId)).add(employee.id);
+                    }
+                }
+                // Add employee status
+                this.employeesStatusList.add(new EmployeeStatus(contract,
+                        singleton.selectedDate,
+                        singleton.apiData.timestampDirectionsNotEnterExit,
+                        database.timestampDao().listByContractNotEnterExit(
+                                singleton.selectedDate, contract.id),
+                        this.employeesView.get().getContext()));
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            // Update data in the list
+            ((ArrayAdapter) this.employeesView.get().getAdapter()).notifyDataSetChanged();
+            // Select the first employee for the selected tab
+            if (this.employeesList.size() > 0) {
+                this.employeesView.get().performItemClick(
+                        this.employeesView.get().getAdapter().getView(0, null, null),
+                        0,
+                        this.employeesView.get().getAdapter().getItemId(0)
+                );
+            }
+        }
     }
 
     private class ExpandableListAdapter extends BaseExpandableListAdapter {
@@ -367,53 +422,48 @@ public class StructuresFragment extends Fragment {
         @Override
         public View getChildView(int groupPosition, final int childPosition,
                                  boolean isLastChild, View convertView, ViewGroup parent) {
+            StructuresViewHolder viewHolder;
             RoomStatus roomStatus = getChild(groupPosition, childPosition);
             if (convertView == null) {
+                // Get a new StructuresViewHolder
                 LayoutInflater inflater = (LayoutInflater) this.context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.structures_building_item, parent, false);
+                viewHolder = new StructuresViewHolder();
+                viewHolder.servicePresentImage = convertView.findViewById(R.id.servicePresentImage);
+                viewHolder.roomView = convertView.findViewById(R.id.roomView);
+                viewHolder.transmissionImage = convertView.findViewById(R.id.transmissionImage);
+                viewHolder.descriptionButton = convertView.findViewById(R.id.noteButton);
+                viewHolder.serviceButton = convertView.findViewById(R.id.serviceButton);
+                convertView.setTag(viewHolder);
+            } else {
+                // Get the StructuresViewHolder from the saved instance in the ConvertView
+                viewHolder = (StructuresViewHolder) convertView.getTag();
             }
-            // This reference is used from the inner classes
-            View rowView = convertView;
             // Update database row
             roomStatus.updateDatabase();
             // Update view row
-            this.updateRoomView(convertView, roomStatus);
+            this.updateRoomView(roomStatus, viewHolder);
             // Handle service present image LongClick
-            ImageView servicePresentImage = convertView.findViewById(R.id.servicePresentImage);
-            servicePresentImage.setOnLongClickListener(view -> {
+            viewHolder.servicePresentImage.setOnLongClickListener(view -> {
                 if (Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId)).size() > 0) {
                     showAlreadyAssignedEmployees(roomsEmployeesAssignedList.get(roomStatus.roomId));
                 }
                 return false;
             });
             // Set transmission LongClick
-            ImageView transmissionImage = convertView.findViewById(R.id.transmissionImage);
-            transmissionImage.setOnLongClickListener(button -> {
-                new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... result) {
-                        // Delete transmission date
-                        roomStatus.transmission = null;
-                        roomStatus.updateDatabase();
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        transmissionImage.setImageResource(R.drawable.ic_timestamp_untransmitted);
-                        Toast.makeText(context,
-                                R.string.structures_marked_activity_as_untransmitted,
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }.execute();
+            viewHolder.transmissionImage.setOnLongClickListener(button -> {
+                roomStatus.transmission = null;
+                roomStatus.updateDatabase();
+                viewHolder.transmissionImage.setImageResource(R.drawable.ic_timestamp_untransmitted);
+                Toast.makeText(context,
+                        R.string.structures_marked_activity_as_untransmitted,
+                        Toast.LENGTH_SHORT).show();
                 return false;
             });
             // Set service button Click
-            ImageButton descriptionButton = convertView.findViewById(R.id.noteButton);
-            Button serviceButton = convertView.findViewById(R.id.serviceButton);
-            serviceButton.setTag(convertView);
-            serviceButton.setOnClickListener(button -> {
+            viewHolder.serviceButton.setTag(convertView);
+            viewHolder.serviceButton.setOnClickListener(button -> {
                 if (! apiData.isValidContract(roomStatus.contractId)) {
                     // Cannot change a disabled contract
                     Toast.makeText(context, R.string.structures_unable_to_use_contract,
@@ -427,11 +477,11 @@ public class StructuresFragment extends Fragment {
                     roomStatus.nextService();
                     updateService(roomStatus);
                     roomStatus.updateDatabase();
-                    updateRoomView(rowView, roomStatus);
+                    updateRoomView(roomStatus, viewHolder);
                 }
             });
             // Set service button Long Click
-            serviceButton.setOnLongClickListener(button -> {
+            viewHolder.serviceButton.setOnLongClickListener(button -> {
                 if (! apiData.isValidContract(roomStatus.contractId)) {
                     // Cannot change a disabled contract
                     Toast.makeText(context, R.string.structures_unable_to_use_contract,
@@ -454,7 +504,7 @@ public class StructuresFragment extends Fragment {
                         roomStatus.prepareForNothing();
                         updateService(roomStatus);
                         roomStatus.updateDatabase();
-                        updateRoomView(rowView, roomStatus);
+                        updateRoomView(roomStatus, viewHolder);
                         dialog.dismiss();
                     });
 
@@ -465,7 +515,7 @@ public class StructuresFragment extends Fragment {
                 return true;
             });
             // Set service description Click
-            descriptionButton.setOnClickListener(button -> {
+            viewHolder.descriptionButton.setOnClickListener(button -> {
                 final EditText descriptionView = new EditText(context);
                 descriptionView.setText(roomStatus.description);
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
@@ -485,7 +535,7 @@ public class StructuresFragment extends Fragment {
                             } else {
                                     roomStatus.description = descriptionView.getText().toString();
                                     roomStatus.updateDatabase();
-                                    updateRoomView(rowView, roomStatus);
+                                    updateRoomView(roomStatus, viewHolder);
                             }
                         })
                         .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
@@ -498,7 +548,9 @@ public class StructuresFragment extends Fragment {
 
         @Override
         public int getChildrenCount(int groupPosition) {
-            return Objects.requireNonNull(this.roomsList.get(this.buildingsList.get(groupPosition))).size();
+            return this.roomsList.get(this.buildingsList.get(groupPosition)) != null ?
+                    Objects.requireNonNull(this.roomsList.get(this.buildingsList.get(groupPosition))).size() :
+                    0;
         }
 
         @Override
@@ -541,38 +593,33 @@ public class StructuresFragment extends Fragment {
             return true;
         }
 
-        private void updateRoomView(View rowView, RoomStatus roomStatus) {
+        private void updateRoomView(RoomStatus roomStatus, StructuresViewHolder viewHolder) {
             // Highlight rooms with at least a service
-            ImageView servicePresentImage = rowView.findViewById(R.id.servicePresentImage);
-            servicePresentImage.setImageResource(
+            viewHolder.servicePresentImage.setImageResource(
                     Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId)).size() > 0 ?
                             R.drawable.ic_service_present : R.drawable.ic_service_absent);
             // Set room name
-            TextView roomView = rowView.findViewById(R.id.roomView);
-            roomView.setText(roomStatus.name);
+            viewHolder.roomView.setText(roomStatus.name);
             // Change room background color
             if (Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId)).size() > 1) {
-                roomView.setBackgroundColor(context.getResources().getColor(
+                viewHolder.roomView.setBackgroundColor(context.getResources().getColor(
                         R.color.color_rooms_background_already_assigned));
             } else {
-                roomView.setBackground(null);
+                viewHolder.roomView.setBackground(null);
             }
             // Set room service
-            Button serviceButton = rowView.findViewById(R.id.serviceButton);
-            serviceButton.setText(roomStatus.getServiceName());
+            viewHolder.serviceButton.setText(roomStatus.getServiceName());
             // Define descriptionButton
-            ImageButton descriptionButton = rowView.findViewById(R.id.noteButton);
             if (this.descriptionEnabledDrawable == null) {
                 this.descriptionEnabledDrawable = context.getResources().getDrawable(R.drawable.ic_note);
                 this.descriptionDisabledDrawable = Utility.convertDrawableToGrayScale(
                         this.descriptionEnabledDrawable);
             }
-            descriptionButton.setEnabled(roomStatus.service != null);
-            descriptionButton.setImageDrawable(roomStatus.service == null ?
+            viewHolder.descriptionButton.setEnabled(roomStatus.service != null);
+            viewHolder.descriptionButton.setImageDrawable(roomStatus.service == null ?
                     this.descriptionDisabledDrawable : this.descriptionEnabledDrawable);
             // Define transmissionImage
-            ImageView transmissionImage = rowView.findViewById(R.id.transmissionImage);
-            transmissionImage.setImageResource(roomStatus.transmission == null ?
+            viewHolder.transmissionImage.setImageResource(roomStatus.transmission == null ?
                     R.drawable.ic_timestamp_untransmitted : R.drawable.ic_timestamp_transmitted);
         }
 
@@ -602,6 +649,16 @@ public class StructuresFragment extends Fragment {
                 roomAssignationList.add(employee.id);
             }
         }
+    }
+
+    private static class StructuresViewHolder {
+        // Views holder caching items for ExpandableListAdapter
+        // https://www.javacodegeeks.com/2013/09/android-viewholder-pattern-example.html
+        ImageView servicePresentImage;
+        TextView roomView;
+        Button serviceButton;
+        ImageButton descriptionButton;
+        ImageView transmissionImage;
     }
 
     private class RoomStatus {
@@ -654,49 +711,58 @@ public class StructuresFragment extends Fragment {
 
         private void updateDatabase() {
             // Update database row
-            new AsyncTask<RoomStatus, Void, Void>() {
-                @Override
-                protected Void doInBackground(RoomStatus... params) {
-                    RoomStatus roomStatus = params[0];
-                    List<ServiceActivity> serviceActivityList =
-                            database.serviceActivityDao().listByDateContract(
-                                    singleton.selectedDate,
-                                    roomStatus.contractId, roomStatus.roomId);
-                    ServiceActivity serviceActivity;
-                    if (serviceActivityList.size() > 0) {
-                        serviceActivity = serviceActivityList.get(0);
-                        if (roomStatus.service != null) {
-                            // Update existing ServiceActivity
-                            serviceActivity.serviceId = roomStatus.service.id;
-                            serviceActivity.description = roomStatus.description;
-                            serviceActivity.transmission = roomStatus.transmission;
-                            database.serviceActivityDao().update(serviceActivity);
-                            serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
-                                    serviceActivity);
-                        } else {
-                            // Delete existing ServiceActivity
-                            database.serviceActivityDao().delete(serviceActivity);
-                            serviceActivityTable.remove(roomStatus.contractId, roomStatus.roomId);
-                        }
-                    } else if (roomStatus.service != null) {
-                        // Create new ServiceActivity
-                        serviceActivity = new ServiceActivity(0,
-                                singleton.selectedDate,
-                                roomStatus.contractId,
-                                roomStatus.roomId,
-                                roomStatus.service.id,
-                                1, roomStatus.description, null);
-                        database.serviceActivityDao().insert(serviceActivity);
-                        serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
-                                serviceActivity);
-                    }
-                    return null;
-                }
-            }.execute(this);
+            new RoomStatusUpdateDatabaseTask(serviceActivityTable).execute(this);
         }
     }
 
-    private class EmployeeStatus {
+    private static class RoomStatusUpdateDatabaseTask extends AsyncTask<RoomStatus, Void, Void> {
+        private final Singleton singleton = Singleton.getInstance();
+        private final Table<Long, Long, ServiceActivity> serviceActivityTable;
+
+        public RoomStatusUpdateDatabaseTask(Table<Long, Long, ServiceActivity> serviceActivityTable) {
+            this.serviceActivityTable = serviceActivityTable;
+        }
+
+        @Override
+        protected Void doInBackground(RoomStatus... params) {
+            RoomStatus roomStatus = params[0];
+            List<ServiceActivity> serviceActivityList =
+                    roomStatus.database.serviceActivityDao().listByDateContract(
+                            singleton.selectedDate,
+                            roomStatus.contractId, roomStatus.roomId);
+            ServiceActivity serviceActivity;
+            if (serviceActivityList.size() > 0) {
+                serviceActivity = serviceActivityList.get(0);
+                if (roomStatus.service != null) {
+                    // Update existing ServiceActivity
+                    serviceActivity.serviceId = roomStatus.service.id;
+                    serviceActivity.description = roomStatus.description;
+                    serviceActivity.transmission = roomStatus.transmission;
+                    roomStatus.database.serviceActivityDao().update(serviceActivity);
+                    serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
+                            serviceActivity);
+                } else {
+                    // Delete existing ServiceActivity
+                    roomStatus.database.serviceActivityDao().delete(serviceActivity);
+                    serviceActivityTable.remove(roomStatus.contractId, roomStatus.roomId);
+                }
+            } else if (roomStatus.service != null) {
+                // Create new ServiceActivity
+                serviceActivity = new ServiceActivity(0,
+                        singleton.selectedDate,
+                        roomStatus.contractId,
+                        roomStatus.roomId,
+                        roomStatus.service.id,
+                        1, roomStatus.description, null);
+                roomStatus.database.serviceActivityDao().insert(serviceActivity);
+                serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
+                        serviceActivity);
+            }
+            return null;
+        }
+    }
+
+    private static class EmployeeStatus {
         private final Contract contract;
         private final Date date;
         private final List<TimestampDirection> timestampDirections;
@@ -706,7 +772,8 @@ public class StructuresFragment extends Fragment {
 
         public EmployeeStatus(Contract contract, Date date,
                               List<TimestampDirection> timestampDirections,
-                              List<Timestamp> timestampsEmployee) {
+                              List<Timestamp> timestampsEmployee,
+                              Context context) {
             this.contract = contract;
             this.date = date;
             // Initialize directionsArray and directionsCheckedArray
@@ -730,27 +797,30 @@ public class StructuresFragment extends Fragment {
 
         private void updateDatabase() {
             // Update database row
-            new AsyncTask<EmployeeStatus, Void, Void>() {
-                @Override
-                protected Void doInBackground(EmployeeStatus... params) {
-                    EmployeeStatus employeeStatus = params[0];
-                    List<Timestamp> timestampsEmployee =
-                            database.timestampDao().listByContractNotEnterExit(date, contract.id);
-                    // Delete any previous timestamp
-                    database.timestampDao().delete(timestampsEmployee.toArray(new Timestamp[0]));
-                    // Re-add every active timestamp
-                    timestampsEmployee.clear();
-                    for (int index = 0; index < employeeStatus.timestampDirections.size(); index++) {
-                        if (employeeStatus.directionsCheckedArray[index]) {
-                            TimestampDirection timestampDirection = employeeStatus.timestampDirections.get(index);
-                            timestampsEmployee.add(new Timestamp(0, employeeStatus.contract.id,
-                                    timestampDirection.id, date,"", null));
-                        }
-                    }
-                    database.timestampDao().insert(timestampsEmployee.toArray(new Timestamp[0]));
-                    return null;
+            new EmployeeStatusUpdateDatabaseTask().execute(this);
+        }
+    }
+
+    private static class EmployeeStatusUpdateDatabaseTask extends AsyncTask<EmployeeStatus, Void, Void> {
+        // Update database for EmployeeStatus
+        @Override
+        protected Void doInBackground(EmployeeStatus... params) {
+            EmployeeStatus employeeStatus = params[0];
+            List<Timestamp> timestampsEmployee = employeeStatus.database.timestampDao().listByContractNotEnterExit(
+                    employeeStatus.date, employeeStatus.contract.id);
+            // Delete any previous timestamp
+            employeeStatus.database.timestampDao().delete(timestampsEmployee.toArray(new Timestamp[0]));
+            // Re-add every active timestamp
+            timestampsEmployee.clear();
+            for (int index = 0; index < employeeStatus.timestampDirections.size(); index++) {
+                if (employeeStatus.directionsCheckedArray[index]) {
+                    TimestampDirection timestampDirection = employeeStatus.timestampDirections.get(index);
+                    timestampsEmployee.add(new Timestamp(0, employeeStatus.contract.id,
+                            timestampDirection.id, employeeStatus.date,"", null));
                 }
-            }.execute(this);
+            }
+            employeeStatus.database.timestampDao().insert(timestampsEmployee.toArray(new Timestamp[0]));
+            return null;
         }
     }
 }

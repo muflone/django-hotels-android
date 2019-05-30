@@ -94,6 +94,9 @@
     <string name="settings_structures_buildings_closed_title">Edifici inizialmente chiusi</string>
     <string name="settings_structures_buildings_closed_summary">I gruppi di edifici sono automaticamente chiusi</string>
 
+    <string name="settings_structures_rooms_list_standard_height_title">Altezza standard per elenco stanze</string>
+    <string name="settings_structures_rooms_list_standard_height_summary">Utilizza altezza standard per l\'elenco delle stanze per prestazioni migliori</string>
+
     <!-- Sync section -->
     <string name="sync_step_started">Sincronizzazione avviata</string>
     <string name="sync_step_timestamps_transmission">Trasmissione delle timbrature</string>

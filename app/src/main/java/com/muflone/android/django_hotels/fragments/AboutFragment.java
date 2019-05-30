@@ -18,6 +18,7 @@ import com.muflone.android.django_hotels.R;
 
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import mehdi.sakout.aboutpage.AboutPage;
@@ -99,7 +100,8 @@ public class AboutFragment extends Fragment {
                         TimeZone.getDefault().getDisplayName(Locale.ROOT)))
                 .addItem(this.newSystemInformationElement(
                         R.string.about_system_information_android_id,
-                        Settings.Secure.getString(this.getActivity().getBaseContext().getContentResolver(),
+                        Settings.Secure.getString(
+                                Objects.requireNonNull(this.getActivity()).getBaseContext().getContentResolver(),
                                 Settings.Secure.ANDROID_ID)))
                 .addItem(this.newSystemInformationElement(
                         R.string.about_system_information_user_agent,
@@ -125,7 +127,7 @@ public class AboutFragment extends Fragment {
         // Return an element for System Information
         return new Element()
                 .setIconDrawable(R.drawable.ic_info)
-                .setTitle(String.format(Locale.ROOT, this.getString(resId), values));
+                .setTitle(String.format(Locale.ROOT, this.getString(resId), (Object[]) values));
     }
 
     @Override
