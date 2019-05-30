@@ -440,8 +440,6 @@ public class StructuresFragment extends Fragment {
                 // Get the StructuresViewHolder from the saved instance in the ConvertView
                 viewHolder = (StructuresViewHolder) convertView.getTag();
             }
-            // This reference is used from the inner classes
-            View rowView = convertView;
             // Update database row
             roomStatus.updateDatabase();
             // Update view row
@@ -455,23 +453,12 @@ public class StructuresFragment extends Fragment {
             });
             // Set transmission LongClick
             viewHolder.transmissionImage.setOnLongClickListener(button -> {
-                new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... result) {
-                        // Delete transmission date
-                        roomStatus.transmission = null;
-                        roomStatus.updateDatabase();
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        viewHolder.transmissionImage.setImageResource(R.drawable.ic_timestamp_untransmitted);
-                        Toast.makeText(context,
-                                R.string.structures_marked_activity_as_untransmitted,
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }.execute();
+                roomStatus.transmission = null;
+                roomStatus.updateDatabase();
+                viewHolder.transmissionImage.setImageResource(R.drawable.ic_timestamp_untransmitted);
+                Toast.makeText(context,
+                        R.string.structures_marked_activity_as_untransmitted,
+                        Toast.LENGTH_SHORT).show();
                 return false;
             });
             // Set service button Click
@@ -664,7 +651,8 @@ public class StructuresFragment extends Fragment {
     }
 
     private static class StructuresViewHolder {
-        // Views holder for room
+        // Views holder caching items for ExpandableListAdapter
+        // https://www.javacodegeeks.com/2013/09/android-viewholder-pattern-example.html
         ImageView servicePresentImage;
         TextView roomView;
         Button serviceButton;

@@ -76,10 +76,10 @@ public class ScannerFragment extends Fragment {
         this.exitButton.setOnClickListener(view -> startQRScanner(false));
         // Load latest timestamps
         this.timestampEmployeeList = new ArrayList<>();
-        this.listLatestTimestamps();
         this.timestampAdapter = new TimestampAdapter(this.context,
                 R.layout.scanner_timestamps, this.timestampEmployeeList);
         this.timestampEmployeesView.setAdapter(this.timestampAdapter);
+        this.listLatestTimestamps();
         // Clear transmission date on long press
         this.timestampEmployeesView.setOnItemLongClickListener((adapterView, view, position, l) -> {
             new ScannerUpdateDatabaseTask(this.context, this.database, this.timestampEmployeeList,
@@ -248,8 +248,8 @@ public class ScannerFragment extends Fragment {
 
     private static class ScannerListLatestTimestampsTask extends AsyncTask<Long, Void, List<TimestampEmployee>> {
         private final AppDatabase database;
-        private List<TimestampEmployeeItem> timestampEmployeeList;
-        private TimestampAdapter timestampAdapter;
+        private final List<TimestampEmployeeItem> timestampEmployeeList;
+        private final TimestampAdapter timestampAdapter;
 
         public ScannerListLatestTimestampsTask(AppDatabase database,
                                                List<TimestampEmployeeItem> timestampEmployeeList,
