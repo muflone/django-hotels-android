@@ -18,6 +18,7 @@ import com.muflone.android.django_hotels.R;
 
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import mehdi.sakout.aboutpage.AboutPage;
@@ -99,7 +100,8 @@ public class AboutFragment extends Fragment {
                         TimeZone.getDefault().getDisplayName(Locale.ROOT)))
                 .addItem(this.newSystemInformationElement(
                         R.string.about_system_information_android_id,
-                        Settings.Secure.getString(this.getActivity().getBaseContext().getContentResolver(),
+                        Settings.Secure.getString(
+                                Objects.requireNonNull(this.getActivity()).getBaseContext().getContentResolver(),
                                 Settings.Secure.ANDROID_ID)))
                 .addItem(this.newSystemInformationElement(
                         R.string.about_system_information_user_agent,

@@ -549,7 +549,8 @@ public class StructuresFragment extends Fragment {
         @Override
         public int getChildrenCount(int groupPosition) {
             return this.roomsList.get(this.buildingsList.get(groupPosition)) != null ?
-                    this.roomsList.get(this.buildingsList.get(groupPosition)).size() : 0;
+                    Objects.requireNonNull(this.roomsList.get(this.buildingsList.get(groupPosition))).size() :
+                    0;
         }
 
         @Override
