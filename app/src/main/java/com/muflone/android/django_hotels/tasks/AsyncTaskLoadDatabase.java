@@ -32,30 +32,31 @@ import com.muflone.android.django_hotels.database.models.TabletSetting;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final AsyncTaskListener callback;
-    private final Context context;
+    private final WeakReference<Context> context;
 
     public AsyncTaskLoadDatabase(Context context, AsyncTaskListener callback) {
-        this.context = context;
+        this.context = new WeakReference<>(context);
         this.callback = callback;
     }
 
     @Override
     protected AsyncTaskResult doInBackground(Void... params) {
         ApiData data = new ApiData();
-        AppDatabase database = AppDatabase.getAppDatabase(this.context);
+        AppDatabase database = AppDatabase.getAppDatabase(this.context.get());
         // TODO: Database deletion is dangerous, must implement migrations
         if (!database.checkDB()) {
             Log.d("", "Invalid database structure " + database.getOpenHelper().getDatabaseName());
             AppDatabase.destroyInstance();
-            File databaseFile = new File(this.context.getApplicationInfo().dataDir +
+            File databaseFile = new File(this.context.get().getApplicationInfo().dataDir +
                     "/databases/" + database.getOpenHelper().getDatabaseName());
             //noinspection ResultOfMethodCallIgnored
             databaseFile.delete();
-            database = AppDatabase.getAppDatabase(this.context);
+            database = AppDatabase.getAppDatabase(this.context.get());
         }
         BrandDao brandDao = database.brandDao();
         BuildingDao buildingDao = database.buildingDao();

@@ -199,7 +199,7 @@ public class ScannerFragment extends Fragment {
         public ScannerUpdateDatabaseTask(Context context, AppDatabase database,
                                          List<TimestampEmployeeItem> timestampEmployeeList,
                                          TimestampAdapter timestampAdapter) {
-            this.context = new WeakReference(context);
+            this.context = new WeakReference<>(context);
             this.database = database;
             this.timestampEmployeeList = timestampEmployeeList;
             this.timestampAdapter = timestampAdapter;

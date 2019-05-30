@@ -339,7 +339,7 @@ public class StructuresFragment extends Fragment {
                                            List<EmployeeStatus> employeesStatusList,
                                            HashMap<Long, List<Long>> roomsEmployeesAssignedList) {
             this.employeesList = employeesList;
-            this.employeesView = new WeakReference(employeesView);
+            this.employeesView = new WeakReference<>(employeesView);
             this.serviceActivityTable = serviceActivityTable;
             this.employeesStatusList = employeesStatusList;
             this.roomsEmployeesAssignedList = roomsEmployeesAssignedList;
