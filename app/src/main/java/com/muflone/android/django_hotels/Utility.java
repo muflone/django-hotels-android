@@ -167,6 +167,7 @@ public class Utility {
     }
 
     public static void copyToClipboard(Context context, String text) {
+        // Copy text to the clipboard
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.setPrimaryClip(ClipData.newPlainText(null, text));
     }

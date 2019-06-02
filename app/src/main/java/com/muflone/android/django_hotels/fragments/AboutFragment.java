@@ -234,8 +234,8 @@ public class AboutFragment extends Fragment {
 
     private class SystemInformationValue {
         // Container for System Information id and multiple values
-        private int id;
-        private List<String> values;
+        private final int id;
+        private final List<String> values;
 
         public SystemInformationValue(int id, String... values) {
             // Add multiple values at once
