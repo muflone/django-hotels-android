@@ -114,6 +114,7 @@
     <string name="about_app_license">Licenza GPL-2+</string>
     <string name="about_credits">Referenze</string>
     <string name="about_application_information">Informazioni sull\'applicazione</string>
+    <string name="about_settings_information">Informazioni sulle impostazioni</string>
     <string name="about_system_information">Informazioni di sistema</string>
     <string name="about_feedback">Feedback</string>
 

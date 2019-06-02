@@ -89,6 +89,25 @@ public class AboutFragment extends Fragment {
             aboutPage.addItem(this.newSystemInformationElement(value.toString(false)));
         }
         systemInformationValuesList.clear();
+        // Settings Information section
+        aboutPage.addGroup(this.getString(R.string.about_settings_information));
+        // Tablet ID
+        systemInformationValuesList.add(new SystemInformationValue(
+                R.string.settings_tablet_id_title,
+                singleton.settings.getTabletID()));
+        // Tablet Key
+        systemInformationValuesList.add(new SystemInformationValue(
+                R.string.settings_tablet_key_title,
+                singleton.settings.getTabletKey()));
+        // API URL
+        systemInformationValuesList.add(new SystemInformationValue(
+                R.string.settings_api_url_title,
+                singleton.settings.getApiUri().toString()));
+        // Add Settings Information elements
+        for (SystemInformationValue value : systemInformationValuesList) {
+            aboutPage.addItem(this.newSystemInformationElement(value.toString(false)));
+        }
+        systemInformationValuesList.clear();
         // System Information section
         aboutPage.addGroup(this.getString(R.string.about_system_information));
         // Android version
