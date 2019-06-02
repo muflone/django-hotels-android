@@ -100,7 +100,9 @@ public class AboutFragment extends Fragment {
         // Tablet Key
         systemInformationValuesList.add(new SystemInformationValue(
                 R.string.settings_tablet_key_title,
-                this.singleton.settings.getTabletKey()));
+                String.format("%s...%s",
+                        Utility.left(this.singleton.settings.getTabletKey(), 4),
+                        Utility.right(this.singleton.settings.getTabletKey(), 4))));
         // API URL
         systemInformationValuesList.add(new SystemInformationValue(
                 R.string.settings_api_url_title,
