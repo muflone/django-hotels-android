@@ -29,14 +29,15 @@ public class LoaderActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loader_activity);
+        // Singleton instance
+        this.singleton.settings = new Settings(this);
+        this.singleton.api = new Api();
+        this.singleton.selectedDate = Utility.getCurrentDate();
         // Load UI
         this.loadUI();
         this.textViewAppName.setText(String.format(Locale.ROOT, "%s %s",
-                this.getString(R.string.app_name), this.getString(R.string.app_version)));
-        // Singleton instance
-        singleton.settings = new Settings(this);
-        singleton.api = new Api();
-        singleton.selectedDate = Utility.getCurrentDate();
+                this.getString(R.string.app_name),
+                this.singleton.settings.getApplicationVersion()));
         // Reload data from database
         AppDatabase.getAppDatabase(this).reload(this, new AsyncTaskListener() {
             @Override

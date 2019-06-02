@@ -31,6 +31,7 @@ public class AboutFragment extends Fragment {
     public View onCreateView(@NonNull  LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        Singleton singleton = Singleton.getInstance();
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         return new AboutPage(this.context)
                 .isRTL(false)
@@ -38,7 +39,7 @@ public class AboutFragment extends Fragment {
                 .setDescription(String.format(Locale.ROOT,
                         "%s %s\n%s",
                         this.getString(R.string.app_name),
-                        this.getString(R.string.app_version),
+                        singleton.settings.getApplicationVersion(),
                         this.getString(R.string.app_description)))
                 .addPlayStore(this.getString(R.string.about_app_playstore))
                 .addGitHub(this.getString(R.string.about_app_github))
