@@ -70,6 +70,25 @@ public class AboutFragment extends Fragment {
                         this.getString(R.string.about_guava_title))
                 .addGitHub(this.getString(R.string.about_numberprogressbar_url),
                         this.getString(R.string.about_numberprogressbar_title));
+        // Application Information section
+        aboutPage.addGroup(this.getString(R.string.about_application_information));
+        // Application name
+        systemInformationValuesList.add(new SystemInformationValue(
+                R.string.about_application_information_name,
+                singleton.settings.getApplicationName()));
+        // Application version
+        systemInformationValuesList.add(new SystemInformationValue(
+                R.string.about_application_information_version,
+                singleton.settings.getApplicationVersion()));
+        // Package name
+        systemInformationValuesList.add(new SystemInformationValue(
+                R.string.about_application_information_package,
+                singleton.settings.getPackageName()));
+        // Add Application Information elements
+        for (SystemInformationValue value : systemInformationValuesList) {
+            aboutPage.addItem(this.newSystemInformationElement(value.toString(false)));
+        }
+        systemInformationValuesList.clear();
         // System Information section
         aboutPage.addGroup(this.getString(R.string.about_system_information));
         // Android version

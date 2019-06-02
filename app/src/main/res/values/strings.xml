@@ -113,7 +113,13 @@
     <string name="about_license">License</string>
     <string name="about_app_license">License GPL-2+</string>
     <string name="about_credits">Credits</string>
+    <string name="about_application_information">Application information</string>
     <string name="about_system_information">System information</string>
+    <string name="about_feedback">Feedback</string>
+
+    <string name="about_application_information_name">Application name</string>
+    <string name="about_application_information_version">Application version</string>
+    <string name="about_application_information_package">Application package</string>
 
     <string name="about_system_information_android">Android version: %s %s</string>
     <string name="about_system_information_sdk">SDK API Level</string>
