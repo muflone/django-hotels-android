@@ -137,5 +137,6 @@
     <string name="about_system_information_android_id">Andoid ID</string>
     <string name="about_system_information_user_agent">User Agent</string>
 
+    <string name="about_feedback_copy_details">Copy details</string>
     <string name="about_feedback_copied_to_clipboard">Copied data to clipboard</string>
 </resources>

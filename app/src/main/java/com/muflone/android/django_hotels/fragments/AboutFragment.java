@@ -39,6 +39,7 @@ public class AboutFragment extends Fragment {
         Singleton singleton = Singleton.getInstance();
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         List<SystemInformationValue> systemInformationValuesList = new ArrayList<>();
+        StringBuilder stringBuilder = new StringBuilder();
 
         AboutPage aboutPage = new AboutPage(this.context)
                 .isRTL(false)
@@ -87,6 +88,7 @@ public class AboutFragment extends Fragment {
         // Add Application Information elements
         for (SystemInformationValue value : systemInformationValuesList) {
             aboutPage.addItem(this.newSystemInformationElement(value.toString(false)));
+            stringBuilder.append(value.toString(true));
         }
         systemInformationValuesList.clear();
         // Settings Information section
@@ -106,6 +108,7 @@ public class AboutFragment extends Fragment {
         // Add Settings Information elements
         for (SystemInformationValue value : systemInformationValuesList) {
             aboutPage.addItem(this.newSystemInformationElement(value.toString(false)));
+            stringBuilder.append(value.toString(true));
         }
         systemInformationValuesList.clear();
         // System Information section
@@ -175,8 +178,12 @@ public class AboutFragment extends Fragment {
         // Add System Information elements
         for (SystemInformationValue value : systemInformationValuesList) {
             aboutPage.addItem(this.newSystemInformationElement(value.toString(false)));
+            stringBuilder.append(value.toString(true));
         }
         systemInformationValuesList.clear();
+        // Copy details item
+        aboutPage.addGroup(this.getString(R.string.about_feedback));
+        aboutPage.addItem(getCopyDetailsElement(stringBuilder.toString()));
         return aboutPage.create();
     }
 
@@ -192,6 +199,20 @@ public class AboutFragment extends Fragment {
         copyRightsElement.setGravity(Gravity.START);
         copyRightsElement.setOnClickListener(view -> Toast.makeText(context, copyrights, Toast.LENGTH_SHORT).show());
         return copyRightsElement;
+    }
+
+    private Element getCopyDetailsElement(String value) {
+        Element copyDetails = new Element();
+        copyDetails.setTitle(this.getString(R.string.about_feedback_copy_details));
+        copyDetails.setIconDrawable(R.drawable.ic_copy);
+        copyDetails.setIconTint(mehdi.sakout.aboutpage.R.color.about_item_icon_color);
+        copyDetails.setIconNightTint(android.R.color.white);
+        copyDetails.setGravity(Gravity.START);
+        copyDetails.setOnClickListener(view -> {
+            Utility.copyToClipboard(context, value);
+            Toast.makeText(context, R.string.about_feedback_copied_to_clipboard, Toast.LENGTH_SHORT).show();
+        });
+        return copyDetails;
     }
 
     private Element newSystemInformationElement(String value) {
