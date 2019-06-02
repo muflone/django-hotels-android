@@ -30,13 +30,13 @@ import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 
 public class AboutFragment extends Fragment {
+    private final Singleton singleton = Singleton.getInstance();
     private Context context;
 
     @Override
     public View onCreateView(@NonNull  LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Singleton singleton = Singleton.getInstance();
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         List<SystemInformationValue> systemInformationValuesList = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder();
@@ -46,8 +46,8 @@ public class AboutFragment extends Fragment {
                 .setImage(R.mipmap.ic_launcher_round)
                 .setDescription(String.format(Locale.ROOT,
                         "%s %s\n%s",
-                        singleton.settings.getApplicationName(),
-                        singleton.settings.getApplicationVersion(),
+                        this.singleton.settings.getApplicationName(),
+                        this.singleton.settings.getApplicationVersion(),
                         this.getString(R.string.app_description)))
                 .addPlayStore(this.getString(R.string.about_app_playstore))
                 .addGitHub(this.getString(R.string.about_app_github));
@@ -76,15 +76,15 @@ public class AboutFragment extends Fragment {
         // Application name
         systemInformationValuesList.add(new SystemInformationValue(
                 R.string.about_application_information_name,
-                singleton.settings.getApplicationName()));
+                this.singleton.settings.getApplicationName()));
         // Application version
         systemInformationValuesList.add(new SystemInformationValue(
                 R.string.about_application_information_version,
-                singleton.settings.getApplicationVersion()));
+                this.singleton.settings.getApplicationVersion()));
         // Package name
         systemInformationValuesList.add(new SystemInformationValue(
                 R.string.about_application_information_package,
-                singleton.settings.getPackageName()));
+                this.singleton.settings.getPackageName()));
         // Add Application Information elements
         for (SystemInformationValue value : systemInformationValuesList) {
             aboutPage.addItem(this.newSystemInformationElement(value.toString(false)));
@@ -96,15 +96,15 @@ public class AboutFragment extends Fragment {
         // Tablet ID
         systemInformationValuesList.add(new SystemInformationValue(
                 R.string.settings_tablet_id_title,
-                singleton.settings.getTabletID()));
+                this.singleton.settings.getTabletID()));
         // Tablet Key
         systemInformationValuesList.add(new SystemInformationValue(
                 R.string.settings_tablet_key_title,
-                singleton.settings.getTabletKey()));
+                this.singleton.settings.getTabletKey()));
         // API URL
         systemInformationValuesList.add(new SystemInformationValue(
                 R.string.settings_api_url_title,
-                singleton.settings.getApiUri().toString()));
+                this.singleton.settings.getApiUri().toString()));
         // Add Settings Information elements
         for (SystemInformationValue value : systemInformationValuesList) {
             aboutPage.addItem(this.newSystemInformationElement(value.toString(false)));
@@ -181,8 +181,9 @@ public class AboutFragment extends Fragment {
             stringBuilder.append(value.toString(true));
         }
         systemInformationValuesList.clear();
-        // Copy details item
+        // Feedback section
         aboutPage.addGroup(this.getString(R.string.about_feedback));
+        // Copy details item
         aboutPage.addItem(getCopyDetailsElement(stringBuilder.toString()));
         return aboutPage.create();
     }
