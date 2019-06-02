@@ -182,4 +182,17 @@ public class Utility {
         intent.setType("message/rfc822");
         context.startActivity(intent);
     }
+
+    public static String left(String string, int length) {
+        // Extract leftmost part of a string
+        return string == null ? null : (string.substring(
+                0,
+                string.length() >= length ? length : string.length()));
+    }
+
+    public static String right(String string, int length) {
+        // Extract rightmost part of a string
+        return string == null ? null : (string.substring(
+                string.length() >= length ? string.length() - length : 0));
+    }
 }
