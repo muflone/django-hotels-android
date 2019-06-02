@@ -139,4 +139,5 @@
 
     <string name="about_feedback_copy_details">Copy details</string>
     <string name="about_feedback_copied_to_clipboard">Copied data to clipboard</string>
+    <string name="about_feedback_email_details">Send e-mail with details to the author</string>
 </resources>

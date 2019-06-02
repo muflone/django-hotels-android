@@ -38,4 +38,6 @@
 
     <string name="about_numberprogressbar_title" translatable="false">Android NumberProgressBar</string>
     <string name="about_numberprogressbar_url" translatable="false">daimajia/NumberProgressBar</string>
+
+    <string name="about_feedback_subject" translatable="false">Feedback for %s %s</string>
 </resources>

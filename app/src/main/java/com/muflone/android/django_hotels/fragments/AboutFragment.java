@@ -185,6 +185,8 @@ public class AboutFragment extends Fragment {
         aboutPage.addGroup(this.getString(R.string.about_feedback));
         // Copy details item
         aboutPage.addItem(getCopyDetailsElement(stringBuilder.toString()));
+        // E-mail details item
+        aboutPage.addItem(getEmailDetailsElement(stringBuilder.toString()));
         return aboutPage.create();
     }
 
@@ -213,6 +215,23 @@ public class AboutFragment extends Fragment {
             Utility.copyToClipboard(context, value);
             Toast.makeText(context, R.string.about_feedback_copied_to_clipboard, Toast.LENGTH_SHORT).show();
         });
+        return copyDetails;
+    }
+
+    private Element getEmailDetailsElement(String value) {
+        Element copyDetails = new Element();
+        copyDetails.setTitle(this.getString(R.string.about_feedback_email_details));
+        copyDetails.setIconDrawable(R.drawable.ic_mail);
+        copyDetails.setIconTint(mehdi.sakout.aboutpage.R.color.about_item_icon_color);
+        copyDetails.setIconNightTint(android.R.color.white);
+        copyDetails.setGravity(Gravity.START);
+        copyDetails.setOnClickListener(view -> Utility.sendEmail(context,
+                new String[]{this.getString(R.string.author_email)},
+                String.format(Locale.ROOT,
+                        this.getString(R.string.about_feedback_subject),
+                        this.singleton.settings.getApplicationName(),
+                        this.singleton.settings.getApplicationVersion()),
+                value));
         return copyDetails;
     }
 
