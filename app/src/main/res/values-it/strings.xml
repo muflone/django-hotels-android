@@ -139,5 +139,5 @@
 
     <string name="about_feedback_copy_details">Copia dettagli</string>
     <string name="about_feedback_copied_to_clipboard">Dati copiati negli appunti</string>
-    <string name="about_feedback_email_details">Invia e-mail con i dettagli all\'autore</string>
+    <string name="about_feedback_email_details">Invia un\'e-mail all\'autore con i dettagli</string>
 </resources>
