@@ -134,7 +134,7 @@
     <string name="about_system_information_device">Device</string>
     <string name="about_system_information_timezone">Timezone: %s (%s)</string>
     <string name="about_system_information_resolution">Resolution: %sx%s (%s DPI)</string>
-    <string name="about_system_information_android_id">Andoid ID</string>
+    <string name="about_system_information_android_id">Android ID</string>
     <string name="about_system_information_user_agent">User Agent</string>
 
     <string name="about_feedback_copy_details">Copy details</string>
