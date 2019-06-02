@@ -1,5 +1,7 @@
 package com.muflone.android.django_hotels;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -162,5 +164,10 @@ public class Utility {
         params.height = height < 10 ? 200 : height;
         listView.setLayoutParams(params);
         listView.requestLayout();
+    }
+
+    public static void copyToClipboard(Context context, String text) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboard.setPrimaryClip(ClipData.newPlainText(null, text));
     }
 }
