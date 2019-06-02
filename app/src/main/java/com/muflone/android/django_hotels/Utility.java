@@ -3,6 +3,7 @@ package com.muflone.android.django_hotels;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -170,5 +171,15 @@ public class Utility {
         // Copy text to the clipboard
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.setPrimaryClip(ClipData.newPlainText(null, text));
+    }
+
+    public static void sendEmail(Context context, String[] recipients, String subject, String body) {
+        // Send e-mail to multiple recipients
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_TEXT, body);
+        intent.setType("message/rfc822");
+        context.startActivity(intent);
     }
 }
