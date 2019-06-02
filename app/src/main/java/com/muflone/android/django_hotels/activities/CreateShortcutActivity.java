@@ -17,7 +17,8 @@ import java.util.Objects;
 public class CreateShortcutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        ApiData apiData = Singleton.getInstance().apiData;
+        Singleton singleton = Singleton.getInstance();
+        ApiData apiData = singleton.apiData;
 
         super.onCreate(savedInstanceState);
 
@@ -32,7 +33,7 @@ public class CreateShortcutActivity extends AppCompatActivity {
         // Get shortcut title
         String title = apiData.tabletSettingsMap.containsKey("app.shortcut.title") ?
                 Objects.requireNonNull(apiData.tabletSettingsMap.get("app.shortcut.title")).getString() :
-                this.getString(R.string.app_name);
+                singleton.settings.getApplicationName();
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
         // Get shortcut icon
         if (apiData.tabletSettingsMap.containsKey("app.shortcut.icon")) {

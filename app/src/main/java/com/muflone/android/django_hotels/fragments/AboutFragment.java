@@ -38,7 +38,7 @@ public class AboutFragment extends Fragment {
                 .setImage(R.mipmap.ic_launcher_round)
                 .setDescription(String.format(Locale.ROOT,
                         "%s %s\n%s",
-                        this.getString(R.string.app_name),
+                        singleton.settings.getApplicationName(),
                         singleton.settings.getApplicationVersion(),
                         this.getString(R.string.app_description)))
                 .addPlayStore(this.getString(R.string.about_app_playstore))

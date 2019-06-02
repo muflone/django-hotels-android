@@ -42,6 +42,10 @@ public class Settings {
         return this.context.getPackageName();
     }
 
+    public String getApplicationName() {
+        return this.context.getString(R.string.app_name);
+    }
+
     public String getApplicationVersion() {
         return this.context.getString(R.string.app_version);
     }

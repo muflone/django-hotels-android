@@ -36,7 +36,7 @@ public class LoaderActivity extends AppCompatActivity {
         // Load UI
         this.loadUI();
         this.textViewAppName.setText(String.format(Locale.ROOT, "%s %s",
-                this.getString(R.string.app_name),
+                this.singleton.settings.getApplicationName(),
                 this.singleton.settings.getApplicationVersion()));
         // Reload data from database
         AppDatabase.getAppDatabase(this).reload(this, new AsyncTaskListener() {
