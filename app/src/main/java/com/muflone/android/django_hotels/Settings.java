@@ -42,7 +42,7 @@ public class Settings {
         return this.context.getPackageName();
     }
 
-    public String getPackageVersion() {
+    public String getApplicationVersion() {
         return this.context.getString(R.string.app_version);
     }
 

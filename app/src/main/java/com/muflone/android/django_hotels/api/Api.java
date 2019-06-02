@@ -55,7 +55,7 @@ public class Api {
             URLConnection connection = requestUrl.openConnection();
             // Add custom headers
             connection.setRequestProperty("client-agent", this.settings.getPackageName());
-            connection.setRequestProperty("client-version", this.settings.getPackageVersion());
+            connection.setRequestProperty("client-version", this.settings.getApplicationVersion());
 
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()));
