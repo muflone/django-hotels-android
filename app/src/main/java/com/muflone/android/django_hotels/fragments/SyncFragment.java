@@ -48,7 +48,6 @@ public class SyncFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.sync_fragment, container, false);
         this.progressBar = rootView.findViewById(R.id.progressBar);
-        this.progressBar.setMax(AsyncTaskSync.totalSteps);
         this.progressBar2 = rootView.findViewById(R.id.progressBar2);
         this.progressView = rootView.findViewById(R.id.progressView);
         this.errorMessage = rootView.findViewById(R.id.errorMessage);
@@ -62,12 +61,14 @@ public class SyncFragment extends Fragment {
         this.progressPhases.add(this.context.getString(R.string.sync_step_download));
         this.progressPhases.add(this.context.getString(R.string.sync_step_saving_data));
         this.progressPhases.add(this.context.getString(R.string.sync_step_completed));
+        this.progressBar.setMax(this.progressPhases.size());
 
         // Download data asynchronously from the server
         Singleton singleton = Singleton.getInstance();
         AsyncTaskSync task = new AsyncTaskSync(
                 singleton.api,
                 AppDatabase.getAppDatabase(this.context),
+                this.progressPhases.size(),
                 new AsyncTaskListener() {
                     @Override
                     public void onSuccess(AsyncTaskResult result) {

@@ -58,14 +58,15 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final Api api;
     private final AsyncTaskListener callback;
     private final AppDatabase database;
-    public final static int totalSteps = 7;
+    private final int totalSteps;
     private int currentStep;
 
-    public AsyncTaskSync(Api api, AppDatabase database, AsyncTaskListener callback) {
+    public AsyncTaskSync(Api api, AppDatabase database, int totalSteps, AsyncTaskListener callback) {
         this.api = api;
         this.callback = callback;
         this.database = database;
         this.currentStep = 0;
+        this.totalSteps = totalSteps;
     }
 
     @Override
@@ -435,7 +436,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private void updateProgress() {
         this.currentStep += 1;
         if (this.callback != null) {
-            this.callback.onProgress(this.currentStep, AsyncTaskSync.totalSteps);
+            this.callback.onProgress(this.currentStep, this.totalSteps);
         }
     }
 }
