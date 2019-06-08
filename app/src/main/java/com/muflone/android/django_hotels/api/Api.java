@@ -23,6 +23,8 @@ import java.net.URLConnection;
 public class Api {
     public static final String STATUS_OK = "OK";
     public static final String STATUS_EXISTING = "EXISTING";
+    public static final String STATUS_DIFFERENT_QUANTITY = "QUANTITY";
+    public static final String STATUS_DIFFERENT_DESCRIPTION = "DESCRIPTION";
 
     public final Settings settings;
 

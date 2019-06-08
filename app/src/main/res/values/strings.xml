@@ -111,6 +111,7 @@
     <string name="sync_error_unable_to_download">Unable to download data from the server</string>
     <string name="sync_error_invalid_server_status">Invalid server status, maybe the server is not ready</string>
     <string name="sync_error_invalid_server_response">Invalid response from the server, please check your internet connection</string>
+    <string name="sync_error_retransmitted_response">The activity was already transmitted and it\'s refused from the server</string>
 
     <!-- About section -->
     <string name="about_contacts">Contacts</string>

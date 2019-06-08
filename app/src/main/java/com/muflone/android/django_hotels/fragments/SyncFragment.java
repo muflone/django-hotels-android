@@ -17,6 +17,7 @@ import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.activities.CreateShortcutActivity;
 import com.muflone.android.django_hotels.api.exceptions.InvalidServerStatusException;
+import com.muflone.android.django_hotels.api.exceptions.RetransmittedActivityException;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.tasks.AsyncTaskSync;
 import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
@@ -128,6 +129,10 @@ public class SyncFragment extends Fragment {
                                     context.getResources().getDrawable(R.drawable.ic_error_cloud_off));
                         } else if (exception instanceof InvalidResponseException) {
                             errorMessage.setText(R.string.sync_error_invalid_server_response);
+                            errorView.setImageDrawable(
+                                    context.getResources().getDrawable(R.drawable.ic_error_generic));
+                        } else if (exception instanceof RetransmittedActivityException) {
+                            errorMessage.setText(R.string.sync_error_retransmitted_response);
                             errorView.setImageDrawable(
                                     context.getResources().getDrawable(R.drawable.ic_error_generic));
                         } else if (exception instanceof NoDownloadException) {

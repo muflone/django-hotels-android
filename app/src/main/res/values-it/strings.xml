@@ -111,6 +111,7 @@
     <string name="sync_error_unable_to_download">Impossibile scaricare le informazioni dal server</string>
     <string name="sync_error_invalid_server_status">Stato del server non valido, forse il server non è pronto</string>
     <string name="sync_error_invalid_server_response">Risposta non valida dal server, controllare la connessione internet</string>
+    <string name="sync_error_retransmitted_response">L\'attività è stata già trasmessa e viene rifiutata dal server</string>
 
     <!-- About section -->
     <string name="about_contacts">Contatti</string>

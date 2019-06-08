@@ -11,6 +11,7 @@ import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException
 import com.muflone.android.django_hotels.api.exceptions.InvalidServerStatusException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
+import com.muflone.android.django_hotels.api.exceptions.RetransmittedActivityException;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
@@ -344,16 +345,27 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 // Check the final node for successful reads
                 String status = jsonRoot.getString("status");
                 if (status.equals(Api.STATUS_EXISTING)) {
+                    // The activity was transmitted but it was already existing, this issue can be ignored
                     Log.w(TAG, String.format("Existing activity during the data transmission: %s", status));
+                } else if (status.equals(Api.STATUS_DIFFERENT_QUANTITY)) {
+                    // The activity was transmitted but it was saved with a different quantity
+                    Log.e(TAG, String.format("Activity already transmitted using a different quantity: %s", status));
+                    throw new RetransmittedActivityException();
+                } else if (status.equals(Api.STATUS_DIFFERENT_DESCRIPTION)) {
+                    // The activity was transmitted but it was saved with a different description
+                    Log.e(TAG, String.format("Activity already transmitted using a different description: %s", status));
+                    throw new RetransmittedActivityException();
                 } else if (! status.equals(Api.STATUS_OK)) {
                     // Invalid response received
                     Log.e(TAG, String.format("Invalid response received during the data transmission: %s", status));
                     throw new InvalidResponseException();
                 }
-            } catch (JSONException e) {
+            } catch (JSONException exception) {
                 result.exception = new InvalidResponseException();
-            } catch (InvalidResponseException e) {
-                result.exception = e;
+            } catch (InvalidResponseException exception) {
+                result.exception = exception;
+            } catch (RetransmittedActivityException exception) {
+                result.exception = exception;
             }
         } else {
             // Unable to download data from the server
