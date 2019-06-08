@@ -152,6 +152,18 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         }
     }
 
+    private void checkStatusResponse(JSONObject jsonObject) throws InvalidResponseException, InvalidServerStatusException {
+        // Check the status object for valid data
+        try {
+            if (!jsonObject.getString("status").equals(Api.STATUS_OK)) {
+                throw new InvalidServerStatusException();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new InvalidResponseException();
+        }
+    }
+
     private ApiData checkStatus() {
         // Check if the server status
         ApiData data = new ApiData();
@@ -160,7 +172,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         if (jsonRoot != null) {
             try {
                 // Check the status node for successful reads
-                this.api.checkStatusResponse(jsonRoot);
+                this.checkStatusResponse(jsonRoot);
             } catch (InvalidResponseException exception) {
                 exception.printStackTrace();
                 data.exception = exception;
@@ -189,7 +201,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         if (jsonRoot != null) {
             try {
                 // Check the status node for successful reads
-                this.api.checkStatusResponse(jsonRoot);
+                this.checkStatusResponse(jsonRoot);
                 // Get current system date only
                 Date date1 = Utility.getCurrentDate();
                 // Get remote date
@@ -237,7 +249,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         if (jsonRoot != null) {
             try {
                 // Check the status node for successful reads
-                this.api.checkStatusResponse(jsonRoot);
+                this.checkStatusResponse(jsonRoot);
                 // Loop over every structure
                 JSONObject jsonStructures = jsonRoot.getJSONObject("structures");
                 Iterator<?> jsonKeys = jsonStructures.keys();

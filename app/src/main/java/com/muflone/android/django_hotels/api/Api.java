@@ -87,16 +87,4 @@ public class Api {
         }
         return token != null ? token.generateCodes().getCurrentCode() : null;
     }
-
-    public void checkStatusResponse(JSONObject jsonObject) throws InvalidResponseException, InvalidServerStatusException {
-        // Check the status object for valid data
-        try {
-            if (!jsonObject.getString("status").equals(Api.STATUS_OK)) {
-                throw new InvalidServerStatusException();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            throw new InvalidResponseException();
-        }
-    }
 }
