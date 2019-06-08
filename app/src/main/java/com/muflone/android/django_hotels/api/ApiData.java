@@ -31,6 +31,7 @@ public class ApiData {
     public final HashMap<Long, JobType> jobTypesMap;
     public final HashMap<Long, Room> roomsMap;
     public final HashMap<Long, Structure> roomsStructureMap;
+    public final HashMap<Long, Building> roomsBuildingMap;
     public final HashMap<Long, Service> serviceMap;
     public final HashMap<Long, Service> serviceExtraMap;
     public final HashMap<Long, Structure> structuresMap;
@@ -53,6 +54,7 @@ public class ApiData {
         this.jobTypesMap = new HashMap<>();
         this.roomsMap = new HashMap<>();
         this.roomsStructureMap = new HashMap<>();
+        this.roomsBuildingMap = new HashMap<>();
         this.serviceMap = new HashMap<>();
         this.serviceExtraMap = new HashMap<>();
         this.structuresMap = new HashMap<>();
