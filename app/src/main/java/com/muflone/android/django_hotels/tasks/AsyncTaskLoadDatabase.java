@@ -102,6 +102,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
                 building.rooms = roomDao.listByBuilding(building.id);
                 for (Room room : building.rooms) {
                     data.roomsMap.put(room.id, room);
+                    data.roomsStructureMap.put(room.id, structure);
                 }
                 // Load employees
                 building.employees = new ArrayList<>();
