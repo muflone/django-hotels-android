@@ -58,6 +58,7 @@ public class SyncFragment extends Fragment {
         this.progressPhases.add(this.context.getString(R.string.sync_step_timestamps_transmission));
         this.progressPhases.add(this.context.getString(R.string.sync_step_activities_transmission));
         this.progressPhases.add(this.context.getString(R.string.sync_step_download));
+        this.progressPhases.add(this.context.getString(R.string.sync_step_saving_data));
         this.progressPhases.add(this.context.getString(R.string.sync_step_completed));
 
         // Download data asynchronously from the server

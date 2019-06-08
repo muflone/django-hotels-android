@@ -53,7 +53,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final Api api;
     private final AsyncTaskListener callback;
     private final AppDatabase database;
-    public final static int totalSteps = 4;
+    public final static int totalSteps = 5;
     private int currentStep;
 
     public AsyncTaskSync(Api api, AppDatabase database, AsyncTaskListener callback) {
@@ -103,6 +103,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
             if (! transmissionErrors) {
                 // Get new data from the server (DOWNLOAD)
                 data = this.downloadData();
+                this.updateProgress();
                 if (data.exception == null) {
                     // Success, save data in database
                     this.saveToDatabase(data);
