@@ -84,8 +84,8 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
             this.updateProgress();
             data = this.checkDates();
             if (data.exception == null) {
-                this.updateProgress();
                 // Transmit any incomplete timestamp (UPLOAD)
+                this.updateProgress();
                 List<Timestamp> timestampsList = this.database.timestampDao().listByUntrasmitted();
                 for (Timestamp timestamp : timestampsList) {
                     data = this.putTimestamp(timestamp);
@@ -98,8 +98,8 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                         transmissionErrors = true;
                     }
                 }
-                this.updateProgress();
                 // Transmit any incomplete activity (UPLOAD)
+                this.updateProgress();
                 List<ServiceActivity> servicesActivityList = this.database.serviceActivityDao().listByUntrasmitted();
                 for (ServiceActivity serviceActivity : servicesActivityList) {
                     data = this.putActivity(serviceActivity);
@@ -111,18 +111,19 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                         transmissionErrors = true;
                     }
                 }
-                this.updateProgress();
                 // If no errors were given during the upload proceed to the download
                 if (!transmissionErrors) {
                     // Get new data from the server (DOWNLOAD)
-                    data = this.downloadData();
                     this.updateProgress();
+                    data = this.downloadData();
                     if (data.exception == null) {
                         // Success, save data in database
+                        this.updateProgress();
                         this.saveToDatabase(data);
+                        // Synchronization complete
+                        this.updateProgress();
                     }
                 }
-                this.updateProgress();
             }
         }
         return new AsyncTaskResult(data, data.exception);
