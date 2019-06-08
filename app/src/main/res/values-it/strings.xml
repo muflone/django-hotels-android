@@ -110,6 +110,7 @@
     <string name="sync_error_invalid_date_time">Data o orario non validi, controllare le impostazioni di sistema</string>
     <string name="sync_error_unable_to_download">Impossibile scaricare le informazioni dal server</string>
     <string name="sync_error_invalid_server_status">Stato del server non valido, forse il server non è pronto</string>
+    <string name="sync_error_invalid_server_status_detail">Stato del server: %s</string>
     <string name="sync_error_invalid_server_response">Risposta non valida dal server, controllare la connessione internet</string>
     <string name="sync_error_retransmitted_response">L\'attività è stata già trasmessa e viene rifiutata dal server</string>
     <string name="sync_error_retransmitted_quantity">Un\'attività è stata già trasmessa con una quantità differente:\nImpiegato: %s %s\nStruttura: %s\nEdificio: %s\nStanza: %s\nData: %s\nQuantità: %d</string>

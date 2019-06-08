@@ -156,7 +156,10 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         // Check the status object for valid data
         try {
             if (!jsonObject.getString("status").equals(Api.STATUS_OK)) {
-                throw new InvalidServerStatusException();
+                throw new InvalidServerStatusException(
+                        String.format(
+                            this.context.get().getString(R.string.sync_error_invalid_server_status_detail),
+                                jsonObject.getString("status")));
             }
         } catch (JSONException e) {
             e.printStackTrace();
