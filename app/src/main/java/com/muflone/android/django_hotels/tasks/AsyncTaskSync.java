@@ -173,7 +173,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     TabletSetting tabletSetting = new TabletSetting(jsonSettings.getJSONObject(i));
                     result.tabletSettingsMap.put(tabletSetting.name, tabletSetting);
                 }
-                // Check the final node for successful reads
+                // Check the status node for successful reads
                 this.api.checkStatusResponse(jsonRoot);
             } catch (JSONException e) {
                 result.exception = new InvalidResponseException();
