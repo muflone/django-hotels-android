@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +41,10 @@ public class SyncFragment extends Fragment {
     private ProgressBar progressBar2;
     private TextView progressView;
     private TextView errorMessage;
+    private TextView errorMessageDetails;
     private ImageView errorView;
     private final List<String> progressPhases = new ArrayList<>();
+    private final String TAG = getClass().getName();
     private static final int SYNC_SLEEP = 400;
 
     @Override
@@ -56,6 +59,8 @@ public class SyncFragment extends Fragment {
         this.errorMessage.setText("");
         this.errorView = rootView.findViewById(R.id.errorView);
         this.errorView.setVisibility(View.INVISIBLE);
+        this.errorMessageDetails = rootView.findViewById(R.id.errorMessageDetails);
+        this.errorMessageDetails.setVisibility(View.INVISIBLE);
         this.progressPhases.add(this.context.getString(R.string.sync_step_server_status));
         this.progressPhases.add(this.context.getString(R.string.sync_step_date_time));
         this.progressPhases.add(this.context.getString(R.string.sync_step_timestamps_transmission));
@@ -143,6 +148,14 @@ public class SyncFragment extends Fragment {
                         }
                         progressBar2.setVisibility(View.INVISIBLE);
                         errorView.setVisibility(View.VISIBLE);
+                        // Show error details
+                        String message = exception.getMessage();
+                        if (message != null)
+                        {
+                            Log.w(TAG, message);
+                            errorMessageDetails.setText(message);
+                            errorMessageDetails.setVisibility(View.VISIBLE);
+                        }
                     }
 
                     @Override
