@@ -55,6 +55,7 @@ public class SyncFragment extends Fragment {
         this.errorMessage.setText("");
         this.errorView = rootView.findViewById(R.id.errorView);
         this.errorView.setVisibility(View.INVISIBLE);
+        this.progressPhases.add(this.context.getString(R.string.sync_step_server_status));
         this.progressPhases.add(this.context.getString(R.string.sync_step_timestamps_transmission));
         this.progressPhases.add(this.context.getString(R.string.sync_step_activities_transmission));
         this.progressPhases.add(this.context.getString(R.string.sync_step_download));

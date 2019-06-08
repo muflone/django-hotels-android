@@ -99,6 +99,7 @@
 
     <!-- Sync section -->
     <string name="sync_step_started">Sincronizzazione avviata</string>
+    <string name="sync_step_server_status">Controllo dello stato del server</string>
     <string name="sync_step_timestamps_transmission">Trasmissione delle timbrature</string>
     <string name="sync_step_activities_transmission">Trasmissione delle attività</string>
     <string name="sync_step_download">Scaricamento dati</string>

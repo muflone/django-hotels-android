@@ -58,7 +58,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final Api api;
     private final AsyncTaskListener callback;
     private final AppDatabase database;
-    public final static int totalSteps = 5;
+    public final static int totalSteps = 6;
     private int currentStep;
 
     public AsyncTaskSync(Api api, AppDatabase database, AsyncTaskListener callback) {
@@ -72,49 +72,55 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     protected AsyncTaskResult doInBackground(Void... params) {
         // Do the background job
         boolean transmissionErrors = false;
+        ApiData data;
 
-        // Check if the system date/time matches with the remote date/time
-        ApiData data = this.checkDates();
+        // Check the server status
+        this.updateProgress();
+        data = this.checkStatus();
         if (data.exception == null) {
-            this.updateProgress();
-            // Transmit any incomplete timestamp (UPLOAD)
-            List<Timestamp> timestampsList = this.database.timestampDao().listByUntrasmitted();
-            for (Timestamp timestamp : timestampsList) {
-                data = this.putTimestamp(timestamp);
-                if (data.exception == null) {
-                    // Update transmission date
-                    timestamp.transmission = Utility.getCurrentDateTime();
-                    this.database.timestampDao().update(timestamp);
-                } else {
-                    // There were some errors during the timestamps transmissions
-                    transmissionErrors = true;
-                }
-            }
-            this.updateProgress();
-            // Transmit any incomplete activity (UPLOAD)
-            List<ServiceActivity> servicesActivityList = this.database.serviceActivityDao().listByUntrasmitted();
-            for (ServiceActivity serviceActivity : servicesActivityList) {
-                data = this.putActivity(serviceActivity);
-                if (data.exception == null) {
-                    serviceActivity.transmission = Utility.getCurrentDateTime();
-                    this.database.serviceActivityDao().update(serviceActivity);
-                } else {
-                    // There were some errors during the timestamps transmissions
-                    transmissionErrors = true;
-                }
-            }
-            this.updateProgress();
-            // If no errors were given during the upload proceed to the download
-            if (! transmissionErrors) {
-                // Get new data from the server (DOWNLOAD)
-                data = this.downloadData();
+            // Check if the system date/time matches with the remote date/time
+            data = this.checkDates();
+            if (data.exception == null) {
                 this.updateProgress();
-                if (data.exception == null) {
-                    // Success, save data in database
-                    this.saveToDatabase(data);
+                // Transmit any incomplete timestamp (UPLOAD)
+                List<Timestamp> timestampsList = this.database.timestampDao().listByUntrasmitted();
+                for (Timestamp timestamp : timestampsList) {
+                    data = this.putTimestamp(timestamp);
+                    if (data.exception == null) {
+                        // Update transmission date
+                        timestamp.transmission = Utility.getCurrentDateTime();
+                        this.database.timestampDao().update(timestamp);
+                    } else {
+                        // There were some errors during the timestamps transmissions
+                        transmissionErrors = true;
+                    }
                 }
+                this.updateProgress();
+                // Transmit any incomplete activity (UPLOAD)
+                List<ServiceActivity> servicesActivityList = this.database.serviceActivityDao().listByUntrasmitted();
+                for (ServiceActivity serviceActivity : servicesActivityList) {
+                    data = this.putActivity(serviceActivity);
+                    if (data.exception == null) {
+                        serviceActivity.transmission = Utility.getCurrentDateTime();
+                        this.database.serviceActivityDao().update(serviceActivity);
+                    } else {
+                        // There were some errors during the timestamps transmissions
+                        transmissionErrors = true;
+                    }
+                }
+                this.updateProgress();
+                // If no errors were given during the upload proceed to the download
+                if (!transmissionErrors) {
+                    // Get new data from the server (DOWNLOAD)
+                    data = this.downloadData();
+                    this.updateProgress();
+                    if (data.exception == null) {
+                        // Success, save data in database
+                        this.saveToDatabase(data);
+                    }
+                }
+                this.updateProgress();
             }
-            this.updateProgress();
         }
         return new AsyncTaskResult(data, data.exception);
     }
@@ -132,6 +138,26 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 this.callback.onFailure(result.exception);
             }
         }
+    }
+
+    private ApiData checkStatus() {
+        // Check if the server status
+        ApiData data = new ApiData();
+        JSONObject jsonRoot = this.api.getJSONObject(String.format("status/%s/",
+                this.api.settings.getTabletID()));
+        if (jsonRoot != null) {
+            try {
+                // Check the status node for successful reads
+                this.api.checkStatusResponse(jsonRoot);
+            } catch (InvalidResponseException exception) {
+                exception.printStackTrace();
+                data.exception = exception;
+            }
+        } else {
+            // Whether the result cannot be get raise exception
+            data.exception = new NoConnectionException();
+        }
+        return data;
     }
 
     private ApiData checkDates() {
