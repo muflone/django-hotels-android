@@ -6,6 +6,7 @@ import com.google.android.apps.authenticator.Base32String;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
+import com.muflone.android.django_hotels.api.exceptions.InvalidServerStatusException;
 
 import org.fedorahosted.freeotp.Token;
 
@@ -85,11 +86,11 @@ public class Api {
         return token != null ? token.generateCodes().getCurrentCode() : null;
     }
 
-    public void checkStatusResponse(JSONObject jsonObject) throws InvalidResponseException {
+    public void checkStatusResponse(JSONObject jsonObject) throws InvalidResponseException, InvalidServerStatusException {
         // Check the status object for valid data
         try {
             if (!jsonObject.getString("status").equals(Api.STATUS_OK)) {
-                throw new InvalidResponseException();
+                throw new InvalidServerStatusException();
             }
         } catch (JSONException e) {
             e.printStackTrace();

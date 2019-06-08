@@ -8,6 +8,7 @@ import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
+import com.muflone.android.django_hotels.api.exceptions.InvalidServerStatusException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
 import com.muflone.android.django_hotels.database.AppDatabase;
@@ -154,6 +155,9 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
             } catch (InvalidResponseException exception) {
                 exception.printStackTrace();
                 data.exception = exception;
+            } catch (InvalidServerStatusException exception) {
+                exception.printStackTrace();
+                data.exception = exception;
             }
         } else {
             // Whether the result cannot be get raise exception
@@ -195,6 +199,9 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     // Invalid date or time
                     result.exception = new InvalidDateTimeException();
                 }
+            } catch (InvalidServerStatusException exception) {
+                exception.printStackTrace();
+                result.exception = exception;
             } catch (InvalidResponseException exception) {
                 exception.printStackTrace();
                 result.exception = exception;
@@ -258,6 +265,8 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     TabletSetting tabletSetting = new TabletSetting(jsonSettings.getJSONObject(i));
                     result.tabletSettingsMap.put(tabletSetting.name, tabletSetting);
                 }
+            } catch (InvalidServerStatusException exception) {
+                result.exception = exception;
             } catch (JSONException exception) {
                 result.exception = new InvalidResponseException();
             } catch (ParseException exception) {
