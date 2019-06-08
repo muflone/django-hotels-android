@@ -100,6 +100,7 @@
     <!-- Sync section -->
     <string name="sync_step_started">Synchronization started</string>
     <string name="sync_step_server_status">Checking server status</string>
+    <string name="sync_step_date_time">Checking device date and time</string>
     <string name="sync_step_timestamps_transmission">Timestamps transmission</string>
     <string name="sync_step_activities_transmission">Activities transmission</string>
     <string name="sync_step_download">Data download</string>

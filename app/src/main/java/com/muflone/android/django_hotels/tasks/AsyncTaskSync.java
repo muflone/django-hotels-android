@@ -58,7 +58,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final Api api;
     private final AsyncTaskListener callback;
     private final AppDatabase database;
-    public final static int totalSteps = 6;
+    public final static int totalSteps = 7;
     private int currentStep;
 
     public AsyncTaskSync(Api api, AppDatabase database, AsyncTaskListener callback) {
@@ -79,6 +79,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         data = this.checkStatus();
         if (data.exception == null) {
             // Check if the system date/time matches with the remote date/time
+            this.updateProgress();
             data = this.checkDates();
             if (data.exception == null) {
                 this.updateProgress();
