@@ -125,7 +125,7 @@ public class SyncFragment extends Fragment {
                         } else if (exception instanceof InvalidServerStatusException) {
                             errorMessage.setText(R.string.sync_error_invalid_server_status);
                             errorView.setImageDrawable(
-                                    context.getResources().getDrawable(R.drawable.ic_error_generic));
+                                    context.getResources().getDrawable(R.drawable.ic_error_cloud_off));
                         } else if (exception instanceof InvalidResponseException) {
                             errorMessage.setText(R.string.sync_error_invalid_server_response);
                             errorView.setImageDrawable(
