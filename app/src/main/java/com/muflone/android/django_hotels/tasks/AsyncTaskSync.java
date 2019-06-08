@@ -1,8 +1,11 @@
 package com.muflone.android.django_hotels.tasks;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.muflone.android.django_hotels.R;
+import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
@@ -45,6 +48,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -61,9 +65,12 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final AsyncTaskListener callback;
     private final AppDatabase database;
     private final int totalSteps;
+    private final Singleton singleton = Singleton.getInstance();
+    private final WeakReference<Context> context;
     private int currentStep;
 
-    public AsyncTaskSync(Api api, AppDatabase database, int totalSteps, AsyncTaskListener callback) {
+    public AsyncTaskSync(Context context, Api api, AppDatabase database, int totalSteps, AsyncTaskListener callback) {
+        this.context = new WeakReference<>(context);
         this.api = api;
         this.callback = callback;
         this.database = database;
@@ -346,15 +353,37 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 String status = jsonRoot.getString("status");
                 if (status.equals(Api.STATUS_EXISTING)) {
                     // The activity was transmitted but it was already existing, this issue can be ignored
-                    Log.w(TAG, String.format("Existing activity during the data transmission: %s", status));
+                    Log.w(TAG, String.format("Existing activity during the data transmission: %d", serviceActivity.id));
                 } else if (status.equals(Api.STATUS_DIFFERENT_QUANTITY)) {
                     // The activity was transmitted but it was saved with a different quantity
-                    Log.e(TAG, String.format("Activity already transmitted using a different quantity: %s", status));
-                    throw new RetransmittedActivityException();
+                    Log.e(TAG, String.format("Activity %d already transmitted using a different quantity: %d",
+                            serviceActivity.id,
+                            serviceActivity.serviceQty));
+                    throw new RetransmittedActivityException(
+                            String.format(this.context.get().getString(R.string.sync_error_retransmitted_quantity),
+                                    singleton.apiData.contractsMap.get(serviceActivity.contractId).employee.firstName,
+                                    singleton.apiData.contractsMap.get(serviceActivity.contractId).employee.lastName,
+                                    singleton.apiData.roomsStructureMap.get(serviceActivity.roomId).name,
+                                    singleton.apiData.roomsBuildingMap.get(serviceActivity.roomId).name,
+                                    singleton.apiData.roomsMap.get(serviceActivity.roomId).name,
+                                    new SimpleDateFormat("yyyy-MM-dd").format(serviceActivity.date),
+                                    serviceActivity.serviceQty
+                            ));
                 } else if (status.equals(Api.STATUS_DIFFERENT_DESCRIPTION)) {
                     // The activity was transmitted but it was saved with a different description
-                    Log.e(TAG, String.format("Activity already transmitted using a different description: %s", status));
-                    throw new RetransmittedActivityException();
+                    Log.e(TAG, String.format("Activity %d already transmitted using a different description: %s",
+                            serviceActivity.id,
+                            serviceActivity.description));
+                    throw new RetransmittedActivityException(
+                            String.format(this.context.get().getString(R.string.sync_error_retransmitted_description),
+                                    singleton.apiData.contractsMap.get(serviceActivity.contractId).employee.firstName,
+                                    singleton.apiData.contractsMap.get(serviceActivity.contractId).employee.lastName,
+                                    singleton.apiData.roomsStructureMap.get(serviceActivity.roomId).name,
+                                    singleton.apiData.roomsBuildingMap.get(serviceActivity.roomId).name,
+                                    singleton.apiData.roomsMap.get(serviceActivity.roomId).name,
+                                    new SimpleDateFormat("yyyy-MM-dd").format(serviceActivity.date),
+                                    serviceActivity.description
+                            ));
                 } else if (! status.equals(Api.STATUS_OK)) {
                     // Invalid response received
                     Log.e(TAG, String.format("Invalid response received during the data transmission: %s", status));

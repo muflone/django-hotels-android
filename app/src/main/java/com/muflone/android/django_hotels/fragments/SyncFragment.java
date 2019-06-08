@@ -68,6 +68,7 @@ public class SyncFragment extends Fragment {
         // Download data asynchronously from the server
         Singleton singleton = Singleton.getInstance();
         AsyncTaskSync task = new AsyncTaskSync(
+                this.context,
                 singleton.api,
                 AppDatabase.getAppDatabase(this.context),
                 this.progressPhases.size(),

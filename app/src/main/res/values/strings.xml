@@ -112,6 +112,8 @@
     <string name="sync_error_invalid_server_status">Invalid server status, maybe the server is not ready</string>
     <string name="sync_error_invalid_server_response">Invalid response from the server, please check your internet connection</string>
     <string name="sync_error_retransmitted_response">The activity was already transmitted and it\'s refused from the server</string>
+    <string name="sync_error_retransmitted_quantity">An activity was already transmitted with a different quantity\nEmployee: %s %s\nStructure: %s\nBuilding: %s\nRoom: %s\nDate: %s\nQuantity: %d</string>
+    <string name="sync_error_retransmitted_description">Activity was already transmitted with a different description\nEmployee: %s %s\nStructure: %s\nBuilding: %s\nRoom: %s\nDate: %s\nDescription: %s</string>
 
     <!-- About section -->
     <string name="about_contacts">Contacts</string>
