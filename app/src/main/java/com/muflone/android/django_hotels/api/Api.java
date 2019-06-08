@@ -118,6 +118,8 @@ public class Api {
                 timeZone.getDisplayName(Locale.ROOT).replace("/", ":")));
         if (jsonRoot != null) {
             try {
+                // Check the status node for successful reads
+                this.checkStatusResponse(jsonRoot);
                 // Get current system date only
                 Date date1 = Utility.getCurrentDate();
                 // Get remote date
@@ -136,6 +138,9 @@ public class Api {
                     // Invalid date or time
                     data.exception = new InvalidDateTimeException();
                 }
+            } catch (InvalidResponseException exception) {
+                exception.printStackTrace();
+                data.exception = exception;
             } catch (ParseException exception) {
                 exception.printStackTrace();
                 data.exception = new InvalidResponseException();
