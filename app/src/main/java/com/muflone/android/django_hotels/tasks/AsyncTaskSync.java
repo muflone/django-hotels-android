@@ -6,7 +6,9 @@ import android.util.Log;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
+import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
+import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
@@ -43,9 +45,12 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final String TAG = getClass().getName();
@@ -69,7 +74,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         boolean transmissionErrors = false;
 
         // Check if the system date/time matches with the remote date/time
-        ApiData data = this.api.checkDates();
+        ApiData data = this.checkDates();
         if (data.exception == null) {
             this.updateProgress();
             // Transmit any incomplete timestamp (UPLOAD)
@@ -127,6 +132,56 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 this.callback.onFailure(result.exception);
             }
         }
+    }
+
+    private ApiData checkDates() {
+        // Check if the system date/time matches with the remote date/time
+        ApiData result = new ApiData();
+        Date currentDateTime = Utility.getCurrentDateTime();
+        TimeZone timeZone = TimeZone.getDefault();
+        JSONObject jsonRoot = this.api.getJSONObject(String.format("dates/%s/%s/%s/%s/%s/",
+                this.api.settings.getTabletID(),
+                new SimpleDateFormat("yyyy-MM-dd").format(currentDateTime),
+                new SimpleDateFormat("HH:mm.ss").format(currentDateTime),
+                timeZone.getID().replace("/", ":"),
+                timeZone.getDisplayName(Locale.ROOT).replace("/", ":")));
+        if (jsonRoot != null) {
+            try {
+                // Check the status node for successful reads
+                this.api.checkStatusResponse(jsonRoot);
+                // Get current system date only
+                Date date1 = Utility.getCurrentDate();
+                // Get remote date
+                Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(jsonRoot.getString("date"));
+                long difference = Math.abs(date1.getTime() - date2.getTime());
+                // If the dates match then compare the time
+                if (difference == 0) {
+                    // Get current system time only
+                    date1 = Utility.getCurrentTime();
+                    // Get remote time
+                    date2 = new SimpleDateFormat("HH:mm.ss").parse(jsonRoot.getString("time"));
+                    // Find the difference in thirty seconds
+                    difference = Math.abs(date1.getTime() - date2.getTime()) / 1000 / 30;
+                }
+                if (difference != 0) {
+                    // Invalid date or time
+                    result.exception = new InvalidDateTimeException();
+                }
+            } catch (InvalidResponseException exception) {
+                exception.printStackTrace();
+                result.exception = exception;
+            } catch (ParseException exception) {
+                exception.printStackTrace();
+                result.exception = new InvalidResponseException();
+            } catch (JSONException exception) {
+                exception.printStackTrace();
+                result.exception = new InvalidResponseException();
+            }
+        } else {
+            // Whether the result cannot be get raise exception
+            result.exception = new NoConnectionException();
+        }
+        return result;
     }
 
     private ApiData downloadData() {

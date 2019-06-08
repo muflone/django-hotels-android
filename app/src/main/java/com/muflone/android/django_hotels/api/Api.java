@@ -5,10 +5,7 @@ import android.net.Uri;
 import com.google.android.apps.authenticator.Base32String;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
-import com.muflone.android.django_hotels.Utility;
-import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
-import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 
 import org.fedorahosted.freeotp.Token;
 
@@ -21,11 +18,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 public class Api {
     public static final String STATUS_OK = "OK";
@@ -103,55 +95,5 @@ public class Api {
             e.printStackTrace();
             throw new InvalidResponseException();
         }
-    }
-
-    public ApiData checkDates() {
-        // Check if the system date/time matches with the remote date/time
-        ApiData data = new ApiData();
-        Date currentDateTime = Utility.getCurrentDateTime();
-        TimeZone timeZone = TimeZone.getDefault();
-        JSONObject jsonRoot = this.getJSONObject(String.format("dates/%s/%s/%s/%s/%s/",
-                this.settings.getTabletID(),
-                new SimpleDateFormat("yyyy-MM-dd").format(currentDateTime),
-                new SimpleDateFormat("HH:mm.ss").format(currentDateTime),
-                timeZone.getID().replace("/", ":"),
-                timeZone.getDisplayName(Locale.ROOT).replace("/", ":")));
-        if (jsonRoot != null) {
-            try {
-                // Check the status node for successful reads
-                this.checkStatusResponse(jsonRoot);
-                // Get current system date only
-                Date date1 = Utility.getCurrentDate();
-                // Get remote date
-                Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(jsonRoot.getString("date"));
-                long difference = Math.abs(date1.getTime() - date2.getTime());
-                // If the dates match then compare the time
-                if (difference == 0) {
-                    // Get current system time only
-                    date1 = Utility.getCurrentTime();
-                    // Get remote time
-                    date2 = new SimpleDateFormat("HH:mm.ss").parse(jsonRoot.getString("time"));
-                    // Find the difference in thirty seconds
-                    difference = Math.abs(date1.getTime() - date2.getTime()) / 1000 / 30;
-                }
-                if (difference != 0) {
-                    // Invalid date or time
-                    data.exception = new InvalidDateTimeException();
-                }
-            } catch (InvalidResponseException exception) {
-                exception.printStackTrace();
-                data.exception = exception;
-            } catch (ParseException exception) {
-                exception.printStackTrace();
-                data.exception = new InvalidResponseException();
-            } catch (JSONException exception) {
-                exception.printStackTrace();
-                data.exception = new InvalidResponseException();
-            }
-        } else {
-            // Whether the result cannot be get raise exception
-            data.exception = new NoConnectionException();
-        }
-        return data;
     }
 }
