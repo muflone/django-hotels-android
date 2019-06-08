@@ -220,6 +220,8 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 this.api.getCurrentTokenCode()));
         if (jsonRoot != null) {
             try {
+                // Check the status node for successful reads
+                this.api.checkStatusResponse(jsonRoot);
                 // Loop over every structure
                 JSONObject jsonStructures = jsonRoot.getJSONObject("structures");
                 Iterator<?> jsonKeys = jsonStructures.keys();
@@ -256,8 +258,6 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     TabletSetting tabletSetting = new TabletSetting(jsonSettings.getJSONObject(i));
                     result.tabletSettingsMap.put(tabletSetting.name, tabletSetting);
                 }
-                // Check the status node for successful reads
-                this.api.checkStatusResponse(jsonRoot);
             } catch (JSONException exception) {
                 result.exception = new InvalidResponseException();
             } catch (ParseException exception) {
