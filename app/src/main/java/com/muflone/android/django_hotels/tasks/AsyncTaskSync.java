@@ -6,7 +6,9 @@ import android.util.Log;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
+import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
+import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
@@ -43,9 +45,12 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final String TAG = getClass().getName();
@@ -53,62 +58,71 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final Api api;
     private final AsyncTaskListener callback;
     private final AppDatabase database;
-    public final static int totalSteps = 4;
+    private final int totalSteps;
     private int currentStep;
 
-    public AsyncTaskSync(Api api, AppDatabase database, AsyncTaskListener callback) {
+    public AsyncTaskSync(Api api, AppDatabase database, int totalSteps, AsyncTaskListener callback) {
         this.api = api;
         this.callback = callback;
         this.database = database;
         this.currentStep = 0;
+        this.totalSteps = totalSteps;
     }
 
     @Override
     protected AsyncTaskResult doInBackground(Void... params) {
         // Do the background job
         boolean transmissionErrors = false;
+        ApiData data;
 
-        // Check if the system date/time matches with the remote date/time
-        ApiData data = this.api.checkDates();
+        // Check the server status
+        this.updateProgress();
+        data = this.checkStatus();
         if (data.exception == null) {
+            // Check if the system date/time matches with the remote date/time
             this.updateProgress();
-            // Transmit any incomplete timestamp (UPLOAD)
-            List<Timestamp> timestampsList = this.database.timestampDao().listByUntrasmitted();
-            for (Timestamp timestamp : timestampsList) {
-                data = this.putTimestamp(timestamp);
-                if (data.exception == null) {
-                    // Update transmission date
-                    timestamp.transmission = Utility.getCurrentDateTime();
-                    this.database.timestampDao().update(timestamp);
-                } else {
-                    // There were some errors during the timestamps transmissions
-                    transmissionErrors = true;
+            data = this.checkDates();
+            if (data.exception == null) {
+                this.updateProgress();
+                // Transmit any incomplete timestamp (UPLOAD)
+                List<Timestamp> timestampsList = this.database.timestampDao().listByUntrasmitted();
+                for (Timestamp timestamp : timestampsList) {
+                    data = this.putTimestamp(timestamp);
+                    if (data.exception == null) {
+                        // Update transmission date
+                        timestamp.transmission = Utility.getCurrentDateTime();
+                        this.database.timestampDao().update(timestamp);
+                    } else {
+                        // There were some errors during the timestamps transmissions
+                        transmissionErrors = true;
+                    }
                 }
-            }
-            this.updateProgress();
-            // Transmit any incomplete activity (UPLOAD)
-            List<ServiceActivity> servicesActivityList = this.database.serviceActivityDao().listByUntrasmitted();
-            for (ServiceActivity serviceActivity : servicesActivityList) {
-                data = this.putActivity(serviceActivity);
-                if (data.exception == null) {
-                    serviceActivity.transmission = Utility.getCurrentDateTime();
-                    this.database.serviceActivityDao().update(serviceActivity);
-                } else {
-                    // There were some errors during the timestamps transmissions
-                    transmissionErrors = true;
+                this.updateProgress();
+                // Transmit any incomplete activity (UPLOAD)
+                List<ServiceActivity> servicesActivityList = this.database.serviceActivityDao().listByUntrasmitted();
+                for (ServiceActivity serviceActivity : servicesActivityList) {
+                    data = this.putActivity(serviceActivity);
+                    if (data.exception == null) {
+                        serviceActivity.transmission = Utility.getCurrentDateTime();
+                        this.database.serviceActivityDao().update(serviceActivity);
+                    } else {
+                        // There were some errors during the timestamps transmissions
+                        transmissionErrors = true;
+                    }
                 }
-            }
-            this.updateProgress();
-            // If no errors were given during the upload proceed to the download
-            if (! transmissionErrors) {
-                // Get new data from the server (DOWNLOAD)
-                data = this.downloadData();
-                if (data.exception == null) {
-                    // Success, save data in database
-                    this.saveToDatabase(data);
+                this.updateProgress();
+                // If no errors were given during the upload proceed to the download
+                if (!transmissionErrors) {
+                    // Get new data from the server (DOWNLOAD)
+                    data = this.downloadData();
+                    this.updateProgress();
+                    if (data.exception == null) {
+                        // Success, save data in database
+                        this.saveToDatabase(data);
+                    }
                 }
+                this.updateProgress();
             }
-            this.updateProgress();
         }
         return new AsyncTaskResult(data, data.exception);
     }
@@ -126,6 +140,76 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 this.callback.onFailure(result.exception);
             }
         }
+    }
+
+    private ApiData checkStatus() {
+        // Check if the server status
+        ApiData data = new ApiData();
+        JSONObject jsonRoot = this.api.getJSONObject(String.format("status/%s/",
+                this.api.settings.getTabletID()));
+        if (jsonRoot != null) {
+            try {
+                // Check the status node for successful reads
+                this.api.checkStatusResponse(jsonRoot);
+            } catch (InvalidResponseException exception) {
+                exception.printStackTrace();
+                data.exception = exception;
+            }
+        } else {
+            // Whether the result cannot be get raise exception
+            data.exception = new NoConnectionException();
+        }
+        return data;
+    }
+
+    private ApiData checkDates() {
+        // Check if the system date/time matches with the remote date/time
+        ApiData result = new ApiData();
+        Date currentDateTime = Utility.getCurrentDateTime();
+        TimeZone timeZone = TimeZone.getDefault();
+        JSONObject jsonRoot = this.api.getJSONObject(String.format("dates/%s/%s/%s/%s/%s/",
+                this.api.settings.getTabletID(),
+                new SimpleDateFormat("yyyy-MM-dd").format(currentDateTime),
+                new SimpleDateFormat("HH:mm.ss").format(currentDateTime),
+                timeZone.getID().replace("/", ":"),
+                timeZone.getDisplayName(Locale.ROOT).replace("/", ":")));
+        if (jsonRoot != null) {
+            try {
+                // Check the status node for successful reads
+                this.api.checkStatusResponse(jsonRoot);
+                // Get current system date only
+                Date date1 = Utility.getCurrentDate();
+                // Get remote date
+                Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(jsonRoot.getString("date"));
+                long difference = Math.abs(date1.getTime() - date2.getTime());
+                // If the dates match then compare the time
+                if (difference == 0) {
+                    // Get current system time only
+                    date1 = Utility.getCurrentTime();
+                    // Get remote time
+                    date2 = new SimpleDateFormat("HH:mm.ss").parse(jsonRoot.getString("time"));
+                    // Find the difference in thirty seconds
+                    difference = Math.abs(date1.getTime() - date2.getTime()) / 1000 / 30;
+                }
+                if (difference != 0) {
+                    // Invalid date or time
+                    result.exception = new InvalidDateTimeException();
+                }
+            } catch (InvalidResponseException exception) {
+                exception.printStackTrace();
+                result.exception = exception;
+            } catch (ParseException exception) {
+                exception.printStackTrace();
+                result.exception = new InvalidResponseException();
+            } catch (JSONException exception) {
+                exception.printStackTrace();
+                result.exception = new InvalidResponseException();
+            }
+        } else {
+            // Whether the result cannot be get raise exception
+            result.exception = new NoConnectionException();
+        }
+        return result;
     }
 
     private ApiData downloadData() {
@@ -172,7 +256,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     TabletSetting tabletSetting = new TabletSetting(jsonSettings.getJSONObject(i));
                     result.tabletSettingsMap.put(tabletSetting.name, tabletSetting);
                 }
-                // Check the final node for successful reads
+                // Check the status node for successful reads
                 this.api.checkStatusResponse(jsonRoot);
             } catch (JSONException e) {
                 result.exception = new InvalidResponseException();
@@ -352,7 +436,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private void updateProgress() {
         this.currentStep += 1;
         if (this.callback != null) {
-            this.callback.onProgress(this.currentStep, AsyncTaskSync.totalSteps);
+            this.callback.onProgress(this.currentStep, this.totalSteps);
         }
     }
 }
