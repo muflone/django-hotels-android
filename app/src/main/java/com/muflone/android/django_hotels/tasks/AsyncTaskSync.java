@@ -258,12 +258,12 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 }
                 // Check the status node for successful reads
                 this.api.checkStatusResponse(jsonRoot);
-            } catch (JSONException e) {
+            } catch (JSONException exception) {
                 result.exception = new InvalidResponseException();
-            } catch (ParseException e) {
+            } catch (ParseException exception) {
                 result.exception = new InvalidResponseException();
-            } catch (InvalidResponseException e) {
-                result.exception = e;
+            } catch (InvalidResponseException exception) {
+                result.exception = exception;
             }
         } else {
             // Unable to download data from the server
