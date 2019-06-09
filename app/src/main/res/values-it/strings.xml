@@ -103,7 +103,7 @@
     <string name="sync_step_date_time">Controllo di data e ora del dispositivo</string>
     <string name="sync_step_timestamps_transmission">Trasmissione delle timbrature</string>
     <string name="sync_step_activities_transmission">Trasmissione delle attività</string>
-    <string name="sync_step_download">Scaricamento dati</string>
+    <string name="sync_step_get_data">Scaricamento dei dati</string>
     <string name="sync_step_saving_data">Salvataggio dei dati</string>
     <string name="sync_step_completed">Sincronizzazione completata</string>
     <string name="sync_error_no_server_connection">Impossibile stabilire una connessione con il server, controllare la connessione internet</string>

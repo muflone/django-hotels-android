@@ -103,7 +103,7 @@
     <string name="sync_step_date_time">Checking device date and time</string>
     <string name="sync_step_timestamps_transmission">Timestamps transmission</string>
     <string name="sync_step_activities_transmission">Activities transmission</string>
-    <string name="sync_step_download">Data download</string>
+    <string name="sync_step_get_data">Data download</string>
     <string name="sync_step_saving_data">Saving data</string>
     <string name="sync_step_completed">Synchronization completed</string>
     <string name="sync_error_no_server_connection">Unable to establish connection with the server, please check your internet connection</string>
