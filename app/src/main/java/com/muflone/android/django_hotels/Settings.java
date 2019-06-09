@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 
 public class Settings {
     private final SharedPreferences preferences;
@@ -60,5 +61,29 @@ public class Settings {
 
     public boolean getRoomsListStandardHeight() {
         return this.preferences.getBoolean(this.context.getString(R.string.settings_structures_rooms_list_standard_height_id), true);
+    }
+
+    public void setValue(String key, @NonNull String value) {
+        this.preferences.edit().putString(key, value).apply();
+    }
+
+    public void setValue(String key, Integer value) {
+        this.preferences.edit().putInt(key, value).apply();
+    }
+
+    public void setValue(String key, Long value) {
+        this.preferences.edit().putLong(key, value).apply();
+    }
+
+    public void setValue(String key, Boolean value) {
+        this.preferences.edit().putBoolean(key, value).apply();
+    }
+
+    public void setValue(String key, Float value) {
+        this.preferences.edit().putFloat(key, value).apply();
+    }
+
+    public void unset(String key) {
+        this.preferences.edit().remove(key).apply();
     }
 }
