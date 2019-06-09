@@ -1,5 +1,6 @@
 package com.muflone.android.django_hotels.commands;
 
+import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -15,8 +16,8 @@ public class CommandToast extends CommandBase {
      * @message: the message to show
      * @duration: the duration to use (0 for LENGTH_SHORT, 1 for LENGTH_LONG)
      */
-    public CommandToast(Context context, Command command) {
-        super(context, command);
+    public CommandToast(Activity activity, Context context, Context applicationContext, Command command) {
+        super(activity, context, applicationContext, command);
     }
 
     @Override

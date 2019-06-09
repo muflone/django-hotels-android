@@ -1,5 +1,6 @@
 package com.muflone.android.django_hotels.commands;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -13,7 +14,7 @@ import java.util.Objects;
 public class CommandFactory {
     private final String TAG = getClass().getName();
 
-    public void executeCommands(Context context, String contextType) {
+    public void executeCommands(Activity activity, Context context, Context applicationContext, String contextType) {
         // Process every command for the current context
         for (Command command : Singleton.getInstance().apiData.commandsMap.values()) {
             // Process only the commands in the current context
@@ -24,8 +25,10 @@ public class CommandFactory {
                         Class<?> commandClass = Class.forName(String.format("%s.%s",
                                 Objects.requireNonNull(this.getClass().getPackage()).getName(),
                                 command.type.type));
-                        Constructor<?> commandConstructor = commandClass.getConstructor(Context.class, Command.class);
-                        CommandBase commandInstance = (CommandBase) commandConstructor.newInstance(context, command);
+                        Constructor<?> commandConstructor = commandClass.getConstructor(
+                                Activity.class, Context.class, Context.class, Command.class);
+                        CommandBase commandInstance = (CommandBase) commandConstructor.newInstance(
+                                activity, context, applicationContext, command);
                         commandInstance.before();
                         commandInstance.execute();
                         commandInstance.after();

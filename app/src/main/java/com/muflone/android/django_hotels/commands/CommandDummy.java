@@ -1,13 +1,14 @@
 package com.muflone.android.django_hotels.commands;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.muflone.android.django_hotels.database.models.Command;
 
 public class CommandDummy extends CommandBase {
     // This is a dummy command that does nothing
-    public CommandDummy(Context context, Command command) {
-        super(context, command);
+    public CommandDummy(Activity activity, Context context, Context applicationContext, Command command) {
+        super(activity, context, applicationContext, command);
     }
 
     @Override
