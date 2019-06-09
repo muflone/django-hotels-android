@@ -16,8 +16,8 @@ public class CommandToast extends CommandBase {
      * message: the message to show
      * duration: the duration to use (0 for LENGTH_SHORT, 1 for LENGTH_LONG)
      */
-    public CommandToast(Activity activity, Context context, Context applicationContext, Command command) {
-        super(activity, context, applicationContext, command);
+    public CommandToast(Activity activity, Context context, Command command) {
+        super(activity, context, command);
     }
 
     @Override

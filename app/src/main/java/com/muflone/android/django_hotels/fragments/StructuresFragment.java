@@ -142,7 +142,6 @@ public class StructuresFragment extends Fragment {
         this.singleton.commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                this.getActivity().getBaseContext(),
                 Constants.CONTEXT_START_STRUCTURE);
         return this.rootLayout;
     }

@@ -23,8 +23,8 @@ public class CommandLog extends CommandBase {
      * tag: the message tag
      * message: the message to show
      */
-    public CommandLog(Activity activity, Context context, Context applicationContext, Command command) {
-        super(activity, context, applicationContext, command);
+    public CommandLog(Activity activity, Context context, Command command) {
+        super(activity, context, command);
     }
 
     @Override

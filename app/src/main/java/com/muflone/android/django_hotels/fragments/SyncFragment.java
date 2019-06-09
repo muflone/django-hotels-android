@@ -75,7 +75,6 @@ public class SyncFragment extends Fragment {
         singleton.commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                this.getActivity().getBaseContext(),
                 Constants.CONTEXT_START_SYNC);
         // Download data asynchronously from the server
         AsyncTaskSync task = new AsyncTaskSync(
@@ -115,9 +114,8 @@ public class SyncFragment extends Fragment {
                                 }
                                 // Execute SYNC END commands
                                 singleton.commandFactory.executeCommands(
-                                        getActivity(),
-                                        getContext(),
-                                        getActivity().getBaseContext(),
+                                        SyncFragment.this.getActivity(),
+                                        SyncFragment.this.getContext(),
                                         Constants.CONTEXT_SYNC_END);
                             }
 
@@ -170,9 +168,8 @@ public class SyncFragment extends Fragment {
                         }
                         // Execute SYNC FAIL commands
                         singleton.commandFactory.executeCommands(
-                                getActivity(),
-                                getContext(),
-                                getActivity().getBaseContext(),
+                                SyncFragment.this.getActivity(),
+                                SyncFragment.this.getContext(),
                                 Constants.CONTEXT_SYNC_FAIL);
                     }
 
@@ -180,9 +177,8 @@ public class SyncFragment extends Fragment {
                     public void onProgress(int step, int total) {
                         // Execute SYNC PROGRESS commands
                         singleton.commandFactory.executeCommands(
-                                getActivity(),
-                                getContext(),
-                                getActivity().getBaseContext(),
+                                SyncFragment.this.getActivity(),
+                                SyncFragment.this.getContext(),
                                 Constants.CONTEXT_SYNC_PROGRESS);
                         // Update progress bar
                         if (step <= total) {

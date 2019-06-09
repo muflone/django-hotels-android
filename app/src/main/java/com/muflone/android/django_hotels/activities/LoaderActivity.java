@@ -49,8 +49,7 @@ public class LoaderActivity extends AppCompatActivity {
                 // Execute APP BEGIN commands
                 singleton.commandFactory.executeCommands(
                         LoaderActivity.this,
-                        getBaseContext(),
-                        getApplicationContext(),
+                        LoaderActivity.this.getBaseContext(),
                         Constants.CONTEXT_APP_BEGIN);
                 // Select the first structure only if not already selected
                 if (singleton.selectedStructure == null && singleton.apiData.structuresMap.size() > 0) {

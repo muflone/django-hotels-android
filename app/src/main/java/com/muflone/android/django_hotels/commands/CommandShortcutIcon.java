@@ -19,8 +19,8 @@ public class CommandShortcutIcon extends CommandBase {
      * width: the icon width
      * icon: the base64 encoded icon
      */
-    public CommandShortcutIcon(Activity activity, Context context, Context applicationContext, Command command) {
-        super(activity, context, applicationContext, command);
+    public CommandShortcutIcon(Activity activity, Context context, Command command) {
+        super(activity, context, command);
     }
 
     @Override

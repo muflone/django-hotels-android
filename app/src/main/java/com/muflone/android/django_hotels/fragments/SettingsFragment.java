@@ -19,7 +19,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Singleton.getInstance().commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                this.getActivity().getBaseContext(),
                 Constants.CONTEXT_START_SETTINGS);
     }
 

@@ -10,8 +10,8 @@ public class CommandDummy extends CommandBase {
     /**
      * This is a dummy command that does nothing
      */
-    public CommandDummy(Activity activity, Context context, Context applicationContext, Command command) {
-        super(activity, context, applicationContext, command);
+    public CommandDummy(Activity activity, Context context, Command command) {
+        super(activity, context, command);
     }
 
     @Override

@@ -29,7 +29,6 @@ public class ExtrasFragment extends Fragment {
         Singleton.getInstance().commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                this.getActivity().getBaseContext(),
                 Constants.CONTEXT_START_EXTRA);
         return this.rootLayout;
     }

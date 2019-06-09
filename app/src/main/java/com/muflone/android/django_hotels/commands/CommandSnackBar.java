@@ -17,8 +17,8 @@ public class CommandSnackBar extends CommandBase {
      * action: the message to show on the closing action
      * duration: the duration in milliseconds
      */
-    public CommandSnackBar(Activity activity, Context context, Context applicationContext, Command command) {
-        super(activity, context, applicationContext, command);
+    public CommandSnackBar(Activity activity, Context context, Command command) {
+        super(activity, context, command);
     }
 
     @Override

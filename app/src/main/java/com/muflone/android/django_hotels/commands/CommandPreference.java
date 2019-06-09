@@ -23,8 +23,8 @@ public class CommandPreference extends CommandBase {
      * key: the name of the preference
      * value: the value to assign (ignored for removal)
      */
-    public CommandPreference(Activity activity, Context context, Context applicationContext, Command command) {
-        super(activity, context, applicationContext, command);
+    public CommandPreference(Activity activity, Context context, Command command) {
+        super(activity, context, command);
     }
 
     @Override

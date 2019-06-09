@@ -15,8 +15,8 @@ public class CommandSleep extends CommandBase {
      * The command must have the following arguments:
      * duration: the duration in milliseconds
      */
-    public CommandSleep(Activity activity, Context context, Context applicationContext, Command command) {
-        super(activity, context, applicationContext, command);
+    public CommandSleep(Activity activity, Context context, Command command) {
+        super(activity, context, command);
     }
 
     @Override

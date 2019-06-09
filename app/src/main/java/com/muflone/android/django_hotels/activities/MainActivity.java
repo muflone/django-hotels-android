@@ -178,8 +178,7 @@ public class MainActivity extends AppCompatActivity
             // Execute APP BEGIN commands
             this.singleton.commandFactory.executeCommands(
                     this,
-                    getBaseContext(),
-                    getApplicationContext(),
+                    this.getBaseContext(),
                     Constants.CONTEXT_APP_END);
             // Accept back button to close the activity
             AppDatabase.destroyInstance();

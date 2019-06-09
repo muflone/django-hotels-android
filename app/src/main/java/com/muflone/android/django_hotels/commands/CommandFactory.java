@@ -14,7 +14,7 @@ import java.util.Objects;
 public class CommandFactory {
     private final String TAG = getClass().getSimpleName();
 
-    public void executeCommands(Activity activity, Context context, Context applicationContext, String contextType) {
+    public void executeCommands(Activity activity, Context context, String contextType) {
         Log.d(this.TAG, String.format("Processing commands for context %s", contextType));
         // Process every command for the current context
         for (Command command : Singleton.getInstance().apiData.commandsMap.values()) {
@@ -27,9 +27,9 @@ public class CommandFactory {
                                 Objects.requireNonNull(this.getClass().getPackage()).getName(),
                                 command.type.type));
                         Constructor<?> commandConstructor = commandClass.getConstructor(
-                                Activity.class, Context.class, Context.class, Command.class);
+                                Activity.class, Context.class, Command.class);
                         CommandBase commandInstance = (CommandBase) commandConstructor.newInstance(
-                                activity, context, applicationContext, command);
+                                activity, context, command);
                         commandInstance.before();
                         commandInstance.execute();
                         commandInstance.after();

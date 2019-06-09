@@ -69,7 +69,6 @@ public class HomeFragment extends Fragment {
         Singleton.getInstance().commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                this.getActivity().getBaseContext(),
                 Constants.CONTEXT_START_MAIN);
         return this.rootLayout;
     }

@@ -194,7 +194,6 @@ public class AboutFragment extends Fragment {
         this.singleton.commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                this.getActivity().getBaseContext(),
                 Constants.CONTEXT_START_ABOUT);
         return aboutPage.create();
     }

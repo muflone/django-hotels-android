@@ -10,13 +10,11 @@ public class CommandBase {
     // Common interface for all the Commands to execute from CommandFactory
     protected final Activity activity;
     protected final Context context;
-    protected final Context applicationContext;
     protected final Command command;
 
-    public CommandBase(Activity activity, Context context, Context applicationContext, Command command) {
+    public CommandBase(Activity activity, Context context, Command command) {
         this.activity = activity;
         this.context = context;
-        this.applicationContext = applicationContext;
         this.command = command;
         Log.d(this.getClass().getSimpleName(), String.format("Initializing command \"%s\"", command.type.id));
     }

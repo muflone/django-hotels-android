@@ -14,8 +14,8 @@ public class CommandPrint extends CommandBase {
      * The command must have the following arguments:
      * message: the message to show
      */
-    public CommandPrint(Activity activity, Context context, Context applicationContext, Command command) {
-        super(activity, context, applicationContext, command);
+    public CommandPrint(Activity activity, Context context, Command command) {
+        super(activity, context, command);
     }
 
     @Override
