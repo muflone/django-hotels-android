@@ -13,8 +13,8 @@ public class CommandToast extends CommandBase {
      * This Command shows a Toast notification
      *
      * The command must have the following arguments:
-     * @message: the message to show
-     * @duration: the duration to use (0 for LENGTH_SHORT, 1 for LENGTH_LONG)
+     * message: the message to show
+     * duration: the duration to use (0 for LENGTH_SHORT, 1 for LENGTH_LONG)
      */
     public CommandToast(Activity activity, Context context, Context applicationContext, Command command) {
         super(activity, context, applicationContext, command);

@@ -158,6 +158,14 @@
     <pattern value="com.muflone.android.django_hotels.database.dao.CommandDao" method="insert" />
     <pattern value="com.muflone.android.django_hotels.database.dao.CommandDao" method="listAll" />
     <pattern value="com.muflone.android.django_hotels.database.dao.CommandDao" method="update" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandDummy" method="after" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandDummy" method="before" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandDummy" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandDummy" method="CommandDummy" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandDummy" method="execute" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandToast" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandToast" method="CommandToast" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandToast" method="execute" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
