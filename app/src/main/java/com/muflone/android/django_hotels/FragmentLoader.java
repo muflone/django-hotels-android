@@ -20,7 +20,7 @@ public class FragmentLoader {
     public final static String FRAGMENT_SETTINGS = SettingsFragment.class.getSimpleName();
     public final static String FRAGMENT_ABOUT = AboutFragment.class.getSimpleName();
 
-    public static Fragment getFragment(String fragmentName) {
+    private static Fragment getFragment(String fragmentName) {
         // Create new fragment by its name
         Fragment result;
         if (fragmentName.equals(FRAGMENT_HOME)) {

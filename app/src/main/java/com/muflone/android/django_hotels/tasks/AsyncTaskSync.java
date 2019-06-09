@@ -450,6 +450,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         TimestampDirectionDao timestampDirectionDao = this.database.timestampDirectionDao();
 
         // Delete previous data
+        commandTypeDao.truncate();
         tabletSettingDao.truncate();
         roomDao.truncate();
         contractBuildingsDao.truncate();
@@ -465,7 +466,6 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         brandDao.truncate();
         serviceDao.truncate();
         timestampDirectionDao.truncate();
-        commandTypeDao.truncate();
 
         // Save data from structures
         for (Structure structure : data.structuresMap.values()) {

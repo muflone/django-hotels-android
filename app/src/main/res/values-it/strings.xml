@@ -39,8 +39,6 @@
     <string name="scan_unsupported_qrcode">Codice QR non supportato</string>
 
     <!-- Structures section -->
-    <string name="available_structures">Strutture disponibili</string>
-
     <string name="employee_id_label">ID:</string>
     <string name="employee_first_name_label">Nome:</string>
     <string name="employee_last_name_label">Cognome:</string>
