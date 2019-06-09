@@ -1,9 +1,14 @@
 package com.muflone.android.django_hotels.commands;
 
+import android.content.Context;
+
 import com.muflone.android.django_hotels.database.models.Command;
 
 public class CommandDummy extends CommandBase {
     // This is a dummy command that does nothing
+    public CommandDummy(Context context, Command command) {
+        super(context, command);
+    }
 
     @Override
     public void before() {
@@ -11,8 +16,8 @@ public class CommandDummy extends CommandBase {
     }
 
     @Override
-    public void execute(Command command) {
-        super.execute(command);
+    public void execute() {
+        super.execute();
     }
 
     @Override
