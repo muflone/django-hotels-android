@@ -64,7 +64,7 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
-    private final String TAG = getClass().getName();
+    private final String TAG = getClass().getSimpleName();
 
     private final Api api;
     private final AsyncTaskListener callback;
@@ -166,8 +166,8 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                             this.context.get().getString(R.string.sync_error_invalid_server_status_detail),
                                 jsonObject.getString("status")));
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException exception) {
+            exception.printStackTrace();
             throw new InvalidResponseException();
         }
     }
@@ -261,7 +261,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     timestamp.directionId,
                     timestamp.datetime.getTime() / 1000,
                     URLEncoder.encode(timestamp.description.replace("\n", "\\n"), "UTF-8")));
-        } catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException exception) {
             result.exception = new InvalidResponseException();
         }
         if (jsonRoot != null) {
@@ -269,16 +269,16 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 // Check the final node for successful reads
                 String status = jsonRoot.getString("status");
                 if (status.equals(Api.STATUS_EXISTING)) {
-                    Log.w(TAG, String.format("Existing timestamp during the data transmission: %s", status));
+                    Log.w(this.TAG, String.format("Existing timestamp during the data transmission: %s", status));
                 } else if (! status.equals(Api.STATUS_OK)) {
                     // Invalid response received
-                    Log.e(TAG, String.format("Invalid response received during the data transmission: %s", status));
+                    Log.e(this.TAG, String.format("Invalid response received during the data transmission: %s", status));
                     throw new InvalidResponseException();
                 }
-            } catch (JSONException e) {
+            } catch (JSONException exception) {
                 result.exception = new InvalidResponseException();
-            } catch (InvalidResponseException e) {
-                result.exception = e;
+            } catch (InvalidResponseException exception) {
+                result.exception = exception;
             }
         } else {
             // Unable to download data from the server
@@ -302,7 +302,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     serviceActivity.serviceQty,
                     serviceActivity.date.getTime() / 1000,
                     URLEncoder.encode(serviceActivity.description.replace("\n", "\\n") , "UTF-8")));
-        } catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException exception) {
             result.exception = new InvalidResponseException();
         }
         if (jsonRoot != null) {
@@ -311,10 +311,10 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 String status = jsonRoot.getString("status");
                 if (status.equals(Api.STATUS_EXISTING)) {
                     // The activity was transmitted but it was already existing, this issue can be ignored
-                    Log.w(TAG, String.format("Existing activity during the data transmission: %d", serviceActivity.id));
+                    Log.w(this.TAG, String.format("Existing activity during the data transmission: %d", serviceActivity.id));
                 } else if (status.equals(Api.STATUS_DIFFERENT_QUANTITY)) {
                     // The activity was transmitted but it was saved with a different quantity
-                    Log.e(TAG, String.format("Activity %d already transmitted using a different quantity: %d",
+                    Log.e(this.TAG, String.format("Activity %d already transmitted using a different quantity: %d",
                             serviceActivity.id,
                             serviceActivity.serviceQty));
                     throw new RetransmittedActivityException(
@@ -329,7 +329,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                             ));
                 } else if (status.equals(Api.STATUS_DIFFERENT_DESCRIPTION)) {
                     // The activity was transmitted but it was saved with a different description
-                    Log.e(TAG, String.format("Activity %d already transmitted using a different description: %s",
+                    Log.e(this.TAG, String.format("Activity %d already transmitted using a different description: %s",
                             serviceActivity.id,
                             serviceActivity.description));
                     throw new RetransmittedActivityException(
@@ -344,7 +344,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                             ));
                 } else if (! status.equals(Api.STATUS_OK)) {
                     // Invalid response received
-                    Log.e(TAG, String.format("Invalid response received during the data transmission: %s", status));
+                    Log.e(this.TAG, String.format("Invalid response received during the data transmission: %s", status));
                     throw new InvalidResponseException();
                 }
             } catch (JSONException exception) {

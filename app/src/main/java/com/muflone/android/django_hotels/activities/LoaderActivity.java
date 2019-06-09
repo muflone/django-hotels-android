@@ -55,7 +55,7 @@ public class LoaderActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Exception e) {
+            public void onFailure(Exception exception) {
             }
 
             @Override

@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ScannerFragment extends Fragment {
+    private final Singleton singleton = Singleton.getInstance();
     private Context context;
     private View rootLayout;
     private Button enterButton;
@@ -65,8 +66,8 @@ public class ScannerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        this.apiData = Singleton.getInstance().apiData;
-        this.settings = Singleton.getInstance().settings;
+        this.apiData = this.singleton.apiData;
+        this.settings = this.singleton.settings;
         this.database = AppDatabase.getAppDatabase(this.context);
 
         // Initialize UI
@@ -158,7 +159,7 @@ public class ScannerFragment extends Fragment {
                                 }
 
                                 @Override
-                                public void onFailure(Exception e) {
+                                public void onFailure(Exception exception) {
                                 }
 
                                 @Override
@@ -171,7 +172,7 @@ public class ScannerFragment extends Fragment {
                                     this.context.getString(R.string.scan_unknown_employee),
                                     Toast.LENGTH_LONG).show();
                         }
-                    } catch (Token.TokenUriInvalidException | Base32String.DecodingException e) {
+                    } catch (Token.TokenUriInvalidException | Base32String.DecodingException exception) {
                         // Unsupported QR Code
                         Toast.makeText(this.context,
                                 this.context.getString(R.string.scan_unsupported_qrcode),

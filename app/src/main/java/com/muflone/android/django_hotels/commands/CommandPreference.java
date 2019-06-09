@@ -58,8 +58,8 @@ public class CommandPreference extends CommandBase {
                     break;
             }
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException exception) {
+            exception.printStackTrace();
         }
     }
 }

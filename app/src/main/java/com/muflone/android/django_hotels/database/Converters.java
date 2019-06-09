@@ -25,7 +25,7 @@ public class Converters {
         // Convert String to JSONObject
         try {
             return new JSONObject(value);
-        } catch (JSONException e) {
+        } catch (JSONException exception) {
             return null;
         }
     }

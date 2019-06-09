@@ -24,8 +24,8 @@ public class CommandSleep extends CommandBase {
         super.execute();
         try {
             Utility.sleep(this.command.type.command.getInt("duration"));
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException exception) {
+            exception.printStackTrace();
         }
     }
 }

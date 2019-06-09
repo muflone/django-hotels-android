@@ -28,8 +28,8 @@ public class CommandToast extends CommandBase {
                     this.command.type.command.getString("message"),
                     this.command.type.command.getInt("duration")
             ).show();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException exception) {
+            exception.printStackTrace();
         }
     }
 }

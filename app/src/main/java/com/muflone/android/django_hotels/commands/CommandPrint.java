@@ -23,8 +23,8 @@ public class CommandPrint extends CommandBase {
         super.execute();
         try {
             System.out.println(this.command.type.command.getString("message"));
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException exception) {
+            exception.printStackTrace();
         }
     }
 }

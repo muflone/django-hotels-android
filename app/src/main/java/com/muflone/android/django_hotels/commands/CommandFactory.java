@@ -12,9 +12,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
 public class CommandFactory {
-    private final String TAG = getClass().getName();
+    private final String TAG = getClass().getSimpleName();
 
     public void executeCommands(Activity activity, Context context, Context applicationContext, String contextType) {
+        Log.d(this.TAG, String.format("Processing commands for context %s", contextType));
         // Process every command for the current context
         for (Command command : Singleton.getInstance().apiData.commandsMap.values()) {
             // Process only the commands in the current context
@@ -32,23 +33,24 @@ public class CommandFactory {
                         commandInstance.before();
                         commandInstance.execute();
                         commandInstance.after();
-                    } catch (ClassNotFoundException e) {
-                        Log.w(TAG, String.format("Command class %s not found", command.type.type));
-                        e.printStackTrace();
-                    } catch (NoSuchMethodException e) {
-                        Log.w(TAG, String.format("Missing constructor for class %s", command.type.type));
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InstantiationException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
+                    } catch (ClassNotFoundException exception) {
+                        Log.w(this.TAG, String.format("Command class %s not found", command.type.type));
+                        exception.printStackTrace();
+                    } catch (NoSuchMethodException exception) {
+                        Log.w(this.TAG, String.format("Missing constructor for class %s", command.type.type));
+                        exception.printStackTrace();
+                    } catch (IllegalAccessException exception) {
+                        exception.printStackTrace();
+                    } catch (InstantiationException exception) {
+                        exception.printStackTrace();
+                    } catch (InvocationTargetException exception) {
+                        exception.printStackTrace();
                     }
                 } else {
-                    Log.w(TAG, "Attempting to execute a factory command, skipped");
+                    Log.w(this.TAG, "Attempting to execute a factory command, skipped");
                 }
             }
         }
+        Log.d(this.TAG, String.format("Completed commands for context %s", contextType));
     }
 }

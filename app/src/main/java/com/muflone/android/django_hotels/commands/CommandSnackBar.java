@@ -31,8 +31,8 @@ public class CommandSnackBar extends CommandBase {
                     this.command.type.command.getString("action"),
                     this.command.type.command.getInt("duration")
                     );
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException exception) {
+            exception.printStackTrace();
         }
     }
 }

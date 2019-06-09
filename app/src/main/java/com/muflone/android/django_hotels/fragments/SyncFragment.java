@@ -44,7 +44,7 @@ public class SyncFragment extends Fragment {
     private TextView errorMessageDetails;
     private ImageView errorView;
     private final List<String> progressPhases = new ArrayList<>();
-    private final String TAG = getClass().getName();
+    private final String TAG = getClass().getSimpleName();
     private static final int SYNC_SLEEP = 400;
 
     @Override
@@ -70,8 +70,8 @@ public class SyncFragment extends Fragment {
         this.progressPhases.add(this.context.getString(R.string.sync_step_completed));
         this.progressBar.setMax(this.progressPhases.size());
 
-        // Download data asynchronously from the server
         Singleton singleton = Singleton.getInstance();
+        // Download data asynchronously from the server
         AsyncTaskSync task = new AsyncTaskSync(
                 this.context,
                 singleton.api,
@@ -110,7 +110,7 @@ public class SyncFragment extends Fragment {
                             }
 
                             @Override
-                            public void onFailure(Exception e) {
+                            public void onFailure(Exception exception) {
                             }
 
                             @Override
@@ -162,8 +162,8 @@ public class SyncFragment extends Fragment {
                     public void onProgress(int step, int total) {
                         try {
                             Thread.sleep(SYNC_SLEEP);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                        } catch (InterruptedException exception) {
+                            exception.printStackTrace();
                         }
                         // Update progress bar
                         if (step <= total) {

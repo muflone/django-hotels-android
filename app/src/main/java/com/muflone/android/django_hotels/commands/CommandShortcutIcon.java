@@ -33,8 +33,8 @@ public class CommandShortcutIcon extends CommandBase {
                     this.command.type.command.getInt("height"),
                     this.command.type.command.getString("icon"),
                     LoaderActivity.class);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException exception) {
+            exception.printStackTrace();
         }
     }
 }

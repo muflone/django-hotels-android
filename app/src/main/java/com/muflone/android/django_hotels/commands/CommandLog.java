@@ -53,8 +53,8 @@ public class CommandLog extends CommandBase {
                     Log.wtf(messageTag, messageText);
                     break;
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException exception) {
+            exception.printStackTrace();
         }
     }
 }
