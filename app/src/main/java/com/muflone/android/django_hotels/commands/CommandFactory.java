@@ -24,8 +24,10 @@ public class CommandFactory {
                                 Objects.requireNonNull(this.getClass().getPackage()).getName(),
                                 command.type.type));
                         Constructor<?> commandConstructor = commandClass.getConstructor();
-                        CommandInterface commandInstance = (CommandInterface) commandConstructor.newInstance();
+                        CommandBase commandInstance = (CommandBase) commandConstructor.newInstance();
+                        commandInstance.before();
                         commandInstance.execute(command);
+                        commandInstance.after();
                     } catch (ClassNotFoundException e) {
                         Log.w(TAG, String.format("Command class %s not found", command.type.type));
                         e.printStackTrace();
