@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
+import com.muflone.android.django_hotels.Singleton;
 
 import java.util.Objects;
 
@@ -23,6 +25,12 @@ public class ExtrasFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         // Initialize UI
         this.loadUI(inflater, Objects.requireNonNull(container));
+        // Execute START EXTRA commands
+        Singleton.getInstance().commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                this.getActivity().getBaseContext(),
+                Constants.CONTEXT_START_EXTRA);
         return this.rootLayout;
     }
 

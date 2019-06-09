@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
@@ -137,6 +138,12 @@ public class StructuresFragment extends Fragment {
                     this.api.settings.getRoomsListStandardHeight());
             return false;
         });
+        // Execute START STRUCTURE commands
+        this.singleton.commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                this.getActivity().getBaseContext(),
+                Constants.CONTEXT_START_STRUCTURE);
         return this.rootLayout;
     }
 

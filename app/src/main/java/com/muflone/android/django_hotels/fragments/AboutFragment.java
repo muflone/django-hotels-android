@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
@@ -189,6 +190,12 @@ public class AboutFragment extends Fragment {
         aboutPage.addItem(getCopyDetailsElement(stringBuilder.toString()));
         // E-mail details item
         aboutPage.addItem(getEmailDetailsElement(stringBuilder.toString()));
+        // Execute START ABOUT commands
+        this.singleton.commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                this.getActivity().getBaseContext(),
+                Constants.CONTEXT_START_ABOUT);
         return aboutPage.create();
     }
 

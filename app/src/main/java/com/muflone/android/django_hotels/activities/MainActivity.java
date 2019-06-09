@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.FragmentLoader;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
@@ -174,6 +175,12 @@ public class MainActivity extends AppCompatActivity
             // Restore confirmation after 2 seconds
             new Handler().postDelayed(() -> backButtonPressed = false, 2000);
         } else {
+            // Execute APP BEGIN commands
+            this.singleton.commandFactory.executeCommands(
+                    this,
+                    getBaseContext(),
+                    getApplicationContext(),
+                    Constants.CONTEXT_APP_END);
             // Accept back button to close the activity
             AppDatabase.destroyInstance();
             super.onBackPressed();

@@ -87,6 +87,12 @@ public class ScannerFragment extends Fragment {
                     this.timestampAdapter).execute(position);
             return false;
         });
+        // Execute START SCANNER commands
+        this.singleton.commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                this.getActivity().getBaseContext(),
+                Constants.CONTEXT_START_SCANNER);
         return this.rootLayout;
     }
 

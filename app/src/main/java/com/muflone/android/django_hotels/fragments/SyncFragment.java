@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.activities.CreateShortcutActivity;
 import com.muflone.android.django_hotels.api.exceptions.InvalidServerStatusException;
@@ -71,6 +72,12 @@ public class SyncFragment extends Fragment {
         this.progressBar.setMax(this.progressPhases.size());
 
         Singleton singleton = Singleton.getInstance();
+        // Execute START SYNC commands
+        singleton.commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                this.getActivity().getBaseContext(),
+                Constants.CONTEXT_START_SYNC);
         // Download data asynchronously from the server
         AsyncTaskSync task = new AsyncTaskSync(
                 this.context,
@@ -107,6 +114,12 @@ public class SyncFragment extends Fragment {
                                     }
                                     getActivity().invalidateOptionsMenu();
                                 }
+                                // Execute SYNC END commands
+                                singleton.commandFactory.executeCommands(
+                                        getActivity(),
+                                        getContext(),
+                                        getActivity().getBaseContext(),
+                                        Constants.CONTEXT_SYNC_END);
                             }
 
                             @Override
@@ -156,6 +169,12 @@ public class SyncFragment extends Fragment {
                             errorMessageDetails.setText(message);
                             errorMessageDetails.setVisibility(View.VISIBLE);
                         }
+                        // Execute SYNC FAIL commands
+                        singleton.commandFactory.executeCommands(
+                                getActivity(),
+                                getContext(),
+                                getActivity().getBaseContext(),
+                                Constants.CONTEXT_SYNC_FAIL);
                     }
 
                     @Override
@@ -165,6 +184,12 @@ public class SyncFragment extends Fragment {
                         } catch (InterruptedException exception) {
                             exception.printStackTrace();
                         }
+                        // Execute SYNC PROGRESS commands
+                        singleton.commandFactory.executeCommands(
+                                getActivity(),
+                                getContext(),
+                                getActivity().getBaseContext(),
+                                Constants.CONTEXT_SYNC_PROGRESS);
                         // Update progress bar
                         if (step <= total) {
                             progressView.post(new Runnable() {

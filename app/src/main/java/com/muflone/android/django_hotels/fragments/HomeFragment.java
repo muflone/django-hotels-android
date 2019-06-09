@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.FragmentLoader;
 import com.muflone.android.django_hotels.R;
+import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.activities.MainActivity;
 
 import java.util.Objects;
@@ -63,7 +65,12 @@ public class HomeFragment extends Fragment {
         this.textViewSync.setOnClickListener(clickListener);
         this.imageSectionAbout.setOnClickListener(clickListener);
         this.textViewAbout.setOnClickListener(clickListener);
-
+        // Execute START MAIN commands
+        Singleton.getInstance().commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                this.getActivity().getBaseContext(),
+                Constants.CONTEXT_START_MAIN);
         return this.rootLayout;
     }
 

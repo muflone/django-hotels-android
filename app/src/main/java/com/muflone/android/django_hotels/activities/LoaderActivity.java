@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
@@ -45,6 +46,12 @@ public class LoaderActivity extends AppCompatActivity {
         AppDatabase.getAppDatabase(this).reload(this, new AsyncTaskListener() {
             @Override
             public void onSuccess(AsyncTaskResult result) {
+                // Execute APP BEGIN commands
+                singleton.commandFactory.executeCommands(
+                        LoaderActivity.this,
+                        getBaseContext(),
+                        getApplicationContext(),
+                        Constants.CONTEXT_APP_BEGIN);
                 // Select the first structure only if not already selected
                 if (singleton.selectedStructure == null && singleton.apiData.structuresMap.size() > 0) {
                     // Select the first available structure
