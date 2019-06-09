@@ -87,17 +87,17 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
 
         // Check the server status
         this.updateProgress();
-        data = this.checkStatus();
+        data = this.requestApiStatus();
         if (data.exception == null) {
             // Check if the system date/time matches with the remote date/time
             this.updateProgress();
-            data = this.checkDates();
+            data = this.requestApiDates();
             if (data.exception == null) {
                 // Transmit any incomplete timestamp (UPLOAD)
                 this.updateProgress();
                 List<Timestamp> timestampsList = this.database.timestampDao().listByUntrasmitted();
                 for (Timestamp timestamp : timestampsList) {
-                    data = this.putTimestamp(timestamp);
+                    data = this.requestApiPutTimestamp(timestamp);
                     if (data.exception == null) {
                         // Update transmission date
                         timestamp.transmission = Utility.getCurrentDateTime();
@@ -111,7 +111,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 this.updateProgress();
                 List<ServiceActivity> servicesActivityList = this.database.serviceActivityDao().listByUntrasmitted();
                 for (ServiceActivity serviceActivity : servicesActivityList) {
-                    data = this.putActivity(serviceActivity);
+                    data = this.requestApiPutActivity(serviceActivity);
                     if (data.exception == null) {
                         serviceActivity.transmission = Utility.getCurrentDateTime();
                         this.database.serviceActivityDao().update(serviceActivity);
@@ -124,7 +124,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 if (!transmissionErrors) {
                     // Get new data from the server (DOWNLOAD)
                     this.updateProgress();
-                    data = this.downloadData();
+                    data = this.requestApiGet();
                     if (data.exception == null) {
                         // Success, save data in database
                         this.updateProgress();
@@ -168,7 +168,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         }
     }
 
-    private ApiData checkStatus() {
+    private ApiData requestApiStatus() {
         // Check if the server status
         ApiData data = new ApiData();
         JSONObject jsonRoot = this.api.getJSONObject(String.format("status/%s/",
@@ -191,7 +191,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         return data;
     }
 
-    private ApiData checkDates() {
+    private ApiData requestApiDates() {
         // Check if the system date/time matches with the remote date/time
         ApiData result = new ApiData();
         Date currentDateTime = Utility.getCurrentDateTime();
@@ -244,7 +244,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         return result;
     }
 
-    private ApiData downloadData() {
+    private ApiData requestApiGet() {
         ApiData result = new ApiData();
         // Get data from the server
         JSONObject jsonRoot = this.api.getJSONObject(String.format("get/%s/%s/",
@@ -306,7 +306,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         return result;
     }
 
-    private ApiData putTimestamp(Timestamp timestamp) {
+    private ApiData requestApiPutTimestamp(Timestamp timestamp) {
         ApiData result = new ApiData();
         JSONObject jsonRoot = null;
         // Send timestamps to the server
@@ -345,7 +345,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         return result;
     }
 
-    private ApiData putActivity(ServiceActivity serviceActivity) {
+    private ApiData requestApiPutActivity(ServiceActivity serviceActivity) {
         ApiData result = new ApiData();
         JSONObject jsonRoot = null;
         // Send timestamps to the server
