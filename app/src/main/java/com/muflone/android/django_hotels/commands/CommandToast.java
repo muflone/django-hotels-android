@@ -25,8 +25,8 @@ public class CommandToast extends CommandBase {
         super.execute();
         try {
             Toast.makeText(this.context,
-                    this.command.type.command.getString("message"),
-                    this.command.type.command.getInt("duration")
+                    this.command.command.getString("message"),
+                    this.command.command.getInt("duration")
             ).show();
         } catch (JSONException exception) {
             exception.printStackTrace();

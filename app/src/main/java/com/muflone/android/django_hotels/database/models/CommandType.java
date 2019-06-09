@@ -18,18 +18,13 @@ public class CommandType {
     @ColumnInfo(name = "type")
     public final String type;
 
-    @ColumnInfo(name = "command")
-    public final JSONObject command;
-
-    public CommandType(@NotNull String id, String type, JSONObject command) {
+    public CommandType(@NotNull String id, String type) {
         this.id = id;
         this.type = type;
-        this.command = command;
     }
 
     public CommandType(JSONObject jsonObject) throws JSONException {
         this(jsonObject.getString("id"),
-                jsonObject.getString("type"),
-                jsonObject.getJSONObject("command"));
+                jsonObject.getString("type"));
     }
 }

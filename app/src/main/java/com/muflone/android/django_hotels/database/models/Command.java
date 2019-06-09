@@ -33,15 +33,20 @@ public class Command {
     @NonNull
     public final String context;
 
-    public Command(Long id, String typeId, @NotNull String context) {
+    @ColumnInfo(name = "command")
+    public final JSONObject command;
+
+    public Command(Long id, String typeId, @NotNull String context, JSONObject command) {
         this.id = id;
         this.typeId = typeId;
         this.context = context;
+        this.command = command;
     }
 
     public Command(JSONObject jsonObject) throws JSONException {
         this(jsonObject.getLong("id"),
                 jsonObject.getString("command_type"),
-                jsonObject.getString("context"));
+                jsonObject.getString("context"),
+                jsonObject.getJSONObject("command"));
     }
 }

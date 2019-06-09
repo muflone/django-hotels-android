@@ -31,9 +31,9 @@ public class CommandLog extends CommandBase {
     public void execute() {
         super.execute();
         try {
-            String messageTag = this.command.type.command.getString("tag");
-            String messageText = this.command.type.command.getString("message");
-            switch (this.command.type.command.getString("type")) {
+            String messageTag = this.command.command.getString("tag");
+            String messageText = this.command.command.getString("message");
+            switch (this.command.command.getString("type")) {
                 case "d":
                     Log.d(messageTag, messageText);
                     break;

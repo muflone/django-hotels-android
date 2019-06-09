@@ -31,27 +31,27 @@ public class CommandPreference extends CommandBase {
     public void execute() {
         super.execute();
         try {
-            String preferenceKey = this.command.type.command.getString("key");
-            switch (this.command.type.command.getString("type")) {
+            String preferenceKey = this.command.command.getString("key");
+            switch (this.command.command.getString("type")) {
                 case "s":
                     Singleton.getInstance().settings.setValue(preferenceKey,
-                            this.command.type.command.getString("value"));
+                            this.command.command.getString("value"));
                     break;
                 case "i":
                     Singleton.getInstance().settings.setValue(preferenceKey,
-                            this.command.type.command.getInt("value"));
+                            this.command.command.getInt("value"));
                     break;
                 case "l":
                     Singleton.getInstance().settings.setValue(preferenceKey,
-                            this.command.type.command.getLong("value"));
+                            this.command.command.getLong("value"));
                     break;
                 case "b":
                     Singleton.getInstance().settings.setValue(preferenceKey,
-                            this.command.type.command.getBoolean("value"));
+                            this.command.command.getBoolean("value"));
                     break;
                 case "f":
                     Singleton.getInstance().settings.setValue(preferenceKey,
-                            (float) this.command.type.command.getDouble("value"));
+                            (float) this.command.command.getDouble("value"));
                     break;
                 case "u":
                     Singleton.getInstance().settings.unset(preferenceKey);

@@ -22,7 +22,7 @@ public class CommandPrint extends CommandBase {
     public void execute() {
         super.execute();
         try {
-            System.out.println(this.command.type.command.getString("message"));
+            System.out.println(this.command.command.getString("message"));
         } catch (JSONException exception) {
             exception.printStackTrace();
         }

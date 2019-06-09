@@ -28,9 +28,9 @@ public class CommandSnackBar extends CommandBase {
             try {
                 NotifyMessage.snackbar(this.context,
                         this.activity.getWindow().getDecorView(),
-                        this.command.type.command.getString("message"),
-                        this.command.type.command.getString("action"),
-                        this.command.type.command.getInt("duration")
+                        this.command.command.getString("message"),
+                        this.command.command.getString("action"),
+                        this.command.command.getInt("duration")
                 );
             } catch (JSONException exception) {
                 exception.printStackTrace();

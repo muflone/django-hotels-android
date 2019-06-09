@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "d10f789b1f7ce262b9834f7fc789e5e6",
+    "identityHash": "7fb828bac233cca307d917a24ea4ff08",
     "entities": [
       {
         "tableName": "brands",
@@ -110,7 +110,7 @@
       },
       {
         "tableName": "commands",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `type_id` TEXT, `context` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`type_id`) REFERENCES `command_types`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `type_id` TEXT, `context` TEXT NOT NULL, `command` TEXT, `uses` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`type_id`) REFERENCES `command_types`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
         "fields": [
           {
             "fieldPath": "id",
@@ -128,6 +128,18 @@
             "fieldPath": "context",
             "columnName": "context",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "command",
+            "columnName": "command",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "uses",
+            "columnName": "uses",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -163,7 +175,7 @@
       },
       {
         "tableName": "command_types",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `type` TEXT, `command` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `type` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -174,12 +186,6 @@
           {
             "fieldPath": "type",
             "columnName": "type",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "command",
-            "columnName": "command",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -1159,7 +1165,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d10f789b1f7ce262b9834f7fc789e5e6\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7fb828bac233cca307d917a24ea4ff08\")"
     ]
   }
 }

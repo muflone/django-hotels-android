@@ -28,10 +28,10 @@ public class CommandShortcutIcon extends CommandBase {
         super.execute();
         try {
             Utility.createShortcutIcon(this.activity,
-                    this.command.type.command.getString("title"),
-                    this.command.type.command.getInt("width"),
-                    this.command.type.command.getInt("height"),
-                    this.command.type.command.getString("icon"),
+                    this.command.command.getString("title"),
+                    this.command.command.getInt("width"),
+                    this.command.command.getInt("height"),
+                    this.command.command.getString("icon"),
                     LoaderActivity.class);
         } catch (JSONException exception) {
             exception.printStackTrace();

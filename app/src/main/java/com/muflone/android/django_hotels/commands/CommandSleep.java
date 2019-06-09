@@ -23,7 +23,7 @@ public class CommandSleep extends CommandBase {
     public void execute() {
         super.execute();
         try {
-            Utility.sleep(this.command.type.command.getInt("duration"));
+            Utility.sleep(this.command.command.getInt("duration"));
         } catch (JSONException exception) {
             exception.printStackTrace();
         }
