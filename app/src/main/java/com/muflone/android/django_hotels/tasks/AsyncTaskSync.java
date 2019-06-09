@@ -417,8 +417,10 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
             } catch (InvalidServerStatusException exception) {
                 result.exception = exception;
             } catch (JSONException exception) {
+                exception.printStackTrace();
                 result.exception = new InvalidResponseException();
             } catch (ParseException exception) {
+                exception.printStackTrace();
                 result.exception = new InvalidResponseException();
             } catch (InvalidResponseException exception) {
                 result.exception = exception;
