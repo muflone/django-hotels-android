@@ -56,6 +56,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
@@ -376,11 +377,11 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                             serviceActivity.serviceQty));
                     throw new RetransmittedActivityException(
                             String.format(this.context.get().getString(R.string.sync_error_retransmitted_quantity),
-                                    singleton.apiData.contractsMap.get(serviceActivity.contractId).employee.firstName,
-                                    singleton.apiData.contractsMap.get(serviceActivity.contractId).employee.lastName,
-                                    singleton.apiData.roomsStructureMap.get(serviceActivity.roomId).name,
-                                    singleton.apiData.roomsBuildingMap.get(serviceActivity.roomId).name,
-                                    singleton.apiData.roomsMap.get(serviceActivity.roomId).name,
+                                    Objects.requireNonNull(singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.firstName,
+                                    Objects.requireNonNull(singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.lastName,
+                                    Objects.requireNonNull(singleton.apiData.roomsStructureMap.get(serviceActivity.roomId)).name,
+                                    Objects.requireNonNull(singleton.apiData.roomsBuildingMap.get(serviceActivity.roomId)).name,
+                                    Objects.requireNonNull(singleton.apiData.roomsMap.get(serviceActivity.roomId)).name,
                                     new SimpleDateFormat("yyyy-MM-dd").format(serviceActivity.date),
                                     serviceActivity.serviceQty
                             ));
@@ -391,11 +392,11 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                             serviceActivity.description));
                     throw new RetransmittedActivityException(
                             String.format(this.context.get().getString(R.string.sync_error_retransmitted_description),
-                                    singleton.apiData.contractsMap.get(serviceActivity.contractId).employee.firstName,
-                                    singleton.apiData.contractsMap.get(serviceActivity.contractId).employee.lastName,
-                                    singleton.apiData.roomsStructureMap.get(serviceActivity.roomId).name,
-                                    singleton.apiData.roomsBuildingMap.get(serviceActivity.roomId).name,
-                                    singleton.apiData.roomsMap.get(serviceActivity.roomId).name,
+                                    Objects.requireNonNull(singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.firstName,
+                                    Objects.requireNonNull(singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.lastName,
+                                    Objects.requireNonNull(singleton.apiData.roomsStructureMap.get(serviceActivity.roomId)).name,
+                                    Objects.requireNonNull(singleton.apiData.roomsBuildingMap.get(serviceActivity.roomId)).name,
+                                    Objects.requireNonNull(singleton.apiData.roomsMap.get(serviceActivity.roomId)).name,
                                     new SimpleDateFormat("yyyy-MM-dd").format(serviceActivity.date),
                                     serviceActivity.description
                             ));
