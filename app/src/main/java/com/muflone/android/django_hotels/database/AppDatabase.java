@@ -10,6 +10,7 @@ import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
+import com.muflone.android.django_hotels.database.dao.CommandDao;
 import com.muflone.android.django_hotels.database.dao.CommandTypeDao;
 import com.muflone.android.django_hotels.database.dao.CompanyDao;
 import com.muflone.android.django_hotels.database.dao.ContractBuildingsDao;
@@ -29,6 +30,7 @@ import com.muflone.android.django_hotels.database.dao.TimestampDao;
 import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Brand;
 import com.muflone.android.django_hotels.database.models.Building;
+import com.muflone.android.django_hotels.database.models.Command;
 import com.muflone.android.django_hotels.database.models.CommandType;
 import com.muflone.android.django_hotels.database.models.Company;
 import com.muflone.android.django_hotels.database.models.Contract;
@@ -50,7 +52,7 @@ import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.tasks.AsyncTaskLoadDatabase;
 import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
 
-@Database(entities = {Brand.class, Building.class, CommandType.class, Company.class,
+@Database(entities = {Brand.class, Building.class, Command.class, CommandType.class, Company.class,
                       Contract.class, ContractBuildings.class,
                       ContractType.class, Country.class, Employee.class, JobType.class,
                       Location.class, Region.class, Room.class, Service.class,
@@ -63,6 +65,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract BrandDao brandDao();
     public abstract BuildingDao buildingDao();
+    public abstract CommandDao commandDao();
     public abstract CommandTypeDao commandTypeDao();
     public abstract CompanyDao companyDao();
     public abstract ContractDao contractDao();

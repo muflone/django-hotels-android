@@ -18,6 +18,7 @@ import com.muflone.android.django_hotels.api.exceptions.RetransmittedActivityExc
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
+import com.muflone.android.django_hotels.database.dao.CommandDao;
 import com.muflone.android.django_hotels.database.dao.CommandTypeDao;
 import com.muflone.android.django_hotels.database.dao.CompanyDao;
 import com.muflone.android.django_hotels.database.dao.ContractBuildingsDao;
@@ -34,6 +35,7 @@ import com.muflone.android.django_hotels.database.dao.StructureDao;
 import com.muflone.android.django_hotels.database.dao.TabletSettingDao;
 import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Building;
+import com.muflone.android.django_hotels.database.models.Command;
 import com.muflone.android.django_hotels.database.models.CommandType;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.ContractBuildings;
@@ -414,6 +416,12 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     CommandType objCommandType = new CommandType(jsonCommandTypes.getJSONObject(key));
                     result.commandTypesMap.put(objCommandType.id, objCommandType);
                 }
+                // Loop over every command
+                JSONArray jsonCommands = jsonRoot.getJSONArray("commands");
+                for (int i = 0; i < jsonCommands.length(); i++) {
+                    Command objCommand = new Command(jsonCommands.getJSONObject(i));
+                    result.commandsMap.put(objCommand.id, objCommand);
+                }
             } catch (InvalidServerStatusException exception) {
                 result.exception = exception;
             } catch (JSONException exception) {
@@ -435,6 +443,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private void saveToDatabase(ApiData data) {
         BrandDao brandDao = this.database.brandDao();
         BuildingDao buildingDao = this.database.buildingDao();
+        CommandDao commandDao = this.database.commandDao();
         CommandTypeDao commandTypeDao = this.database.commandTypeDao();
         CompanyDao companyDao = this.database.companyDao();
         ContractDao contractDao = this.database.contractDao();
@@ -452,6 +461,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         TimestampDirectionDao timestampDirectionDao = this.database.timestampDirectionDao();
 
         // Delete previous data
+        commandDao.truncate();
         commandTypeDao.truncate();
         tabletSettingDao.truncate();
         roomDao.truncate();
@@ -516,6 +526,10 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         // Save data from command types
         for (CommandType commandType : data.commandTypesMap.values()) {
             commandTypeDao.insert(commandType);
+        }
+        // Save data from commands
+        for (Command command : data.commandsMap.values()) {
+            commandDao.insert(command);
         }
     }
 

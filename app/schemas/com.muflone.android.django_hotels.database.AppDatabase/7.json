@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "0ee0997ab7a2066443bca866b1444c79",
+    "identityHash": "d10f789b1f7ce262b9834f7fc789e5e6",
     "entities": [
       {
         "tableName": "brands",
@@ -101,6 +101,59 @@
             "onUpdate": "NO ACTION",
             "columns": [
               "location_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "commands",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `type_id` TEXT, `context` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`type_id`) REFERENCES `command_types`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "typeId",
+            "columnName": "type_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "context",
+            "columnName": "context",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_commands_type_id",
+            "unique": false,
+            "columnNames": [
+              "type_id"
+            ],
+            "createSql": "CREATE  INDEX `index_commands_type_id` ON `${TABLE_NAME}` (`type_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "command_types",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "type_id"
             ],
             "referencedColumns": [
               "id"
@@ -1106,7 +1159,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0ee0997ab7a2066443bca866b1444c79\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d10f789b1f7ce262b9834f7fc789e5e6\")"
     ]
   }
 }
