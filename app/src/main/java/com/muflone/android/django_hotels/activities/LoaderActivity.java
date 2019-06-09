@@ -12,6 +12,7 @@ import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
+import com.muflone.android.django_hotels.commands.CommandFactory;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
@@ -33,6 +34,8 @@ public class LoaderActivity extends AppCompatActivity {
         this.singleton.settings = new Settings(this);
         this.singleton.api = new Api();
         this.singleton.selectedDate = Utility.getCurrentDate();
+        // Prepares CommandFactory for executing commands
+        this.singleton.commandFactory = new CommandFactory();
         // Load UI
         this.loadUI();
         this.textViewAppName.setText(String.format(Locale.ROOT, "%s %s",
