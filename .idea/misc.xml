@@ -166,6 +166,9 @@
     <pattern value="com.muflone.android.django_hotels.commands.CommandToast" />
     <pattern value="com.muflone.android.django_hotels.commands.CommandToast" method="CommandToast" />
     <pattern value="com.muflone.android.django_hotels.commands.CommandToast" method="execute" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandSnackBar" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandSnackBar" method="CommandSnackBar" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandSnackBar" method="execute" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
