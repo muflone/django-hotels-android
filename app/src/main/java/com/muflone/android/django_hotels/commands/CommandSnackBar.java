@@ -24,15 +24,17 @@ public class CommandSnackBar extends CommandBase {
     @Override
     public void execute() {
         super.execute();
-        try {
-            NotifyMessage.snackbar(this.context,
-                    this.activity.getWindow().getDecorView(),
-                    this.command.type.command.getString("message"),
-                    this.command.type.command.getString("action"),
-                    this.command.type.command.getInt("duration")
-                    );
-        } catch (JSONException exception) {
-            exception.printStackTrace();
+        if (this.activity != null) {
+            try {
+                NotifyMessage.snackbar(this.context,
+                        this.activity.getWindow().getDecorView(),
+                        this.command.type.command.getString("message"),
+                        this.command.type.command.getString("action"),
+                        this.command.type.command.getInt("duration")
+                );
+            } catch (JSONException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 }
