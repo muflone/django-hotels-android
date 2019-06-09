@@ -144,6 +144,13 @@
     <pattern value="com.muflone.android.django_hotels.database.models.Structure" method="compareTo" />
     <pattern value="com.muflone.android.django_hotels.database.models.Service" />
     <pattern value="com.muflone.android.django_hotels.database.models.Structure" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CommandTypeDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CommandTypeDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CommandTypeDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CommandTypeDao" method="findById" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CommandTypeDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CommandTypeDao" method="listAll" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CommandTypeDao" method="update" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

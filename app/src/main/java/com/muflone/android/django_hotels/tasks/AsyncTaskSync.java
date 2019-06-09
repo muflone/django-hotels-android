@@ -18,6 +18,7 @@ import com.muflone.android.django_hotels.api.exceptions.RetransmittedActivityExc
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
+import com.muflone.android.django_hotels.database.dao.CommandTypeDao;
 import com.muflone.android.django_hotels.database.dao.CompanyDao;
 import com.muflone.android.django_hotels.database.dao.ContractBuildingsDao;
 import com.muflone.android.django_hotels.database.dao.ContractDao;
@@ -33,6 +34,7 @@ import com.muflone.android.django_hotels.database.dao.StructureDao;
 import com.muflone.android.django_hotels.database.dao.TabletSettingDao;
 import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Building;
+import com.muflone.android.django_hotels.database.models.CommandType;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.ContractBuildings;
 import com.muflone.android.django_hotels.database.models.Room;
@@ -359,6 +361,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
 
     private ApiData requestApiGet() {
         ApiData result = new ApiData();
+        Iterator<String> jsonKeys;
         // Get data from the server
         JSONObject jsonRoot = this.api.getJSONObject(String.format("get/%s/%s/",
                 this.api.settings.getTabletID(),
@@ -369,9 +372,9 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 this.checkStatusResponse(jsonRoot);
                 // Loop over every structure
                 JSONObject jsonStructures = jsonRoot.getJSONObject("structures");
-                Iterator<?> jsonKeys = jsonStructures.keys();
+                jsonKeys = jsonStructures.keys();
                 while (jsonKeys.hasNext()) {
-                    String key = (String) jsonKeys.next();
+                    String key = jsonKeys.next();
                     Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
                     result.structuresMap.put(objStructure.id, objStructure);
                 }
@@ -403,6 +406,14 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     TabletSetting tabletSetting = new TabletSetting(jsonSettings.getJSONObject(i));
                     result.tabletSettingsMap.put(tabletSetting.name, tabletSetting);
                 }
+                // Loop over every command type
+                JSONObject jsonCommandTypes = jsonRoot.getJSONObject("command_types");
+                jsonKeys = jsonCommandTypes.keys();
+                while (jsonKeys.hasNext()) {
+                    String key = jsonKeys.next();
+                    CommandType objCommandType = new CommandType(jsonCommandTypes.getJSONObject(key));
+                    result.commandTypesMap.put(objCommandType.id, objCommandType);
+                }
             } catch (InvalidServerStatusException exception) {
                 result.exception = exception;
             } catch (JSONException exception) {
@@ -422,6 +433,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private void saveToDatabase(ApiData data) {
         BrandDao brandDao = this.database.brandDao();
         BuildingDao buildingDao = this.database.buildingDao();
+        CommandTypeDao commandTypeDao = this.database.commandTypeDao();
         CompanyDao companyDao = this.database.companyDao();
         ContractDao contractDao = this.database.contractDao();
         ContractBuildingsDao contractBuildingsDao = this.database.contractBuildingsDao();
@@ -453,6 +465,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         brandDao.truncate();
         serviceDao.truncate();
         timestampDirectionDao.truncate();
+        commandTypeDao.truncate();
 
         // Save data from structures
         for (Structure structure : data.structuresMap.values()) {
@@ -497,6 +510,10 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         // Save data for tablet settings
         for (TabletSetting tabletSetting : data.tabletSettingsMap.values()) {
             tabletSettingDao.insert(tabletSetting);
+        }
+        // Save data from command types
+        for (CommandType commandType : data.commandTypesMap.values()) {
+            commandTypeDao.insert(commandType);
         }
     }
 
