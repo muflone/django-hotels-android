@@ -178,6 +178,9 @@
     <pattern value="com.muflone.android.django_hotels.commands.CommandLog" />
     <pattern value="com.muflone.android.django_hotels.commands.CommandLog" method="CommandLog" />
     <pattern value="com.muflone.android.django_hotels.commands.CommandLog" method="execute" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandPreference" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandPreference" method="CommandPreference" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandPreference" method="execute" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
