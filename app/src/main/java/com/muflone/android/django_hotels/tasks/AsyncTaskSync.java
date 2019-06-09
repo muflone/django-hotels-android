@@ -244,68 +244,6 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         return result;
     }
 
-    private ApiData requestApiGet() {
-        ApiData result = new ApiData();
-        // Get data from the server
-        JSONObject jsonRoot = this.api.getJSONObject(String.format("get/%s/%s/",
-                this.api.settings.getTabletID(),
-                this.api.getCurrentTokenCode()));
-        if (jsonRoot != null) {
-            try {
-                // Check the status node for successful reads
-                this.checkStatusResponse(jsonRoot);
-                // Loop over every structure
-                JSONObject jsonStructures = jsonRoot.getJSONObject("structures");
-                Iterator<?> jsonKeys = jsonStructures.keys();
-                while (jsonKeys.hasNext()) {
-                    String key = (String) jsonKeys.next();
-                    Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
-                    result.structuresMap.put(objStructure.id, objStructure);
-                }
-                // Loop over every contract
-                JSONArray jsonContracts = jsonRoot.getJSONArray("contracts");
-                for (int i = 0; i < jsonContracts.length(); i++) {
-                    Contract contract = new Contract(jsonContracts.getJSONObject(i));
-                    result.contractsMap.put(contract.id, contract);
-                }
-                // Loop over every service
-                JSONArray jsonServices = jsonRoot.getJSONArray("services");
-                for (int i = 0; i < jsonServices.length(); i++) {
-                    Service service = new Service(jsonServices.getJSONObject(i));
-                    if (service.extra_service) {
-                        result.serviceExtraMap.put(service.id, service);
-                    } else {
-                        result.serviceMap.put(service.id, service);
-                    }
-                }
-                // Loop over every timestamp direction
-                JSONArray jsonTimestampDirections = jsonRoot.getJSONArray("timestamp_directions");
-                for (int i = 0; i < jsonTimestampDirections.length(); i++) {
-                    TimestampDirection timestampDirection = new TimestampDirection(jsonTimestampDirections.getJSONObject(i));
-                    result.timestampDirectionsMap.put(timestampDirection.id, timestampDirection);
-                }
-                // Loop over every tablet settings
-                JSONArray jsonSettings = jsonRoot.getJSONArray("settings");
-                for (int i = 0; i < jsonSettings.length(); i++) {
-                    TabletSetting tabletSetting = new TabletSetting(jsonSettings.getJSONObject(i));
-                    result.tabletSettingsMap.put(tabletSetting.name, tabletSetting);
-                }
-            } catch (InvalidServerStatusException exception) {
-                result.exception = exception;
-            } catch (JSONException exception) {
-                result.exception = new InvalidResponseException();
-            } catch (ParseException exception) {
-                result.exception = new InvalidResponseException();
-            } catch (InvalidResponseException exception) {
-                result.exception = exception;
-            }
-        } else {
-            // Unable to download data from the server
-            result.exception = new NoDownloadException();
-        }
-        return result;
-    }
-
     private ApiData requestApiPutTimestamp(Timestamp timestamp) {
         ApiData result = new ApiData();
         JSONObject jsonRoot = null;
@@ -410,6 +348,68 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
             } catch (InvalidResponseException exception) {
                 result.exception = exception;
             } catch (RetransmittedActivityException exception) {
+                result.exception = exception;
+            }
+        } else {
+            // Unable to download data from the server
+            result.exception = new NoDownloadException();
+        }
+        return result;
+    }
+
+    private ApiData requestApiGet() {
+        ApiData result = new ApiData();
+        // Get data from the server
+        JSONObject jsonRoot = this.api.getJSONObject(String.format("get/%s/%s/",
+                this.api.settings.getTabletID(),
+                this.api.getCurrentTokenCode()));
+        if (jsonRoot != null) {
+            try {
+                // Check the status node for successful reads
+                this.checkStatusResponse(jsonRoot);
+                // Loop over every structure
+                JSONObject jsonStructures = jsonRoot.getJSONObject("structures");
+                Iterator<?> jsonKeys = jsonStructures.keys();
+                while (jsonKeys.hasNext()) {
+                    String key = (String) jsonKeys.next();
+                    Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
+                    result.structuresMap.put(objStructure.id, objStructure);
+                }
+                // Loop over every contract
+                JSONArray jsonContracts = jsonRoot.getJSONArray("contracts");
+                for (int i = 0; i < jsonContracts.length(); i++) {
+                    Contract contract = new Contract(jsonContracts.getJSONObject(i));
+                    result.contractsMap.put(contract.id, contract);
+                }
+                // Loop over every service
+                JSONArray jsonServices = jsonRoot.getJSONArray("services");
+                for (int i = 0; i < jsonServices.length(); i++) {
+                    Service service = new Service(jsonServices.getJSONObject(i));
+                    if (service.extra_service) {
+                        result.serviceExtraMap.put(service.id, service);
+                    } else {
+                        result.serviceMap.put(service.id, service);
+                    }
+                }
+                // Loop over every timestamp direction
+                JSONArray jsonTimestampDirections = jsonRoot.getJSONArray("timestamp_directions");
+                for (int i = 0; i < jsonTimestampDirections.length(); i++) {
+                    TimestampDirection timestampDirection = new TimestampDirection(jsonTimestampDirections.getJSONObject(i));
+                    result.timestampDirectionsMap.put(timestampDirection.id, timestampDirection);
+                }
+                // Loop over every tablet settings
+                JSONArray jsonSettings = jsonRoot.getJSONArray("settings");
+                for (int i = 0; i < jsonSettings.length(); i++) {
+                    TabletSetting tabletSetting = new TabletSetting(jsonSettings.getJSONObject(i));
+                    result.tabletSettingsMap.put(tabletSetting.name, tabletSetting);
+                }
+            } catch (InvalidServerStatusException exception) {
+                result.exception = exception;
+            } catch (JSONException exception) {
+                result.exception = new InvalidResponseException();
+            } catch (ParseException exception) {
+                result.exception = new InvalidResponseException();
+            } catch (InvalidResponseException exception) {
                 result.exception = exception;
             }
         } else {
