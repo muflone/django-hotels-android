@@ -19,9 +19,9 @@ public class CommandType {
     public final String type;
 
     @ColumnInfo(name = "command")
-    public final String command;
+    public final JSONObject command;
 
-    public CommandType(@NotNull String id, String type, String command) {
+    public CommandType(@NotNull String id, String type, JSONObject command) {
         this.id = id;
         this.type = type;
         this.command = command;
@@ -30,15 +30,6 @@ public class CommandType {
     public CommandType(JSONObject jsonObject) throws JSONException {
         this(jsonObject.getString("id"),
                 jsonObject.getString("type"),
-                jsonObject.getString("command"));
-    }
-
-    public JSONObject getJsonCommand() {
-        // Return a JSONObject from command
-        try {
-            return new JSONObject(this.command);
-        } catch (JSONException e) {
-            return null;
-        }
+                jsonObject.getJSONObject("command"));
     }
 }
