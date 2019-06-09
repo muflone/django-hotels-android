@@ -8,6 +8,8 @@ import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
+import com.muflone.android.django_hotels.database.dao.CommandDao;
+import com.muflone.android.django_hotels.database.dao.CommandTypeDao;
 import com.muflone.android.django_hotels.database.dao.CompanyDao;
 import com.muflone.android.django_hotels.database.dao.ContractBuildingsDao;
 import com.muflone.android.django_hotels.database.dao.ContractDao;
@@ -23,6 +25,8 @@ import com.muflone.android.django_hotels.database.dao.StructureDao;
 import com.muflone.android.django_hotels.database.dao.TabletSettingDao;
 import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Building;
+import com.muflone.android.django_hotels.database.models.Command;
+import com.muflone.android.django_hotels.database.models.CommandType;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.Room;
@@ -60,6 +64,8 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
         }
         BrandDao brandDao = database.brandDao();
         BuildingDao buildingDao = database.buildingDao();
+        CommandDao commandDao = database.commandDao();
+        CommandTypeDao commandTypeDao = database.commandTypeDao();
         CompanyDao companyDao = database.companyDao();
         ContractDao contractDao = database.contractDao();
         ContractBuildingsDao contractBuildingsDao = database.contractBuildingsDao();
@@ -146,6 +152,15 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
         // Load TabletSettings
         for(TabletSetting tabletSetting : tabletSettingDao.listAll()) {
             data.tabletSettingsMap.put(tabletSetting.name, tabletSetting);
+        }
+        // Load Command Types
+        for(CommandType commandType : commandTypeDao.listAll()) {
+            data.commandTypesMap.put(commandType.id, commandType);
+        }
+        // Load Commands
+        for(Command command : commandDao.listAll()) {
+            command.type = data.commandTypesMap.get(command.typeId);
+            data.commandsMap.put(command.id, command);
         }
         return new AsyncTaskResult(data, data.exception);
     }
