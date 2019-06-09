@@ -46,7 +46,6 @@ public class SyncFragment extends Fragment {
     private ImageView errorView;
     private final List<String> progressPhases = new ArrayList<>();
     private final String TAG = getClass().getSimpleName();
-    private static final int SYNC_SLEEP = 400;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -179,11 +178,6 @@ public class SyncFragment extends Fragment {
 
                     @Override
                     public void onProgress(int step, int total) {
-                        try {
-                            Thread.sleep(SYNC_SLEEP);
-                        } catch (InterruptedException exception) {
-                            exception.printStackTrace();
-                        }
                         // Execute SYNC PROGRESS commands
                         singleton.commandFactory.executeCommands(
                                 getActivity(),
