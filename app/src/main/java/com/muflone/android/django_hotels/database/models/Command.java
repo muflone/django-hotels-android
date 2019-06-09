@@ -11,23 +11,17 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@Entity(tableName = "commands",
-        foreignKeys = {
-            @ForeignKey(entity = CommandType.class,
-                        parentColumns = "id",
-                        childColumns = "type_id",
-                        onDelete = ForeignKey.RESTRICT)
-        }
-)
+@Entity(tableName = "commands")
 public class Command {
     @PrimaryKey
     public final Long id;
 
-    @Ignore
-    public CommandType type;
+    @ColumnInfo(name = "name")
+    @NonNull
+    public final String name;
 
-    @ColumnInfo(name = "type_id", index = true)
-    public final String typeId;
+    @ColumnInfo(name = "type")
+    public final String type;
 
     @ColumnInfo(name = "context")
     @NonNull
@@ -36,15 +30,17 @@ public class Command {
     @ColumnInfo(name = "command")
     public final JSONObject command;
 
-    public Command(Long id, String typeId, @NotNull String context, JSONObject command) {
+    public Command(Long id, String name, String type, @NotNull String context, JSONObject command) {
         this.id = id;
-        this.typeId = typeId;
+        this.name = name;
+        this.type = type;
         this.context = context;
         this.command = command;
     }
 
     public Command(JSONObject jsonObject) throws JSONException {
         this(jsonObject.getLong("id"),
+                jsonObject.getString("name"),
                 jsonObject.getString("command_type"),
                 jsonObject.getString("context"),
                 jsonObject.getJSONObject("command"));

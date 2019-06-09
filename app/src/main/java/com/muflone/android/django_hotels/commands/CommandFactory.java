@@ -21,11 +21,11 @@ public class CommandFactory {
             // Process only the commands in the current context
             if (command.context.equals(contextType)) {
                 // Skip attempts to execute commands of the factory type
-                if (! command.type.type.equals(this.getClass().getSimpleName())) {
+                if (! command.type.equals(this.getClass().getSimpleName())) {
                     try {
                         Class<?> commandClass = Class.forName(String.format("%s.%s",
                                 Objects.requireNonNull(this.getClass().getPackage()).getName(),
-                                command.type.type));
+                                command.type));
                         Constructor<?> commandConstructor = commandClass.getConstructor(
                                 Activity.class, Context.class, Command.class);
                         CommandBase commandInstance = (CommandBase) commandConstructor.newInstance(
@@ -34,10 +34,10 @@ public class CommandFactory {
                         commandInstance.execute();
                         commandInstance.after();
                     } catch (ClassNotFoundException exception) {
-                        Log.w(this.TAG, String.format("Command class %s not found", command.type.type));
+                        Log.w(this.TAG, String.format("Command class %s not found", command.type));
                         exception.printStackTrace();
                     } catch (NoSuchMethodException exception) {
-                        Log.w(this.TAG, String.format("Missing constructor for class %s", command.type.type));
+                        Log.w(this.TAG, String.format("Missing constructor for class %s", command.type));
                         exception.printStackTrace();
                     } catch (IllegalAccessException exception) {
                         exception.printStackTrace();

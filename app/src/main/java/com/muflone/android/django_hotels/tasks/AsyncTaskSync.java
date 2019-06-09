@@ -19,7 +19,6 @@ import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
 import com.muflone.android.django_hotels.database.dao.CommandDao;
-import com.muflone.android.django_hotels.database.dao.CommandTypeDao;
 import com.muflone.android.django_hotels.database.dao.CompanyDao;
 import com.muflone.android.django_hotels.database.dao.ContractBuildingsDao;
 import com.muflone.android.django_hotels.database.dao.ContractDao;
@@ -36,7 +35,6 @@ import com.muflone.android.django_hotels.database.dao.TabletSettingDao;
 import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Command;
-import com.muflone.android.django_hotels.database.models.CommandType;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.ContractBuildings;
 import com.muflone.android.django_hotels.database.models.Room;
@@ -408,14 +406,6 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     TabletSetting tabletSetting = new TabletSetting(jsonSettings.getJSONObject(i));
                     result.tabletSettingsMap.put(tabletSetting.name, tabletSetting);
                 }
-                // Loop over every command type
-                JSONObject jsonCommandTypes = jsonRoot.getJSONObject("command_types");
-                jsonKeys = jsonCommandTypes.keys();
-                while (jsonKeys.hasNext()) {
-                    String key = jsonKeys.next();
-                    CommandType objCommandType = new CommandType(jsonCommandTypes.getJSONObject(key));
-                    result.commandTypesMap.put(objCommandType.id, objCommandType);
-                }
                 // Loop over every command
                 JSONArray jsonCommands = jsonRoot.getJSONArray("commands");
                 for (int i = 0; i < jsonCommands.length(); i++) {
@@ -444,7 +434,6 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         BrandDao brandDao = this.database.brandDao();
         BuildingDao buildingDao = this.database.buildingDao();
         CommandDao commandDao = this.database.commandDao();
-        CommandTypeDao commandTypeDao = this.database.commandTypeDao();
         CompanyDao companyDao = this.database.companyDao();
         ContractDao contractDao = this.database.contractDao();
         ContractBuildingsDao contractBuildingsDao = this.database.contractBuildingsDao();
@@ -462,7 +451,6 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
 
         // Delete previous data
         commandDao.truncate();
-        commandTypeDao.truncate();
         tabletSettingDao.truncate();
         roomDao.truncate();
         contractBuildingsDao.truncate();
@@ -522,10 +510,6 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         // Save data for tablet settings
         for (TabletSetting tabletSetting : data.tabletSettingsMap.values()) {
             tabletSettingDao.insert(tabletSetting);
-        }
-        // Save data from command types
-        for (CommandType commandType : data.commandTypesMap.values()) {
-            commandTypeDao.insert(commandType);
         }
         // Save data from commands
         for (Command command : data.commandsMap.values()) {

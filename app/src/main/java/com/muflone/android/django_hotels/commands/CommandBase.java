@@ -16,21 +16,21 @@ public class CommandBase {
         this.activity = activity;
         this.context = context;
         this.command = command;
-        Log.d(this.getClass().getSimpleName(), String.format("Initializing command \"%s\"", command.type.id));
+        Log.d(this.getClass().getSimpleName(), String.format("Initializing command \"%s\"", command.name));
     }
 
     public void before() {
         // Log before the execution
-        Log.d(this.getClass().getSimpleName(), String.format("Starting execution for \"%s\"", command.type.id));
+        Log.d(this.getClass().getSimpleName(), String.format("Starting execution for \"%s\"", command.name));
     }
 
     public void execute() {
         // Log the execution
-        Log.d(this.getClass().getSimpleName(), String.format("Executing command \"%s\"", command.type.id));
+        Log.d(this.getClass().getSimpleName(), String.format("Executing command \"%s\"", command.name));
     }
 
     public void after() {
         // Log after the execution
-        Log.d(this.getClass().getSimpleName(), String.format("Execution completed for \"%s\"", command.type.id));
+        Log.d(this.getClass().getSimpleName(), String.format("Execution completed for \"%s\"", command.name));
     }
 }

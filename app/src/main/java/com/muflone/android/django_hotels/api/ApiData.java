@@ -6,7 +6,6 @@ import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.database.models.Brand;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Command;
-import com.muflone.android.django_hotels.database.models.CommandType;
 import com.muflone.android.django_hotels.database.models.Company;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.ContractType;
@@ -26,7 +25,6 @@ public class ApiData {
     public final HashMap<Long, Brand> brandsMap;
     public final HashMap<Long, Building> buildingsMap;
     public final HashMap<Long, Command> commandsMap;
-    public final HashMap<String, CommandType> commandTypesMap;
     public final HashMap<Long, Company> companiesMap;
     public final HashMap<Long, Contract> contractsMap;
     public final HashMap<String, Contract> contractsGuidMap;
@@ -51,7 +49,6 @@ public class ApiData {
         this.brandsMap = new HashMap<>();
         this.buildingsMap = new HashMap<>();
         this.commandsMap = new HashMap<>();
-        this.commandTypesMap = new HashMap<>();
         this.companiesMap = new HashMap<>();
         this.contractsMap = new HashMap<>();
         this.contractsGuidMap = new HashMap<>();
