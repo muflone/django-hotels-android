@@ -15,7 +15,6 @@ import com.muflone.android.django_hotels.api.exceptions.InvalidServerStatusExcep
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
 import com.muflone.android.django_hotels.api.exceptions.RetransmittedActivityException;
-import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
 import com.muflone.android.django_hotels.database.dao.CommandDao;
@@ -66,17 +65,15 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
 
     private final Api api;
     private final AsyncTaskListener callback;
-    private final AppDatabase database;
     private final int totalSteps;
     private final Singleton singleton = Singleton.getInstance();
     private final WeakReference<Context> context;
     private int currentStep;
 
-    public AsyncTaskSync(Context context, Api api, AppDatabase database, int totalSteps, AsyncTaskListener callback) {
+    public AsyncTaskSync(Context context, Api api, int totalSteps, AsyncTaskListener callback) {
         this.context = new WeakReference<>(context);
         this.api = api;
         this.callback = callback;
-        this.database = database;
         this.currentStep = 0;
         this.totalSteps = totalSteps;
     }
@@ -97,13 +94,13 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
             if (data.exception == null) {
                 // Transmit any incomplete timestamp (UPLOAD)
                 this.updateProgress();
-                List<Timestamp> timestampsList = this.database.timestampDao().listByUntrasmitted();
+                List<Timestamp> timestampsList = this.singleton.database.timestampDao().listByUntrasmitted();
                 for (Timestamp timestamp : timestampsList) {
                     data = this.requestApiPutTimestamp(timestamp);
                     if (data.exception == null) {
                         // Update transmission date
                         timestamp.transmission = Utility.getCurrentDateTime();
-                        this.database.timestampDao().update(timestamp);
+                        this.singleton.database.timestampDao().update(timestamp);
                     } else {
                         // There were some errors during the timestamps transmissions
                         transmissionErrors = true;
@@ -111,12 +108,12 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 }
                 // Transmit any incomplete activity (UPLOAD)
                 this.updateProgress();
-                List<ServiceActivity> servicesActivityList = this.database.serviceActivityDao().listByUntrasmitted();
+                List<ServiceActivity> servicesActivityList = this.singleton.database.serviceActivityDao().listByUntrasmitted();
                 for (ServiceActivity serviceActivity : servicesActivityList) {
                     data = this.requestApiPutActivity(serviceActivity);
                     if (data.exception == null) {
                         serviceActivity.transmission = Utility.getCurrentDateTime();
-                        this.database.serviceActivityDao().update(serviceActivity);
+                        this.singleton.database.serviceActivityDao().update(serviceActivity);
                     } else {
                         // There were some errors during the timestamps transmissions
                         transmissionErrors = true;
@@ -431,23 +428,23 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     }
 
     private void saveToDatabase(ApiData data) {
-        BrandDao brandDao = this.database.brandDao();
-        BuildingDao buildingDao = this.database.buildingDao();
-        CommandDao commandDao = this.database.commandDao();
-        CompanyDao companyDao = this.database.companyDao();
-        ContractDao contractDao = this.database.contractDao();
-        ContractBuildingsDao contractBuildingsDao = this.database.contractBuildingsDao();
-        ContractTypeDao contractTypeDao = this.database.contractTypeDao();
-        JobTypeDao jobTypeDao = this.database.jobTypeDao();
-        CountryDao countryDao = this.database.countryDao();
-        EmployeeDao employeeDao = this.database.employeeDao();
-        LocationDao locationDao = this.database.locationDao();
-        RegionDao regionDao = this.database.regionDao();
-        RoomDao roomDao = this.database.roomDao();
-        ServiceDao serviceDao = this.database.serviceDao();
-        StructureDao structureDao = this.database.structureDao();
-        TabletSettingDao tabletSettingDao = this.database.tabletSettingDao();
-        TimestampDirectionDao timestampDirectionDao = this.database.timestampDirectionDao();
+        BrandDao brandDao = this.singleton.database.brandDao();
+        BuildingDao buildingDao = this.singleton.database.buildingDao();
+        CommandDao commandDao = this.singleton.database.commandDao();
+        CompanyDao companyDao = this.singleton.database.companyDao();
+        ContractDao contractDao = this.singleton.database.contractDao();
+        ContractBuildingsDao contractBuildingsDao = this.singleton.database.contractBuildingsDao();
+        ContractTypeDao contractTypeDao = this.singleton.database.contractTypeDao();
+        JobTypeDao jobTypeDao = this.singleton.database.jobTypeDao();
+        CountryDao countryDao = this.singleton.database.countryDao();
+        EmployeeDao employeeDao = this.singleton.database.employeeDao();
+        LocationDao locationDao = this.singleton.database.locationDao();
+        RegionDao regionDao = this.singleton.database.regionDao();
+        RoomDao roomDao = this.singleton.database.roomDao();
+        ServiceDao serviceDao = this.singleton.database.serviceDao();
+        StructureDao structureDao = this.singleton.database.structureDao();
+        TabletSettingDao tabletSettingDao = this.singleton.database.tabletSettingDao();
+        TimestampDirectionDao timestampDirectionDao = this.singleton.database.timestampDirectionDao();
 
         // Delete previous data
         commandDao.truncate();

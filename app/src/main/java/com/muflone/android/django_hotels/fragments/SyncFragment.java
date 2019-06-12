@@ -28,7 +28,6 @@ import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
-import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
 
 import java.util.ArrayList;
@@ -80,13 +79,12 @@ public class SyncFragment extends Fragment {
         AsyncTaskSync task = new AsyncTaskSync(
                 this.context,
                 singleton.api,
-                AppDatabase.getAppDatabase(this.context),
                 this.progressPhases.size(),
                 new AsyncTaskListener() {
                     @Override
                     public void onSuccess(AsyncTaskResult result) {
                         // Reload data from database
-                        AppDatabase.getAppDatabase(context).reload(context, new AsyncTaskListener() {
+                        singleton.database.reload(context, new AsyncTaskListener() {
                             @Override
                             public void onSuccess(AsyncTaskResult result) {
                                 // Complete synchronization only after the data was reloaded from DB

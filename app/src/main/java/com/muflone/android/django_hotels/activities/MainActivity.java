@@ -25,7 +25,6 @@ import com.muflone.android.django_hotels.FragmentLoader;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
-import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
 
@@ -181,7 +180,7 @@ public class MainActivity extends AppCompatActivity
                     this.getBaseContext(),
                     Constants.CONTEXT_APP_END);
             // Accept back button to close the activity
-            AppDatabase.destroyInstance();
+            singleton.database.destroyInstance();
             super.onBackPressed();
         }
     }

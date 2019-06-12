@@ -35,6 +35,7 @@ public class LoaderActivity extends AppCompatActivity {
         this.singleton.settings = new Settings(this);
         this.singleton.api = new Api();
         this.singleton.selectedDate = Utility.getCurrentDate();
+        this.singleton.openDatabase(this);
         // Prepares CommandFactory for executing commands
         this.singleton.commandFactory = new CommandFactory();
         // Load UI

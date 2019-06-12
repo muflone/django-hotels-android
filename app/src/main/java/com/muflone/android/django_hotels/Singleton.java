@@ -1,8 +1,11 @@
 package com.muflone.android.django_hotels;
 
+import android.content.Context;
+
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.commands.CommandFactory;
+import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Structure;
 
 import java.io.Serializable;
@@ -16,6 +19,7 @@ public class Singleton implements Serializable {
     public Date selectedDate;
     public Structure selectedStructure;
     public CommandFactory commandFactory;
+    public AppDatabase database;
 
     private Singleton() {
         // Prevent form the reflection api.
@@ -34,5 +38,9 @@ public class Singleton implements Serializable {
             }
         }
         return instance;
+    }
+
+    public void openDatabase(Context context) {
+        this.database = AppDatabase.getAppDatabase(context);
     }
 }
