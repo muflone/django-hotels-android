@@ -78,9 +78,9 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         this.navigationView.setNavigationItemSelectedListener(this);
         // Load preferences
-        if (singleton.settings.getTabletID().isEmpty() |
-                singleton.settings.getTabletKey().isEmpty()) {
-            String message = singleton.settings.getTabletID().isEmpty() ?
+        if (this.singleton.settings.getTabletID().isEmpty() |
+                this.singleton.settings.getTabletKey().isEmpty()) {
+            String message = this.singleton.settings.getTabletID().isEmpty() ?
                     this.getString(R.string.missing_tablet_id) :
                     this.getString(R.string.missing_tablet_key);
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity
                     this.getBaseContext(),
                     Constants.CONTEXT_APP_END);
             // Accept back button to close the activity
-            singleton.database.destroyInstance();
+            this.singleton.database.destroyInstance();
             super.onBackPressed();
         }
     }
@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 builder.setItems(structuresList.toArray(new String[0]), (dialog, position) -> {
                     // Get the selected structure and update the user interface
-                    singleton.selectedStructure = singleton.apiData.structuresMap.get(structureIdList.get(position));
+                    this.singleton.selectedStructure = this.singleton.apiData.structuresMap.get(structureIdList.get(position));
                     invalidateOptionsMenu();
                     dialog.dismiss();
                     // Reload fragment
@@ -280,13 +280,13 @@ public class MainActivity extends AppCompatActivity
             case R.id.toolButtonSetDate: {
                 // Change current date
                 Calendar calendar = Calendar.getInstance();
-                calendar.setTime(Singleton.getInstance().selectedDate);
+                calendar.setTime(this.singleton.selectedDate);
                 DatePickerDialog dialog = new DatePickerDialog(MainActivity.this,
                         (view, year, month, day) -> {
                             calendar.set(year, month, day);
                             toolButtonSetDate.setTitle("  " + new SimpleDateFormat(
                                     "yyyy-MM-dd").format(calendar.getTime()));
-                            singleton.selectedDate = calendar.getTime();
+                            this.singleton.selectedDate = calendar.getTime();
                             FragmentLoader.loadFragment(
                                     MainActivity.this,
                                     R.id.fragment_container,

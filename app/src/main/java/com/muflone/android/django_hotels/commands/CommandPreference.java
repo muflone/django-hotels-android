@@ -23,6 +23,9 @@ public class CommandPreference extends CommandBase {
      * key: the name of the preference
      * value: the value to assign (ignored for removal)
      */
+
+    private static final Singleton singleton = Singleton.getInstance();
+
     public CommandPreference(Activity activity, Context context, Command command) {
         super(activity, context, command);
     }
@@ -34,27 +37,27 @@ public class CommandPreference extends CommandBase {
             String preferenceKey = this.command.command.getString("key");
             switch (this.command.command.getString("type")) {
                 case "s":
-                    Singleton.getInstance().settings.setValue(preferenceKey,
+                    this.singleton.settings.setValue(preferenceKey,
                             this.command.command.getString("value"));
                     break;
                 case "i":
-                    Singleton.getInstance().settings.setValue(preferenceKey,
+                    this.singleton.settings.setValue(preferenceKey,
                             this.command.command.getInt("value"));
                     break;
                 case "l":
-                    Singleton.getInstance().settings.setValue(preferenceKey,
+                    this.singleton.settings.setValue(preferenceKey,
                             this.command.command.getLong("value"));
                     break;
                 case "b":
-                    Singleton.getInstance().settings.setValue(preferenceKey,
+                    this.singleton.settings.setValue(preferenceKey,
                             this.command.command.getBoolean("value"));
                     break;
                 case "f":
-                    Singleton.getInstance().settings.setValue(preferenceKey,
+                    this.singleton.settings.setValue(preferenceKey,
                             (float) this.command.command.getDouble("value"));
                     break;
                 case "u":
-                    Singleton.getInstance().settings.unset(preferenceKey);
+                    this.singleton.settings.unset(preferenceKey);
                     break;
             }
 

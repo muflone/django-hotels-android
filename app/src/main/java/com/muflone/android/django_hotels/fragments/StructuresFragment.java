@@ -96,7 +96,7 @@ public class StructuresFragment extends Fragment {
         this.employeesView.setAdapter(new ArrayAdapter<>(
                 this.context, android.R.layout.simple_list_item_activated_1, this.employeesList));
         this.employeesView.setOnItemClickListener(
-                (parent, view, position, id) -> loadEmployee(singleton.selectedStructure.employees.get(position)));
+                (parent, view, position, id) -> loadEmployee(this.singleton.selectedStructure.employees.get(position)));
         this.employeesView.setOnItemLongClickListener((parent, view, position, id) -> {
             // Show contextual menu for employee
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -115,7 +115,7 @@ public class StructuresFragment extends Fragment {
         });
 
         // Load the employees for the selected structure
-        if (singleton.selectedStructure != null) {
+        if (this.singleton.selectedStructure != null) {
             this.loadEmployees();
         }
 
@@ -179,7 +179,7 @@ public class StructuresFragment extends Fragment {
         this.serviceActivityTable.clear();
         // Initialize buildings groups to collapsed
         this.buildingsClosedStatusMap.clear();
-        for (Building building : singleton.selectedStructure.buildings) {
+        for (Building building : this.singleton.selectedStructure.buildings) {
             this.buildingsClosedStatusMap.put(building.name,
                     this.api.settings.getBuildingsInitiallyClosed());
             // Initialize empty already assigned rooms list (<Room ID><List of employees>)
@@ -230,7 +230,7 @@ public class StructuresFragment extends Fragment {
         for (ContractBuildings contractBuilding : employee.contractBuildings) {
             Building building = Objects.requireNonNull(this.apiData.buildingsMap.get(contractBuilding.buildingId));
             // Only show the buildings for the current structure
-            if (building.structureId == singleton.selectedStructure.id) {
+            if (building.structureId == this.singleton.selectedStructure.id) {
                 this.buildingsList.add(building.name);
                 List<RoomStatus> rooms = new ArrayList<>();
                 Service service;
@@ -293,13 +293,13 @@ public class StructuresFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             // Load employees for the selected structure
-            for (Employee employee : singleton.selectedStructure.employees) {
+            for (Employee employee : this.singleton.selectedStructure.employees) {
                 this.employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
                 // Reload services for contract
-                Contract contract = Objects.requireNonNull(singleton.apiData.contractsMap.get(
+                Contract contract = Objects.requireNonNull(this.singleton.apiData.contractsMap.get(
                         employee.contractBuildings.get(0).contractId));
-                for (ServiceActivity serviceActivity : singleton.database.serviceActivityDao().listByDateContract(
-                        singleton.selectedDate, contract.id)) {
+                for (ServiceActivity serviceActivity : this.singleton.database.serviceActivityDao().listByDateContract(
+                        this.singleton.selectedDate, contract.id)) {
                     this.serviceActivityTable.put(
                             serviceActivity.contractId,
                             serviceActivity.roomId,
@@ -313,10 +313,10 @@ public class StructuresFragment extends Fragment {
                 }
                 // Add employee status
                 this.employeesStatusList.add(new EmployeeStatus(contract,
-                        singleton.selectedDate,
-                        singleton.apiData.timestampDirectionsNotEnterExit,
-                        singleton.database.timestampDao().listByContractNotEnterExit(
-                                singleton.selectedDate, contract.id),
+                        this.singleton.selectedDate,
+                        this.singleton.apiData.timestampDirectionsNotEnterExit,
+                        this.singleton.database.timestampDao().listByContractNotEnterExit(
+                                this.singleton.selectedDate, contract.id),
                         this.employeesView.get().getContext()));
             }
             return null;
@@ -342,6 +342,7 @@ public class StructuresFragment extends Fragment {
         private final List<String> buildingsList;
         private final HashMap<String, List<RoomStatus>> roomsList;
         private final ApiData apiData;
+        private final Singleton singleton = Singleton.getInstance();
         private Drawable descriptionEnabledDrawable;
         private Drawable descriptionDisabledDrawable;
 
@@ -350,7 +351,7 @@ public class StructuresFragment extends Fragment {
             this.context = context;
             this.buildingsList = listDataHeader;
             this.roomsList = listChildData;
-            this.apiData = singleton.apiData;
+            this.apiData = this.singleton.apiData;
         }
 
         @Override
@@ -669,8 +670,8 @@ public class StructuresFragment extends Fragment {
         protected Void doInBackground(RoomStatus... params) {
             RoomStatus roomStatus = params[0];
             List<ServiceActivity> serviceActivityList =
-                    singleton.database.serviceActivityDao().listByDateContract(
-                            singleton.selectedDate,
+                    this.singleton.database.serviceActivityDao().listByDateContract(
+                            this.singleton.selectedDate,
                             roomStatus.contractId, roomStatus.roomId);
             ServiceActivity serviceActivity;
             if (serviceActivityList.size() > 0) {
@@ -680,23 +681,23 @@ public class StructuresFragment extends Fragment {
                     serviceActivity.serviceId = roomStatus.service.id;
                     serviceActivity.description = roomStatus.description;
                     serviceActivity.transmission = roomStatus.transmission;
-                    singleton.database.serviceActivityDao().update(serviceActivity);
+                    this.singleton.database.serviceActivityDao().update(serviceActivity);
                     serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
                             serviceActivity);
                 } else {
                     // Delete existing ServiceActivity
-                    singleton.database.serviceActivityDao().delete(serviceActivity);
+                    this.singleton.database.serviceActivityDao().delete(serviceActivity);
                     serviceActivityTable.remove(roomStatus.contractId, roomStatus.roomId);
                 }
             } else if (roomStatus.service != null) {
                 // Create new ServiceActivity
                 serviceActivity = new ServiceActivity(0,
-                        singleton.selectedDate,
+                        this.singleton.selectedDate,
                         roomStatus.contractId,
                         roomStatus.roomId,
                         roomStatus.service.id,
                         1, roomStatus.description, null);
-                singleton.database.serviceActivityDao().insert(serviceActivity);
+                this.singleton.database.serviceActivityDao().insert(serviceActivity);
                 serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
                         serviceActivity);
             }
@@ -748,10 +749,10 @@ public class StructuresFragment extends Fragment {
         @Override
         protected Void doInBackground(EmployeeStatus... params) {
             EmployeeStatus employeeStatus = params[0];
-            List<Timestamp> timestampsEmployee = singleton.database.timestampDao().listByContractNotEnterExit(
+            List<Timestamp> timestampsEmployee = this.singleton.database.timestampDao().listByContractNotEnterExit(
                     employeeStatus.date, employeeStatus.contract.id);
             // Delete any previous timestamp
-            singleton.database.timestampDao().delete(timestampsEmployee.toArray(new Timestamp[0]));
+            this.singleton.database.timestampDao().delete(timestampsEmployee.toArray(new Timestamp[0]));
             // Re-add every active timestamp
             timestampsEmployee.clear();
             for (int index = 0; index < employeeStatus.timestampDirections.size(); index++) {
@@ -761,7 +762,7 @@ public class StructuresFragment extends Fragment {
                             timestampDirection.id, employeeStatus.date,"", null));
                 }
             }
-            singleton.database.timestampDao().insert(timestampsEmployee.toArray(new Timestamp[0]));
+            this.singleton.database.timestampDao().insert(timestampsEmployee.toArray(new Timestamp[0]));
             return null;
         }
     }

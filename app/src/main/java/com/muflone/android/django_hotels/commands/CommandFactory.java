@@ -13,11 +13,12 @@ import java.util.Objects;
 
 public class CommandFactory {
     private final String TAG = getClass().getSimpleName();
+    private final Singleton singleton = Singleton.getInstance();
 
     public void executeCommands(Activity activity, Context context, String contextType) {
         Log.d(this.TAG, String.format("Processing commands for context %s", contextType));
         // Process every command for the current context
-        for (Command command : Singleton.getInstance().apiData.commandsMap.values()) {
+        for (Command command : this.singleton.apiData.commandsMap.values()) {
             // Process only the commands in the current context
             if (command.context.equals(contextType)) {
                 // Skip attempts to execute commands of the factory type

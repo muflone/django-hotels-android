@@ -143,7 +143,7 @@ public class Utility {
             }
 
             if (((listView.isGroupExpanded(index)) && (index != group))
-                    || ((!listView.isGroupExpanded(index)) && (index == group))) {
+                    || ((! listView.isGroupExpanded(index)) && (index == group))) {
                 int childrenCount = listAdapter.getChildrenCount(index);
                 if (standardHeight) {
                     // Use the same standard height for every item in the group

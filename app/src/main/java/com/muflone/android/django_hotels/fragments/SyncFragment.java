@@ -45,6 +45,7 @@ public class SyncFragment extends Fragment {
     private ImageView errorView;
     private final List<String> progressPhases = new ArrayList<>();
     private final String TAG = getClass().getSimpleName();
+    private final Singleton singleton = Singleton.getInstance();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -69,22 +70,21 @@ public class SyncFragment extends Fragment {
         this.progressPhases.add(this.context.getString(R.string.sync_step_completed));
         this.progressBar.setMax(this.progressPhases.size());
 
-        Singleton singleton = Singleton.getInstance();
         // Execute START SYNC commands
-        singleton.commandFactory.executeCommands(
+        this.singleton.commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
                 Constants.CONTEXT_START_SYNC);
         // Download data asynchronously from the server
         AsyncTaskSync task = new AsyncTaskSync(
                 this.context,
-                singleton.api,
+                this.singleton.api,
                 this.progressPhases.size(),
                 new AsyncTaskListener() {
                     @Override
                     public void onSuccess(AsyncTaskResult result) {
                         // Reload data from database
-                        singleton.database.reload(context, new AsyncTaskListener() {
+                        SyncFragment.this.singleton.database.reload(context, new AsyncTaskListener() {
                             @Override
                             public void onSuccess(AsyncTaskResult result) {
                                 // Complete synchronization only after the data was reloaded from DB
@@ -93,25 +93,25 @@ public class SyncFragment extends Fragment {
                                 progressBar2.setVisibility(View.INVISIBLE);
                                 errorView.setVisibility(View.VISIBLE);
                                 // Add shortcut on home screen if not yet done
-                                if (! singleton.settings.getHomeScreenShortcutAdded()) {
+                                if (! SyncFragment.this.singleton.settings.getHomeScreenShortcutAdded()) {
                                     Intent intent = new Intent(getContext(), CreateShortcutActivity.class);
                                     startActivity(intent);
-                                    singleton.settings.setHomeScreenShortcutAdded(true);
+                                    SyncFragment.this.singleton.settings.setHomeScreenShortcutAdded(true);
                                 }
                                 // Update options menu if available
                                 if (getActivity() != null) {
                                     if (singleton.apiData.structuresMap.size() > 0) {
                                         // Select the first available structure
                                         SortedSet<Structure> sortedStructures = new TreeSet<>(singleton.apiData.structuresMap.values());
-                                        singleton.selectedStructure = sortedStructures.first();
+                                        SyncFragment.this.singleton.selectedStructure = sortedStructures.first();
                                     } else {
                                         // No available structures
-                                        singleton.selectedStructure = null;
+                                        SyncFragment.this.singleton.selectedStructure = null;
                                     }
                                     getActivity().invalidateOptionsMenu();
                                 }
                                 // Execute SYNC END commands
-                                singleton.commandFactory.executeCommands(
+                                SyncFragment.this.singleton.commandFactory.executeCommands(
                                         SyncFragment.this.getActivity(),
                                         SyncFragment.this.getContext(),
                                         Constants.CONTEXT_SYNC_END);
@@ -165,7 +165,7 @@ public class SyncFragment extends Fragment {
                             errorMessageDetails.setVisibility(View.VISIBLE);
                         }
                         // Execute SYNC FAIL commands
-                        singleton.commandFactory.executeCommands(
+                        SyncFragment.this.singleton.commandFactory.executeCommands(
                                 SyncFragment.this.getActivity(),
                                 SyncFragment.this.getContext(),
                                 Constants.CONTEXT_SYNC_FAIL);
@@ -174,7 +174,7 @@ public class SyncFragment extends Fragment {
                     @Override
                     public void onProgress(int step, int total) {
                         // Execute SYNC PROGRESS commands
-                        singleton.commandFactory.executeCommands(
+                        SyncFragment.this.singleton.commandFactory.executeCommands(
                                 SyncFragment.this.getActivity(),
                                 SyncFragment.this.getContext(),
                                 Constants.CONTEXT_SYNC_PROGRESS);

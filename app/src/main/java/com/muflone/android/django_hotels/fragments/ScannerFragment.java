@@ -261,8 +261,8 @@ public class ScannerFragment extends Fragment {
         @Override
         protected List<TimestampEmployee> doInBackground(Long... params) {
             return this.singleton.database.timestampDao().listByLatestEnterExit(
-                    Singleton.getInstance().selectedDate,
-                    Singleton.getInstance().selectedStructure.id,
+                    this.singleton.selectedDate,
+                    this.singleton.selectedStructure.id,
                     params[0]);
         }
 

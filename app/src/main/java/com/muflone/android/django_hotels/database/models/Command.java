@@ -2,8 +2,6 @@ package com.muflone.android.django_hotels.database.models;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -21,6 +19,7 @@ public class Command {
     public final String name;
 
     @ColumnInfo(name = "type")
+    @NonNull
     public final String type;
 
     @ColumnInfo(name = "context")

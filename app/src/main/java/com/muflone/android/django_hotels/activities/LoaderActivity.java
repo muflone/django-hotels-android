@@ -48,15 +48,17 @@ public class LoaderActivity extends AppCompatActivity {
             @Override
             public void onSuccess(AsyncTaskResult result) {
                 // Execute APP BEGIN commands
-                singleton.commandFactory.executeCommands(
+                LoaderActivity.this.singleton.commandFactory.executeCommands(
                         LoaderActivity.this,
                         LoaderActivity.this.getBaseContext(),
                         Constants.CONTEXT_APP_BEGIN);
                 // Select the first structure only if not already selected
-                if (singleton.selectedStructure == null && singleton.apiData.structuresMap.size() > 0) {
+                if (LoaderActivity.this.singleton.selectedStructure == null &&
+                        LoaderActivity.this.singleton.apiData.structuresMap.size() > 0) {
                     // Select the first available structure
-                    SortedSet<Structure> sortedStructures = new TreeSet<>(singleton.apiData.structuresMap.values());
-                    singleton.selectedStructure = sortedStructures.first();
+                    SortedSet<Structure> sortedStructures = new TreeSet<>(
+                            LoaderActivity.this.singleton.apiData.structuresMap.values());
+                    LoaderActivity.this.singleton.selectedStructure = sortedStructures.first();
                 }
                 new LoaderActivityStartTask().execute(LoaderActivity.this);
             }

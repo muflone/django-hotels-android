@@ -120,7 +120,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     }
                 }
                 // If no errors were given during the upload proceed to the download
-                if (!transmissionErrors) {
+                if (! transmissionErrors) {
                     // Get new data from the server (DOWNLOAD)
                     this.updateProgress();
                     data = this.requestApiGet();
@@ -155,7 +155,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private void checkStatusResponse(JSONObject jsonObject) throws InvalidResponseException, InvalidServerStatusException {
         // Check the status object for valid data
         try {
-            if (!jsonObject.getString("status").equals(Api.STATUS_OK)) {
+            if (! jsonObject.getString("status").equals(Api.STATUS_OK)) {
                 throw new InvalidServerStatusException(
                         String.format(
                             this.context.get().getString(R.string.sync_error_invalid_server_status_detail),
@@ -314,11 +314,11 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                             serviceActivity.serviceQty));
                     throw new RetransmittedActivityException(
                             String.format(this.context.get().getString(R.string.sync_error_retransmitted_quantity),
-                                    Objects.requireNonNull(singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.firstName,
-                                    Objects.requireNonNull(singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.lastName,
-                                    Objects.requireNonNull(singleton.apiData.roomsStructureMap.get(serviceActivity.roomId)).name,
-                                    Objects.requireNonNull(singleton.apiData.roomsBuildingMap.get(serviceActivity.roomId)).name,
-                                    Objects.requireNonNull(singleton.apiData.roomsMap.get(serviceActivity.roomId)).name,
+                                    Objects.requireNonNull(this.singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.firstName,
+                                    Objects.requireNonNull(this.singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.lastName,
+                                    Objects.requireNonNull(this.singleton.apiData.roomsStructureMap.get(serviceActivity.roomId)).name,
+                                    Objects.requireNonNull(this.singleton.apiData.roomsBuildingMap.get(serviceActivity.roomId)).name,
+                                    Objects.requireNonNull(this.singleton.apiData.roomsMap.get(serviceActivity.roomId)).name,
                                     new SimpleDateFormat("yyyy-MM-dd").format(serviceActivity.date),
                                     serviceActivity.serviceQty
                             ));
@@ -329,11 +329,11 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                             serviceActivity.description));
                     throw new RetransmittedActivityException(
                             String.format(this.context.get().getString(R.string.sync_error_retransmitted_description),
-                                    Objects.requireNonNull(singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.firstName,
-                                    Objects.requireNonNull(singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.lastName,
-                                    Objects.requireNonNull(singleton.apiData.roomsStructureMap.get(serviceActivity.roomId)).name,
-                                    Objects.requireNonNull(singleton.apiData.roomsBuildingMap.get(serviceActivity.roomId)).name,
-                                    Objects.requireNonNull(singleton.apiData.roomsMap.get(serviceActivity.roomId)).name,
+                                    Objects.requireNonNull(this.singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.firstName,
+                                    Objects.requireNonNull(this.singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.lastName,
+                                    Objects.requireNonNull(this.singleton.apiData.roomsStructureMap.get(serviceActivity.roomId)).name,
+                                    Objects.requireNonNull(this.singleton.apiData.roomsBuildingMap.get(serviceActivity.roomId)).name,
+                                    Objects.requireNonNull(this.singleton.apiData.roomsMap.get(serviceActivity.roomId)).name,
                                     new SimpleDateFormat("yyyy-MM-dd").format(serviceActivity.date),
                                     serviceActivity.description
                             ));

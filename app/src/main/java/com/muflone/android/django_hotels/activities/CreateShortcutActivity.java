@@ -13,16 +13,17 @@ import com.muflone.android.django_hotels.api.ApiData;
 import java.util.Objects;
 
 public class CreateShortcutActivity extends AppCompatActivity {
+    private final Singleton singleton = Singleton.getInstance();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        Singleton singleton = Singleton.getInstance();
-        ApiData apiData = singleton.apiData;
+        ApiData apiData = this.singleton.apiData;
 
         super.onCreate(savedInstanceState);
 
         String title = apiData.tabletSettingsMap.containsKey("app.shortcut.title") ?
                 Objects.requireNonNull(apiData.tabletSettingsMap.get("app.shortcut.title")).getString() :
-                singleton.settings.getApplicationName();
+                this.singleton.settings.getApplicationName();
         int width = Objects.requireNonNull(apiData.tabletSettingsMap.get("app.shortcut.icon.width")).getInteger();
         int height = Objects.requireNonNull(apiData.tabletSettingsMap.get("app.shortcut.icon.height")).getInteger();
         Utility.createShortcutIcon(this, title, width, height,
