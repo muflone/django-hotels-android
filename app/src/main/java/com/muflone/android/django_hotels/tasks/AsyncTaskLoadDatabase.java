@@ -9,6 +9,7 @@ import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
 import com.muflone.android.django_hotels.database.dao.CommandDao;
+import com.muflone.android.django_hotels.database.dao.CommandUsageDao;
 import com.muflone.android.django_hotels.database.dao.CompanyDao;
 import com.muflone.android.django_hotels.database.dao.ContractBuildingsDao;
 import com.muflone.android.django_hotels.database.dao.ContractDao;
@@ -25,6 +26,7 @@ import com.muflone.android.django_hotels.database.dao.TabletSettingDao;
 import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Command;
+import com.muflone.android.django_hotels.database.models.CommandUsage;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.Room;
@@ -153,7 +155,14 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
         }
         // Load Commands
         for(Command command : commandDao.listAll()) {
+            // Get Command Usage
+            CommandUsage commandUsage = commandUsageDao.findById(command.id);
+            if (commandUsage == null) {
+                commandUsage = new CommandUsage(command.id, 0);
+                commandUsageDao.insert(commandUsage);
+            }
             data.commandsMap.put(command.id, command);
+            data.commandsUsageMap.put(commandUsage.id, commandUsage);
         }
         return new AsyncTaskResult(data, data.exception);
     }

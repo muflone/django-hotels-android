@@ -29,12 +29,16 @@ public class Command {
     @ColumnInfo(name = "command")
     public final JSONObject command;
 
-    public Command(Long id, String name, String type, @NotNull String context, JSONObject command) {
+    @ColumnInfo(name = "uses")
+    public final int uses;
+
+    public Command(Long id, String name, String type, @NotNull String context, JSONObject command, int uses) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.context = context;
         this.command = command;
+        this.uses = uses;
     }
 
     public Command(JSONObject jsonObject) throws JSONException {
@@ -42,6 +46,7 @@ public class Command {
                 jsonObject.getString("name"),
                 jsonObject.getString("command_type"),
                 jsonObject.getString("context"),
-                jsonObject.getJSONObject("command"));
+                jsonObject.getJSONObject("command"),
+                jsonObject.getInt("uses"));
     }
 }

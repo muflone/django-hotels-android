@@ -2,10 +2,12 @@ package com.muflone.android.django_hotels.commands;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.database.models.Command;
+import com.muflone.android.django_hotels.database.models.CommandUsage;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -31,9 +33,15 @@ public class CommandFactory {
                                 Activity.class, Context.class, Command.class);
                         CommandBase commandInstance = (CommandBase) commandConstructor.newInstance(
                                 activity, context, command);
-                        commandInstance.before();
-                        commandInstance.execute();
-                        commandInstance.after();
+                        CommandUsage commandUsage = this.singleton.apiData.commandsUsageMap.get(command.id);
+                        if (command.uses == 0 | commandUsage.used < command.uses) {
+                            commandInstance.before();
+                            commandInstance.execute();
+                            commandInstance.after();
+                            // Update CommandUsage count
+                            commandUsage.used = command.uses == 0 ? 0 : commandUsage.used + 1;
+                            new CommandUsedUpdateDatabaseTask().execute(commandUsage);
+                        }
                     } catch (ClassNotFoundException exception) {
                         Log.w(this.TAG, String.format("Command class %s not found", command.type));
                         exception.printStackTrace();
@@ -53,5 +61,16 @@ public class CommandFactory {
             }
         }
         Log.d(this.TAG, String.format("Completed commands for context %s", contextType));
+    }
+
+    private static class CommandUsedUpdateDatabaseTask extends AsyncTask<CommandUsage, Void, Void> {
+        private final Singleton singleton = Singleton.getInstance();
+
+        @Override
+        protected Void doInBackground(CommandUsage... params) {
+            CommandUsage commandUsage = params[0];
+            this.singleton.database.commandUsageDao().update(commandUsage);
+            return null;
+        }
     }
 }
