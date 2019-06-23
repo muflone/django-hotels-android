@@ -1,7 +1,6 @@
 package com.muflone.android.django_hotels.activities;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -48,7 +47,6 @@ public class MainActivity extends AppCompatActivity
     private MenuItem menuItemStructures = null;
     private MenuItem menuItemExtras = null;
     private MenuItem menuItemSync = null;
-    private MenuItem menuItemShortcut = null;
     private MenuItem menuItemSettings = null;
     private MenuItem menuItemAbout = null;
     private MenuItem toolButtonSetStructure = null;
@@ -113,9 +111,6 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.menuItemSync:
                     this.menuItemSync = menu.getItem(item);
-                    break;
-                case R.id.menuItemShortcut:
-                    this.menuItemShortcut = menu.getItem(item);
                     break;
                 case R.id.menuItemSettings:
                     this.menuItemSettings = menu.getItem(item);
@@ -203,10 +198,6 @@ public class MainActivity extends AppCompatActivity
             fragmentName = FragmentLoader.FRAGMENT_EXTRA;
         } else if (item == this.menuItemSync) {
             fragmentName = FragmentLoader.FRAGMENT_SYNC;
-        } else if (item == this.menuItemShortcut) {
-            fragmentName = FragmentLoader.FRAGMENT_HOME;
-            Intent intent = new Intent(this, CreateShortcutActivity.class);
-            this.startActivity(intent);
         } else if (item == this.menuItemSettings) {
             fragmentName = FragmentLoader.FRAGMENT_SETTINGS;
         } else if (item == this.menuItemAbout) {
