@@ -22,7 +22,6 @@ import com.muflone.android.django_hotels.database.dao.RegionDao;
 import com.muflone.android.django_hotels.database.dao.RoomDao;
 import com.muflone.android.django_hotels.database.dao.ServiceDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
-import com.muflone.android.django_hotels.database.dao.TabletSettingDao;
 import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Command;
@@ -32,7 +31,6 @@ import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
-import com.muflone.android.django_hotels.database.models.TabletSetting;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
 import java.io.File;
@@ -78,7 +76,6 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
         RoomDao roomDao = this.singleton.database.roomDao();
         ServiceDao serviceDao = this.singleton.database.serviceDao();
         StructureDao structureDao = this.singleton.database.structureDao();
-        TabletSettingDao tabletSettingDao = this.singleton.database.tabletSettingDao();
         TimestampDirectionDao timestampDirectionDao = this.singleton.database.timestampDirectionDao();
         // Load Structures
         for(Structure structure : structureDao.listAll()) {
@@ -149,10 +146,6 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
         data.enterDirection = timestampDirectionDao.findByTypeEnter();
         data.exitDirection = timestampDirectionDao.findByTypeExit();
         data.timestampDirectionsNotEnterExit = timestampDirectionDao.listNotEnterExit();
-        // Load TabletSettings
-        for(TabletSetting tabletSetting : tabletSettingDao.listAll()) {
-            data.tabletSettingsMap.put(tabletSetting.name, tabletSetting);
-        }
         // Load Commands
         for(Command command : commandDao.listAll()) {
             // Get Command Usage

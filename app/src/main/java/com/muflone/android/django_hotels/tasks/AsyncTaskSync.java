@@ -30,7 +30,6 @@ import com.muflone.android.django_hotels.database.dao.RegionDao;
 import com.muflone.android.django_hotels.database.dao.RoomDao;
 import com.muflone.android.django_hotels.database.dao.ServiceDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
-import com.muflone.android.django_hotels.database.dao.TabletSettingDao;
 import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Command;
@@ -40,7 +39,6 @@ import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.database.models.Structure;
-import com.muflone.android.django_hotels.database.models.TabletSetting;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
@@ -397,12 +395,6 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     TimestampDirection timestampDirection = new TimestampDirection(jsonTimestampDirections.getJSONObject(i));
                     result.timestampDirectionsMap.put(timestampDirection.id, timestampDirection);
                 }
-                // Loop over every tablet settings
-                JSONArray jsonSettings = jsonRoot.getJSONArray("settings");
-                for (int i = 0; i < jsonSettings.length(); i++) {
-                    TabletSetting tabletSetting = new TabletSetting(jsonSettings.getJSONObject(i));
-                    result.tabletSettingsMap.put(tabletSetting.name, tabletSetting);
-                }
                 // Loop over every command
                 JSONArray jsonCommands = jsonRoot.getJSONArray("commands");
                 for (int i = 0; i < jsonCommands.length(); i++) {
@@ -443,12 +435,10 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         RoomDao roomDao = this.singleton.database.roomDao();
         ServiceDao serviceDao = this.singleton.database.serviceDao();
         StructureDao structureDao = this.singleton.database.structureDao();
-        TabletSettingDao tabletSettingDao = this.singleton.database.tabletSettingDao();
         TimestampDirectionDao timestampDirectionDao = this.singleton.database.timestampDirectionDao();
 
         // Delete previous data
         commandDao.truncate();
-        tabletSettingDao.truncate();
         roomDao.truncate();
         contractBuildingsDao.truncate();
         buildingDao.truncate();
@@ -503,10 +493,6 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         // Save data for timestamp directions
         for (TimestampDirection timestampDirection : data.timestampDirectionsMap.values()) {
             timestampDirectionDao.insert(timestampDirection);
-        }
-        // Save data for tablet settings
-        for (TabletSetting tabletSetting : data.tabletSettingsMap.values()) {
-            tabletSettingDao.insert(tabletSetting);
         }
         // Save data from commands
         for (Command command : data.commandsMap.values()) {
