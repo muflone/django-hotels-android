@@ -24,7 +24,7 @@ public class CommandPreference extends CommandBase {
      * value: the value to assign (ignored for removal)
      */
 
-    private static final Singleton singleton = Singleton.getInstance();
+    private final Singleton singleton = Singleton.getInstance();
 
     public CommandPreference(Activity activity, Context context, Command command) {
         super(activity, context, command);

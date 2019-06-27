@@ -32,7 +32,7 @@ public class Command implements Comparable<Command> {
     @ColumnInfo(name = "uses")
     public final int uses;
 
-    public Command(Long id, String name, String type, @NotNull String context, JSONObject command, int uses) {
+    public Command(Long id, @NotNull String name, @NotNull String type, @NotNull String context, JSONObject command, int uses) {
         this.id = id;
         this.name = name;
         this.type = type;

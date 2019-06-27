@@ -18,18 +18,18 @@ public class Constants {
     public static final String CONTEXT_SYNC_PROGRESS = "SYNC PROGRESS";
     public static final String CONTEXT_SYNC_FAIL = "SYNC FAIL";
     public static final String CONTEXT_SYNC_END = "SYNC END";
-    public static final String contexts[] = {
-        CONTEXT_APP_BEGIN,
-        CONTEXT_APP_END,
-        CONTEXT_START_MAIN,
-        CONTEXT_START_SCANNER,
-        CONTEXT_START_STRUCTURE,
-        CONTEXT_START_EXTRA,
-        CONTEXT_START_SYNC,
-        CONTEXT_START_SETTINGS,
-        CONTEXT_START_ABOUT,
-        CONTEXT_SYNC_PROGRESS,
-        CONTEXT_SYNC_FAIL,
-        CONTEXT_SYNC_END
+    public static final String[] contexts = {
+            CONTEXT_APP_BEGIN,
+            CONTEXT_APP_END,
+            CONTEXT_START_MAIN,
+            CONTEXT_START_SCANNER,
+            CONTEXT_START_STRUCTURE,
+            CONTEXT_START_EXTRA,
+            CONTEXT_START_SYNC,
+            CONTEXT_START_SETTINGS,
+            CONTEXT_START_ABOUT,
+            CONTEXT_SYNC_PROGRESS,
+            CONTEXT_SYNC_FAIL,
+            CONTEXT_SYNC_END
     };
 }

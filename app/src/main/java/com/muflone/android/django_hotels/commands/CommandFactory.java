@@ -31,7 +31,7 @@ public class CommandFactory {
                             Activity.class, Context.class, Command.class);
                     CommandBase commandInstance = (CommandBase) commandConstructor.newInstance(
                             activity, context, command);
-                    CommandUsage commandUsage = this.singleton.apiData.commandsUsageMap.get(command.id);
+                    CommandUsage commandUsage = Objects.requireNonNull(this.singleton.apiData.commandsUsageMap.get(command.id));
                     if (command.uses == 0 | commandUsage.used < command.uses) {
                         commandInstance.before();
                         commandInstance.execute();

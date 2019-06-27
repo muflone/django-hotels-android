@@ -12,7 +12,6 @@
     <string name="placeholder" translatable="false">Placeholder</string>
 
     <!-- Settings section -->
-    <string name="settings_home_screen_shortcut" translatable="false">home_screen_shortcut</string>
     <string name="settings_tablet_id_id" translatable="false">tablet_id</string>
     <string name="settings_tablet_key_id" translatable="false">tablet_key</string>
     <string name="settings_api_url_id" translatable="false">api_url</string>
