@@ -17,6 +17,8 @@ import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -72,5 +74,19 @@ public class ApiData {
                 Singleton.getInstance().selectedDate.compareTo(contract.endDate) <= 0;
     }
 
-
+    public ArrayList<Command> getCommandsByContext(String contextType) {
+        /*
+         * Get commands list for the ContextType specified
+         */
+        ArrayList<Command> results = new ArrayList<>();
+        for (Command command : this.commandsMap.values()) {
+            // Process only the commands in the current context
+            if (command.context.equals(contextType)) {
+                results.add(command);
+            }
+        }
+        // Sort results by id
+        Collections.sort(results);
+        return results;
+    }
 }

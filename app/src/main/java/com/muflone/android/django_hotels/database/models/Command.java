@@ -10,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 @Entity(tableName = "commands")
-public class Command {
+public class Command implements Comparable<Command> {
     @PrimaryKey
     public final Long id;
 
@@ -48,5 +48,11 @@ public class Command {
                 jsonObject.getString("context"),
                 jsonObject.getJSONObject("command"),
                 jsonObject.getInt("uses"));
+    }
+
+    @Override
+    public int compareTo(Command command) {
+        // Compare two commands to allow sorting
+        return this.id.compareTo(command.id);
     }
 }

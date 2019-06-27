@@ -20,44 +20,41 @@ public class CommandFactory {
     public void executeCommands(Activity activity, Context context, String contextType) {
         Log.d(this.TAG, String.format("Processing commands for context %s", contextType));
         // Process every command for the current context
-        for (Command command : this.singleton.apiData.commandsMap.values()) {
-            // Process only the commands in the current context
-            if (command.context.equals(contextType)) {
-                // Skip attempts to execute commands of the factory type
-                if (! command.type.equals(this.getClass().getSimpleName())) {
-                    try {
-                        Class<?> commandClass = Class.forName(String.format("%s.%s",
-                                Objects.requireNonNull(this.getClass().getPackage()).getName(),
-                                command.type));
-                        Constructor<?> commandConstructor = commandClass.getConstructor(
-                                Activity.class, Context.class, Command.class);
-                        CommandBase commandInstance = (CommandBase) commandConstructor.newInstance(
-                                activity, context, command);
-                        CommandUsage commandUsage = this.singleton.apiData.commandsUsageMap.get(command.id);
-                        if (command.uses == 0 | commandUsage.used < command.uses) {
-                            commandInstance.before();
-                            commandInstance.execute();
-                            commandInstance.after();
-                            // Update CommandUsage count
-                            commandUsage.used = command.uses == 0 ? 0 : commandUsage.used + 1;
-                            new CommandUsedUpdateDatabaseTask().execute(commandUsage);
-                        }
-                    } catch (ClassNotFoundException exception) {
-                        Log.w(this.TAG, String.format("Command class %s not found", command.type));
-                        exception.printStackTrace();
-                    } catch (NoSuchMethodException exception) {
-                        Log.w(this.TAG, String.format("Missing constructor for class %s", command.type));
-                        exception.printStackTrace();
-                    } catch (IllegalAccessException exception) {
-                        exception.printStackTrace();
-                    } catch (InstantiationException exception) {
-                        exception.printStackTrace();
-                    } catch (InvocationTargetException exception) {
-                        exception.printStackTrace();
+        for (Command command : this.singleton.apiData.getCommandsByContext(contextType)) {
+            // Skip attempts to execute commands of the factory type
+            if (! command.type.equals(this.getClass().getSimpleName())) {
+                try {
+                    Class<?> commandClass = Class.forName(String.format("%s.%s",
+                            Objects.requireNonNull(this.getClass().getPackage()).getName(),
+                            command.type));
+                    Constructor<?> commandConstructor = commandClass.getConstructor(
+                            Activity.class, Context.class, Command.class);
+                    CommandBase commandInstance = (CommandBase) commandConstructor.newInstance(
+                            activity, context, command);
+                    CommandUsage commandUsage = this.singleton.apiData.commandsUsageMap.get(command.id);
+                    if (command.uses == 0 | commandUsage.used < command.uses) {
+                        commandInstance.before();
+                        commandInstance.execute();
+                        commandInstance.after();
+                        // Update CommandUsage count
+                        commandUsage.used = command.uses == 0 ? 0 : commandUsage.used + 1;
+                        new CommandUsedUpdateDatabaseTask().execute(commandUsage);
                     }
-                } else {
-                    Log.w(this.TAG, "Attempting to execute a factory command, skipped");
+                } catch (ClassNotFoundException exception) {
+                    Log.w(this.TAG, String.format("Command class %s not found", command.type));
+                    exception.printStackTrace();
+                } catch (NoSuchMethodException exception) {
+                    Log.w(this.TAG, String.format("Missing constructor for class %s", command.type));
+                    exception.printStackTrace();
+                } catch (IllegalAccessException exception) {
+                    exception.printStackTrace();
+                } catch (InstantiationException exception) {
+                    exception.printStackTrace();
+                } catch (InvocationTargetException exception) {
+                    exception.printStackTrace();
                 }
+            } else {
+                Log.w(this.TAG, "Attempting to execute a factory command, skipped");
             }
         }
         Log.d(this.TAG, String.format("Completed commands for context %s", contextType));
