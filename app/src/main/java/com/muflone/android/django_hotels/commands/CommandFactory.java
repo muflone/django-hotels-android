@@ -5,12 +5,15 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.Singleton;
+import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.database.models.Command;
 import com.muflone.android.django_hotels.database.models.CommandUsage;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class CommandFactory {
@@ -20,7 +23,8 @@ public class CommandFactory {
     public void executeCommands(Activity activity, Context context, String contextType) {
         Log.d(this.TAG, String.format("Processing commands for context %s", contextType));
         // Process every command for the current context
-        for (Command command : this.singleton.apiData.getCommandsByContext(contextType)) {
+        ArrayList<Command> commandsList =  this.singleton.apiData.getCommandsByContext(contextType);
+        for (Command command : commandsList) {
             // Skip attempts to execute commands of the factory type
             if (! command.type.equals(this.getClass().getSimpleName())) {
                 try {
@@ -58,6 +62,12 @@ public class CommandFactory {
             }
         }
         Log.d(this.TAG, String.format("Completed commands for context %s", contextType));
+        // Apply a delay for APP END context
+        if (contextType.equals(Constants.CONTEXT_APP_END) && commandsList.size() > 0) {
+            long delay = this.singleton.settings.getLong("app_exit_commands_delay", 0);
+            Log.d(this.TAG, String.format("Applying app_exit_commands_delay of %d milliseconds", delay));
+            Utility.sleep(delay);
+        }
     }
 
     private static class CommandUsedUpdateDatabaseTask extends AsyncTask<CommandUsage, Void, Void> {

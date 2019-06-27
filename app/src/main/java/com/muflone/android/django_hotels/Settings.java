@@ -55,20 +55,49 @@ public class Settings {
         return this.preferences.getBoolean(this.context.getString(R.string.settings_structures_rooms_list_standard_height_id), true);
     }
 
+    @SuppressWarnings("unused")
+    public String getString(String key, String defaultValue) {
+        // Get a string value, using the default value if not existents
+        return this.preferences.getString(key, defaultValue);
+    }
+
     public void setValue(String key, @NonNull String value) {
         this.preferences.edit().putString(key, value).apply();
+    }
+
+    @SuppressWarnings("unused")
+    public int getInteger(String key, int defaultValue) {
+        // Get an int value, using the default value if not existents
+        return this.preferences.getInt(key, defaultValue);
     }
 
     public void setValue(String key, Integer value) {
         this.preferences.edit().putInt(key, value).apply();
     }
 
+    public long getLong(String key, long defaultValue) {
+        // Get a long value, using the default value if not existents
+        return this.preferences.getLong(key, defaultValue);
+    }
+
     public void setValue(String key, Long value) {
         this.preferences.edit().putLong(key, value).apply();
     }
 
+    @SuppressWarnings("unused")
+    public boolean getBoolean(String key, boolean defaultValue) {
+        // Get a boolean value, using the default value if not existents
+        return this.preferences.getBoolean(key, defaultValue);
+    }
+
     public void setValue(String key, Boolean value) {
         this.preferences.edit().putBoolean(key, value).apply();
+    }
+
+    @SuppressWarnings("unused")
+    public float getFloat(String key, float defaultValue) {
+        // Get a float value, using the default value if not existents
+        return this.preferences.getFloat(key, defaultValue);
     }
 
     public void setValue(String key, Float value) {
