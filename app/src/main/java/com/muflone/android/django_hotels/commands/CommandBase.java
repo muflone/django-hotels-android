@@ -21,7 +21,7 @@ public class CommandBase {
 
     public void before() {
         // Log before the execution
-        Log.d(this.getClass().getSimpleName(), String.format("Starting execution for \"%s\"", command.name));
+        Log.d(this.getClass().getSimpleName(), String.format("Before execution for \"%s\"", command.name));
     }
 
     public void execute() {

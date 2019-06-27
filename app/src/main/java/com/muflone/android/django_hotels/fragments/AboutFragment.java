@@ -243,11 +243,16 @@ public class AboutFragment extends Fragment {
         return copyDetails;
     }
 
-    private Element newSystemInformationElement(String value) {
+    private Element newDetailElement(String value) {
         // Return an element for System Information
         return new Element()
                 .setIconDrawable(R.drawable.ic_info)
-                .setTitle(value)
+                .setTitle(value);
+    }
+
+    private Element newSystemInformationElement(String value) {
+        // Return an element for System Information
+        return this.newDetailElement(value)
                 .setOnClickListener(view -> {
                     Utility.copyToClipboard(context, value);
                     Toast.makeText(context, R.string.about_feedback_copied_to_clipboard, Toast.LENGTH_SHORT).show();
