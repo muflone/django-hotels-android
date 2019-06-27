@@ -184,6 +184,14 @@
     <pattern value="com.muflone.android.django_hotels.commands.CommandShortcutIcon" />
     <pattern value="com.muflone.android.django_hotels.commands.CommandShortcutIcon" method="CommandShortcutIcon" />
     <pattern value="com.muflone.android.django_hotels.commands.CommandShortcutIcon" method="execute" />
+    <pattern value="com.muflone.android.django_hotels.database.models.Command" method="compareTo" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CommandUsageDao" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CommandUsageDao" method="count" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CommandUsageDao" method="delete" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CommandUsageDao" method="insert" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CommandUsageDao" method="listAll" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CommandUsageDao" method="truncate" />
+    <pattern value="com.muflone.android.django_hotels.database.dao.CommandUsageDao" method="update" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
