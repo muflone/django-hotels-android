@@ -18,6 +18,8 @@ import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
+import com.muflone.android.django_hotels.database.models.Command;
+import com.muflone.android.django_hotels.database.models.CommandUsage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -184,6 +186,25 @@ public class AboutFragment extends Fragment {
             stringBuilder.append(value.toString(true));
         }
         systemInformationValuesList.clear();
+        // Add configured Commands elements
+        for (String context : Constants.contexts) {
+            ArrayList<Command> commands = this.singleton.apiData.getCommandsByContext(context);
+            aboutPage.addGroup(String.format(this.getString(R.string.about_configured_commands), context));
+            stringBuilder.append(String.format(this.getString(R.string.about_configured_commands), context));
+            stringBuilder.append("\n");
+            if (commands.size() > 0) {
+                // Add each configured command
+                for (Command command : commands) {
+                    CommandValue commandValue = new CommandValue(
+                            this.getString(R.string.about_configured_commands_format), command);
+                    aboutPage.addItem(this.newDetailElement(commandValue.toString(false)));
+                    stringBuilder.append(commandValue.toString(true));
+                }
+            } else {
+                // No configured commands
+                aboutPage.addItem(this.newDetailElement(this.getString(R.string.about_configured_commands_none)));
+            }
+        }
         // Feedback section
         aboutPage.addGroup(this.getString(R.string.about_feedback));
         // Copy details item
@@ -285,6 +306,33 @@ public class AboutFragment extends Fragment {
                 // With no format specifiers we add title: value standard format
                 result = String.format(Locale.ROOT, "%s: %s", getString(this.id), this.values.get(0));
             }
+            // Add a newline character if required
+            if (newLine) {
+                result += "\n";
+            }
+            return result;
+        }
+    }
+
+    private class CommandValue {
+        // Container for CommandValue
+        private final String format;
+        private final Command command;
+        private final Singleton singleton = Singleton.getInstance();
+
+        public CommandValue(String format, Command command) {
+            this.format = format;
+            this.command = command;
+        }
+
+        public String toString(boolean newLine) {
+            CommandUsage commandUsage = this.singleton.apiData.commandsUsageMap.get(command.id);
+            String result = String.format(this.format,
+                                          command.id,
+                                          command.name,
+                                          command.type,
+                                          command.uses,
+                                          commandUsage != null ? commandUsage.used : 0);
             // Add a newline character if required
             if (newLine) {
                 result += "\n";

@@ -118,6 +118,9 @@
     <string name="about_application_information">Informazioni sull\'applicazione</string>
     <string name="about_settings_information">Informazioni sulle impostazioni</string>
     <string name="about_system_information">Informazioni di sistema</string>
+    <string name="about_configured_commands">Comandi configurati per il contesto %s</string>
+    <string name="about_configured_commands_format">ID: %d\nNome: %s\nTipo: %s\nUtilizzi: %d/%d</string>
+    <string name="about_configured_commands_none">Non ci sono comandi configurati</string>
     <string name="about_feedback">Feedback</string>
 
     <string name="about_application_information_name">Nome applicazione</string>
