@@ -195,6 +195,9 @@
     <pattern value="com.muflone.android.django_hotels.commands.CommandStartEmail" />
     <pattern value="com.muflone.android.django_hotels.commands.CommandStartEmail" method="CommandStartEmail" />
     <pattern value="com.muflone.android.django_hotels.commands.CommandStartEmail" method="execute" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandStartUri" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandStartUri" method="CommandStartUri" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandStartUri" method="execute" />
     <pattern value="com.muflone.android.django_hotels.commands.CommandSetUsed" />
     <pattern value="com.muflone.android.django_hotels.commands.CommandSetUsed" method="CommandSetUsed" />
     <pattern value="com.muflone.android.django_hotels.commands.CommandSetUsed.CommandUsedUpdateDatabaseTask" />
