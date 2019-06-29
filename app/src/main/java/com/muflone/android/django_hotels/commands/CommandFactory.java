@@ -28,7 +28,7 @@ public class CommandFactory {
             // Skip attempts to execute commands of the factory type
             if (! command.type.equals(this.getClass().getSimpleName())) {
                 try {
-                    Class<?> commandClass = Class.forName(String.format("%s.%s",
+                    Class<?> commandClass = Class.forName(String.format("%s.Command%s",
                             Objects.requireNonNull(this.getClass().getPackage()).getName(),
                             command.type));
                     Constructor<?> commandConstructor = commandClass.getConstructor(
