@@ -64,8 +64,10 @@ public class CommandFactory {
         Log.d(this.TAG, String.format("Completed commands for context %s", contextType));
         // Apply a delay for APP END context
         if (contextType.equals(Constants.CONTEXT_APP_END) && commandsList.size() > 0) {
-            long delay = this.singleton.settings.getLong("app_exit_commands_delay", 0);
-            Log.d(this.TAG, String.format("Applying app_exit_commands_delay of %d milliseconds", delay));
+            long delay = this.singleton.settings.getLong(CommandConstants.SETTING_APP_EXIT_COMMANDS_DELAY, 0);
+            Log.d(this.TAG, String.format("Applying %s of %d milliseconds",
+                    CommandConstants.SETTING_APP_EXIT_COMMANDS_DELAY,
+                    delay));
             Utility.sleep(delay);
         }
     }
