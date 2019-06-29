@@ -195,11 +195,12 @@
     <pattern value="com.muflone.android.django_hotels.commands.CommandStartEmail" />
     <pattern value="com.muflone.android.django_hotels.commands.CommandStartEmail" method="CommandStartEmail" />
     <pattern value="com.muflone.android.django_hotels.commands.CommandStartEmail" method="execute" />
-    <pattern value="com.muflone.android.django_hotels.commands.CommandCommandUsed" />
-    <pattern value="com.muflone.android.django_hotels.commands.CommandCommandUsed" method="CommandCommandUsed" />
-    <pattern value="com.muflone.android.django_hotels.commands.CommandCommandUsed.CommandUsedUpdateDatabaseTask" />
-    <pattern value="com.muflone.android.django_hotels.commands.CommandCommandUsed" method="execute" />
-    <pattern value="com.muflone.android.django_hotels.commands.CommandCommandUsed.CommandUsedUpdateDatabaseTask" method="doInBackground" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandSetUsed" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandSetUsed" method="CommandSetUsed" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandSetUsed.CommandUsedUpdateDatabaseTask" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandSetUsed" method="execute" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandSetUsed.CommandUsedUpdateDatabaseTask" method="CommandUsedUpdateDatabaseTask" />
+    <pattern value="com.muflone.android.django_hotels.commands.CommandSetUsed.CommandUsedUpdateDatabaseTask" method="doInBackground" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

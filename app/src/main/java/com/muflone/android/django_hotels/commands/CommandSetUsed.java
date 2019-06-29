@@ -10,7 +10,7 @@ import com.muflone.android.django_hotels.database.models.CommandUsage;
 
 import org.json.JSONException;
 
-public class CommandCommandUsed extends CommandBase {
+public class CommandSetUsed extends CommandBase {
     /**
      * This Command changes a Command usage count
      *
@@ -20,7 +20,7 @@ public class CommandCommandUsed extends CommandBase {
      */
     private final Singleton singleton = Singleton.getInstance();
 
-    public CommandCommandUsed(Activity activity, Context context, Command command) {
+    public CommandSetUsed(Activity activity, Context context, Command command) {
         super(activity, context, command);
     }
 
