@@ -32,7 +32,7 @@ public class CommandSetUsed extends CommandBase {
             int commandId = command.command.getInt("id");
             int commandUsed = command.command.getInt("used");
             // Find CommandUsages to update
-            if (commandId == -1) {
+            if (commandId == CommandConstants.SET_USED_SET_ALL_COMMAND_USAGES) {
                 // Update every CommandUsages
                 new CommandUsedUpdateDatabaseTask(commandUsed).execute(commandUsages);
             } else {
