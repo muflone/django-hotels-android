@@ -331,8 +331,8 @@ public class AboutFragment extends Fragment {
                                           command.id,
                                           command.name,
                                           command.type,
-                                          command.uses,
-                                          commandUsage != null ? commandUsage.used : 0);
+                                          commandUsage != null ? commandUsage.used : 0,
+                                          command.uses);
             // Add a newline character if required
             if (newLine) {
                 result += "\n";
