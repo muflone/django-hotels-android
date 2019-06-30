@@ -177,6 +177,7 @@ public class MainActivity extends AppCompatActivity
             // Accept back button to close the activity
             this.singleton.database.destroyInstance();
             super.onBackPressed();
+            this.finishAffinity();
         }
     }
 
