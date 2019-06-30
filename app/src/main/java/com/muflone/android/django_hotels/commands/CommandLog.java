@@ -14,12 +14,12 @@ public class CommandLog extends CommandBase {
      *
      * The command must have the following arguments:
      * type: must be one of the following:
-     *   d for debug message
-     *   w for warning message
-     *   v for verbose message
-     *   i for information message
-     *   e for error message
-     *   a for abnormal message
+     *   LOG_TYPE_DEBUG for debug message
+     *   LOG_TYPE_WARNING for warning message
+     *   LOG_TYPE_VERBOSE for verbose message
+     *   LOG_TYPE_INFORMATION for information message
+     *   LOG_TYPE_ERROR for error message
+     *   LOG_TYPE_ABNORMAL for abnormal message
      * tag: the message tag
      * message: the message to show
      */
@@ -34,22 +34,22 @@ public class CommandLog extends CommandBase {
             String messageTag = this.command.command.getString("tag");
             String messageText = this.command.command.getString("message");
             switch (this.command.command.getString("type")) {
-                case "d":
+                case CommandConstants.LOG_TYPE_DEBUG:
                     Log.d(messageTag, messageText);
                     break;
-                case "w":
+                case CommandConstants.LOG_TYPE_WARNING:
                     Log.w(messageTag, messageText);
                     break;
-                case "v":
+                case CommandConstants.LOG_TYPE_VERBOSE:
                     Log.v(messageTag, messageText);
                     break;
-                case "i":
+                case CommandConstants.LOG_TYPE_INFORMATION:
                     Log.i(messageTag, messageText);
                     break;
-                case "e":
+                case CommandConstants.LOG_TYPE_ERROR:
                     Log.e(messageTag, messageText);
                     break;
-                case "a":
+                case CommandConstants.LOG_TYPE_ABNORMAL:
                     Log.wtf(messageTag, messageText);
                     break;
             }
