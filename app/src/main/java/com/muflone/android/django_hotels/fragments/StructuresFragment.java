@@ -316,8 +316,7 @@ public class StructuresFragment extends Fragment {
                         this.singleton.selectedDate,
                         this.singleton.apiData.timestampDirectionsNotEnterExit,
                         this.singleton.database.timestampDao().listByContractNotEnterExit(
-                                this.singleton.selectedDate, contract.id),
-                        this.employeesView.get().getContext()));
+                                this.singleton.selectedDate, contract.id)));
             }
             return null;
         }
@@ -714,8 +713,7 @@ public class StructuresFragment extends Fragment {
 
         public EmployeeStatus(Contract contract, Date date,
                               List<TimestampDirection> timestampDirections,
-                              List<Timestamp> timestampsEmployee,
-                              Context context) {
+                              List<Timestamp> timestampsEmployee) {
             this.contract = contract;
             this.date = date;
             // Initialize directionsArray and directionsCheckedArray
