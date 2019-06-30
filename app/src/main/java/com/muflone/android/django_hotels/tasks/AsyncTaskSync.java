@@ -15,9 +15,9 @@ import com.muflone.android.django_hotels.api.exceptions.InvalidServerStatusExcep
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
 import com.muflone.android.django_hotels.api.exceptions.RetransmittedActivityException;
-import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
+import com.muflone.android.django_hotels.database.dao.CommandDao;
 import com.muflone.android.django_hotels.database.dao.CompanyDao;
 import com.muflone.android.django_hotels.database.dao.ContractBuildingsDao;
 import com.muflone.android.django_hotels.database.dao.ContractDao;
@@ -30,16 +30,15 @@ import com.muflone.android.django_hotels.database.dao.RegionDao;
 import com.muflone.android.django_hotels.database.dao.RoomDao;
 import com.muflone.android.django_hotels.database.dao.ServiceDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
-import com.muflone.android.django_hotels.database.dao.TabletSettingDao;
 import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Building;
+import com.muflone.android.django_hotels.database.models.Command;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.ContractBuildings;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.database.models.Structure;
-import com.muflone.android.django_hotels.database.models.TabletSetting;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
@@ -60,21 +59,19 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
-    private final String TAG = getClass().getName();
+    private final String TAG = getClass().getSimpleName();
 
     private final Api api;
     private final AsyncTaskListener callback;
-    private final AppDatabase database;
     private final int totalSteps;
     private final Singleton singleton = Singleton.getInstance();
     private final WeakReference<Context> context;
     private int currentStep;
 
-    public AsyncTaskSync(Context context, Api api, AppDatabase database, int totalSteps, AsyncTaskListener callback) {
+    public AsyncTaskSync(Context context, Api api, int totalSteps, AsyncTaskListener callback) {
         this.context = new WeakReference<>(context);
         this.api = api;
         this.callback = callback;
-        this.database = database;
         this.currentStep = 0;
         this.totalSteps = totalSteps;
     }
@@ -87,21 +84,21 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
 
         // Check the server status
         this.updateProgress();
-        data = this.checkStatus();
+        data = this.requestApiStatus();
         if (data.exception == null) {
             // Check if the system date/time matches with the remote date/time
             this.updateProgress();
-            data = this.checkDates();
+            data = this.requestApiDates();
             if (data.exception == null) {
                 // Transmit any incomplete timestamp (UPLOAD)
                 this.updateProgress();
-                List<Timestamp> timestampsList = this.database.timestampDao().listByUntrasmitted();
+                List<Timestamp> timestampsList = this.singleton.database.timestampDao().listByUntrasmitted();
                 for (Timestamp timestamp : timestampsList) {
-                    data = this.putTimestamp(timestamp);
+                    data = this.requestApiPutTimestamp(timestamp);
                     if (data.exception == null) {
                         // Update transmission date
                         timestamp.transmission = Utility.getCurrentDateTime();
-                        this.database.timestampDao().update(timestamp);
+                        this.singleton.database.timestampDao().update(timestamp);
                     } else {
                         // There were some errors during the timestamps transmissions
                         transmissionErrors = true;
@@ -109,22 +106,22 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 }
                 // Transmit any incomplete activity (UPLOAD)
                 this.updateProgress();
-                List<ServiceActivity> servicesActivityList = this.database.serviceActivityDao().listByUntrasmitted();
+                List<ServiceActivity> servicesActivityList = this.singleton.database.serviceActivityDao().listByUntrasmitted();
                 for (ServiceActivity serviceActivity : servicesActivityList) {
-                    data = this.putActivity(serviceActivity);
+                    data = this.requestApiPutActivity(serviceActivity);
                     if (data.exception == null) {
                         serviceActivity.transmission = Utility.getCurrentDateTime();
-                        this.database.serviceActivityDao().update(serviceActivity);
+                        this.singleton.database.serviceActivityDao().update(serviceActivity);
                     } else {
                         // There were some errors during the timestamps transmissions
                         transmissionErrors = true;
                     }
                 }
                 // If no errors were given during the upload proceed to the download
-                if (!transmissionErrors) {
+                if (! transmissionErrors) {
                     // Get new data from the server (DOWNLOAD)
                     this.updateProgress();
-                    data = this.downloadData();
+                    data = this.requestApiGet();
                     if (data.exception == null) {
                         // Success, save data in database
                         this.updateProgress();
@@ -156,19 +153,19 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private void checkStatusResponse(JSONObject jsonObject) throws InvalidResponseException, InvalidServerStatusException {
         // Check the status object for valid data
         try {
-            if (!jsonObject.getString("status").equals(Api.STATUS_OK)) {
+            if (! jsonObject.getString("status").equals(Api.STATUS_OK)) {
                 throw new InvalidServerStatusException(
                         String.format(
                             this.context.get().getString(R.string.sync_error_invalid_server_status_detail),
                                 jsonObject.getString("status")));
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException exception) {
+            exception.printStackTrace();
             throw new InvalidResponseException();
         }
     }
 
-    private ApiData checkStatus() {
+    private ApiData requestApiStatus() {
         // Check if the server status
         ApiData data = new ApiData();
         JSONObject jsonRoot = this.api.getJSONObject(String.format("status/%s/",
@@ -191,7 +188,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         return data;
     }
 
-    private ApiData checkDates() {
+    private ApiData requestApiDates() {
         // Check if the system date/time matches with the remote date/time
         ApiData result = new ApiData();
         Date currentDateTime = Utility.getCurrentDateTime();
@@ -244,8 +241,122 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         return result;
     }
 
-    private ApiData downloadData() {
+    private ApiData requestApiPutTimestamp(Timestamp timestamp) {
         ApiData result = new ApiData();
+        JSONObject jsonRoot = null;
+        // Send timestamps to the server
+        try {
+            jsonRoot = this.api.getJSONObject(String.format(Locale.ROOT,
+                    "put/timestamp/%s/%s/%d/%d/%d/%s/",
+                    this.api.settings.getTabletID(),
+                    this.api.getCurrentTokenCode(),
+                    timestamp.contractId,
+                    timestamp.directionId,
+                    timestamp.datetime.getTime() / 1000,
+                    URLEncoder.encode(timestamp.description.replace("\n", "\\n"), "UTF-8")));
+        } catch (UnsupportedEncodingException exception) {
+            result.exception = new InvalidResponseException();
+        }
+        if (jsonRoot != null) {
+            try {
+                // Check the final node for successful reads
+                String status = jsonRoot.getString("status");
+                if (status.equals(Api.STATUS_EXISTING)) {
+                    Log.w(this.TAG, String.format("Existing timestamp during the data transmission: %s", status));
+                } else if (! status.equals(Api.STATUS_OK)) {
+                    // Invalid response received
+                    Log.e(this.TAG, String.format("Invalid response received during the data transmission: %s", status));
+                    throw new InvalidResponseException();
+                }
+            } catch (JSONException exception) {
+                result.exception = new InvalidResponseException();
+            } catch (InvalidResponseException exception) {
+                result.exception = exception;
+            }
+        } else {
+            // Unable to download data from the server
+            result.exception = new NoDownloadException();
+        }
+        return result;
+    }
+
+    private ApiData requestApiPutActivity(ServiceActivity serviceActivity) {
+        ApiData result = new ApiData();
+        JSONObject jsonRoot = null;
+        // Send timestamps to the server
+        try {
+            jsonRoot = this.api.getJSONObject(String.format(Locale.ROOT,
+                    "put/activity/%s/%s/%d/%d/%d/%d/%d/%s/",
+                    this.api.settings.getTabletID(),
+                    this.api.getCurrentTokenCode(),
+                    serviceActivity.contractId,
+                    serviceActivity.roomId,
+                    serviceActivity.serviceId,
+                    serviceActivity.serviceQty,
+                    serviceActivity.date.getTime() / 1000,
+                    URLEncoder.encode(serviceActivity.description.replace("\n", "\\n") , "UTF-8")));
+        } catch (UnsupportedEncodingException exception) {
+            result.exception = new InvalidResponseException();
+        }
+        if (jsonRoot != null) {
+            try {
+                // Check the final node for successful reads
+                String status = jsonRoot.getString("status");
+                if (status.equals(Api.STATUS_EXISTING)) {
+                    // The activity was transmitted but it was already existing, this issue can be ignored
+                    Log.w(this.TAG, String.format("Existing activity during the data transmission: %d", serviceActivity.id));
+                } else if (status.equals(Api.STATUS_DIFFERENT_QUANTITY)) {
+                    // The activity was transmitted but it was saved with a different quantity
+                    Log.e(this.TAG, String.format("Activity %d already transmitted using a different quantity: %d",
+                            serviceActivity.id,
+                            serviceActivity.serviceQty));
+                    throw new RetransmittedActivityException(
+                            String.format(this.context.get().getString(R.string.sync_error_retransmitted_quantity),
+                                    Objects.requireNonNull(this.singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.firstName,
+                                    Objects.requireNonNull(this.singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.lastName,
+                                    Objects.requireNonNull(this.singleton.apiData.roomsStructureMap.get(serviceActivity.roomId)).name,
+                                    Objects.requireNonNull(this.singleton.apiData.roomsBuildingMap.get(serviceActivity.roomId)).name,
+                                    Objects.requireNonNull(this.singleton.apiData.roomsMap.get(serviceActivity.roomId)).name,
+                                    new SimpleDateFormat("yyyy-MM-dd").format(serviceActivity.date),
+                                    serviceActivity.serviceQty
+                            ));
+                } else if (status.equals(Api.STATUS_DIFFERENT_DESCRIPTION)) {
+                    // The activity was transmitted but it was saved with a different description
+                    Log.e(this.TAG, String.format("Activity %d already transmitted using a different description: %s",
+                            serviceActivity.id,
+                            serviceActivity.description));
+                    throw new RetransmittedActivityException(
+                            String.format(this.context.get().getString(R.string.sync_error_retransmitted_description),
+                                    Objects.requireNonNull(this.singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.firstName,
+                                    Objects.requireNonNull(this.singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.lastName,
+                                    Objects.requireNonNull(this.singleton.apiData.roomsStructureMap.get(serviceActivity.roomId)).name,
+                                    Objects.requireNonNull(this.singleton.apiData.roomsBuildingMap.get(serviceActivity.roomId)).name,
+                                    Objects.requireNonNull(this.singleton.apiData.roomsMap.get(serviceActivity.roomId)).name,
+                                    new SimpleDateFormat("yyyy-MM-dd").format(serviceActivity.date),
+                                    serviceActivity.description
+                            ));
+                } else if (! status.equals(Api.STATUS_OK)) {
+                    // Invalid response received
+                    Log.e(this.TAG, String.format("Invalid response received during the data transmission: %s", status));
+                    throw new InvalidResponseException();
+                }
+            } catch (JSONException exception) {
+                result.exception = new InvalidResponseException();
+            } catch (InvalidResponseException exception) {
+                result.exception = exception;
+            } catch (RetransmittedActivityException exception) {
+                result.exception = exception;
+            }
+        } else {
+            // Unable to download data from the server
+            result.exception = new NoDownloadException();
+        }
+        return result;
+    }
+
+    private ApiData requestApiGet() {
+        ApiData result = new ApiData();
+        Iterator<String> jsonKeys;
         // Get data from the server
         JSONObject jsonRoot = this.api.getJSONObject(String.format("get/%s/%s/",
                 this.api.settings.getTabletID(),
@@ -256,9 +367,9 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 this.checkStatusResponse(jsonRoot);
                 // Loop over every structure
                 JSONObject jsonStructures = jsonRoot.getJSONObject("structures");
-                Iterator<?> jsonKeys = jsonStructures.keys();
+                jsonKeys = jsonStructures.keys();
                 while (jsonKeys.hasNext()) {
-                    String key = (String) jsonKeys.next();
+                    String key = jsonKeys.next();
                     Structure objStructure = new Structure(jsonStructures.getJSONObject(key));
                     result.structuresMap.put(objStructure.id, objStructure);
                 }
@@ -284,132 +395,21 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                     TimestampDirection timestampDirection = new TimestampDirection(jsonTimestampDirections.getJSONObject(i));
                     result.timestampDirectionsMap.put(timestampDirection.id, timestampDirection);
                 }
-                // Loop over every tablet settings
-                JSONArray jsonSettings = jsonRoot.getJSONArray("settings");
-                for (int i = 0; i < jsonSettings.length(); i++) {
-                    TabletSetting tabletSetting = new TabletSetting(jsonSettings.getJSONObject(i));
-                    result.tabletSettingsMap.put(tabletSetting.name, tabletSetting);
+                // Loop over every command
+                JSONArray jsonCommands = jsonRoot.getJSONArray("commands");
+                for (int i = 0; i < jsonCommands.length(); i++) {
+                    Command objCommand = new Command(jsonCommands.getJSONObject(i));
+                    result.commandsMap.put(objCommand.id, objCommand);
                 }
             } catch (InvalidServerStatusException exception) {
                 result.exception = exception;
             } catch (JSONException exception) {
+                exception.printStackTrace();
                 result.exception = new InvalidResponseException();
             } catch (ParseException exception) {
+                exception.printStackTrace();
                 result.exception = new InvalidResponseException();
             } catch (InvalidResponseException exception) {
-                result.exception = exception;
-            }
-        } else {
-            // Unable to download data from the server
-            result.exception = new NoDownloadException();
-        }
-        return result;
-    }
-
-    private ApiData putTimestamp(Timestamp timestamp) {
-        ApiData result = new ApiData();
-        JSONObject jsonRoot = null;
-        // Send timestamps to the server
-        try {
-            jsonRoot = this.api.getJSONObject(String.format(Locale.ROOT,
-                    "put/timestamp/%s/%s/%d/%d/%d/%s/",
-                    this.api.settings.getTabletID(),
-                    this.api.getCurrentTokenCode(),
-                    timestamp.contractId,
-                    timestamp.directionId,
-                    timestamp.datetime.getTime() / 1000,
-                    URLEncoder.encode(timestamp.description.replace("\n", "\\n"), "UTF-8")));
-        } catch (UnsupportedEncodingException e) {
-            result.exception = new InvalidResponseException();
-        }
-        if (jsonRoot != null) {
-            try {
-                // Check the final node for successful reads
-                String status = jsonRoot.getString("status");
-                if (status.equals(Api.STATUS_EXISTING)) {
-                    Log.w(TAG, String.format("Existing timestamp during the data transmission: %s", status));
-                } else if (! status.equals(Api.STATUS_OK)) {
-                    // Invalid response received
-                    Log.e(TAG, String.format("Invalid response received during the data transmission: %s", status));
-                    throw new InvalidResponseException();
-                }
-            } catch (JSONException e) {
-                result.exception = new InvalidResponseException();
-            } catch (InvalidResponseException e) {
-                result.exception = e;
-            }
-        } else {
-            // Unable to download data from the server
-            result.exception = new NoDownloadException();
-        }
-        return result;
-    }
-
-    private ApiData putActivity(ServiceActivity serviceActivity) {
-        ApiData result = new ApiData();
-        JSONObject jsonRoot = null;
-        // Send timestamps to the server
-        try {
-            jsonRoot = this.api.getJSONObject(String.format(Locale.ROOT,
-                    "put/activity/%s/%s/%d/%d/%d/%d/%d/%s/",
-                    this.api.settings.getTabletID(),
-                    this.api.getCurrentTokenCode(),
-                    serviceActivity.contractId,
-                    serviceActivity.roomId,
-                    serviceActivity.serviceId,
-                    serviceActivity.serviceQty,
-                    serviceActivity.date.getTime() / 1000,
-                    URLEncoder.encode(serviceActivity.description.replace("\n", "\\n") , "UTF-8")));
-        } catch (UnsupportedEncodingException e) {
-            result.exception = new InvalidResponseException();
-        }
-        if (jsonRoot != null) {
-            try {
-                // Check the final node for successful reads
-                String status = jsonRoot.getString("status");
-                if (status.equals(Api.STATUS_EXISTING)) {
-                    // The activity was transmitted but it was already existing, this issue can be ignored
-                    Log.w(TAG, String.format("Existing activity during the data transmission: %d", serviceActivity.id));
-                } else if (status.equals(Api.STATUS_DIFFERENT_QUANTITY)) {
-                    // The activity was transmitted but it was saved with a different quantity
-                    Log.e(TAG, String.format("Activity %d already transmitted using a different quantity: %d",
-                            serviceActivity.id,
-                            serviceActivity.serviceQty));
-                    throw new RetransmittedActivityException(
-                            String.format(this.context.get().getString(R.string.sync_error_retransmitted_quantity),
-                                    Objects.requireNonNull(singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.firstName,
-                                    Objects.requireNonNull(singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.lastName,
-                                    Objects.requireNonNull(singleton.apiData.roomsStructureMap.get(serviceActivity.roomId)).name,
-                                    Objects.requireNonNull(singleton.apiData.roomsBuildingMap.get(serviceActivity.roomId)).name,
-                                    Objects.requireNonNull(singleton.apiData.roomsMap.get(serviceActivity.roomId)).name,
-                                    new SimpleDateFormat("yyyy-MM-dd").format(serviceActivity.date),
-                                    serviceActivity.serviceQty
-                            ));
-                } else if (status.equals(Api.STATUS_DIFFERENT_DESCRIPTION)) {
-                    // The activity was transmitted but it was saved with a different description
-                    Log.e(TAG, String.format("Activity %d already transmitted using a different description: %s",
-                            serviceActivity.id,
-                            serviceActivity.description));
-                    throw new RetransmittedActivityException(
-                            String.format(this.context.get().getString(R.string.sync_error_retransmitted_description),
-                                    Objects.requireNonNull(singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.firstName,
-                                    Objects.requireNonNull(singleton.apiData.contractsMap.get(serviceActivity.contractId)).employee.lastName,
-                                    Objects.requireNonNull(singleton.apiData.roomsStructureMap.get(serviceActivity.roomId)).name,
-                                    Objects.requireNonNull(singleton.apiData.roomsBuildingMap.get(serviceActivity.roomId)).name,
-                                    Objects.requireNonNull(singleton.apiData.roomsMap.get(serviceActivity.roomId)).name,
-                                    new SimpleDateFormat("yyyy-MM-dd").format(serviceActivity.date),
-                                    serviceActivity.description
-                            ));
-                } else if (! status.equals(Api.STATUS_OK)) {
-                    // Invalid response received
-                    Log.e(TAG, String.format("Invalid response received during the data transmission: %s", status));
-                    throw new InvalidResponseException();
-                }
-            } catch (JSONException exception) {
-                result.exception = new InvalidResponseException();
-            } catch (InvalidResponseException exception) {
-                result.exception = exception;
-            } catch (RetransmittedActivityException exception) {
                 result.exception = exception;
             }
         } else {
@@ -420,25 +420,25 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     }
 
     private void saveToDatabase(ApiData data) {
-        BrandDao brandDao = this.database.brandDao();
-        BuildingDao buildingDao = this.database.buildingDao();
-        CompanyDao companyDao = this.database.companyDao();
-        ContractDao contractDao = this.database.contractDao();
-        ContractBuildingsDao contractBuildingsDao = this.database.contractBuildingsDao();
-        ContractTypeDao contractTypeDao = this.database.contractTypeDao();
-        JobTypeDao jobTypeDao = this.database.jobTypeDao();
-        CountryDao countryDao = this.database.countryDao();
-        EmployeeDao employeeDao = this.database.employeeDao();
-        LocationDao locationDao = this.database.locationDao();
-        RegionDao regionDao = this.database.regionDao();
-        RoomDao roomDao = this.database.roomDao();
-        ServiceDao serviceDao = this.database.serviceDao();
-        StructureDao structureDao = this.database.structureDao();
-        TabletSettingDao tabletSettingDao = this.database.tabletSettingDao();
-        TimestampDirectionDao timestampDirectionDao = this.database.timestampDirectionDao();
+        BrandDao brandDao = this.singleton.database.brandDao();
+        BuildingDao buildingDao = this.singleton.database.buildingDao();
+        CommandDao commandDao = this.singleton.database.commandDao();
+        CompanyDao companyDao = this.singleton.database.companyDao();
+        ContractDao contractDao = this.singleton.database.contractDao();
+        ContractBuildingsDao contractBuildingsDao = this.singleton.database.contractBuildingsDao();
+        ContractTypeDao contractTypeDao = this.singleton.database.contractTypeDao();
+        JobTypeDao jobTypeDao = this.singleton.database.jobTypeDao();
+        CountryDao countryDao = this.singleton.database.countryDao();
+        EmployeeDao employeeDao = this.singleton.database.employeeDao();
+        LocationDao locationDao = this.singleton.database.locationDao();
+        RegionDao regionDao = this.singleton.database.regionDao();
+        RoomDao roomDao = this.singleton.database.roomDao();
+        ServiceDao serviceDao = this.singleton.database.serviceDao();
+        StructureDao structureDao = this.singleton.database.structureDao();
+        TimestampDirectionDao timestampDirectionDao = this.singleton.database.timestampDirectionDao();
 
         // Delete previous data
-        tabletSettingDao.truncate();
+        commandDao.truncate();
         roomDao.truncate();
         contractBuildingsDao.truncate();
         buildingDao.truncate();
@@ -494,9 +494,9 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
         for (TimestampDirection timestampDirection : data.timestampDirectionsMap.values()) {
             timestampDirectionDao.insert(timestampDirection);
         }
-        // Save data for tablet settings
-        for (TabletSetting tabletSetting : data.tabletSettingsMap.values()) {
-            tabletSettingDao.insert(tabletSetting);
+        // Save data from commands
+        for (Command command : data.commandsMap.values()) {
+            commandDao.insert(command);
         }
     }
 

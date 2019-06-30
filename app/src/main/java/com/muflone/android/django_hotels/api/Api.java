@@ -61,12 +61,12 @@ public class Api {
             }
             // Convert results to JSON
             jsonObject = new JSONObject(jsonStringBuilder.toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (MalformedURLException exception) {
+            exception.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        } catch (JSONException exception) {
+            exception.printStackTrace();
         }
         return jsonObject;
     }
@@ -80,8 +80,8 @@ public class Api {
                     this.settings.getTabletID(),
                     Base32String.encode(this.settings.getTabletKey().getBytes())));
             token = new Token(uri);
-        } catch (Token.TokenUriInvalidException e) {
-            e.printStackTrace();
+        } catch (Token.TokenUriInvalidException exception) {
+            exception.printStackTrace();
         }
         return token != null ? token.generateCodes().getCurrentCode() : null;
     }

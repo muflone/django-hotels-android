@@ -4,10 +4,12 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.api.ApiData;
-import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
+import com.muflone.android.django_hotels.database.dao.CommandDao;
+import com.muflone.android.django_hotels.database.dao.CommandUsageDao;
 import com.muflone.android.django_hotels.database.dao.CompanyDao;
 import com.muflone.android.django_hotels.database.dao.ContractBuildingsDao;
 import com.muflone.android.django_hotels.database.dao.ContractDao;
@@ -20,15 +22,15 @@ import com.muflone.android.django_hotels.database.dao.RegionDao;
 import com.muflone.android.django_hotels.database.dao.RoomDao;
 import com.muflone.android.django_hotels.database.dao.ServiceDao;
 import com.muflone.android.django_hotels.database.dao.StructureDao;
-import com.muflone.android.django_hotels.database.dao.TabletSettingDao;
 import com.muflone.android.django_hotels.database.dao.TimestampDirectionDao;
 import com.muflone.android.django_hotels.database.models.Building;
+import com.muflone.android.django_hotels.database.models.Command;
+import com.muflone.android.django_hotels.database.models.CommandUsage;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.Structure;
-import com.muflone.android.django_hotels.database.models.TabletSetting;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 
 import java.io.File;
@@ -38,6 +40,7 @@ import java.util.ArrayList;
 public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final AsyncTaskListener callback;
     private final WeakReference<Context> context;
+    private final Singleton singleton = Singleton.getInstance();
 
     public AsyncTaskLoadDatabase(Context context, AsyncTaskListener callback) {
         this.context = new WeakReference<>(context);
@@ -47,33 +50,33 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
     @Override
     protected AsyncTaskResult doInBackground(Void... params) {
         ApiData data = new ApiData();
-        AppDatabase database = AppDatabase.getAppDatabase(this.context.get());
         // TODO: Database deletion is dangerous, must implement migrations
-        if (!database.checkDB()) {
-            Log.d("", "Invalid database structure " + database.getOpenHelper().getDatabaseName());
-            AppDatabase.destroyInstance();
+        if (! this.singleton.database.checkDB()) {
+            Log.d("", "Invalid database structure " + this.singleton.database.getOpenHelper().getDatabaseName());
+            this.singleton.database.destroyInstance();
             File databaseFile = new File(this.context.get().getApplicationInfo().dataDir +
-                    "/databases/" + database.getOpenHelper().getDatabaseName());
+                    "/databases/" + this.singleton.database.getOpenHelper().getDatabaseName());
             //noinspection ResultOfMethodCallIgnored
             databaseFile.delete();
-            database = AppDatabase.getAppDatabase(this.context.get());
+            this.singleton.openDatabase(this.context.get());
         }
-        BrandDao brandDao = database.brandDao();
-        BuildingDao buildingDao = database.buildingDao();
-        CompanyDao companyDao = database.companyDao();
-        ContractDao contractDao = database.contractDao();
-        ContractBuildingsDao contractBuildingsDao = database.contractBuildingsDao();
-        ContractTypeDao contractTypeDao = database.contractTypeDao();
-        JobTypeDao jobTypeDao = database.jobTypeDao();
-        CountryDao countryDao = database.countryDao();
-        EmployeeDao employeeDao = database.employeeDao();
-        LocationDao locationDao = database.locationDao();
-        RegionDao regionDao = database.regionDao();
-        RoomDao roomDao = database.roomDao();
-        ServiceDao serviceDao = database.serviceDao();
-        StructureDao structureDao = database.structureDao();
-        TabletSettingDao tabletSettingDao = database.tabletSettingDao();
-        TimestampDirectionDao timestampDirectionDao = database.timestampDirectionDao();
+        BrandDao brandDao = this.singleton.database.brandDao();
+        BuildingDao buildingDao = this.singleton.database.buildingDao();
+        CommandDao commandDao = this.singleton.database.commandDao();
+        CommandUsageDao commandUsageDao = this.singleton.database.commandUsageDao();
+        CompanyDao companyDao = this.singleton.database.companyDao();
+        ContractDao contractDao = this.singleton.database.contractDao();
+        ContractBuildingsDao contractBuildingsDao = this.singleton.database.contractBuildingsDao();
+        ContractTypeDao contractTypeDao = this.singleton.database.contractTypeDao();
+        JobTypeDao jobTypeDao = this.singleton.database.jobTypeDao();
+        CountryDao countryDao = this.singleton.database.countryDao();
+        EmployeeDao employeeDao = this.singleton.database.employeeDao();
+        LocationDao locationDao = this.singleton.database.locationDao();
+        RegionDao regionDao = this.singleton.database.regionDao();
+        RoomDao roomDao = this.singleton.database.roomDao();
+        ServiceDao serviceDao = this.singleton.database.serviceDao();
+        StructureDao structureDao = this.singleton.database.structureDao();
+        TimestampDirectionDao timestampDirectionDao = this.singleton.database.timestampDirectionDao();
         // Load Structures
         for(Structure structure : structureDao.listAll()) {
             data.structuresMap.put(structure.id, structure);
@@ -143,9 +146,16 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
         data.enterDirection = timestampDirectionDao.findByTypeEnter();
         data.exitDirection = timestampDirectionDao.findByTypeExit();
         data.timestampDirectionsNotEnterExit = timestampDirectionDao.listNotEnterExit();
-        // Load TabletSettings
-        for(TabletSetting tabletSetting : tabletSettingDao.listAll()) {
-            data.tabletSettingsMap.put(tabletSetting.name, tabletSetting);
+        // Load Commands
+        for(Command command : commandDao.listAll()) {
+            // Get Command Usage
+            CommandUsage commandUsage = commandUsageDao.findById(command.id);
+            if (commandUsage == null) {
+                commandUsage = new CommandUsage(command.id, 0);
+                commandUsageDao.insert(commandUsage);
+            }
+            data.commandsMap.put(command.id, command);
+            data.commandsUsageMap.put(commandUsage.id, commandUsage);
         }
         return new AsyncTaskResult(data, data.exception);
     }

@@ -7,11 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
+import com.muflone.android.django_hotels.commands.CommandFactory;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
@@ -33,6 +35,9 @@ public class LoaderActivity extends AppCompatActivity {
         this.singleton.settings = new Settings(this);
         this.singleton.api = new Api();
         this.singleton.selectedDate = Utility.getCurrentDate();
+        this.singleton.openDatabase(this);
+        // Prepares CommandFactory for executing commands
+        this.singleton.commandFactory = new CommandFactory();
         // Load UI
         this.loadUI();
         this.textViewAppName.setText(String.format(Locale.ROOT, "%s %s",
@@ -42,17 +47,24 @@ public class LoaderActivity extends AppCompatActivity {
         AppDatabase.getAppDatabase(this).reload(this, new AsyncTaskListener() {
             @Override
             public void onSuccess(AsyncTaskResult result) {
+                // Execute APP BEGIN commands
+                LoaderActivity.this.singleton.commandFactory.executeCommands(
+                        LoaderActivity.this,
+                        LoaderActivity.this.getBaseContext(),
+                        Constants.CONTEXT_APP_BEGIN);
                 // Select the first structure only if not already selected
-                if (singleton.selectedStructure == null && singleton.apiData.structuresMap.size() > 0) {
+                if (LoaderActivity.this.singleton.selectedStructure == null &&
+                        LoaderActivity.this.singleton.apiData.structuresMap.size() > 0) {
                     // Select the first available structure
-                    SortedSet<Structure> sortedStructures = new TreeSet<>(singleton.apiData.structuresMap.values());
-                    singleton.selectedStructure = sortedStructures.first();
+                    SortedSet<Structure> sortedStructures = new TreeSet<>(
+                            LoaderActivity.this.singleton.apiData.structuresMap.values());
+                    LoaderActivity.this.singleton.selectedStructure = sortedStructures.first();
                 }
                 new LoaderActivityStartTask().execute(LoaderActivity.this);
             }
 
             @Override
-            public void onFailure(Exception e) {
+            public void onFailure(Exception exception) {
             }
 
             @Override

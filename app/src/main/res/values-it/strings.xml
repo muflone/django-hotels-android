@@ -19,7 +19,6 @@
     <string name="section_structures">Strutture</string>
     <string name="section_extras">Extra</string>
     <string name="section_sync">Sincronizzazione</string>
-    <string name="section_add_shortcut">Aggiungi scorciatoia</string>
     <string name="section_settings">Impostazioni</string>
     <string name="section_about">Informazioni</string>
 
@@ -39,8 +38,6 @@
     <string name="scan_unsupported_qrcode">Codice QR non supportato</string>
 
     <!-- Structures section -->
-    <string name="available_structures">Strutture disponibili</string>
-
     <string name="employee_id_label">ID:</string>
     <string name="employee_first_name_label">Nome:</string>
     <string name="employee_last_name_label">Cognome:</string>
@@ -63,9 +60,6 @@
     <string name="structures_select_a_service_room">Scegliere un servizio per la stanza</string>
     <string name="structures_employees_already_assigned">Impiegati già assegnati</string>
     <string name="structures_employee_set_conditions">Assegnare una o più condizioni al dipendente</string>
-
-    <!-- Add shortcut section -->
-    <string name="add_shortcut_succeeded">Una nuova scorciatoia è stata aggiunta alla schermata iniziale</string>
 
     <!-- Settings section -->
     <string name="settings_tablet">Impostazioni tablet</string>
@@ -103,7 +97,7 @@
     <string name="sync_step_date_time">Controllo di data e ora del dispositivo</string>
     <string name="sync_step_timestamps_transmission">Trasmissione delle timbrature</string>
     <string name="sync_step_activities_transmission">Trasmissione delle attività</string>
-    <string name="sync_step_download">Scaricamento dati</string>
+    <string name="sync_step_get_data">Scaricamento dei dati</string>
     <string name="sync_step_saving_data">Salvataggio dei dati</string>
     <string name="sync_step_completed">Sincronizzazione completata</string>
     <string name="sync_error_no_server_connection">Impossibile stabilire una connessione con il server, controllare la connessione internet</string>
@@ -124,6 +118,9 @@
     <string name="about_application_information">Informazioni sull\'applicazione</string>
     <string name="about_settings_information">Informazioni sulle impostazioni</string>
     <string name="about_system_information">Informazioni di sistema</string>
+    <string name="about_configured_commands">Comandi configurati per il contesto %s</string>
+    <string name="about_configured_commands_format">ID: %d\nNome: %s\nTipo: %s\nUtilizzi: %d/%d</string>
+    <string name="about_configured_commands_none">Non ci sono comandi configurati</string>
     <string name="about_feedback">Feedback</string>
 
     <string name="about_application_information_name">Nome applicazione</string>

@@ -1,7 +1,6 @@
 package com.muflone.android.django_hotels.activities;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -20,11 +19,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.FragmentLoader;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
-import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
 
@@ -48,7 +47,6 @@ public class MainActivity extends AppCompatActivity
     private MenuItem menuItemStructures = null;
     private MenuItem menuItemExtras = null;
     private MenuItem menuItemSync = null;
-    private MenuItem menuItemShortcut = null;
     private MenuItem menuItemSettings = null;
     private MenuItem menuItemAbout = null;
     private MenuItem toolButtonSetStructure = null;
@@ -78,9 +76,9 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         this.navigationView.setNavigationItemSelectedListener(this);
         // Load preferences
-        if (singleton.settings.getTabletID().isEmpty() |
-                singleton.settings.getTabletKey().isEmpty()) {
-            String message = singleton.settings.getTabletID().isEmpty() ?
+        if (this.singleton.settings.getTabletID().isEmpty() |
+                this.singleton.settings.getTabletKey().isEmpty()) {
+            String message = this.singleton.settings.getTabletID().isEmpty() ?
                     this.getString(R.string.missing_tablet_id) :
                     this.getString(R.string.missing_tablet_key);
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -113,9 +111,6 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.menuItemSync:
                     this.menuItemSync = menu.getItem(item);
-                    break;
-                case R.id.menuItemShortcut:
-                    this.menuItemShortcut = menu.getItem(item);
                     break;
                 case R.id.menuItemSettings:
                     this.menuItemSettings = menu.getItem(item);
@@ -174,8 +169,13 @@ public class MainActivity extends AppCompatActivity
             // Restore confirmation after 2 seconds
             new Handler().postDelayed(() -> backButtonPressed = false, 2000);
         } else {
+            // Execute APP BEGIN commands
+            this.singleton.commandFactory.executeCommands(
+                    this,
+                    this.getBaseContext(),
+                    Constants.CONTEXT_APP_END);
             // Accept back button to close the activity
-            AppDatabase.destroyInstance();
+            this.singleton.database.destroyInstance();
             super.onBackPressed();
         }
     }
@@ -198,10 +198,6 @@ public class MainActivity extends AppCompatActivity
             fragmentName = FragmentLoader.FRAGMENT_EXTRA;
         } else if (item == this.menuItemSync) {
             fragmentName = FragmentLoader.FRAGMENT_SYNC;
-        } else if (item == this.menuItemShortcut) {
-            fragmentName = FragmentLoader.FRAGMENT_HOME;
-            Intent intent = new Intent(this, CreateShortcutActivity.class);
-            this.startActivity(intent);
         } else if (item == this.menuItemSettings) {
             fragmentName = FragmentLoader.FRAGMENT_SETTINGS;
         } else if (item == this.menuItemAbout) {
@@ -261,7 +257,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 builder.setItems(structuresList.toArray(new String[0]), (dialog, position) -> {
                     // Get the selected structure and update the user interface
-                    singleton.selectedStructure = singleton.apiData.structuresMap.get(structureIdList.get(position));
+                    this.singleton.selectedStructure = this.singleton.apiData.structuresMap.get(structureIdList.get(position));
                     invalidateOptionsMenu();
                     dialog.dismiss();
                     // Reload fragment
@@ -275,13 +271,13 @@ public class MainActivity extends AppCompatActivity
             case R.id.toolButtonSetDate: {
                 // Change current date
                 Calendar calendar = Calendar.getInstance();
-                calendar.setTime(Singleton.getInstance().selectedDate);
+                calendar.setTime(this.singleton.selectedDate);
                 DatePickerDialog dialog = new DatePickerDialog(MainActivity.this,
                         (view, year, month, day) -> {
                             calendar.set(year, month, day);
                             toolButtonSetDate.setTitle("  " + new SimpleDateFormat(
                                     "yyyy-MM-dd").format(calendar.getTime()));
-                            singleton.selectedDate = calendar.getTime();
+                            this.singleton.selectedDate = calendar.getTime();
                             FragmentLoader.loadFragment(
                                     MainActivity.this,
                                     R.id.fragment_container,

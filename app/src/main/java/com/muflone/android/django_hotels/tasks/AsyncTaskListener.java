@@ -5,6 +5,6 @@ package com.muflone.android.django_hotels.tasks;
  */
 public interface AsyncTaskListener {
     void onSuccess(AsyncTaskResult result);
-    void onFailure(Exception e);
+    void onFailure(Exception exception);
     void onProgress(int step, int total);
 }

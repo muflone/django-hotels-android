@@ -5,10 +5,22 @@ import android.os.Bundle;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
 
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
+import com.muflone.android.django_hotels.Singleton;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     private Context context;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Execute START SETTINGS commands
+        Singleton.getInstance().commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                Constants.CONTEXT_START_SETTINGS);
+    }
 
     @Override
     public void onAttach(Context context) {

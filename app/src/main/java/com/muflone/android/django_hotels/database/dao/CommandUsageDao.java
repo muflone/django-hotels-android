@@ -6,7 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.muflone.android.django_hotels.database.models.TabletSetting;
+import com.muflone.android.django_hotels.database.models.CommandUsage;
 
 import java.util.List;
 
@@ -14,39 +14,39 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 
 @SuppressWarnings("UnusedReturnValue")
 @Dao
-public interface TabletSettingDao {
+public interface CommandUsageDao {
     @Query("SELECT * " +
-           "FROM settings " +
-           "ORDER BY name")
-    List<TabletSetting> listAll();
+           "FROM commands_usage " +
+           "ORDER BY id")
+    List<CommandUsage> listAll();
 
     @Query("SELECT * " +
-           "FROM settings " +
-           "WHERE name = :name")
-    TabletSetting findByName(String name);
+           "FROM commands_usage " +
+           "WHERE id = :id")
+    CommandUsage findById(Long id);
 
     @Query("SELECT COUNT(*) " +
-           "FROM settings")
+           "FROM commands_usage")
     long count();
 
     @Insert(onConflict = IGNORE)
-    long insert(TabletSetting item);
+    long insert(CommandUsage item);
 
     @Insert(onConflict = IGNORE)
-    void insert(TabletSetting... items);
+    void insert(CommandUsage... items);
 
     @Update
-    void update(TabletSetting item);
+    void update(CommandUsage item);
 
     @Update
-    void update(TabletSetting... items);
+    void update(CommandUsage... items);
 
     @Delete
-    void delete(TabletSetting item);
+    void delete(CommandUsage item);
 
     @Delete
-    void delete(TabletSetting... items);
+    void delete(CommandUsage... items);
 
-    @Query("DELETE FROM settings")
+    @Query("DELETE FROM commands_usage")
     void truncate();
 }

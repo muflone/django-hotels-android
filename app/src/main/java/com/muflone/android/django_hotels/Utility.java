@@ -1,17 +1,22 @@
 package com.muflone.android.django_hotels;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
@@ -138,7 +143,7 @@ public class Utility {
             }
 
             if (((listView.isGroupExpanded(index)) && (index != group))
-                    || ((!listView.isGroupExpanded(index)) && (index == group))) {
+                    || ((! listView.isGroupExpanded(index)) && (index == group))) {
                 int childrenCount = listAdapter.getChildrenCount(index);
                 if (standardHeight) {
                     // Use the same standard height for every item in the group
@@ -194,5 +199,42 @@ public class Utility {
         // Extract rightmost part of a string
         return string == null ? null : (string.substring(
                 string.length() >= length ? string.length() - length : 0));
+    }
+
+    public static void createShortcutIcon(Activity activity, String title, int width, int height,
+                                          @Nullable String base64Icon, Class<?> klass) {
+        // Add a shortcut icon to the home
+        Intent shortcutIntent;
+        shortcutIntent = new Intent(activity, klass);
+
+        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        Intent intent = new Intent();
+        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        // Get shortcut title
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
+        if (base64Icon != null) {
+            // Use custom bitmap icon
+            byte[] icon = Base64.decode(base64Icon, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(icon, 0, icon.length);
+            if (width == 0) {
+                width = bitmap.getWidth();
+            }
+            if (height == 0) {
+                height = bitmap.getHeight();
+            }
+            // Resize bitmap if needed
+            if (width != bitmap.getWidth() | height != bitmap.getHeight()) {
+                bitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
+            }
+            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, bitmap);
+        } else {
+            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                    Intent.ShortcutIconResource.fromContext(activity.getApplicationContext(),
+                            R.mipmap.ic_launcher));
+        }
+        intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        activity.sendBroadcast(intent);
     }
 }

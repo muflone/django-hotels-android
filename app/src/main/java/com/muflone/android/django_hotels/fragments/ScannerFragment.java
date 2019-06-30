@@ -29,7 +29,6 @@ import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.ApiData;
-import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.dao.TimestampDao;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Timestamp;
@@ -49,6 +48,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ScannerFragment extends Fragment {
+    private final Singleton singleton = Singleton.getInstance();
     private Context context;
     private View rootLayout;
     private Button enterButton;
@@ -56,7 +56,6 @@ public class ScannerFragment extends Fragment {
     private ListView timestampEmployeesView;
     private ScanType scanType = ScanType.SCAN_TYPE_UNKNOWN;
     private ApiData apiData;
-    private AppDatabase database;
     private Settings settings;
     private TimestampAdapter timestampAdapter;
     private List<TimestampEmployeeItem> timestampEmployeeList;
@@ -65,9 +64,8 @@ public class ScannerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        this.apiData = Singleton.getInstance().apiData;
-        this.settings = Singleton.getInstance().settings;
-        this.database = AppDatabase.getAppDatabase(this.context);
+        this.apiData = this.singleton.apiData;
+        this.settings = this.singleton.settings;
 
         // Initialize UI
         this.loadUI(inflater, Objects.requireNonNull(container));
@@ -82,10 +80,15 @@ public class ScannerFragment extends Fragment {
         this.listLatestTimestamps();
         // Clear transmission date on long press
         this.timestampEmployeesView.setOnItemLongClickListener((adapterView, view, position, l) -> {
-            new ScannerUpdateDatabaseTask(this.context, this.database, this.timestampEmployeeList,
+            new ScannerUpdateDatabaseTask(this.context, this.timestampEmployeeList,
                     this.timestampAdapter).execute(position);
             return false;
         });
+        // Execute START SCANNER commands
+        this.singleton.commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                Constants.CONTEXT_START_SCANNER);
         return this.rootLayout;
     }
 
@@ -150,7 +153,7 @@ public class ScannerFragment extends Fragment {
                                             this.apiData.enterDirection.id : this.apiData.exitDirection.id,
                                     Utility.getCurrentDateTime(),
                                     "", null);
-                            new ScannerInsertTimestampTask(this.database, new AsyncTaskListener() {
+                            new ScannerInsertTimestampTask(new AsyncTaskListener() {
                                 @Override
                                 public void onSuccess(AsyncTaskResult result) {
                                     // Reload list
@@ -158,7 +161,7 @@ public class ScannerFragment extends Fragment {
                                 }
 
                                 @Override
-                                public void onFailure(Exception e) {
+                                public void onFailure(Exception exception) {
                                 }
 
                                 @Override
@@ -171,7 +174,7 @@ public class ScannerFragment extends Fragment {
                                     this.context.getString(R.string.scan_unknown_employee),
                                     Toast.LENGTH_LONG).show();
                         }
-                    } catch (Token.TokenUriInvalidException | Base32String.DecodingException e) {
+                    } catch (Token.TokenUriInvalidException | Base32String.DecodingException exception) {
                         // Unsupported QR Code
                         Toast.makeText(this.context,
                                 this.context.getString(R.string.scan_unsupported_qrcode),
@@ -186,21 +189,20 @@ public class ScannerFragment extends Fragment {
 
     private void listLatestTimestamps() {
         // List the latest timestamps
-        new ScannerListLatestTimestampsTask(this.database, this.timestampEmployeeList,
+        new ScannerListLatestTimestampsTask(this.timestampEmployeeList,
                 this.timestampAdapter).execute(Long.valueOf(Constants.LATEST_TIMESTAMPS));
     }
 
     private static class ScannerUpdateDatabaseTask extends AsyncTask<Integer, Void, Void> {
         private final WeakReference<Context> context;
-        private final AppDatabase database;
         private final List<TimestampEmployeeItem> timestampEmployeeList;
         private final TimestampAdapter timestampAdapter;
+        private final Singleton singleton = Singleton.getInstance();
 
-        public ScannerUpdateDatabaseTask(Context context, AppDatabase database,
+        public ScannerUpdateDatabaseTask(Context context,
                                          List<TimestampEmployeeItem> timestampEmployeeList,
                                          TimestampAdapter timestampAdapter) {
             this.context = new WeakReference<>(context);
-            this.database = database;
             this.timestampEmployeeList = timestampEmployeeList;
             this.timestampAdapter = timestampAdapter;
         }
@@ -212,9 +214,9 @@ public class ScannerFragment extends Fragment {
             TimestampEmployeeItem timestampEmployeeItem = this.timestampEmployeeList.get(position);
             timestampEmployeeItem.transmission = null;
             // Update database
-            Timestamp timestamp = this.database.timestampDao().findById(timestampEmployeeItem.id);
+            Timestamp timestamp = this.singleton.database.timestampDao().findById(timestampEmployeeItem.id);
             timestamp.transmission = null;
-            this.database.timestampDao().update(timestamp);
+            this.singleton.database.timestampDao().update(timestamp);
             return null;
         }
 
@@ -228,18 +230,17 @@ public class ScannerFragment extends Fragment {
     }
 
     private static class ScannerInsertTimestampTask extends AsyncTask<Timestamp, Void, Void> {
-        private final AppDatabase database;
         private final AsyncTaskListener listener;
+        private final Singleton singleton = Singleton.getInstance();
 
-        public ScannerInsertTimestampTask(AppDatabase database, AsyncTaskListener listener) {
-            this.database = database;
+        public ScannerInsertTimestampTask(AsyncTaskListener listener) {
             this.listener = listener;
         }
 
         @Override
         protected Void doInBackground(Timestamp... params) {
             // Insert new Timestamp
-            TimestampDao timestampDao = this.database.timestampDao();
+            TimestampDao timestampDao = this.singleton.database.timestampDao();
             timestampDao.insert(params);
             this.listener.onSuccess(null);
             return null;
@@ -247,23 +248,21 @@ public class ScannerFragment extends Fragment {
     }
 
     private static class ScannerListLatestTimestampsTask extends AsyncTask<Long, Void, List<TimestampEmployee>> {
-        private final AppDatabase database;
         private final List<TimestampEmployeeItem> timestampEmployeeList;
         private final TimestampAdapter timestampAdapter;
+        private final Singleton singleton = Singleton.getInstance();
 
-        public ScannerListLatestTimestampsTask(AppDatabase database,
-                                               List<TimestampEmployeeItem> timestampEmployeeList,
+        public ScannerListLatestTimestampsTask(List<TimestampEmployeeItem> timestampEmployeeList,
                                                TimestampAdapter timestampAdapter) {
-            this.database = database;
             this.timestampEmployeeList = timestampEmployeeList;
             this.timestampAdapter = timestampAdapter;
         }
 
         @Override
         protected List<TimestampEmployee> doInBackground(Long... params) {
-            return this.database.timestampDao().listByLatestEnterExit(
-                    Singleton.getInstance().selectedDate,
-                    Singleton.getInstance().selectedStructure.id,
+            return this.singleton.database.timestampDao().listByLatestEnterExit(
+                    this.singleton.selectedDate,
+                    this.singleton.selectedStructure.id,
                     params[0]);
         }
 

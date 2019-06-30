@@ -2,6 +2,9 @@ package com.muflone.android.django_hotels.database;
 
 import android.arch.persistence.room.TypeConverter;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
 
 public class Converters {
@@ -15,5 +18,21 @@ public class Converters {
     public static Date fromTimestamp(Long value) {
         // Convert Long to Date
         return value == null ? null : new Date(value);
+    }
+
+    @TypeConverter
+    public static JSONObject stringToJSONObject(String value) {
+        // Convert String to JSONObject
+        try {
+            return new JSONObject(value);
+        } catch (JSONException exception) {
+            return null;
+        }
+    }
+
+    @TypeConverter
+    public static String jsonObjectToString(JSONObject value) {
+        // Convert a JSONObject to String
+        return value.toString();
     }
 }

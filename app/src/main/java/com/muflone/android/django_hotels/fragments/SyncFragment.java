@@ -1,7 +1,6 @@
 package com.muflone.android.django_hotels.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,8 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.Singleton;
-import com.muflone.android.django_hotels.activities.CreateShortcutActivity;
 import com.muflone.android.django_hotels.api.exceptions.InvalidServerStatusException;
 import com.muflone.android.django_hotels.api.exceptions.RetransmittedActivityException;
 import com.muflone.android.django_hotels.database.models.Structure;
@@ -27,7 +26,6 @@ import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException
 import com.muflone.android.django_hotels.api.exceptions.InvalidResponseException;
 import com.muflone.android.django_hotels.api.exceptions.NoConnectionException;
 import com.muflone.android.django_hotels.api.exceptions.NoDownloadException;
-import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
 
 import java.util.ArrayList;
@@ -44,8 +42,8 @@ public class SyncFragment extends Fragment {
     private TextView errorMessageDetails;
     private ImageView errorView;
     private final List<String> progressPhases = new ArrayList<>();
-    private final String TAG = getClass().getName();
-    private static final int SYNC_SLEEP = 400;
+    private final String TAG = getClass().getSimpleName();
+    private final Singleton singleton = Singleton.getInstance();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -65,23 +63,26 @@ public class SyncFragment extends Fragment {
         this.progressPhases.add(this.context.getString(R.string.sync_step_date_time));
         this.progressPhases.add(this.context.getString(R.string.sync_step_timestamps_transmission));
         this.progressPhases.add(this.context.getString(R.string.sync_step_activities_transmission));
-        this.progressPhases.add(this.context.getString(R.string.sync_step_download));
+        this.progressPhases.add(this.context.getString(R.string.sync_step_get_data));
         this.progressPhases.add(this.context.getString(R.string.sync_step_saving_data));
         this.progressPhases.add(this.context.getString(R.string.sync_step_completed));
         this.progressBar.setMax(this.progressPhases.size());
 
+        // Execute START SYNC commands
+        this.singleton.commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                Constants.CONTEXT_START_SYNC);
         // Download data asynchronously from the server
-        Singleton singleton = Singleton.getInstance();
         AsyncTaskSync task = new AsyncTaskSync(
                 this.context,
-                singleton.api,
-                AppDatabase.getAppDatabase(this.context),
+                this.singleton.api,
                 this.progressPhases.size(),
                 new AsyncTaskListener() {
                     @Override
                     public void onSuccess(AsyncTaskResult result) {
                         // Reload data from database
-                        AppDatabase.getAppDatabase(context).reload(context, new AsyncTaskListener() {
+                        SyncFragment.this.singleton.database.reload(context, new AsyncTaskListener() {
                             @Override
                             public void onSuccess(AsyncTaskResult result) {
                                 // Complete synchronization only after the data was reloaded from DB
@@ -89,28 +90,27 @@ public class SyncFragment extends Fragment {
                                         context.getResources().getDrawable(R.drawable.ic_check_ok));
                                 progressBar2.setVisibility(View.INVISIBLE);
                                 errorView.setVisibility(View.VISIBLE);
-                                // Add shortcut on home screen if not yet done
-                                if (! singleton.settings.getHomeScreenShortcutAdded()) {
-                                    Intent intent = new Intent(getContext(), CreateShortcutActivity.class);
-                                    startActivity(intent);
-                                    singleton.settings.setHomeScreenShortcutAdded(true);
-                                }
                                 // Update options menu if available
                                 if (getActivity() != null) {
                                     if (singleton.apiData.structuresMap.size() > 0) {
                                         // Select the first available structure
                                         SortedSet<Structure> sortedStructures = new TreeSet<>(singleton.apiData.structuresMap.values());
-                                        singleton.selectedStructure = sortedStructures.first();
+                                        SyncFragment.this.singleton.selectedStructure = sortedStructures.first();
                                     } else {
                                         // No available structures
-                                        singleton.selectedStructure = null;
+                                        SyncFragment.this.singleton.selectedStructure = null;
                                     }
                                     getActivity().invalidateOptionsMenu();
                                 }
+                                // Execute SYNC END commands
+                                SyncFragment.this.singleton.commandFactory.executeCommands(
+                                        SyncFragment.this.getActivity(),
+                                        SyncFragment.this.getContext(),
+                                        Constants.CONTEXT_SYNC_END);
                             }
 
                             @Override
-                            public void onFailure(Exception e) {
+                            public void onFailure(Exception exception) {
                             }
 
                             @Override
@@ -156,15 +156,20 @@ public class SyncFragment extends Fragment {
                             errorMessageDetails.setText(message);
                             errorMessageDetails.setVisibility(View.VISIBLE);
                         }
+                        // Execute SYNC FAIL commands
+                        SyncFragment.this.singleton.commandFactory.executeCommands(
+                                SyncFragment.this.getActivity(),
+                                SyncFragment.this.getContext(),
+                                Constants.CONTEXT_SYNC_FAIL);
                     }
 
                     @Override
                     public void onProgress(int step, int total) {
-                        try {
-                            Thread.sleep(SYNC_SLEEP);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        // Execute SYNC PROGRESS commands
+                        SyncFragment.this.singleton.commandFactory.executeCommands(
+                                SyncFragment.this.getActivity(),
+                                SyncFragment.this.getContext(),
+                                Constants.CONTEXT_SYNC_PROGRESS);
                         // Update progress bar
                         if (step <= total) {
                             progressView.post(new Runnable() {
