@@ -57,7 +57,7 @@ public class Settings {
 
     @SuppressWarnings("unused")
     public String getString(String key, String defaultValue) {
-        // Get a string value, using the default value if not existents
+        // Get a string value, using the default value if not existing
         return this.preferences.getString(key, defaultValue);
     }
 
@@ -67,7 +67,7 @@ public class Settings {
 
     @SuppressWarnings("unused")
     public int getInteger(String key, int defaultValue) {
-        // Get an int value, using the default value if not existents
+        // Get an int value, using the default value if not existing
         return this.preferences.getInt(key, defaultValue);
     }
 
@@ -76,7 +76,7 @@ public class Settings {
     }
 
     public long getLong(String key, long defaultValue) {
-        // Get a long value, using the default value if not existents
+        // Get a long value, using the default value if not existing
         return this.preferences.getLong(key, defaultValue);
     }
 
@@ -86,7 +86,7 @@ public class Settings {
 
     @SuppressWarnings("unused")
     public boolean getBoolean(String key, boolean defaultValue) {
-        // Get a boolean value, using the default value if not existents
+        // Get a boolean value, using the default value if not existing
         return this.preferences.getBoolean(key, defaultValue);
     }
 
@@ -96,7 +96,7 @@ public class Settings {
 
     @SuppressWarnings("unused")
     public float getFloat(String key, float defaultValue) {
-        // Get a float value, using the default value if not existents
+        // Get a float value, using the default value if not existing
         return this.preferences.getFloat(key, defaultValue);
     }
 

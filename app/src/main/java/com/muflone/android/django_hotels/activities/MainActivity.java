@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity
             // Restore confirmation after 2 seconds
             new Handler().postDelayed(() -> backButtonPressed = false, 2000);
         } else {
-            // Execute APP BEGIN commands
+            // Execute APP END commands
             this.singleton.commandFactory.executeCommands(
                     this,
                     this.getBaseContext(),
