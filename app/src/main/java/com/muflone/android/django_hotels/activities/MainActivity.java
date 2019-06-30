@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,6 +38,7 @@ import java.util.TreeSet;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private final String TAG = getClass().getSimpleName();
     private final Singleton singleton = Singleton.getInstance();
     private Fragment fragment = null;
     private DrawerLayout drawerLayout = null;
@@ -175,9 +177,13 @@ public class MainActivity extends AppCompatActivity
                     this.getBaseContext(),
                     Constants.CONTEXT_APP_END);
             // Accept back button to close the activity
+            Log.d(this.TAG, "Closing database instance");
             this.singleton.database.destroyInstance();
+            Log.d(this.TAG, "Closing current activity");
             super.onBackPressed();
+            Log.d(this.TAG, "Closing any other activity");
             this.finishAffinity();
+            Log.d(this.TAG, "End of the program");
         }
     }
 
