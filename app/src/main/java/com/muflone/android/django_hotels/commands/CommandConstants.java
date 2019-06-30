@@ -14,4 +14,9 @@ public class CommandConstants {
     public static final String LOG_TYPE_INFORMATION = "information";
     public static final String LOG_TYPE_ERROR = "error";
     public static final String LOG_TYPE_ABNORMAL = "abnormal";
+
+    // Dialog types
+    public static final String DIALOG_TYPE_MESSAGE = "message";
+    public static final String DIALOG_TYPE_INPUT = "input";
+    public static final String DIALOG_TYPE_LIST = "list";
 }
