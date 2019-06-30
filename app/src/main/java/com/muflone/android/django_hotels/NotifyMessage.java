@@ -23,6 +23,7 @@ public class NotifyMessage {
         snackbar.show();
     }
 
+    @SuppressWarnings("unused")
     public static void snackbar(Context context, View rootView, String message, int duration) {
         // Show a Snackbar with the dismiss action
         NotifyMessage.snackbar(context, rootView, message,

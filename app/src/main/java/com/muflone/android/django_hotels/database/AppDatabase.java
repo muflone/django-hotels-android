@@ -95,7 +95,7 @@ public abstract class AppDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    public static synchronized void destroyInstance() {
+    public synchronized void destroyInstance() {
         if (INSTANCE != null) {
             // Execute checkpoint only for valid database status
             if (INSTANCE.checkDB()) {

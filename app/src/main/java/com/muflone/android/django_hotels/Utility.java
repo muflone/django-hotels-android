@@ -28,6 +28,7 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 public class Utility {
+    @SuppressWarnings("WeakerAccess")
     public static Date getCurrentDateTime(String timezone) {
         // Get current system date and time using the specified timezone
         Calendar calendar = Calendar.getInstance();
@@ -40,6 +41,7 @@ public class Utility {
         return getCurrentDateTime(TimeZone.getDefault().getID());
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static Date getCurrentDate(String timezone) {
         // Get current system date only using the specified timezone
         Calendar calendar = Calendar.getInstance();
@@ -56,6 +58,7 @@ public class Utility {
         return getCurrentDate(TimeZone.getDefault().getID());
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static Date getCurrentTime(String timezone) {
         // Get current system time using the specified time zone
         Calendar calendar = Calendar.getInstance();
@@ -71,14 +74,17 @@ public class Utility {
         return getCurrentTime(TimeZone.getDefault().getID());
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static int getScreenOrientation(Context context) {
         return context.getResources().getConfiguration().orientation;
     }
 
+    @SuppressWarnings("unused")
     public static boolean isScreenOrientationPortrait(Context context) {
         return getScreenOrientation(context) == Configuration.ORIENTATION_PORTRAIT;
     }
 
+    @SuppressWarnings("unused")
     public static boolean isScreenOrientationLandscape(Context context) {
         return getScreenOrientation(context) == Configuration.ORIENTATION_LANDSCAPE;
     }
@@ -202,7 +208,8 @@ public class Utility {
     }
 
     public static void createShortcutIcon(Activity activity, String title, int width, int height,
-                                          @Nullable String base64Icon, Class<?> klass) {
+                                          @Nullable String base64Icon,
+                                          @SuppressWarnings("SpellCheckingInspection") Class<?> klass) {
         // Add a shortcut icon to the home
         Intent shortcutIntent;
         shortcutIntent = new Intent(activity, klass);

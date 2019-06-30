@@ -67,6 +67,7 @@ public class ApiData {
         this.timestampDirectionsMap = new HashMap<>();
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isValidContract(Long contractId) {
         Contract contract = Objects.requireNonNull(this.contractsMap.get(contractId));
         return contract.enabled &&

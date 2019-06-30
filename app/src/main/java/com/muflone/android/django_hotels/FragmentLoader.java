@@ -43,6 +43,7 @@ public class FragmentLoader {
         return result;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static Fragment loadFragment(MainActivity activity, int containerId, Fragment fragment) {
         if (fragment != null) {
             // Update navigation drawer

@@ -12,7 +12,7 @@ public class Settings {
 
     public Settings(Context context) {
         this.context = context;
-        preferences = PreferenceManager.getDefaultSharedPreferences(this.context);
+        this.preferences = PreferenceManager.getDefaultSharedPreferences(this.context);
     }
 
     public String getTabletID() {
