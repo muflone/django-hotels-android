@@ -29,6 +29,7 @@ import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.ApiData;
+import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.dao.TimestampDao;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Timestamp;
@@ -327,10 +328,12 @@ public class ScannerFragment extends Fragment {
             }
             TimestampEmployeeItem timestampEmployee = Objects.requireNonNull(getItem(position));
             timestampViewHolder.employeeView.setText(timestampEmployee.fullName);
-            timestampViewHolder.dateView.setText(new SimpleDateFormat("yyyy-MM-dd").format(
-                    timestampEmployee.datetime));
-            timestampViewHolder.timeView.setText(new SimpleDateFormat("HH:mm.ss").format(
-                    timestampEmployee.datetime));
+            timestampViewHolder.dateView.setText(new SimpleDateFormat(singleton.settings.getString(
+                    CommandConstants.SETTING_SCANNER_TIMESTAMPS_FORMAT_DATE, "yyyy-MM-dd")).format(
+                            timestampEmployee.datetime));
+            timestampViewHolder.timeView.setText(new SimpleDateFormat(singleton.settings.getString(
+                    CommandConstants.SETTING_SCANNER_TIMESTAMPS_FORMAT_TIME, "HH:mm.ss")).format(
+                            timestampEmployee.datetime));
             timestampViewHolder.transmissionImage.setImageResource(
                     timestampEmployee.transmission == null ?
                             R.drawable.ic_timestamp_untransmitted :
