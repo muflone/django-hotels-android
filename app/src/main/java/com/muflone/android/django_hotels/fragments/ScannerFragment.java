@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class ScannerFragment extends Fragment {
     private Button enterButton;
     private Button exitButton;
     private ListView timestampEmployeesView;
+    private TextClock dayClock;
     private ScanType scanType = ScanType.SCAN_TYPE_UNKNOWN;
     private ApiData apiData;
     private Settings settings;
@@ -106,6 +108,9 @@ public class ScannerFragment extends Fragment {
         this.enterButton = this.rootLayout.findViewById(R.id.enterButton);
         this.exitButton = this.rootLayout.findViewById(R.id.exitButton);
         this.timestampEmployeesView = this.rootLayout.findViewById(R.id.timestampEmployeesView);
+        this.dayClock = this.rootLayout.findViewById(R.id.dayClock);
+        // Set format based on server settings
+        this.dayClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_DAY_FORMAT, "EEEE"));
     }
 
     private void startQRScanner(boolean enter) {
