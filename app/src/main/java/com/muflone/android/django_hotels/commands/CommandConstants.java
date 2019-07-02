@@ -6,6 +6,7 @@ public class CommandConstants {
     public static final String SETTING_SCANNER_TIMESTAMPS_FORMAT_DATE = "scanner_timestamps_format_date";
     public static final String SETTING_SCANNER_TIMESTAMPS_FORMAT_TIME = "scanner_timestamps_format_time";
     public static final String SETTING_SCANNER_CURRENT_DAY_FORMAT = "scanner_current_day_format";
+    public static final String SETTING_SCANNER_CURRENT_DATE_FORMAT = "scanner_current_date_format";
 
     // Set used value for all commands at once
     public static final int SET_USED_SET_ALL_COMMAND_USAGES = -1;

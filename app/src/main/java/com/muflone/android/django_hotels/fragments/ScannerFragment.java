@@ -57,6 +57,7 @@ public class ScannerFragment extends Fragment {
     private Button exitButton;
     private ListView timestampEmployeesView;
     private TextClock dayClock;
+    private TextClock dateClock;
     private ScanType scanType = ScanType.SCAN_TYPE_UNKNOWN;
     private ApiData apiData;
     private Settings settings;
@@ -109,8 +110,10 @@ public class ScannerFragment extends Fragment {
         this.exitButton = this.rootLayout.findViewById(R.id.exitButton);
         this.timestampEmployeesView = this.rootLayout.findViewById(R.id.timestampEmployeesView);
         this.dayClock = this.rootLayout.findViewById(R.id.dayClock);
+        this.dateClock = this.rootLayout.findViewById(R.id.dateClock);
         // Set format based on server settings
         this.dayClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_DAY_FORMAT, "EEEE"));
+        this.dateClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_DATE_FORMAT, "yyyy/MM/dd"));
     }
 
     private void startQRScanner(boolean enter) {
