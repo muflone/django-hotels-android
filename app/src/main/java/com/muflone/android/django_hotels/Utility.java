@@ -1,10 +1,12 @@
 package com.muflone.android.django_hotels;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,8 +15,10 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.View;
@@ -243,5 +247,20 @@ public class Utility {
         }
         intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
         activity.sendBroadcast(intent);
+    }
+
+    public static boolean requestWriteStoragePermission(Activity activity) {
+        boolean hasPermission = (ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        if (! hasPermission) {
+            ActivityCompat.requestPermissions(
+                    activity,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    Constants.REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION);
+            return false;
+        } else {
+            return true;
+        }
     }
 }

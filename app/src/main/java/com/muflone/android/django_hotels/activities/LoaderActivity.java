@@ -43,6 +43,9 @@ public class LoaderActivity extends AppCompatActivity {
         this.textViewAppName.setText(String.format(Locale.ROOT, "%s %s",
                 this.singleton.settings.getApplicationName(),
                 this.singleton.settings.getApplicationVersion()));
+        // Grant write storage permission
+        //noinspection ResultOfMethodCallIgnored
+        Utility.requestWriteStoragePermission(this);
         // Reload data from database
         AppDatabase.getAppDatabase(this).reload(this, new AsyncTaskListener() {
             @Override
