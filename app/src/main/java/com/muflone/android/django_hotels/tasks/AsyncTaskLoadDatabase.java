@@ -50,7 +50,6 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
     @Override
     protected AsyncTaskResult doInBackground(Void... params) {
         ApiData data = new ApiData();
-        // TODO: Database deletion is dangerous, must implement migrations
         if (! this.singleton.database.checkDB()) {
             Log.d("", "Invalid database structure " + this.singleton.database.getOpenHelper().getDatabaseName());
             // Close and backup database to external storage

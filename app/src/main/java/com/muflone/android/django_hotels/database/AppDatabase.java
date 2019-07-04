@@ -98,6 +98,9 @@ public abstract class AppDatabase extends RoomDatabase {
                     context, AppDatabase.class, Constants.DATABASE_NAME)
                 // Allow schema changes even without any migration
                 //.fallbackToDestructiveMigration()
+                // Execute schema migrations to save the user data
+                .addMigrations(Migrations.MIGRATION_5_TO_6)
+                .addMigrations(Migrations.MIGRATION_6_TO_7)
                 // allow queries on the main thread.
                 // Don’t do this on a real app! See PersistenceBasicSample for an example.
                 //.allowMainThreadQueries()
