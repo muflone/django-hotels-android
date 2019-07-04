@@ -5,8 +5,10 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Environment;
 
 import com.muflone.android.django_hotels.Constants;
+import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.database.dao.BrandDao;
 import com.muflone.android.django_hotels.database.dao.BuildingDao;
@@ -49,6 +51,15 @@ import com.muflone.android.django_hotels.database.models.TimestampDirection;
 import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
 import com.muflone.android.django_hotels.tasks.AsyncTaskLoadDatabase;
 import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Database(entities = {Brand.class, Building.class, Command.class, CommandUsage.class,
                       Company.class, Contract.class, ContractBuildings.class,
@@ -152,5 +163,45 @@ public abstract class AppDatabase extends RoomDatabase {
             }
         });
         task.execute();
+    }
+
+    public void backupDatabase(Context context, Settings settings) {
+        // Backup database to external storage
+        String destinationPath = String.format("backup_%s_%s.sqlite",
+                this.getOpenHelper().getDatabaseName().replace(".sqlite", ""),
+                new SimpleDateFormat("yyyy_MM_dd-HHmmss").format(new Date()));
+        File sourceFile = new File(
+                context.getApplicationInfo().dataDir +
+                        File.separator +
+                        "databases" +
+                        File.separator +
+                        this.getOpenHelper().getDatabaseName());
+        File destinationDirectory = new File(
+                Environment.getExternalStorageDirectory() +
+                        File.separator +
+                        settings.getPackageName() +
+                        File.separator +
+                        "backups");
+        // Create missing destination directory
+        if (! destinationDirectory.exists()) {
+            destinationDirectory.mkdir();
+        }
+        File destinationFile = new File(
+                destinationDirectory.getAbsoluteFile() +
+                        File.separator +
+                        destinationPath);
+        try {
+            FileInputStream inStream = new FileInputStream(sourceFile);
+            FileOutputStream outStream = new FileOutputStream(destinationFile);
+            FileChannel inChannel = inStream.getChannel();
+            FileChannel outChannel = outStream.getChannel();
+            inChannel.transferTo(0, inChannel.size(), outChannel);
+            inStream.close();
+            outStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

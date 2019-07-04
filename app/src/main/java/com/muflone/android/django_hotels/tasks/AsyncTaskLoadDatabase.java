@@ -53,9 +53,12 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
         // TODO: Database deletion is dangerous, must implement migrations
         if (! this.singleton.database.checkDB()) {
             Log.d("", "Invalid database structure " + this.singleton.database.getOpenHelper().getDatabaseName());
+            // Close and backup database to external storage
             this.singleton.database.destroyInstance();
+            this.singleton.database.backupDatabase(this.context.get(), this.singleton.settings);
             File databaseFile = new File(this.context.get().getApplicationInfo().dataDir +
                     "/databases/" + this.singleton.database.getOpenHelper().getDatabaseName());
+            // Delete old damaged database
             //noinspection ResultOfMethodCallIgnored
             databaseFile.delete();
             this.singleton.openDatabase(this.context.get());
