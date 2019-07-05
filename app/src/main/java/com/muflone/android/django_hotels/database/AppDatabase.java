@@ -187,6 +187,7 @@ public abstract class AppDatabase extends RoomDatabase {
                         "backups");
         // Create missing destination directory
         if (! destinationDirectory.exists()) {
+            //noinspection ResultOfMethodCallIgnored
             destinationDirectory.mkdir();
         }
         File destinationFile = new File(

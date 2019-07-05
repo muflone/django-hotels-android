@@ -56,9 +56,6 @@ public class ScannerFragment extends Fragment {
     private Button enterButton;
     private Button exitButton;
     private ListView timestampEmployeesView;
-    private TextClock dayClock;
-    private TextClock dateClock;
-    private TextClock timeClock;
     private ScanType scanType = ScanType.SCAN_TYPE_UNKNOWN;
     private ApiData apiData;
     private Settings settings;
@@ -110,13 +107,13 @@ public class ScannerFragment extends Fragment {
         this.enterButton = this.rootLayout.findViewById(R.id.enterButton);
         this.exitButton = this.rootLayout.findViewById(R.id.exitButton);
         this.timestampEmployeesView = this.rootLayout.findViewById(R.id.timestampEmployeesView);
-        this.dayClock = this.rootLayout.findViewById(R.id.dayClock);
-        this.dateClock = this.rootLayout.findViewById(R.id.dateClock);
-        this.timeClock = this.rootLayout.findViewById(R.id.timeClock);
+        TextClock dayClock = this.rootLayout.findViewById(R.id.dayClock);
+        TextClock dateClock = this.rootLayout.findViewById(R.id.dateClock);
+        TextClock timeClock = this.rootLayout.findViewById(R.id.timeClock);
         // Set clock/date format based on server settings
-        this.dayClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_DAY_FORMAT, "EEEE"));
-        this.dateClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_DATE_FORMAT, "yyyy/MM/dd"));
-        this.timeClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_TIME_FORMAT, "HH:mm.ss"));
+        dayClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_DAY_FORMAT, "EEEE"));
+        dateClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_DATE_FORMAT, "yyyy/MM/dd"));
+        timeClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_TIME_FORMAT, "HH:mm.ss"));
     }
 
     private void startQRScanner(boolean enter) {

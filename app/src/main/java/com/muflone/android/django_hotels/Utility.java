@@ -249,6 +249,7 @@ public class Utility {
         activity.sendBroadcast(intent);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static boolean requestWriteStoragePermission(Activity activity) {
         boolean hasPermission = (ContextCompat.checkSelfPermission(
                 activity,
