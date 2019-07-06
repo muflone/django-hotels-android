@@ -18,6 +18,7 @@
     <string name="section_scanner">Scan</string>
     <string name="section_structures">Structures</string>
     <string name="section_extras">Extra</string>
+    <string name="section_reports">Reports</string>
     <string name="section_sync">Synchronization</string>
     <string name="section_settings">Settings</string>
     <string name="section_about">About</string>
