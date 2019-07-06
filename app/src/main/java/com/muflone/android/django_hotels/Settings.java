@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 
 public class Settings {
     private final SharedPreferences preferences;
-    private final Context context;
+    public final Context context;
 
     public Settings(Context context) {
         this.context = context;

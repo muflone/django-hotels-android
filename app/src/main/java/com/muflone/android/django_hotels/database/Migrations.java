@@ -1,24 +1,28 @@
 package com.muflone.android.django_hotels.database;
 
 import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.migration.Migration;
+
+import org.jetbrains.annotations.NotNull;
 
 public class Migrations {
-    static final Migration MIGRATION_5_TO_6 = new Migration(5, 6) {
+    static final MigrationSafe MIGRATION_5_TO_6 = new MigrationSafe(5, 6) {
         @Override
-        public void migrate(SupportSQLiteDatabase database) {
+        public void migrate(@NotNull SupportSQLiteDatabase database) {
+            super.migrate(database);
             database.execSQL(
                     "CREATE TABLE IF NOT EXISTS settings (" +
                     "  name TEXT NOT NULL, " +
                     "  data TEXT, " +
                     "  PRIMARY KEY (name)" +
                     ")");
+            this.updateVersion(database);
         }
     };
 
-    static final Migration MIGRATION_6_TO_7 = new Migration(6, 7) {
+    static final MigrationSafe MIGRATION_6_TO_7 = new MigrationSafe(6, 7) {
         @Override
-        public void migrate(SupportSQLiteDatabase database) {
+        public void migrate(@NotNull SupportSQLiteDatabase database) {
+            super.migrate(database);
             database.execSQL(
                     "DROP TABLE IF EXISTS settings"
             );
@@ -39,6 +43,7 @@ public class Migrations {
                     "  PRIMARY KEY (id)" +
                     ")"
             );
+            this.updateVersion(database);
         }
     };
 }
