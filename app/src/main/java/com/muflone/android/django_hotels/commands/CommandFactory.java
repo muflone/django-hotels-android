@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.database.models.Command;
@@ -63,7 +62,7 @@ public class CommandFactory {
         }
         Log.d(this.TAG, String.format("Completed commands for context %s", contextType));
         // Apply a delay for APP END context
-        if (contextType.equals(Constants.CONTEXT_APP_END) && commandsList.size() > 0) {
+        if (contextType.equals(CommandConstants.CONTEXT_APP_END) && commandsList.size() > 0) {
             long delay = this.singleton.settings.getLong(CommandConstants.SETTING_APP_EXIT_COMMANDS_DELAY, 0);
             Log.d(this.TAG, String.format("Applying %s of %d milliseconds",
                     CommandConstants.SETTING_APP_EXIT_COMMANDS_DELAY,

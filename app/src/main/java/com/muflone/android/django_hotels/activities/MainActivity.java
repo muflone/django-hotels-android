@@ -20,11 +20,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.FragmentLoader;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
+import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
 
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity
             this.singleton.commandFactory.executeCommands(
                     this,
                     this.getBaseContext(),
-                    Constants.CONTEXT_APP_END);
+                    CommandConstants.CONTEXT_APP_END);
             // Accept back button to close the activity
             Log.d(this.TAG, "Closing database instance");
             this.singleton.database.destroyInstance();

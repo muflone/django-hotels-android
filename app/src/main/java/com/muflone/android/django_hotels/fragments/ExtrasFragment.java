@@ -9,9 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
+import com.muflone.android.django_hotels.commands.CommandConstants;
 
 import java.util.Objects;
 
@@ -29,7 +29,7 @@ public class ExtrasFragment extends Fragment {
         Singleton.getInstance().commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                Constants.CONTEXT_START_EXTRA_POST);
+                CommandConstants.CONTEXT_START_EXTRA_POST);
         return this.rootLayout;
     }
 

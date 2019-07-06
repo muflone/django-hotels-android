@@ -7,12 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
+import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.commands.CommandFactory;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Structure;
@@ -53,7 +53,7 @@ public class LoaderActivity extends AppCompatActivity {
                 LoaderActivity.this.singleton.commandFactory.executeCommands(
                         LoaderActivity.this,
                         LoaderActivity.this.getBaseContext(),
-                        Constants.CONTEXT_APP_BEGIN);
+                        CommandConstants.CONTEXT_APP_BEGIN);
                 // Select the first structure only if not already selected
                 if (LoaderActivity.this.singleton.selectedStructure == null &&
                         LoaderActivity.this.singleton.apiData.structuresMap.size() > 0) {

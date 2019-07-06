@@ -14,11 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
-import com.muflone.android.django_hotels.database.AppDatabase;
+import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.Command;
 import com.muflone.android.django_hotels.database.models.CommandUsage;
 
@@ -188,7 +187,7 @@ public class AboutFragment extends Fragment {
         }
         systemInformationValuesList.clear();
         // Add configured Commands elements
-        for (String context : Constants.contexts) {
+        for (String context : CommandConstants.contexts) {
             ArrayList<Command> commands = this.singleton.apiData.getCommandsByContext(context);
             aboutPage.addGroup(String.format(this.getString(R.string.about_configured_commands), context));
             stringBuilder.append(String.format(this.getString(R.string.about_configured_commands), context));
@@ -219,7 +218,7 @@ public class AboutFragment extends Fragment {
         this.singleton.commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                Constants.CONTEXT_START_ABOUT_POST);
+                CommandConstants.CONTEXT_START_ABOUT_POST);
         return aboutPage.create();
     }
 

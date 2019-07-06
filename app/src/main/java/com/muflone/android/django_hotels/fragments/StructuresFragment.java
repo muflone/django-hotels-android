@@ -25,12 +25,12 @@ import android.widget.Toast;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
 import com.muflone.android.django_hotels.api.ApiData;
+import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.ContractBuildings;
@@ -141,7 +141,7 @@ public class StructuresFragment extends Fragment {
         this.singleton.commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                Constants.CONTEXT_START_STRUCTURE_POST);
+                CommandConstants.CONTEXT_START_STRUCTURE_POST);
         return this.rootLayout;
     }
 

@@ -11,11 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.FragmentLoader;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.activities.MainActivity;
+import com.muflone.android.django_hotels.commands.CommandConstants;
 
 import java.util.Objects;
 
@@ -69,7 +69,7 @@ public class HomeFragment extends Fragment {
         Singleton.getInstance().commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                Constants.CONTEXT_START_MAIN_POST);
+                CommandConstants.CONTEXT_START_MAIN_POST);
         return this.rootLayout;
     }
 

@@ -90,7 +90,7 @@ public class ScannerFragment extends Fragment {
         this.singleton.commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                Constants.CONTEXT_START_SCANNER_POST);
+                CommandConstants.CONTEXT_START_SCANNER_POST);
         return this.rootLayout;
     }
 

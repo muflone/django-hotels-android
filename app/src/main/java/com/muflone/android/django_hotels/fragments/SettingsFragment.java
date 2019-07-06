@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
 
-import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
+import com.muflone.android.django_hotels.commands.CommandConstants;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     private Context context;
@@ -19,7 +19,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Singleton.getInstance().commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                Constants.CONTEXT_START_SETTINGS_POST);
+                CommandConstants.CONTEXT_START_SETTINGS_POST);
     }
 
     @Override
