@@ -27,6 +27,8 @@ public class HomeFragment extends Fragment {
     private TextView textViewStructures;
     private ImageView imageSectionExtra;
     private TextView textViewExtra;
+    private ImageView imageSectionReports;
+    private TextView textViewReports;
     private ImageView imageSectionSync;
     private TextView textViewSync;
     private ImageView imageSectionAbout;
@@ -45,15 +47,17 @@ public class HomeFragment extends Fragment {
         this.loadUI(inflater, Objects.requireNonNull(container));
         View.OnClickListener clickListener = view -> {
             String fragmentName;
-            if (view == imageSectionScanner || view == textViewScanner) {
+            if (view == this.imageSectionScanner || view == this.textViewScanner) {
                 fragmentName = FragmentLoader.FRAGMENT_SCANNER;
-            } else if (view == imageSectionStructures || view == textViewStructures) {
+            } else if (view == this.imageSectionStructures || view == this.textViewStructures) {
                 fragmentName = FragmentLoader.FRAGMENT_STRUCTURES;
-            } else if (view == imageSectionExtra || view == textViewExtra) {
+            } else if (view == this.imageSectionExtra || view == this.textViewExtra) {
                 fragmentName = FragmentLoader.FRAGMENT_EXTRA;
-            } else if (view == imageSectionSync || view == textViewSync) {
+            } else if (view == this.imageSectionReports || view == this.textViewReports) {
+                fragmentName = FragmentLoader.FRAGMENT_REPORTS;
+            } else if (view == this.imageSectionSync || view == this.textViewSync) {
                 fragmentName = FragmentLoader.FRAGMENT_SYNC;
-            } else if (view == imageSectionAbout || view == textViewAbout) {
+            } else if (view == this.imageSectionAbout || view == this.textViewAbout) {
                 fragmentName = FragmentLoader.FRAGMENT_ABOUT;
             } else {
                 fragmentName = null;
@@ -66,6 +70,8 @@ public class HomeFragment extends Fragment {
         this.textViewStructures.setOnClickListener(clickListener);
         this.imageSectionExtra.setOnClickListener(clickListener);
         this.textViewExtra.setOnClickListener(clickListener);
+        this.imageSectionReports.setOnClickListener(clickListener);
+        this.textViewReports.setOnClickListener(clickListener);
         this.imageSectionSync.setOnClickListener(clickListener);
         this.textViewSync.setOnClickListener(clickListener);
         this.imageSectionAbout.setOnClickListener(clickListener);
@@ -88,6 +94,8 @@ public class HomeFragment extends Fragment {
         this.textViewStructures = this.rootLayout.findViewById(R.id.textViewStructures);
         this.imageSectionExtra = this.rootLayout.findViewById(R.id.imageSectionExtra);
         this.textViewExtra = this.rootLayout.findViewById(R.id.textViewExtra);
+        this.imageSectionReports = this.rootLayout.findViewById(R.id.imageSectionReports);
+        this.textViewReports = this.rootLayout.findViewById(R.id.textViewReports);
         this.imageSectionSync = this.rootLayout.findViewById(R.id.imageSectionSync);
         this.textViewSync = this.rootLayout.findViewById(R.id.textViewSync);
         this.imageSectionAbout = this.rootLayout.findViewById(R.id.imageSectionAbout);

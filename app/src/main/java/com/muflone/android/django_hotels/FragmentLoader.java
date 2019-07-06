@@ -6,6 +6,7 @@ import com.muflone.android.django_hotels.activities.MainActivity;
 import com.muflone.android.django_hotels.fragments.AboutFragment;
 import com.muflone.android.django_hotels.fragments.ExtrasFragment;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
+import com.muflone.android.django_hotels.fragments.ReportsFragment;
 import com.muflone.android.django_hotels.fragments.ScannerFragment;
 import com.muflone.android.django_hotels.fragments.SettingsFragment;
 import com.muflone.android.django_hotels.fragments.StructuresFragment;
@@ -17,6 +18,7 @@ public class FragmentLoader {
     public final static String FRAGMENT_STRUCTURES = StructuresFragment.class.getSimpleName();
     public final static String FRAGMENT_EXTRA = ExtrasFragment.class.getSimpleName();
     public final static String FRAGMENT_SYNC = SyncFragment.class.getSimpleName();
+    public final static String FRAGMENT_REPORTS = ReportsFragment.class.getSimpleName();
     public final static String FRAGMENT_SETTINGS = SettingsFragment.class.getSimpleName();
     public final static String FRAGMENT_ABOUT = AboutFragment.class.getSimpleName();
 
@@ -31,6 +33,8 @@ public class FragmentLoader {
             result = new StructuresFragment();
         } else if (fragmentName.equals(FRAGMENT_EXTRA)) {
             result = new ExtrasFragment();
+        } else if (fragmentName.equals(FRAGMENT_REPORTS)) {
+            result = new ReportsFragment();
         } else if (fragmentName.equals(FRAGMENT_SYNC)) {
             result = new SyncFragment();
         } else if (fragmentName.equals(FRAGMENT_SETTINGS)) {

@@ -76,6 +76,11 @@
     <string name="extras_no_extras_allowed">No extras are allowed for this structure</string>
     <string name="extras_marked_extra_as_untransmitted">Marked extra as untrasmitted</string>
 
+    <!-- Reports section -->
+    <string name="reports_timestamps">Timestamps</string>
+    <string name="reports_daily_activities">Daily Activities</string>
+    <string name="reports_monthly_activities">Monthly Activities</string>
+
     <!-- Settings section -->
     <string name="settings_tablet">Tablet settings</string>
 
