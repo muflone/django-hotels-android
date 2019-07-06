@@ -12,6 +12,8 @@ public class CommandConstants {
     public static final String CONTEXT_START_STRUCTURE_END = "START STRUCTURE END";
     public static final String CONTEXT_START_EXTRA_BEGIN = "START EXTRA BEGIN";
     public static final String CONTEXT_START_EXTRA_END = "START EXTRA END";
+    public static final String CONTEXT_START_REPORTS_BEGIN = "START REPORTS BEGIN";
+    public static final String CONTEXT_START_REPORTS_END = "START REPORTS END";
     public static final String CONTEXT_START_SYNC_BEGIN = "START SYNC BEGIN";
     public static final String CONTEXT_START_SYNC_END = "START SYNC END";
     public static final String CONTEXT_START_SETTINGS_BEGIN = "START SETTINGS BEGIN";
@@ -31,6 +33,8 @@ public class CommandConstants {
             CONTEXT_START_STRUCTURE_END,
             CONTEXT_START_EXTRA_BEGIN,
             CONTEXT_START_EXTRA_END,
+            CONTEXT_START_REPORTS_BEGIN,
+            CONTEXT_START_REPORTS_END,
             CONTEXT_START_SYNC_BEGIN,
             CONTEXT_START_SYNC_END,
             CONTEXT_START_SETTINGS_BEGIN,

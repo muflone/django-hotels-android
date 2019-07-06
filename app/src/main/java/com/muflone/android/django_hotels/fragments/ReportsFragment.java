@@ -31,6 +31,11 @@ public class ReportsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // Execute START REPORTS BEGIN commands
+        Singleton.getInstance().commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                CommandConstants.CONTEXT_START_REPORTS_BEGIN);
         // Initialize UI
         this.loadUI(inflater, Objects.requireNonNull(container));
         View.OnClickListener clickListener = view -> {
@@ -51,11 +56,11 @@ public class ReportsFragment extends Fragment {
         this.viewReportTimestamps.setOnClickListener(clickListener);
         this.viewReportDailyActivities.setOnClickListener(clickListener);
         this.viewReportMonthlyActivities.setOnClickListener(clickListener);
-        // Execute START EXTRA commands
+        // Execute START REPORTS END commands
         Singleton.getInstance().commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                Constants.CONTEXT_START_REPORTS);
+                CommandConstants.CONTEXT_START_REPORTS_END);
         return this.rootLayout;
     }
 
