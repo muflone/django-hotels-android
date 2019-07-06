@@ -286,6 +286,7 @@ public class Utility {
             destinationDirectory.mkdir();
         }
         File sourceFile = new File(databasePath);
+        //noinspection SpellCheckingInspection
         File destinationFile = new File(
                 destinationDirectory.getAbsoluteFile() +
                         File.separator +

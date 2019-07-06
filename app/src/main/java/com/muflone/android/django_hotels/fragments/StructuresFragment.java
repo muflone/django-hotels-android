@@ -278,6 +278,7 @@ public class StructuresFragment extends Fragment {
         private final List<EmployeeStatus> employeesStatusList;
         private final HashMap<Long, List<Long>> roomsEmployeesAssignedList;
 
+        @SuppressWarnings("WeakerAccess")
         public StructuresLoadEmployeesTask(List<String> employeesList,
                                            ListView employeesView,
                                            Table<Long, Long, ServiceActivity> serviceActivityTable,
@@ -567,6 +568,7 @@ public class StructuresFragment extends Fragment {
                     R.drawable.ic_timestamp_untransmitted : R.drawable.ic_timestamp_transmitted);
         }
 
+        @SuppressWarnings("WeakerAccess")
         public void showAlreadyAssignedEmployees(List<Long> employeesIdList) {
             List<String> employees = new ArrayList<>();
             for (Long employeeId : employeesIdList) {
@@ -581,6 +583,7 @@ public class StructuresFragment extends Fragment {
             dialog.show();
         }
 
+        @SuppressWarnings("WeakerAccess")
         public void updateService(RoomStatus roomStatus) {
             // Check if the employee is already assigned for the room
             List<Long> roomAssignationList = Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId));
@@ -661,6 +664,7 @@ public class StructuresFragment extends Fragment {
         private final Singleton singleton = Singleton.getInstance();
         private final Table<Long, Long, ServiceActivity> serviceActivityTable;
 
+        @SuppressWarnings("WeakerAccess")
         public RoomStatusUpdateDatabaseTask(Table<Long, Long, ServiceActivity> serviceActivityTable) {
             this.serviceActivityTable = serviceActivityTable;
         }
@@ -711,6 +715,7 @@ public class StructuresFragment extends Fragment {
         private final String[] directionsArray;
         private final boolean[] directionsCheckedArray;
 
+        @SuppressWarnings("WeakerAccess")
         public EmployeeStatus(Contract contract, Date date,
                               List<TimestampDirection> timestampDirections,
                               List<Timestamp> timestampsEmployee) {

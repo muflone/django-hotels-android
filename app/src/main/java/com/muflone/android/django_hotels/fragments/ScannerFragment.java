@@ -208,6 +208,7 @@ public class ScannerFragment extends Fragment {
         private final TimestampAdapter timestampAdapter;
         private final Singleton singleton = Singleton.getInstance();
 
+        @SuppressWarnings("WeakerAccess")
         public ScannerUpdateDatabaseTask(Context context,
                                          List<TimestampEmployeeItem> timestampEmployeeList,
                                          TimestampAdapter timestampAdapter) {
@@ -242,6 +243,7 @@ public class ScannerFragment extends Fragment {
         private final AsyncTaskListener listener;
         private final Singleton singleton = Singleton.getInstance();
 
+        @SuppressWarnings("WeakerAccess")
         public ScannerInsertTimestampTask(AsyncTaskListener listener) {
             this.listener = listener;
         }
@@ -261,6 +263,7 @@ public class ScannerFragment extends Fragment {
         private final TimestampAdapter timestampAdapter;
         private final Singleton singleton = Singleton.getInstance();
 
+        @SuppressWarnings("WeakerAccess")
         public ScannerListLatestTimestampsTask(List<TimestampEmployeeItem> timestampEmployeeList,
                                                TimestampAdapter timestampAdapter) {
             this.timestampEmployeeList = timestampEmployeeList;

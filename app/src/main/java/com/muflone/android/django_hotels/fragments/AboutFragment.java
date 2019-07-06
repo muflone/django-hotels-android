@@ -291,12 +291,14 @@ public class AboutFragment extends Fragment {
         private final int id;
         private final List<String> values;
 
+        @SuppressWarnings("WeakerAccess")
         public SystemInformationValue(int id, String... values) {
             // Add multiple values at once
             this.id = id;
             this.values = Arrays.asList(values);
         }
 
+        @SuppressWarnings("WeakerAccess")
         public String toString(boolean newLine) {
             String result;
             if (getString(this.id).contains("%s")) {
@@ -320,11 +322,13 @@ public class AboutFragment extends Fragment {
         private final Command command;
         private final Singleton singleton = Singleton.getInstance();
 
+        @SuppressWarnings("WeakerAccess")
         public CommandValue(String format, Command command) {
             this.format = format;
             this.command = command;
         }
 
+        @SuppressWarnings("WeakerAccess")
         public String toString(boolean newLine) {
             CommandUsage commandUsage = this.singleton.apiData.commandsUsageMap.get(command.id);
             String result = String.format(this.format,

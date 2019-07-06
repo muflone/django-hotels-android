@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess")
 public class Migrations {
     static final MigrationSafe MIGRATION_5_TO_6 = new MigrationSafe(5, 6) {
         @Override

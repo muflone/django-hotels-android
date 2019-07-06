@@ -5,19 +5,26 @@
       <w>barcodescanner</w>
       <w>callum</w>
       <w>castelli</w>
+      <w>daimajia</w>
+      <w>eece</w>
       <w>hmac</w>
       <w>hotp</w>
       <w>issueralt</w>
       <w>journeyapps</w>
       <w>labelalt</w>
+      <w>listitem</w>
+      <w>medyo</w>
       <w>muflone</w>
+      <w>numberprogressbar</w>
       <w>otpauth</w>
+      <w>playstore</w>
       <w>qrcode</w>
       <w>snackbar</w>
       <w>sqlite</w>
       <w>steamchars</w>
       <w>totp</w>
       <w>untrasmitted</w>
+      <w>xing</w>
       <w>zxing</w>
     </words>
   </dictionary>

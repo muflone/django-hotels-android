@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class MigrationSafe extends Migration {
     public MigrationSafe(int startVersion, int endVersion) {
         // Implements a more secure migration with database backup

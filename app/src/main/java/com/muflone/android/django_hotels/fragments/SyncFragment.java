@@ -175,6 +175,7 @@ public class SyncFragment extends Fragment {
                             progressView.post(new Runnable() {
                                 private int step;
 
+                                @SuppressWarnings("WeakerAccess")
                                 public Runnable init(int step) {
                                     this.step = step;
                                     return (this);

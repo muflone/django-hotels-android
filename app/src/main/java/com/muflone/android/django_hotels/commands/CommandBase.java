@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.muflone.android.django_hotels.database.models.Command;
 
+@SuppressWarnings("WeakerAccess")
 public class CommandBase {
     // Common interface for all the Commands to execute from CommandFactory
     protected final Activity activity;
