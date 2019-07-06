@@ -137,11 +137,11 @@ public class StructuresFragment extends Fragment {
                     this.api.settings.getRoomsListStandardHeight());
             return false;
         });
-        // Execute START STRUCTURE POST commands
+        // Execute START STRUCTURE END commands
         this.singleton.commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                CommandConstants.CONTEXT_START_STRUCTURE_POST);
+                CommandConstants.CONTEXT_START_STRUCTURE_END);
         return this.rootLayout;
     }
 

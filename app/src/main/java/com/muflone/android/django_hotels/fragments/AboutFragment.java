@@ -214,11 +214,11 @@ public class AboutFragment extends Fragment {
         // Tools section
         aboutPage.addGroup(this.getString(R.string.about_tools));
         aboutPage.addItem(this.databaseBackupElement());
-        // Execute START ABOUT POST commands
+        // Execute START ABOUT END commands
         this.singleton.commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                CommandConstants.CONTEXT_START_ABOUT_POST);
+                CommandConstants.CONTEXT_START_ABOUT_END);
         return aboutPage.create();
     }
 

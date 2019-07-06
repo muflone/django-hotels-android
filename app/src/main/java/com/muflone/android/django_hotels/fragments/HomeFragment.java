@@ -65,11 +65,11 @@ public class HomeFragment extends Fragment {
         this.textViewSync.setOnClickListener(clickListener);
         this.imageSectionAbout.setOnClickListener(clickListener);
         this.textViewAbout.setOnClickListener(clickListener);
-        // Execute START MAIN POST commands
+        // Execute START MAIN END commands
         Singleton.getInstance().commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                CommandConstants.CONTEXT_START_MAIN_POST);
+                CommandConstants.CONTEXT_START_MAIN_END);
         return this.rootLayout;
     }
 

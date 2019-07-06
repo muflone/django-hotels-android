@@ -68,11 +68,11 @@ public class SyncFragment extends Fragment {
         this.progressPhases.add(this.context.getString(R.string.sync_step_completed));
         this.progressBar.setMax(this.progressPhases.size());
 
-        // Execute START SYNC POST commands
+        // Execute START SYNC END commands
         this.singleton.commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                CommandConstants.CONTEXT_START_SYNC_POST);
+                CommandConstants.CONTEXT_START_SYNC_END);
         // Download data asynchronously from the server
         AsyncTaskSync task = new AsyncTaskSync(
                 this.context,

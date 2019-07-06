@@ -25,11 +25,11 @@ public class ExtrasFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         // Initialize UI
         this.loadUI(inflater, Objects.requireNonNull(container));
-        // Execute START EXTRA POST commands
+        // Execute START EXTRA END commands
         Singleton.getInstance().commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                CommandConstants.CONTEXT_START_EXTRA_POST);
+                CommandConstants.CONTEXT_START_EXTRA_END);
         return this.rootLayout;
     }
 
