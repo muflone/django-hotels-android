@@ -86,11 +86,11 @@ public class ScannerFragment extends Fragment {
                     this.timestampAdapter).execute(position);
             return false;
         });
-        // Execute START SCANNER commands
+        // Execute START SCANNER POST commands
         this.singleton.commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                Constants.CONTEXT_START_SCANNER);
+                Constants.CONTEXT_START_SCANNER_POST);
         return this.rootLayout;
     }
 

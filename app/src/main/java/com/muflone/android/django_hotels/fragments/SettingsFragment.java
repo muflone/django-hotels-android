@@ -15,11 +15,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Execute START SETTINGS commands
+        // Execute START SETTINGS POST commands
         Singleton.getInstance().commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
-                Constants.CONTEXT_START_SETTINGS);
+                Constants.CONTEXT_START_SETTINGS_POST);
     }
 
     @Override

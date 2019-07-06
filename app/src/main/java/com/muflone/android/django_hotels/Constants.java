@@ -9,25 +9,25 @@ public class Constants {
     // Command Contexts for CommandFactory
     public static final String CONTEXT_APP_BEGIN = "APP BEGIN";
     public static final String CONTEXT_APP_END = "APP END";
-    public static final String CONTEXT_START_MAIN = "START MAIN";
-    public static final String CONTEXT_START_SCANNER = "START SCANNER";
-    public static final String CONTEXT_START_STRUCTURE = "START STRUCTURE";
-    public static final String CONTEXT_START_EXTRA = "START EXTRA";
-    public static final String CONTEXT_START_SYNC = "START SYNC";
-    public static final String CONTEXT_START_SETTINGS = "START SETTINGS";
-    public static final String CONTEXT_START_ABOUT = "START ABOUT";
+    public static final String CONTEXT_START_MAIN_POST = "START MAIN POST";
+    public static final String CONTEXT_START_SCANNER_POST = "START SCANNER POST";
+    public static final String CONTEXT_START_STRUCTURE_POST = "START STRUCTURE POST";
+    public static final String CONTEXT_START_EXTRA_POST = "START EXTRA POST";
+    public static final String CONTEXT_START_SYNC_POST = "START SYNC POST";
+    public static final String CONTEXT_START_SETTINGS_POST = "START SETTINGS POST";
+    public static final String CONTEXT_START_ABOUT_POST = "START ABOUT POST";
     public static final String CONTEXT_SYNC_PROGRESS = "SYNC PROGRESS";
     public static final String CONTEXT_SYNC_FAIL = "SYNC FAIL";
     public static final String CONTEXT_SYNC_END = "SYNC END";
     public static final String[] contexts = {
             CONTEXT_APP_BEGIN,
-            CONTEXT_START_MAIN,
-            CONTEXT_START_SCANNER,
-            CONTEXT_START_STRUCTURE,
-            CONTEXT_START_EXTRA,
-            CONTEXT_START_SYNC,
-            CONTEXT_START_SETTINGS,
-            CONTEXT_START_ABOUT,
+            CONTEXT_START_MAIN_POST,
+            CONTEXT_START_SCANNER_POST,
+            CONTEXT_START_STRUCTURE_POST,
+            CONTEXT_START_EXTRA_POST,
+            CONTEXT_START_SYNC_POST,
+            CONTEXT_START_SETTINGS_POST,
+            CONTEXT_START_ABOUT_POST,
             CONTEXT_SYNC_PROGRESS,
             CONTEXT_SYNC_FAIL,
             CONTEXT_SYNC_END,
