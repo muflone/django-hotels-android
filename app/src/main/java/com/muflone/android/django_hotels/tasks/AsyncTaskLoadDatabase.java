@@ -54,7 +54,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
             Log.d("", "Invalid database structure " + this.singleton.database.getOpenHelper().getDatabaseName());
             // Close and backup database to external storage
             this.singleton.database.destroyInstance();
-            this.singleton.database.backupDatabase(this.context.get(), this.singleton.settings);
+            this.singleton.database.backupDatabase(this.context.get());
             File databaseFile = new File(this.context.get().getApplicationInfo().dataDir +
                     "/databases/" + this.singleton.database.getOpenHelper().getDatabaseName());
             // Delete old damaged database

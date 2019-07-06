@@ -26,8 +26,16 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -263,5 +271,41 @@ public class Utility {
         } else {
             return true;
         }
+    }
+
+    public static boolean backupDatabase(Context context, String databasePath, int version) {
+        // Backup database to external storage
+        boolean result = false;
+        File destinationDirectory = new File(
+                context.getExternalFilesDir(null) +
+                        File.separator +
+                        "backups");
+        // Create missing destination directory
+        if (! destinationDirectory.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            destinationDirectory.mkdir();
+        }
+        File sourceFile = new File(databasePath);
+        File destinationFile = new File(
+                destinationDirectory.getAbsoluteFile() +
+                        File.separator +
+                        String.format(Locale.ROOT, "%s_v%d.sqlite",
+                                new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date()),
+                                version));
+        try {
+            FileInputStream inStream = new FileInputStream(sourceFile);
+            FileOutputStream outStream = new FileOutputStream(destinationFile);
+            FileChannel inChannel = inStream.getChannel();
+            FileChannel outChannel = outStream.getChannel();
+            inChannel.transferTo(0, inChannel.size(), outChannel);
+            inStream.close();
+            outStream.close();
+            result = true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
