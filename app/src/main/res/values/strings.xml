@@ -122,6 +122,7 @@
     <string name="about_configured_commands_format">ID: %d\nName: %s\nType: %s\nUses: %d/%d</string>
     <string name="about_configured_commands_none">There are no configured commands</string>
     <string name="about_feedback">Feedback</string>
+    <string name="about_tools">Tools</string>
 
     <string name="about_application_information_name">Application name</string>
     <string name="about_application_information_version">Application version</string>
@@ -145,4 +146,7 @@
     <string name="about_feedback_copy_details">Copy details</string>
     <string name="about_feedback_copied_to_clipboard">Copied data to clipboard</string>
     <string name="about_feedback_email_details">Send an e-mail to the author with the details</string>
+
+    <string name="about_tools_database_backup">Execute a data backup</string>
+    <string name="about_tools_database_backup_done">A copy of the database was made</string>
 </resources>

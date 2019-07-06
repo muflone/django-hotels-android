@@ -18,6 +18,7 @@ import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
+import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Command;
 import com.muflone.android.django_hotels.database.models.CommandUsage;
 
@@ -211,6 +212,9 @@ public class AboutFragment extends Fragment {
         aboutPage.addItem(getCopyDetailsElement(stringBuilder.toString()));
         // E-mail details item
         aboutPage.addItem(getEmailDetailsElement(stringBuilder.toString()));
+        // Tools section
+        aboutPage.addGroup(this.getString(R.string.about_tools));
+        aboutPage.addItem(this.databaseBackupElement());
         // Execute START ABOUT commands
         this.singleton.commandFactory.executeCommands(
                 this.getActivity(),
@@ -278,6 +282,20 @@ public class AboutFragment extends Fragment {
                     Utility.copyToClipboard(context, value);
                     Toast.makeText(context, R.string.about_feedback_copied_to_clipboard, Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private Element databaseBackupElement() {
+        Element backupElement = new Element();
+        backupElement.setTitle(this.getString(R.string.about_tools_database_backup));
+        backupElement.setIconDrawable(R.drawable.ic_settings);
+        backupElement.setIconTint(mehdi.sakout.aboutpage.R.color.about_item_icon_color);
+        backupElement.setIconNightTint(android.R.color.white);
+        backupElement.setGravity(Gravity.START);
+        backupElement.setOnClickListener(view -> {
+            singleton.database.backupDatabase(context);
+            Toast.makeText(context, R.string.about_tools_database_backup_done, Toast.LENGTH_LONG).show();
+        });
+        return backupElement;
     }
 
     @Override
