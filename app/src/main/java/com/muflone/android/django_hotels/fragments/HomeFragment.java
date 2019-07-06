@@ -36,6 +36,11 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // Execute START MAIN BEGIN commands
+        Singleton.getInstance().commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                CommandConstants.CONTEXT_START_MAIN_BEGIN);
         // Initialize UI
         this.loadUI(inflater, Objects.requireNonNull(container));
         View.OnClickListener clickListener = view -> {

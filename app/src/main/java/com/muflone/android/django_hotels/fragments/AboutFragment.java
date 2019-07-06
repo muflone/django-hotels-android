@@ -44,6 +44,12 @@ public class AboutFragment extends Fragment {
         List<SystemInformationValue> systemInformationValuesList = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder();
 
+        // Execute START ABOUT BEGIN commands
+        this.singleton.commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                CommandConstants.CONTEXT_START_ABOUT_BEGIN);
+
         AboutPage aboutPage = new AboutPage(this.context)
                 .isRTL(false)
                 .setImage(R.mipmap.ic_launcher_round)

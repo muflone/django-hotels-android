@@ -4,24 +4,38 @@ public class CommandConstants {
     // Command Contexts for CommandFactory
     public static final String CONTEXT_APP_BEGIN = "APP BEGIN";
     public static final String CONTEXT_APP_END = "APP END";
+    public static final String CONTEXT_START_MAIN_BEGIN = "START MAIN BEGIN";
     public static final String CONTEXT_START_MAIN_END = "START MAIN END";
+    public static final String CONTEXT_START_SCANNER_BEGIN = "START SCANNER BEGIN";
     public static final String CONTEXT_START_SCANNER_END = "START SCANNER END";
+    public static final String CONTEXT_START_STRUCTURE_BEGIN = "START STRUCTURE BEGIN";
     public static final String CONTEXT_START_STRUCTURE_END = "START STRUCTURE END";
+    public static final String CONTEXT_START_EXTRA_BEGIN = "START EXTRA BEGIN";
     public static final String CONTEXT_START_EXTRA_END = "START EXTRA END";
+    public static final String CONTEXT_START_SYNC_BEGIN = "START SYNC BEGIN";
     public static final String CONTEXT_START_SYNC_END = "START SYNC END";
+    public static final String CONTEXT_START_SETTINGS_BEGIN = "START SETTINGS BEGIN";
     public static final String CONTEXT_START_SETTINGS_END = "START SETTINGS END";
+    public static final String CONTEXT_START_ABOUT_BEGIN = "START ABOUT BEGIN";
     public static final String CONTEXT_START_ABOUT_END = "START ABOUT END";
     public static final String CONTEXT_SYNC_PROGRESS = "SYNC PROGRESS";
     public static final String CONTEXT_SYNC_FAIL = "SYNC FAIL";
     public static final String CONTEXT_SYNC_END = "SYNC END";
     public static final String[] contexts = {
             CONTEXT_APP_BEGIN,
+            CONTEXT_START_MAIN_BEGIN,
             CONTEXT_START_MAIN_END,
+            CONTEXT_START_SCANNER_BEGIN,
             CONTEXT_START_SCANNER_END,
+            CONTEXT_START_STRUCTURE_BEGIN,
             CONTEXT_START_STRUCTURE_END,
+            CONTEXT_START_EXTRA_BEGIN,
             CONTEXT_START_EXTRA_END,
+            CONTEXT_START_SYNC_BEGIN,
             CONTEXT_START_SYNC_END,
+            CONTEXT_START_SETTINGS_BEGIN,
             CONTEXT_START_SETTINGS_END,
+            CONTEXT_START_ABOUT_BEGIN,
             CONTEXT_START_ABOUT_END,
             CONTEXT_SYNC_PROGRESS,
             CONTEXT_SYNC_FAIL,

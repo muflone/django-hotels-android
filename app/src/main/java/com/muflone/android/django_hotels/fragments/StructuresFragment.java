@@ -90,6 +90,12 @@ public class StructuresFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // Execute START STRUCTURE BEGIN commands
+        this.singleton.commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                CommandConstants.CONTEXT_START_STRUCTURE_BEGIN);
+
         // Initialize UI
         this.loadUI(inflater, Objects.requireNonNull(container));
 

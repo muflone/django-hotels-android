@@ -23,6 +23,11 @@ public class ExtrasFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // Execute START EXTRA BEGIN commands
+        Singleton.getInstance().commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                CommandConstants.CONTEXT_START_EXTRA_BEGIN);
         // Initialize UI
         this.loadUI(inflater, Objects.requireNonNull(container));
         // Execute START EXTRA END commands

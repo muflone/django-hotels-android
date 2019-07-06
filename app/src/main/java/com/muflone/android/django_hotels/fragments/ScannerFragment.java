@@ -66,6 +66,12 @@ public class ScannerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // Execute START SCANNER BEGIN commands
+        this.singleton.commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                CommandConstants.CONTEXT_START_SCANNER_BEGIN);
+
         this.apiData = this.singleton.apiData;
         this.settings = this.singleton.settings;
 

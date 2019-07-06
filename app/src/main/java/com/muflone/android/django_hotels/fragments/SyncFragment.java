@@ -49,6 +49,12 @@ public class SyncFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // Execute START SYNC BEGIN commands
+        this.singleton.commandFactory.executeCommands(
+                this.getActivity(),
+                this.getContext(),
+                CommandConstants.CONTEXT_START_SYNC_BEGIN);
+
         View rootView = inflater.inflate(R.layout.sync_fragment, container, false);
         this.progressBar = rootView.findViewById(R.id.progressBar);
         this.progressBar2 = rootView.findViewById(R.id.progressBar2);
