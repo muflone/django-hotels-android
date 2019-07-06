@@ -13,8 +13,20 @@ public abstract class MigrationSafe extends Migration {
         super(startVersion, endVersion);
     }
 
-    @Override
-    public void migrate(@NonNull SupportSQLiteDatabase database) {
+    public void migrate(@NonNull SupportSQLiteDatabase database, String[] actions) {
+        // Execute a safe migration
+
+        // Backup database to external storage
+        this.backupDatabase(database);
+        // Execute SQL actions
+        for (String action : actions) {
+            database.execSQL(action);
+        }
+        // Update database version
+        this.updateVersion(database);
+    }
+
+    private void backupDatabase(@NonNull SupportSQLiteDatabase database) {
         // Backup database to external storage
         Singleton singleton = Singleton.getInstance();
         database.setTransactionSuccessful();
@@ -23,7 +35,7 @@ public abstract class MigrationSafe extends Migration {
         database.beginTransaction();
     }
 
-    public void updateVersion(@NonNull SupportSQLiteDatabase database) {
+    private void updateVersion(@NonNull SupportSQLiteDatabase database) {
         // Update database version
         database.setVersion(this.endVersion);
     }
