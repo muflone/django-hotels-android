@@ -65,6 +65,9 @@ public class ReportsFragment extends Fragment {
         // Set WebView zoom enabled
         this.webReport.getSettings().setBuiltInZoomControls(
                 this.singleton.settings.getBoolean(CommandConstants.SETTING_REPORTS_ZOOM_ENABLE, false));
+        // Set WebView zoom control
+        this.webReport.getSettings().setDisplayZoomControls(
+                this.singleton.settings.getBoolean(CommandConstants.SETTING_REPORTS_ZOOM_CONTROLS, false));
         // Execute START REPORTS END commands
         Singleton.getInstance().commandFactory.executeCommands(
                 this.getActivity(),
