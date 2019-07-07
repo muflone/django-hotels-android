@@ -52,6 +52,10 @@ public class Api {
             connection.setConnectTimeout(settings.getInteger(
                     CommandConstants.SYNC_CONNECT_TIMEOUT,
                     Constants.SYNC_CONNECT_TIMEOUT_DEFAULT));
+            // Set connection read timeout
+            connection.setReadTimeout(settings.getInteger(
+                    CommandConstants.SYNC_READ_TIMEOUT,
+                    Constants.SYNC_READ_TIMEOUT_DEFAULT));
             // Add custom headers
             connection.setRequestProperty("client-agent", this.settings.getPackageName());
             connection.setRequestProperty("client-version", this.settings.getApplicationVersion());
