@@ -58,6 +58,17 @@ public class CommandConstants {
     public static final String SETTING_SYNC_READ_TIMEOUT = "sync_read_timeout";
     public static final String SETTING_EXTRAS_TIME_STEP = "extras_time_step";
 
+    // Report for timestamps
+    public static final String SETTING_REPORTS_TIMESTAMPS_HEADER = "reports_timestamps_header";
+    public static final String SETTING_REPORTS_TIMESTAMPS_FIRST = "reports_timestamps_first";
+    public static final String SETTING_REPORTS_TIMESTAMPS_CONTENT = "reports_timestamps_content";
+    public static final String SETTING_REPORTS_TIMESTAMPS_TOTALS = "reports_timestamps_totals";
+    public static final String SETTING_REPORTS_TIMESTAMPS_FOOTER = "reports_timestamps_footer";
+    public static final String SETTING_REPORTS_TIMESTAMPS_TIME_FORMAT = "reports_timestamps_time_format";
+    public static final String SETTING_REPORTS_TIMESTAMPS_DURATION_FORMAT = "reports_timestamps_duration_format";
+    public static final String SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME = "reports_timestamps_missing_enter_time";
+    public static final String SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME = "reports_timestamps_missing_exit_time";
+
     // Set used value for all commands at once
     public static final int SET_USED_SET_ALL_COMMAND_USAGES = -1;
 
