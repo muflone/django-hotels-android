@@ -3,8 +3,10 @@ package com.muflone.android.django_hotels.api;
 import android.net.Uri;
 
 import com.google.android.apps.authenticator.Base32String;
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
+import com.muflone.android.django_hotels.commands.CommandConstants;
 
 import org.fedorahosted.freeotp.Token;
 
@@ -46,6 +48,10 @@ public class Api {
         try {
             URL requestUrl = new URL(this.buildJsonUri(segment).toString());
             URLConnection connection = requestUrl.openConnection();
+            // Set connection connect timeout
+            connection.setConnectTimeout(settings.getInteger(
+                    CommandConstants.SYNC_CONNECT_TIMEOUT,
+                    Constants.SYNC_CONNECT_TIMEOUT_DEFAULT));
             // Add custom headers
             connection.setRequestProperty("client-agent", this.settings.getPackageName());
             connection.setRequestProperty("client-version", this.settings.getApplicationVersion());
