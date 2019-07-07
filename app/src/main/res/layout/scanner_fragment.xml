@@ -6,28 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/enterButton"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/action_enter"
+        android:background="@drawable/btn_rounded_2"
         android:drawableStart="@drawable/ic_action_enter2"
         android:text="@string/scan_register_enter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/exitButton"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/exitButton"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/action_exit"
+        android:background="@drawable/btn_rounded_3"
         android:drawableEnd="@drawable/ic_action_exit2"
         android:text="@string/scan_register_exit"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,7 +52,7 @@
             android:format24Hour="EEEE"
             android:padding="10dp"
             android:textAlignment="center"
-            android:textColor="@color/clock_foreground"
+            android:textColor="@color/color_button_2"
             android:textSize="70sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +66,7 @@
             android:format24Hour="yyyy/MM/dd"
             android:padding="10dp"
             android:textAlignment="center"
-            android:textColor="@color/clock_foreground"
+            android:textColor="@color/color_button_2"
             android:textSize="70sp"
             app:layout_constraintBottom_toTopOf="@+id/timeClock"
             app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +81,7 @@
             android:format24Hour="HH:mm.ss"
             android:padding="10dp"
             android:textAlignment="center"
-            android:textColor="@color/clock_foreground"
+            android:textColor="@color/color_button_2"
             android:textSize="70sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

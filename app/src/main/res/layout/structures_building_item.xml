@@ -33,12 +33,14 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="ITEM" />
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/serviceButton"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:background="@drawable/btn_rounded_1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/noteButton"
         app:layout_constraintTop_toTopOf="parent"

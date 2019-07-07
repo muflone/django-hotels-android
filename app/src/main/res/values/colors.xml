@@ -21,8 +21,7 @@
     <color name="color_rooms_background">#DCEDC8</color>
     <color name="color_rooms_background_already_assigned">#FF7070</color>
 
-    <color name="action_enter">#7AE400</color>
-    <color name="action_exit">#FA3333</color>
-
-    <color name="clock_foreground">#5DAC00</color>
+    <color name="color_button_1">#90CAF9</color>
+    <color name="color_button_2">#4CAF50</color>
+    <color name="color_button_3">#FF8A65</color>
 </resources>
