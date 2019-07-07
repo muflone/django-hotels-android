@@ -50,13 +50,13 @@ public class Api {
             URLConnection connection = requestUrl.openConnection();
             // Set connection connect timeout (don't allow lower timeout than default)
             int timeout = settings.getInteger(
-                    CommandConstants.SYNC_CONNECT_TIMEOUT,
+                    CommandConstants.SETTING_SYNC_CONNECT_TIMEOUT,
                     Constants.SYNC_CONNECT_TIMEOUT_DEFAULT);
             connection.setConnectTimeout(timeout > Constants.SYNC_CONNECT_TIMEOUT_DEFAULT ? timeout :
                     Constants.SYNC_CONNECT_TIMEOUT_DEFAULT);
             // Set connection read timeout (don't allow lower timeout than default)
             timeout = settings.getInteger(
-                    CommandConstants.SYNC_READ_TIMEOUT,
+                    CommandConstants.SETTING_SYNC_READ_TIMEOUT,
                     Constants.SYNC_READ_TIMEOUT_DEFAULT);
             connection.setReadTimeout(timeout > Constants.SYNC_READ_TIMEOUT_DEFAULT ? timeout :
                     Constants.SYNC_READ_TIMEOUT_DEFAULT);
