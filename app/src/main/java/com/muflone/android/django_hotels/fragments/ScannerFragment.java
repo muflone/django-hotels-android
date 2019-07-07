@@ -280,7 +280,7 @@ public class ScannerFragment extends Fragment {
         protected List<TimestampEmployee> doInBackground(Long... params) {
             return this.singleton.database.timestampDao().listByLatestEnterExit(
                     this.singleton.selectedDate,
-                    this.singleton.selectedStructure.id,
+                    this.singleton.selectedStructure != null ? this.singleton.selectedStructure.id : 0,
                     params[0]);
         }
 
