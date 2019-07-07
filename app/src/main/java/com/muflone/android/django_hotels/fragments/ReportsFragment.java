@@ -110,7 +110,7 @@ public class ReportsFragment extends Fragment {
         protected List<TimestampEmployee> doInBackground(Void... params) {
             return this.singleton.database.timestampDao().listForReportTimestamps(
                     this.singleton.selectedDate,
-                    this.singleton.selectedStructure.id);
+                    this.singleton.selectedStructure != null ? this.singleton.selectedStructure.id : 0);
         }
 
         @Override
