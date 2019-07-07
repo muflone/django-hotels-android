@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity
             this.onNavigationItemSelected(this.menuItemSettings);
         } else {
             this.onNavigationItemSelected(this.menuItemHome);
+            // Grant write storage permission
+            Utility.requestWriteStoragePermission(this);
         }
         invalidateOptionsMenu();
     }
