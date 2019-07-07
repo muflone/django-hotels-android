@@ -48,14 +48,18 @@ public class Api {
         try {
             URL requestUrl = new URL(this.buildJsonUri(segment).toString());
             URLConnection connection = requestUrl.openConnection();
-            // Set connection connect timeout
-            connection.setConnectTimeout(settings.getInteger(
+            // Set connection connect timeout (don't allow lower timeout than default)
+            int timeout = settings.getInteger(
                     CommandConstants.SYNC_CONNECT_TIMEOUT,
-                    Constants.SYNC_CONNECT_TIMEOUT_DEFAULT));
-            // Set connection read timeout
-            connection.setReadTimeout(settings.getInteger(
+                    Constants.SYNC_CONNECT_TIMEOUT_DEFAULT);
+            connection.setConnectTimeout(timeout > Constants.SYNC_CONNECT_TIMEOUT_DEFAULT ? timeout :
+                    Constants.SYNC_CONNECT_TIMEOUT_DEFAULT);
+            // Set connection read timeout (don't allow lower timeout than default)
+            timeout = settings.getInteger(
                     CommandConstants.SYNC_READ_TIMEOUT,
-                    Constants.SYNC_READ_TIMEOUT_DEFAULT));
+                    Constants.SYNC_READ_TIMEOUT_DEFAULT);
+            connection.setReadTimeout(timeout > Constants.SYNC_READ_TIMEOUT_DEFAULT ? timeout :
+                    Constants.SYNC_READ_TIMEOUT_DEFAULT);
             // Add custom headers
             connection.setRequestProperty("client-agent", this.settings.getPackageName());
             connection.setRequestProperty("client-version", this.settings.getApplicationVersion());
