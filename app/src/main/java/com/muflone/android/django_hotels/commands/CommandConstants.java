@@ -59,6 +59,7 @@ public class CommandConstants {
     public static final String SETTING_EXTRAS_TIME_STEP = "extras_time_step";
     public static final String SETTING_REPORTS_ZOOM_ENABLE = "reports_zoom_enable";
     public static final String SETTING_REPORTS_ZOOM_CONTROLS = "reports_zoom_controls";
+    public static final String SETTING_REPORTS_ZOOM_DEFAULT = "reports_zoom_default";
 
     // Report for timestamps
     public static final String SETTING_REPORTS_TIMESTAMPS_HEADER = "reports_timestamps_header";
