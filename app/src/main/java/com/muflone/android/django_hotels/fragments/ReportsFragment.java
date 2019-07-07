@@ -48,9 +48,9 @@ public class ReportsFragment extends Fragment {
                 ReportTimestampsListByDateTask task = new ReportTimestampsListByDateTask(this);
                 task.execute();
             } else if (view == this.viewReportDailyActivities) {
-                reportText = ReportsFragment.this.loadReportDailyActivities();
+                reportText = "<html><body><h1>Daily Activities</h1></body></html>";
             } else if (view == this.viewReportMonthlyActivities) {
-                reportText = ReportsFragment.this.loadReportMonthlyActivities();
+                reportText = "<html><body><h1>Monthly Activities</h1></body></html>";
             }
             // Check if valid report and show it
             if (reportText != null) {
@@ -87,14 +87,6 @@ public class ReportsFragment extends Fragment {
     private void showReportData(String data) {
         // Load report data in webview
         this.webReport.loadData(data, "text/html", "utf-8");
-    }
-
-    private String loadReportDailyActivities() {
-        return "<html><body><h1>Daily Activities</h1></body></html>";
-    }
-
-    private String loadReportMonthlyActivities() {
-        return "<html><body><h1>Monthly Activities</h1></body></html>";
     }
 
     private static class ReportTimestampsListByDateTask extends AsyncTask<Void, Void, List<TimestampEmployee>> {
