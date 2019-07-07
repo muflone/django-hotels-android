@@ -284,9 +284,7 @@ public class AboutFragment extends Fragment {
     private Element newCommandElement(String text, String value) {
         // Return an element for Custom command
         return this.newDetailElement(text)
-                .setOnClickListener(view -> {
-                    Toast.makeText(context, value, Toast.LENGTH_LONG).show();
-                });
+                .setOnClickListener(view -> Toast.makeText(context, value, Toast.LENGTH_LONG).show());
     }
 
     private Element newSystemInformationElement(String value) {
