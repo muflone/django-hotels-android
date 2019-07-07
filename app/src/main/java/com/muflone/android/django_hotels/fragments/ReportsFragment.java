@@ -165,7 +165,11 @@ public class ReportsFragment extends Fragment {
                         .replace("{{ NOTES_STYLE }}", notes == null ? "notes_empty" : "notes"));
             }
             // Show report data
-            this.fragment.showReportData(reportHeader + reportFirstLine + stringBuilder.toString() + reportTotals + reportFooter);
+            String reportData = reportHeader + reportFirstLine + stringBuilder.toString() + reportTotals + reportFooter;
+            if (reportData.length() == 0) {
+                reportData = "<html><body><h1>Timestamps</h1><h3>No data</h3></body></html>";
+            }
+            this.fragment.showReportData(reportData);
         }
 
         private class ReportTimestampListItem {
