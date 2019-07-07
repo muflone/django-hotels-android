@@ -57,6 +57,7 @@ public class CommandConstants {
     public static final String SETTING_SYNC_CONNECT_TIMEOUT = "sync_connect_timeout";
     public static final String SETTING_SYNC_READ_TIMEOUT = "sync_read_timeout";
     public static final String SETTING_EXTRAS_TIME_STEP = "extras_time_step";
+    public static final String SETTING_REPORTS_ZOOM_ENABLE = "reports_zoom_enable";
 
     // Report for timestamps
     public static final String SETTING_REPORTS_TIMESTAMPS_HEADER = "reports_timestamps_header";

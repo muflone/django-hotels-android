@@ -30,13 +30,14 @@ public class ReportsFragment extends Fragment {
     private TextView viewReportDailyActivities;
     private TextView viewReportMonthlyActivities;
     private WebView webReport;
+    private Singleton singleton = Singleton.getInstance();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         // Execute START REPORTS BEGIN commands
-        Singleton.getInstance().commandFactory.executeCommands(
+        this.singleton.commandFactory.executeCommands(
                 this.getActivity(),
                 this.getContext(),
                 CommandConstants.CONTEXT_START_REPORTS_BEGIN);
@@ -61,6 +62,9 @@ public class ReportsFragment extends Fragment {
         this.viewReportTimestamps.setOnClickListener(clickListener);
         this.viewReportDailyActivities.setOnClickListener(clickListener);
         this.viewReportMonthlyActivities.setOnClickListener(clickListener);
+        // Set WebView zoom enabled
+        this.webReport.getSettings().setBuiltInZoomControls(
+                this.singleton.settings.getBoolean(CommandConstants.SETTING_REPORTS_ZOOM_ENABLE, false));
         // Execute START REPORTS END commands
         Singleton.getInstance().commandFactory.executeCommands(
                 this.getActivity(),
