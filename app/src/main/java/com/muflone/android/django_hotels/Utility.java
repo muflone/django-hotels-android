@@ -38,6 +38,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class Utility {
     @SuppressWarnings("WeakerAccess")
@@ -318,5 +319,18 @@ public class Utility {
                     activity.getString(R.string.app_name),
                     title));
         }
+    }
+
+    public static String formatElapsedTime(long seconds, String format) {
+        // Format elapsed time
+        long hours = TimeUnit.SECONDS.toHours(seconds);
+        seconds -= TimeUnit.HOURS.toSeconds(hours);
+
+        long minutes = TimeUnit.SECONDS.toMinutes (seconds);
+        seconds -= TimeUnit.MINUTES.toSeconds(minutes);
+
+        return seconds > 0 ?
+                String.format (format == null ? "%02d:%02d:%02d" : format, hours, minutes, seconds) :
+                "";
     }
 }
