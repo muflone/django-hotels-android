@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.TextView;
 
-import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.commands.CommandConstants;
@@ -20,12 +19,10 @@ import java.util.Objects;
 
 public class ReportsFragment extends Fragment {
     private View rootLayout;
-    private Context context;
     private TextView viewReportTimestamps;
     private TextView viewReportDailyActivities;
     private TextView viewReportMonthlyActivities;
     private WebView webReport;
-    private final Singleton singleton = Singleton.getInstance();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -75,19 +72,18 @@ public class ReportsFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        this.context = context;
         super.onAttach(context);
     }
 
-    public String loadReportTimestamps() {
+    private String loadReportTimestamps() {
         return "<html><body><h1>Timestamps</h1></body></html>";
     }
 
-    public String loadReportDailyActivities() {
+    private String loadReportDailyActivities() {
         return "<html><body><h1>Daily Activities</h1></body></html>";
     }
 
-    public String loadReportMonthlyActivities() {
+    private String loadReportMonthlyActivities() {
         return "<html><body><h1>Monthly Activities</h1></body></html>";
     }
 }
