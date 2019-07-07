@@ -203,7 +203,8 @@ public class AboutFragment extends Fragment {
                 for (Command command : commands) {
                     CommandValue commandValue = new CommandValue(
                             this.getString(R.string.about_configured_commands_format), command);
-                    aboutPage.addItem(this.newDetailElement(commandValue.toString(false)));
+                    aboutPage.addItem(this.newCommandElement(commandValue.toString(false),
+                                                             commandValue.command.command.toString()));
                     stringBuilder.append(commandValue.toString(true));
                 }
             } else {
@@ -274,10 +275,18 @@ public class AboutFragment extends Fragment {
     }
 
     private Element newDetailElement(String value) {
-        // Return an element for System Information
+        // Return a generic element with information
         return new Element()
                 .setIconDrawable(R.drawable.ic_info)
                 .setTitle(value);
+    }
+
+    private Element newCommandElement(String text, String value) {
+        // Return an element for Custom command
+        return this.newDetailElement(text)
+                .setOnClickListener(view -> {
+                    Toast.makeText(context, value, Toast.LENGTH_LONG).show();
+                });
     }
 
     private Element newSystemInformationElement(String value) {
