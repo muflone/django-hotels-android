@@ -19,7 +19,6 @@ import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.tasks.TaskListenerInterface;
 import com.muflone.android.django_hotels.tasks.TaskResult;
 
-import java.util.Locale;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
