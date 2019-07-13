@@ -34,10 +34,10 @@ import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Timestamp;
-import com.muflone.android.django_hotels.database.models.TimestampEmployee;
 import com.muflone.android.django_hotels.tasks.TaskInsertTimestamp;
 import com.muflone.android.django_hotels.tasks.TaskListenerInterface;
 import com.muflone.android.django_hotels.tasks.TaskResult;
+import com.muflone.android.django_hotels.tasks.TaskScannerListLatestTimestamps;
 
 import org.fedorahosted.freeotp.Token;
 
@@ -46,7 +46,6 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -205,7 +204,7 @@ public class ScannerFragment extends Fragment {
 
     private void listLatestTimestamps() {
         // List the latest timestamps
-        new ScannerListLatestTimestampsTask(this.timestampEmployeeList,
+        new TaskScannerListLatestTimestamps(this.timestampEmployeeList,
                 this.timestampAdapter).execute(Long.valueOf(Constants.LATEST_TIMESTAMPS));
     }
 
@@ -246,43 +245,7 @@ public class ScannerFragment extends Fragment {
         }
     }
 
-    private static class ScannerListLatestTimestampsTask extends AsyncTask<Long, Void, List<TimestampEmployee>> {
-        private final List<TimestampEmployeeItem> timestampEmployeeList;
-        private final TimestampAdapter timestampAdapter;
-        private final Singleton singleton = Singleton.getInstance();
-
-        @SuppressWarnings("WeakerAccess")
-        public ScannerListLatestTimestampsTask(List<TimestampEmployeeItem> timestampEmployeeList,
-                                               TimestampAdapter timestampAdapter) {
-            this.timestampEmployeeList = timestampEmployeeList;
-            this.timestampAdapter = timestampAdapter;
-        }
-
-        @Override
-        protected List<TimestampEmployee> doInBackground(Long... params) {
-            return this.singleton.database.timestampDao().listByLatestEnterExit(
-                    this.singleton.selectedDate,
-                    this.singleton.selectedStructure != null ? this.singleton.selectedStructure.id : 0,
-                    params[0]);
-        }
-
-        @Override
-        protected void onPostExecute(List<TimestampEmployee> result) {
-            // Reload the timestamps list
-            this.timestampEmployeeList.clear();
-            for (TimestampEmployee timestamp : result) {
-                this.timestampEmployeeList.add(new TimestampEmployeeItem(
-                        timestamp.id,
-                        String.format("%s %s", timestamp.firstName, timestamp.lastName),
-                        timestamp.datetime,
-                        timestamp.direction,
-                        timestamp.transmission));
-            }
-            this.timestampAdapter.notifyDataSetChanged();
-        }
-    }
-
-    private class TimestampAdapter extends ArrayAdapter<TimestampEmployeeItem> {
+    public class TimestampAdapter extends ArrayAdapter<TimestampEmployeeItem> {
         TimestampAdapter(Context context, int resource, List<TimestampEmployeeItem> objects) {
             super(context, resource, objects);
         }
