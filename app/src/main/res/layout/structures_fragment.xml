@@ -9,15 +9,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/employeesView"
+    <include
+        layout="@layout/include_employees_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.7"
-        android:background="@color/color_employees_background"
-        android:choiceMode="singleChoice"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_weight="0.7" />
 
     <ScrollView
         android:layout_width="match_parent"
