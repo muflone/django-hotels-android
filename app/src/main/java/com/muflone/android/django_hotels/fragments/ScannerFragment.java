@@ -33,7 +33,7 @@ import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Timestamp;
-import com.muflone.android.django_hotels.tasks.TaskInsertTimestamp;
+import com.muflone.android.django_hotels.tasks.TaskTimestampInsert;
 import com.muflone.android.django_hotels.tasks.TaskListenerInterface;
 import com.muflone.android.django_hotels.tasks.TaskResult;
 import com.muflone.android.django_hotels.tasks.TaskScannerListLatestTimestamps;
@@ -167,7 +167,7 @@ public class ScannerFragment extends Fragment {
                                             this.apiData.enterDirection.id : this.apiData.exitDirection.id,
                                     Utility.getCurrentDateTime(),
                                     "", null);
-                            new TaskInsertTimestamp(new TaskListenerInterface() {
+                            new TaskTimestampInsert(new TaskListenerInterface() {
                                 @Override
                                 public void onSuccess(TaskResult result) {
                                     // Reload list
