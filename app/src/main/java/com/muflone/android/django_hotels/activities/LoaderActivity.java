@@ -16,7 +16,7 @@ import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.commands.CommandFactory;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Structure;
-import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
+import com.muflone.android.django_hotels.tasks.TaskListenerInterface;
 import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
 
 import java.util.Locale;
@@ -42,7 +42,7 @@ public class LoaderActivity extends AppCompatActivity {
         this.loadUI();
         this.textViewAppName.setText(this.singleton.settings.getApplicationNameVersion());
         // Reload data from database
-        AppDatabase.getAppDatabase(this).reload(this, new AsyncTaskListener() {
+        AppDatabase.getAppDatabase(this).reload(this, new TaskListenerInterface() {
             @Override
             public void onSuccess(AsyncTaskResult result) {
                 // Execute APP BEGIN commands

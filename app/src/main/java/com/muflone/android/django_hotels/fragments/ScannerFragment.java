@@ -35,7 +35,7 @@ import com.muflone.android.django_hotels.database.dao.TimestampDao;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampEmployee;
-import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
+import com.muflone.android.django_hotels.tasks.TaskListenerInterface;
 import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
 
 import org.fedorahosted.freeotp.Token;
@@ -168,7 +168,7 @@ public class ScannerFragment extends Fragment {
                                             this.apiData.enterDirection.id : this.apiData.exitDirection.id,
                                     Utility.getCurrentDateTime(),
                                     "", null);
-                            new ScannerInsertTimestampTask(new AsyncTaskListener() {
+                            new ScannerInsertTimestampTask(new TaskListenerInterface() {
                                 @Override
                                 public void onSuccess(AsyncTaskResult result) {
                                     // Reload list
@@ -246,11 +246,11 @@ public class ScannerFragment extends Fragment {
     }
 
     private static class ScannerInsertTimestampTask extends AsyncTask<Timestamp, Void, Void> {
-        private final AsyncTaskListener listener;
+        private final TaskListenerInterface listener;
         private final Singleton singleton = Singleton.getInstance();
 
         @SuppressWarnings("WeakerAccess")
-        public ScannerInsertTimestampTask(AsyncTaskListener listener) {
+        public ScannerInsertTimestampTask(TaskListenerInterface listener) {
             this.listener = listener;
         }
 

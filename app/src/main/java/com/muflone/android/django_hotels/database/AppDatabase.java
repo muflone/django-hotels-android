@@ -47,7 +47,7 @@ import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
-import com.muflone.android.django_hotels.tasks.AsyncTaskListener;
+import com.muflone.android.django_hotels.tasks.TaskListenerInterface;
 import com.muflone.android.django_hotels.tasks.AsyncTaskLoadDatabase;
 import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
 
@@ -130,11 +130,11 @@ public abstract class AppDatabase extends RoomDatabase {
         return result;
     }
 
-    public void reload(Context context, AsyncTaskListener callback) {
+    public void reload(Context context, TaskListenerInterface callback) {
         // Load data from database
         AsyncTaskLoadDatabase task = new AsyncTaskLoadDatabase(
                 context,
-                new AsyncTaskListener() {
+                new TaskListenerInterface() {
             @Override
             public void onSuccess(AsyncTaskResult result) {
                 Singleton.getInstance().apiData = result.data;

@@ -62,13 +62,13 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final String TAG = getClass().getSimpleName();
 
     private final Api api;
-    private final AsyncTaskListener callback;
+    private final TaskListenerInterface callback;
     private final int totalSteps;
     private final Singleton singleton = Singleton.getInstance();
     private final WeakReference<Context> context;
     private int currentStep;
 
-    public AsyncTaskSync(Context context, Api api, int totalSteps, AsyncTaskListener callback) {
+    public AsyncTaskSync(Context context, Api api, int totalSteps, TaskListenerInterface callback) {
         this.context = new WeakReference<>(context);
         this.api = api;
         this.callback = callback;
