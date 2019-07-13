@@ -41,6 +41,7 @@ import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
+import com.muflone.android.django_hotels.tasks.TaskStructureUpdateRoomStatus;
 
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
@@ -614,16 +615,16 @@ public class StructuresFragment extends Fragment {
         ImageView transmissionImage;
     }
 
-    private class RoomStatus {
+    public class RoomStatus {
         private final String emptyServiceDescription;
-        final String name;
-        final long contractId;
-        final long roomId;
-        final List<Service> services;
-        Service service;
+        private final List<Service> services;
+        private final String name;
         private int serviceCounter;
-        String description;
-        Date transmission;
+        public final long contractId;
+        public final long roomId;
+        public Service service;
+        public String description;
+        public Date transmission;
 
         RoomStatus(Context context, String name, long contractId, long roomId,
                    List<Service> services, Service service, String description,
@@ -662,55 +663,7 @@ public class StructuresFragment extends Fragment {
 
         private void updateDatabase() {
             // Update database row
-            new RoomStatusUpdateDatabaseTask(serviceActivityTable).execute(this);
-        }
-    }
-
-    private static class RoomStatusUpdateDatabaseTask extends AsyncTask<RoomStatus, Void, Void> {
-        private final Singleton singleton = Singleton.getInstance();
-        private final Table<Long, Long, ServiceActivity> serviceActivityTable;
-
-        @SuppressWarnings("WeakerAccess")
-        public RoomStatusUpdateDatabaseTask(Table<Long, Long, ServiceActivity> serviceActivityTable) {
-            this.serviceActivityTable = serviceActivityTable;
-        }
-
-        @Override
-        protected Void doInBackground(RoomStatus... params) {
-            RoomStatus roomStatus = params[0];
-            List<ServiceActivity> serviceActivityList =
-                    this.singleton.database.serviceActivityDao().listByDateContract(
-                            this.singleton.selectedDate,
-                            roomStatus.contractId, roomStatus.roomId);
-            ServiceActivity serviceActivity;
-            if (serviceActivityList.size() > 0) {
-                serviceActivity = serviceActivityList.get(0);
-                if (roomStatus.service != null) {
-                    // Update existing ServiceActivity
-                    serviceActivity.serviceId = roomStatus.service.id;
-                    serviceActivity.description = roomStatus.description;
-                    serviceActivity.transmission = roomStatus.transmission;
-                    this.singleton.database.serviceActivityDao().update(serviceActivity);
-                    serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
-                            serviceActivity);
-                } else {
-                    // Delete existing ServiceActivity
-                    this.singleton.database.serviceActivityDao().delete(serviceActivity);
-                    serviceActivityTable.remove(roomStatus.contractId, roomStatus.roomId);
-                }
-            } else if (roomStatus.service != null) {
-                // Create new ServiceActivity
-                serviceActivity = new ServiceActivity(0,
-                        this.singleton.selectedDate,
-                        roomStatus.contractId,
-                        roomStatus.roomId,
-                        roomStatus.service.id,
-                        1, roomStatus.description, null);
-                this.singleton.database.serviceActivityDao().insert(serviceActivity);
-                serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
-                        serviceActivity);
-            }
-            return null;
+            new TaskStructureUpdateRoomStatus(serviceActivityTable).execute(this);
         }
     }
 
