@@ -60,4 +60,6 @@ dependencies {
     implementation 'com.github.medyo:android-about-page:1.2.5'
     implementation 'com.google.guava:guava:27.1-android'
     implementation 'com.daimajia.numberprogressbar:library:1.4@aar'
+    implementation 'com.itextpdf:itextpdf:5.5.13.1'
+    implementation 'com.itextpdf.tool:xmlworker:5.5.13.1'
 }

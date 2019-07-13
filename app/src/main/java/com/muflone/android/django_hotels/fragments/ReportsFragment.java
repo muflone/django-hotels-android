@@ -6,18 +6,23 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.TextView;
 
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.muflone.android.django_hotels.PDFCreator;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.TimestampEmployee;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -180,6 +185,26 @@ public class ReportsFragment extends Fragment {
                 reportData = "<html><body><h1>Timestamps</h1><h3>No data</h3></body></html>";
             }
             this.fragment.showReportData(reportData);
+            // Save data to PDF document
+            File destinationDirectory = new File(
+                    this.singleton.settings.context.getCacheDir() +
+                            File.separator +
+                            "reports");
+            // Create missing destination directory
+            if (! destinationDirectory.exists()) {
+                //noinspection ResultOfMethodCallIgnored
+                destinationDirectory.mkdir();
+            }
+            String destinationPath = destinationDirectory + File.separator + this.getClass().getSimpleName() + ".pdf";
+            try {
+                PDFCreator pdfCreator = new PDFCreator();
+                pdfCreator.pageSize = PageSize.A4.rotate();
+                if (! pdfCreator.htmlToPDF(reportData, destinationPath)) {
+                    Log.w(this.getClass().getSimpleName(), "Unable to create PDFCreator document");
+                }
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            }
         }
 
         private class ReportTimestampListItem {
