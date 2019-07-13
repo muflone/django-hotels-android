@@ -26,9 +26,9 @@ import java.util.Objects;
 
 public class ReportsFragment extends Fragment {
     private View rootLayout;
-    private TextView viewReportTimestamps;
-    private TextView viewReportDailyActivities;
-    private TextView viewReportMonthlyActivities;
+    private TextView buttonReportTimestamps;
+    private TextView buttonReportDailyActivities;
+    private TextView buttonReportMonthActivities;
     private WebView webReport;
     private Singleton singleton = Singleton.getInstance();
 
@@ -45,12 +45,12 @@ public class ReportsFragment extends Fragment {
         this.loadUI(inflater, Objects.requireNonNull(container));
         View.OnClickListener clickListener = view -> {
             String reportText = null;
-            if (view == this.viewReportTimestamps) {
+            if (view == this.buttonReportTimestamps) {
                 ReportTimestampsListByDateTask task = new ReportTimestampsListByDateTask(this);
                 task.execute();
-            } else if (view == this.viewReportDailyActivities) {
+            } else if (view == this.buttonReportDailyActivities) {
                 reportText = "<html><body><h1>Daily Activities</h1></body></html>";
-            } else if (view == this.viewReportMonthlyActivities) {
+            } else if (view == this.buttonReportMonthActivities) {
                 reportText = "<html><body><h1>Monthly Activities</h1></body></html>";
             }
             // Check if valid report and show it
@@ -59,9 +59,9 @@ public class ReportsFragment extends Fragment {
                         reportText, "text/html", "utf-8");
             }
         };
-        this.viewReportTimestamps.setOnClickListener(clickListener);
-        this.viewReportDailyActivities.setOnClickListener(clickListener);
-        this.viewReportMonthlyActivities.setOnClickListener(clickListener);
+        this.buttonReportTimestamps.setOnClickListener(clickListener);
+        this.buttonReportDailyActivities.setOnClickListener(clickListener);
+        this.buttonReportMonthActivities.setOnClickListener(clickListener);
         // Set WebView zoom enabled
         this.webReport.getSettings().setBuiltInZoomControls(
                 this.singleton.settings.getBoolean(CommandConstants.SETTING_REPORTS_ZOOM_ENABLE, false));
@@ -82,9 +82,9 @@ public class ReportsFragment extends Fragment {
     private void loadUI(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container) {
         // Inflate the layout for this fragment
         this.rootLayout = inflater.inflate(R.layout.reports_fragment, container, false);
-        this.viewReportTimestamps = this.rootLayout.findViewById(R.id.viewReportTimestamps);
-        this.viewReportDailyActivities = this.rootLayout.findViewById(R.id.viewReportDailyActivities);
-        this.viewReportMonthlyActivities = this.rootLayout.findViewById(R.id.viewReportMonthActivities);
+        this.buttonReportTimestamps = this.rootLayout.findViewById(R.id.buttonReportTimestamps);
+        this.buttonReportDailyActivities = this.rootLayout.findViewById(R.id.buttonReportDailyActivities);
+        this.buttonReportMonthActivities = this.rootLayout.findViewById(R.id.buttonReportMonthActivities);
         this.webReport = this.rootLayout.findViewById(R.id.webReport);
     }
 
