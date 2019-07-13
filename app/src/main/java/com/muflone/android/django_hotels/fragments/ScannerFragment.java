@@ -36,7 +36,7 @@ import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.tasks.TaskTimestampInsert;
 import com.muflone.android.django_hotels.tasks.TaskListenerInterface;
 import com.muflone.android.django_hotels.tasks.TaskResult;
-import com.muflone.android.django_hotels.tasks.TaskScannerListLatestTimestamps;
+import com.muflone.android.django_hotels.tasks.TaskTimestampListLatest;
 import com.muflone.android.django_hotels.tasks.TaskTimestampUnsetTransmission;
 
 import org.fedorahosted.freeotp.Token;
@@ -203,7 +203,7 @@ public class ScannerFragment extends Fragment {
 
     private void listLatestTimestamps() {
         // List the latest timestamps
-        new TaskScannerListLatestTimestamps(this.timestampEmployeeList,
+        new TaskTimestampListLatest(this.timestampEmployeeList,
                 this.timestampAdapter).execute(Long.valueOf(Constants.LATEST_TIMESTAMPS));
     }
 

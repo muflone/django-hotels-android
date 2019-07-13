@@ -9,14 +9,14 @@ import com.muflone.android.django_hotels.fragments.ScannerFragment;
 
 import java.util.List;
 
-public class TaskScannerListLatestTimestamps extends AsyncTask<Long, Void, List<TimestampEmployee>> {
+public class TaskTimestampListLatest extends AsyncTask<Long, Void, List<TimestampEmployee>> {
     private final List<TimestampEmployeeItem> timestampEmployeeList;
     private final ScannerFragment.TimestampAdapter timestampAdapter;
     private final Singleton singleton = Singleton.getInstance();
 
     @SuppressWarnings("WeakerAccess")
-    public TaskScannerListLatestTimestamps(List<TimestampEmployeeItem> timestampEmployeeList,
-                                           ScannerFragment.TimestampAdapter timestampAdapter) {
+    public TaskTimestampListLatest(List<TimestampEmployeeItem> timestampEmployeeList,
+                                   ScannerFragment.TimestampAdapter timestampAdapter) {
         this.timestampEmployeeList = timestampEmployeeList;
         this.timestampAdapter = timestampAdapter;
     }
