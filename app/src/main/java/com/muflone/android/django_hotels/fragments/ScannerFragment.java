@@ -31,10 +31,10 @@ import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.commands.CommandConstants;
-import com.muflone.android.django_hotels.database.dao.TimestampDao;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampEmployee;
+import com.muflone.android.django_hotels.tasks.TaskInsertTimestamp;
 import com.muflone.android.django_hotels.tasks.TaskListenerInterface;
 import com.muflone.android.django_hotels.tasks.TaskResult;
 
@@ -168,7 +168,7 @@ public class ScannerFragment extends Fragment {
                                             this.apiData.enterDirection.id : this.apiData.exitDirection.id,
                                     Utility.getCurrentDateTime(),
                                     "", null);
-                            new ScannerInsertTimestampTask(new TaskListenerInterface() {
+                            new TaskInsertTimestamp(new TaskListenerInterface() {
                                 @Override
                                 public void onSuccess(TaskResult result) {
                                     // Reload list
@@ -242,25 +242,6 @@ public class ScannerFragment extends Fragment {
             Toast.makeText(this.context.get(),
                     R.string.structures_marked_timestamp_as_untransmitted,
                     Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private static class ScannerInsertTimestampTask extends AsyncTask<Timestamp, Void, Void> {
-        private final TaskListenerInterface listener;
-        private final Singleton singleton = Singleton.getInstance();
-
-        @SuppressWarnings("WeakerAccess")
-        public ScannerInsertTimestampTask(TaskListenerInterface listener) {
-            this.listener = listener;
-        }
-
-        @Override
-        protected Void doInBackground(Timestamp... params) {
-            // Insert new Timestamp
-            TimestampDao timestampDao = this.singleton.database.timestampDao();
-            timestampDao.insert(params);
-            this.listener.onSuccess(null);
-            return null;
         }
     }
 
