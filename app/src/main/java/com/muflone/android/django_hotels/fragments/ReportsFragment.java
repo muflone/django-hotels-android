@@ -198,9 +198,14 @@ public class ReportsFragment extends Fragment {
             String destinationPath = destinationDirectory + File.separator + this.getClass().getSimpleName() + ".pdf";
             try {
                 PDFCreator pdfCreator = new PDFCreator();
-                pdfCreator.pageSize = PageSize.A4.rotate();
+                pdfCreator.pageSize = PageSize.A4;
+                pdfCreator.title = this.singleton.settings.context.getString(R.string.reports_timestamps);
+                pdfCreator.subject = this.singleton.settings.context.getString(R.string.reports_timestamps);
+                pdfCreator.creator = this.singleton.settings.getApplicationNameVersion();
+                pdfCreator.author = this.singleton.settings.context.getString(R.string.author_name);
+                pdfCreator.keywords = "report, timestamps";
                 if (! pdfCreator.htmlToPDF(reportData, destinationPath)) {
-                    Log.w(this.getClass().getSimpleName(), "Unable to create PDFCreator document");
+                    Log.w(this.getClass().getSimpleName(), "Unable to create PDF document");
                 }
             } catch (DocumentException e) {
                 e.printStackTrace();

@@ -1,5 +1,7 @@
 package com.muflone.android.django_hotels;
 
+import android.graphics.pdf.PdfDocument;
+
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
@@ -14,19 +16,55 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Locale;
 
 public class PDFCreator {
-    public Rectangle pageSize;
+    private Document document = null;
+    public Rectangle pageSize = PageSize.A4;
+    public String title = null;
+    public String subject = null;
+    public String author = null;
+    public String creator = null;
+    public String keywords = null;
 
     public PDFCreator() {
-        this.pageSize = PageSize.A4;
+        // Empty method
     }
 
-    public PDFCreator(Rectangle pageSize) {
-        super();
-        this.pageSize = pageSize;
+    private void create() {
+        this.document = new Document();
     }
 
+    private void open() {
+        this.document.open();
+        this.document.setPageSize(this.pageSize);
+        // Add title
+        if (this.title != null) {
+            this.document.addTitle(this.title);
+        }
+        // Add subject
+        if (this.subject != null) {
+            this.document.addSubject(this.subject);
+        }
+        // Add author
+        if (this.author != null) {
+            this.document.addAuthor(this.author);
+        }
+        // Add creator
+        if (this.creator != null) {
+            this.document.addCreator(this.creator);
+        }
+        // Add keywords
+        if (this.keywords != null) {
+            this.document.addKeywords(this.keywords);
+        }
+        this.document.addCreationDate();
+    }
+
+    private void close() {
+        this.document.close();
+        this.document = null;
+    }
 
     public boolean htmlToPDF(String content, String destionationPath) throws DocumentException {
         // Save the HTML content to a PDFCreator file
@@ -34,13 +72,16 @@ public class PDFCreator {
         File filePath = new File(destionationPath);
         try {
             OutputStream destinationStream = new FileOutputStream(filePath);
-            Document document = new Document();
-            document.setPageSize(this.pageSize);
-            PdfWriter writer = PdfWriter.getInstance(document, destinationStream);
-            document.open();
+            this.create();
+            PdfWriter writer = PdfWriter.getInstance(this.document, destinationStream);
+            this.open();
             InputStream inputStream = new ByteArrayInputStream(content.getBytes());
-            XMLWorkerHelper.getInstance().parseXHtml(writer, document, inputStream);
-            document.close();
+            XMLWorkerHelper.getInstance().parseXHtml(writer, this.document, inputStream);
+            // Replace HTML title
+            if (this.title != null) {
+                this.document.addTitle(this.title);
+            }
+            this.close();
             inputStream.close();
             destinationStream.close();
             result = true;
