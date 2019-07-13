@@ -58,7 +58,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
-public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
+public class TaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final String TAG = getClass().getSimpleName();
 
     private final Api api;
@@ -68,7 +68,7 @@ public class AsyncTaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     private final WeakReference<Context> context;
     private int currentStep;
 
-    public AsyncTaskSync(Context context, Api api, int totalSteps, TaskListenerInterface callback) {
+    public TaskSync(Context context, Api api, int totalSteps, TaskListenerInterface callback) {
         this.context = new WeakReference<>(context);
         this.api = api;
         this.callback = callback;

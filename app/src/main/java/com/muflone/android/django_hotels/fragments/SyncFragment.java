@@ -19,7 +19,7 @@ import com.muflone.android.django_hotels.api.exceptions.InvalidServerStatusExcep
 import com.muflone.android.django_hotels.api.exceptions.RetransmittedActivityException;
 import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.Structure;
-import com.muflone.android.django_hotels.tasks.AsyncTaskSync;
+import com.muflone.android.django_hotels.tasks.TaskSync;
 import com.muflone.android.django_hotels.tasks.TaskListenerInterface;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.api.exceptions.InvalidDateTimeException;
@@ -80,7 +80,7 @@ public class SyncFragment extends Fragment {
                 this.getContext(),
                 CommandConstants.CONTEXT_START_SYNC_END);
         // Download data asynchronously from the server
-        AsyncTaskSync task = new AsyncTaskSync(
+        TaskSync task = new TaskSync(
                 this.context,
                 this.singleton.api,
                 this.progressPhases.size(),
