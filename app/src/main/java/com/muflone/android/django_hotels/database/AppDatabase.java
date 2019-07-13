@@ -48,7 +48,7 @@ import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 import com.muflone.android.django_hotels.tasks.TaskListenerInterface;
-import com.muflone.android.django_hotels.tasks.AsyncTaskLoadDatabase;
+import com.muflone.android.django_hotels.tasks.TaskLoadDatabase;
 import com.muflone.android.django_hotels.tasks.TaskResult;
 
 import java.io.File;
@@ -132,7 +132,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public void reload(Context context, TaskListenerInterface callback) {
         // Load data from database
-        AsyncTaskLoadDatabase task = new AsyncTaskLoadDatabase(
+        TaskLoadDatabase task = new TaskLoadDatabase(
                 context,
                 new TaskListenerInterface() {
             @Override

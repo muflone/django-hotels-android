@@ -37,12 +37,12 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, TaskResult> {
+public class TaskLoadDatabase extends AsyncTask<Void, Void, TaskResult> {
     private final TaskListenerInterface callback;
     private final WeakReference<Context> context;
     private final Singleton singleton = Singleton.getInstance();
 
-    public AsyncTaskLoadDatabase(Context context, TaskListenerInterface callback) {
+    public TaskLoadDatabase(Context context, TaskListenerInterface callback) {
         this.context = new WeakReference<>(context);
         this.callback = callback;
     }
