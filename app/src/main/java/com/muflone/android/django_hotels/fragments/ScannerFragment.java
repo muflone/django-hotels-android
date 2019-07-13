@@ -28,6 +28,7 @@ import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.ScanType;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
+import com.muflone.android.django_hotels.TimestampEmployeeItem;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.commands.CommandConstants;
@@ -278,23 +279,6 @@ public class ScannerFragment extends Fragment {
                         timestamp.transmission));
             }
             this.timestampAdapter.notifyDataSetChanged();
-        }
-    }
-
-    private static class TimestampEmployeeItem {
-        final long id;
-        final String fullName;
-        final Date datetime;
-        final String direction;
-        Date transmission;
-
-        TimestampEmployeeItem(long id, String fullName, Date datetime,
-                              String direction, Date transmission) {
-            this.id = id;
-            this.fullName = fullName;
-            this.datetime = datetime;
-            this.direction = direction;
-            this.transmission = transmission;
         }
     }
 
