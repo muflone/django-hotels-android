@@ -58,7 +58,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
-public class TaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
+public class TaskSync extends AsyncTask<Void, Void, TaskResult> {
     private final String TAG = getClass().getSimpleName();
 
     private final Api api;
@@ -77,7 +77,7 @@ public class TaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
     }
 
     @Override
-    protected AsyncTaskResult doInBackground(Void... params) {
+    protected TaskResult doInBackground(Void... params) {
         // Do the background job
         boolean transmissionErrors = false;
         ApiData data;
@@ -132,11 +132,11 @@ public class TaskSync extends AsyncTask<Void, Void, AsyncTaskResult> {
                 }
             }
         }
-        return new AsyncTaskResult(data, data.exception);
+        return new TaskResult(data, data.exception);
     }
 
     @Override
-    protected void onPostExecute(AsyncTaskResult result) {
+    protected void onPostExecute(TaskResult result) {
         super.onPostExecute(result);
         // Check if callback listener was requested
         if (this.callback != null & result != null) {

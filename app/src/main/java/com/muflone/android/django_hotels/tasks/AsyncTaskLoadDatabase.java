@@ -37,7 +37,7 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult> {
+public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, TaskResult> {
     private final TaskListenerInterface callback;
     private final WeakReference<Context> context;
     private final Singleton singleton = Singleton.getInstance();
@@ -48,7 +48,7 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
     }
 
     @Override
-    protected AsyncTaskResult doInBackground(Void... params) {
+    protected TaskResult doInBackground(Void... params) {
         ApiData data = new ApiData();
         if (! this.singleton.database.checkDB()) {
             Log.d("", "Invalid database structure " + this.singleton.database.getOpenHelper().getDatabaseName());
@@ -159,11 +159,11 @@ public class AsyncTaskLoadDatabase extends AsyncTask<Void, Void, AsyncTaskResult
             data.commandsMap.put(command.id, command);
             data.commandsUsageMap.put(commandUsage.id, commandUsage);
         }
-        return new AsyncTaskResult(data, data.exception);
+        return new TaskResult(data, data.exception);
     }
 
     @Override
-    protected void onPostExecute(AsyncTaskResult result) {
+    protected void onPostExecute(TaskResult result) {
         super.onPostExecute(result);
         // Check if callback listener was requested
         if (this.callback != null & result != null) {

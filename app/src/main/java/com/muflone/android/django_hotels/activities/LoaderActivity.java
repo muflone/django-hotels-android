@@ -17,7 +17,7 @@ import com.muflone.android.django_hotels.commands.CommandFactory;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.tasks.TaskListenerInterface;
-import com.muflone.android.django_hotels.tasks.AsyncTaskResult;
+import com.muflone.android.django_hotels.tasks.TaskResult;
 
 import java.util.Locale;
 import java.util.SortedSet;
@@ -44,7 +44,7 @@ public class LoaderActivity extends AppCompatActivity {
         // Reload data from database
         AppDatabase.getAppDatabase(this).reload(this, new TaskListenerInterface() {
             @Override
-            public void onSuccess(AsyncTaskResult result) {
+            public void onSuccess(TaskResult result) {
                 // Execute APP BEGIN commands
                 LoaderActivity.this.singleton.commandFactory.executeCommands(
                         LoaderActivity.this,
