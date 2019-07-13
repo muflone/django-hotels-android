@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
+import java.util.Locale;
+
 public class Settings {
     private final SharedPreferences preferences;
     public final Context context;
@@ -49,6 +51,12 @@ public class Settings {
 
     public String getApplicationVersion() {
         return this.context.getString(R.string.app_version);
+    }
+
+    public String getApplicationNameVersion() {
+        return String.format(Locale.ROOT, "%s %s",
+                this.getApplicationName(),
+                this.getApplicationVersion());
     }
 
     public boolean getRoomsListStandardHeight() {

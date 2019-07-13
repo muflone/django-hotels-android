@@ -54,9 +54,8 @@ public class AboutFragment extends Fragment {
                 .isRTL(false)
                 .setImage(R.mipmap.ic_launcher_round)
                 .setDescription(String.format(Locale.ROOT,
-                        "%s %s\n%s",
-                        this.singleton.settings.getApplicationName(),
-                        this.singleton.settings.getApplicationVersion(),
+                        "%s\n%s",
+                        this.singleton.settings.getApplicationNameVersion(),
                         this.getString(R.string.app_description)))
                 .addPlayStore(this.getString(R.string.about_app_playstore))
                 .addGitHub(this.getString(R.string.about_app_github));

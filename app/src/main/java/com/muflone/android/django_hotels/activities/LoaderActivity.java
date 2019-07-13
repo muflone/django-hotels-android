@@ -40,9 +40,7 @@ public class LoaderActivity extends AppCompatActivity {
         this.singleton.commandFactory = new CommandFactory();
         // Load UI
         this.loadUI();
-        this.textViewAppName.setText(String.format(Locale.ROOT, "%s %s",
-                this.singleton.settings.getApplicationName(),
-                this.singleton.settings.getApplicationVersion()));
+        this.textViewAppName.setText(this.singleton.settings.getApplicationNameVersion());
         // Reload data from database
         AppDatabase.getAppDatabase(this).reload(this, new AsyncTaskListener() {
             @Override
