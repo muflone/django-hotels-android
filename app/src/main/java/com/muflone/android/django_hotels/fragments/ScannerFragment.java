@@ -3,7 +3,6 @@ package com.muflone.android.django_hotels.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,12 +37,12 @@ import com.muflone.android.django_hotels.tasks.TaskInsertTimestamp;
 import com.muflone.android.django_hotels.tasks.TaskListenerInterface;
 import com.muflone.android.django_hotels.tasks.TaskResult;
 import com.muflone.android.django_hotels.tasks.TaskScannerListLatestTimestamps;
+import com.muflone.android.django_hotels.tasks.TaskTimestampUnsetTransmission;
 
 import org.fedorahosted.freeotp.Token;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +87,7 @@ public class ScannerFragment extends Fragment {
         this.listLatestTimestamps();
         // Clear transmission date on long press
         this.timestampEmployeesView.setOnItemLongClickListener((adapterView, view, position, l) -> {
-            new ScannerUpdateDatabaseTask(this.context, this.timestampEmployeeList,
+            new TaskTimestampUnsetTransmission(this.context, this.timestampEmployeeList,
                     this.timestampAdapter).execute(position);
             return false;
         });
@@ -206,43 +205,6 @@ public class ScannerFragment extends Fragment {
         // List the latest timestamps
         new TaskScannerListLatestTimestamps(this.timestampEmployeeList,
                 this.timestampAdapter).execute(Long.valueOf(Constants.LATEST_TIMESTAMPS));
-    }
-
-    private static class ScannerUpdateDatabaseTask extends AsyncTask<Integer, Void, Void> {
-        private final WeakReference<Context> context;
-        private final List<TimestampEmployeeItem> timestampEmployeeList;
-        private final TimestampAdapter timestampAdapter;
-        private final Singleton singleton = Singleton.getInstance();
-
-        @SuppressWarnings("WeakerAccess")
-        public ScannerUpdateDatabaseTask(Context context,
-                                         List<TimestampEmployeeItem> timestampEmployeeList,
-                                         TimestampAdapter timestampAdapter) {
-            this.context = new WeakReference<>(context);
-            this.timestampEmployeeList = timestampEmployeeList;
-            this.timestampAdapter = timestampAdapter;
-        }
-
-        @Override
-        protected Void doInBackground(Integer... result) {
-            // Update adapter
-            int position = result[0];
-            TimestampEmployeeItem timestampEmployeeItem = this.timestampEmployeeList.get(position);
-            timestampEmployeeItem.transmission = null;
-            // Update database
-            Timestamp timestamp = this.singleton.database.timestampDao().findById(timestampEmployeeItem.id);
-            timestamp.transmission = null;
-            this.singleton.database.timestampDao().update(timestamp);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            this.timestampAdapter.notifyDataSetChanged();
-            Toast.makeText(this.context.get(),
-                    R.string.structures_marked_timestamp_as_untransmitted,
-                    Toast.LENGTH_SHORT).show();
-        }
     }
 
     public class TimestampAdapter extends ArrayAdapter<TimestampEmployeeItem> {
