@@ -6,7 +6,6 @@ import com.muflone.android.django_hotels.EmployeeStatus;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
-import com.muflone.android.django_hotels.fragments.StructuresFragment;
 
 import java.util.List;
 
