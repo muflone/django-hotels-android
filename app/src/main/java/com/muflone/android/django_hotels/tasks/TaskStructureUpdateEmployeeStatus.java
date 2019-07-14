@@ -2,6 +2,7 @@ package com.muflone.android.django_hotels.tasks;
 
 import android.os.AsyncTask;
 
+import com.muflone.android.django_hotels.EmployeeStatus;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
@@ -9,13 +10,13 @@ import com.muflone.android.django_hotels.fragments.StructuresFragment;
 
 import java.util.List;
 
-public class TaskStructureUpdateEmployeeStatus extends AsyncTask<StructuresFragment.EmployeeStatus, Void, Void> {
+public class TaskStructureUpdateEmployeeStatus extends AsyncTask<EmployeeStatus, Void, Void> {
     private final Singleton singleton = Singleton.getInstance();
 
     // Update database for EmployeeStatus
     @Override
-    protected Void doInBackground(StructuresFragment.EmployeeStatus... params) {
-        StructuresFragment.EmployeeStatus employeeStatus = params[0];
+    protected Void doInBackground(EmployeeStatus... params) {
+        EmployeeStatus employeeStatus = params[0];
         List<Timestamp> timestampsEmployee = this.singleton.database.timestampDao().listByContractNotEnterExit(
                 employeeStatus.date, employeeStatus.contract.id);
         // Delete any previous timestamp

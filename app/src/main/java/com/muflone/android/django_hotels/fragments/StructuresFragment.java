@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.muflone.android.django_hotels.EmployeeStatus;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.RoomStatus;
 import com.muflone.android.django_hotels.Singleton;
@@ -614,42 +615,5 @@ public class StructuresFragment extends Fragment {
         Button serviceButton;
         ImageButton descriptionButton;
         ImageView transmissionImage;
-    }
-
-    public static class EmployeeStatus {
-        public final Contract contract;
-        public final Date date;
-        public final List<TimestampDirection> timestampDirections;
-        private final String[] directionsArray;
-        public final boolean[] directionsCheckedArray;
-
-        @SuppressWarnings("WeakerAccess")
-        public EmployeeStatus(Contract contract, Date date,
-                              List<TimestampDirection> timestampDirections,
-                              List<Timestamp> timestampsEmployee) {
-            this.contract = contract;
-            this.date = date;
-            // Initialize directionsArray and directionsCheckedArray
-            this.timestampDirections = timestampDirections;
-            this.directionsArray = new String[timestampDirections.size()];
-            this.directionsCheckedArray = new boolean[timestampDirections.size()];
-            // Get the already assigned timestamp directions to restore
-            List<Long> assignedTimestampDirectionsList = new ArrayList<>();
-            for (Timestamp timestamp : timestampsEmployee) {
-                assignedTimestampDirectionsList.add(timestamp.directionId);
-            }
-            // Translate timestamp directions to array, needed by the AlertDialog for selections
-            int index = 0;
-            for (TimestampDirection direction : timestampDirections) {
-                this.directionsArray[index] = direction.name;
-                this.directionsCheckedArray[index] = assignedTimestampDirectionsList.contains(direction.id);
-                index++;
-            }
-        }
-
-        private void updateDatabase() {
-            // Update database row
-            new TaskStructureUpdateEmployeeStatus().execute(this);
-        }
     }
 }
