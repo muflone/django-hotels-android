@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.muflone.android.django_hotels.EmployeeStatus;
+import com.muflone.android.django_hotels.EmployeeViewsUpdater;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.RoomStatus;
 import com.muflone.android.django_hotels.Singleton;
@@ -60,6 +61,7 @@ public class StructuresFragment extends Fragment {
     private Context context;
     private View rootLayout;
     private ListView employeesView;
+    private EmployeeViewsUpdater employeeViewsUpdater;
     private ExpandableListView roomsView;
     private ExpandableListAdapter buildingRoomsAdapter;
     private final List<String> employeesList = new ArrayList<>();
@@ -72,10 +74,6 @@ public class StructuresFragment extends Fragment {
     private final HashMap<Long, List<Long>> roomsEmployeesAssignedList = new HashMap<>();
     private final HashMap<String, Boolean> buildingsClosedStatusMap = new HashMap<>();
 
-    private TextView employeeIdView;
-    private TextView employeeFirstNameView;
-    private TextView employeeLastNameView;
-    private ImageView employeeGenderImageView;
     private TextView contractIdView;
     private TextView contractCompanyView;
     private TextView contractStatusView;
@@ -160,11 +158,7 @@ public class StructuresFragment extends Fragment {
         // Inflate the layout for this fragment
         this.rootLayout = inflater.inflate(R.layout.structures_fragment, container, false);
         // Save references
-        this.employeeIdView = rootLayout.findViewById(R.id.employeeIdView);
         this.employeesView = rootLayout.findViewById(R.id.employeesView);
-        this.employeeFirstNameView = rootLayout.findViewById(R.id.employeeFirstNameView);
-        this.employeeLastNameView = rootLayout.findViewById(R.id.employeeLastNameView);
-        this.employeeGenderImageView = rootLayout.findViewById(R.id.employeeGenderImageView);
         this.contractIdView = rootLayout.findViewById(R.id.contractIdView);
         this.contractCompanyView = rootLayout.findViewById(R.id.contractCompanyView);
         this.contractStatusView = rootLayout.findViewById(R.id.contractStatusView);
@@ -174,6 +168,13 @@ public class StructuresFragment extends Fragment {
         this.contractStartDateView = rootLayout.findViewById(R.id.contractStartDateView);
         this.contractEndDateView = rootLayout.findViewById(R.id.contractEndDateView);
         this.roomsView = rootLayout.findViewById(R.id.roomsView);
+        // Prepares employee views updater
+        this.employeeViewsUpdater = new EmployeeViewsUpdater(
+                rootLayout.findViewById(R.id.employeeIdView),
+                rootLayout.findViewById(R.id.employeeFirstNameView),
+                rootLayout.findViewById(R.id.employeeLastNameView),
+                rootLayout.findViewById(R.id.employeeGenderImageView)
+        );
     }
 
     private void loadEmployees() {
@@ -199,22 +200,7 @@ public class StructuresFragment extends Fragment {
 
     private void loadEmployee(Employee employee) {
         // Load Employee details
-        this.employeeIdView.setText(String.valueOf(employee.id));
-        this.employeeFirstNameView.setText(employee.firstName);
-        this.employeeLastNameView.setText(employee.lastName);
-        int genderResourceId;
-        switch (employee.gender) {
-            case "male":
-                genderResourceId = R.drawable.ic_gender_male;
-                break;
-            case "female":
-                genderResourceId = R.drawable.ic_gender_female;
-                break;
-            default:
-                genderResourceId = R.drawable.ic_gender_unknown;
-                break;
-        }
-        this.employeeGenderImageView.setImageResource(genderResourceId);
+        this.employeeViewsUpdater.updateViews(employee);
         // Get the first contract for the employee
         Contract contract = Objects.requireNonNull(this.apiData.contractsMap.get(employee.contractBuildings.get(0).contractId));
         this.contractIdView.setText(String.valueOf(contract.id));
