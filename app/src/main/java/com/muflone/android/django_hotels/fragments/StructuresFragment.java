@@ -42,6 +42,7 @@ import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
+import com.muflone.android.django_hotels.tasks.TaskStructureUpdateEmployeeStatus;
 
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
@@ -615,12 +616,12 @@ public class StructuresFragment extends Fragment {
         ImageView transmissionImage;
     }
 
-    private static class EmployeeStatus {
-        private final Contract contract;
-        private final Date date;
-        private final List<TimestampDirection> timestampDirections;
+    public static class EmployeeStatus {
+        public final Contract contract;
+        public final Date date;
+        public final List<TimestampDirection> timestampDirections;
         private final String[] directionsArray;
-        private final boolean[] directionsCheckedArray;
+        public final boolean[] directionsCheckedArray;
 
         @SuppressWarnings("WeakerAccess")
         public EmployeeStatus(Contract contract, Date date,
@@ -648,32 +649,7 @@ public class StructuresFragment extends Fragment {
 
         private void updateDatabase() {
             // Update database row
-            new EmployeeStatusUpdateDatabaseTask().execute(this);
-        }
-    }
-
-    private static class EmployeeStatusUpdateDatabaseTask extends AsyncTask<EmployeeStatus, Void, Void> {
-        private final Singleton singleton = Singleton.getInstance();
-
-        // Update database for EmployeeStatus
-        @Override
-        protected Void doInBackground(EmployeeStatus... params) {
-            EmployeeStatus employeeStatus = params[0];
-            List<Timestamp> timestampsEmployee = this.singleton.database.timestampDao().listByContractNotEnterExit(
-                    employeeStatus.date, employeeStatus.contract.id);
-            // Delete any previous timestamp
-            this.singleton.database.timestampDao().delete(timestampsEmployee.toArray(new Timestamp[0]));
-            // Re-add every active timestamp
-            timestampsEmployee.clear();
-            for (int index = 0; index < employeeStatus.timestampDirections.size(); index++) {
-                if (employeeStatus.directionsCheckedArray[index]) {
-                    TimestampDirection timestampDirection = employeeStatus.timestampDirections.get(index);
-                    timestampsEmployee.add(new Timestamp(0, employeeStatus.contract.id,
-                            timestampDirection.id, employeeStatus.date,"", null));
-                }
-            }
-            this.singleton.database.timestampDao().insert(timestampsEmployee.toArray(new Timestamp[0]));
-            return null;
+            new TaskStructureUpdateEmployeeStatus().execute(this);
         }
     }
 }
