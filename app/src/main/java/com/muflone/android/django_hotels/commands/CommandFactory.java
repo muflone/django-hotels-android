@@ -2,13 +2,13 @@ package com.muflone.android.django_hotels.commands;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.database.models.Command;
 import com.muflone.android.django_hotels.database.models.CommandUsage;
+import com.muflone.android.django_hotels.tasks.TaskCommandSetUsed;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -41,7 +41,7 @@ public class CommandFactory {
                         commandInstance.after();
                         // Update CommandUsage count
                         commandUsage.used = command.uses == 0 ? 0 : commandUsage.used + 1;
-                        new CommandUsedUpdateDatabaseTask().execute(commandUsage);
+                        new TaskCommandSetUsed().execute(commandUsage);
                     }
                 } catch (ClassNotFoundException exception) {
                     Log.w(this.TAG, String.format("Command class %s not found", command.type));
@@ -68,17 +68,6 @@ public class CommandFactory {
                     CommandConstants.SETTING_APP_EXIT_COMMANDS_DELAY,
                     delay));
             Utility.sleep(delay);
-        }
-    }
-
-    private static class CommandUsedUpdateDatabaseTask extends AsyncTask<CommandUsage, Void, Void> {
-        private final Singleton singleton = Singleton.getInstance();
-
-        @Override
-        protected Void doInBackground(CommandUsage... params) {
-            CommandUsage commandUsage = params[0];
-            this.singleton.database.commandUsageDao().update(commandUsage);
-            return null;
         }
     }
 }
