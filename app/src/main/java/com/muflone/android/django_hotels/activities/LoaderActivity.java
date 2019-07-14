@@ -1,7 +1,5 @@
 package com.muflone.android.django_hotels.activities;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +15,7 @@ import com.muflone.android.django_hotels.commands.CommandFactory;
 import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.tasks.TaskListenerInterface;
+import com.muflone.android.django_hotels.tasks.TaskLoaderActivityStart;
 import com.muflone.android.django_hotels.tasks.TaskResult;
 
 import java.util.SortedSet;
@@ -57,7 +56,7 @@ public class LoaderActivity extends AppCompatActivity {
                             LoaderActivity.this.singleton.apiData.structuresMap.values());
                     LoaderActivity.this.singleton.selectedStructure = sortedStructures.first();
                 }
-                new LoaderActivityStartTask().execute(LoaderActivity.this);
+                new TaskLoaderActivityStart().execute(LoaderActivity.this);
             }
 
             @Override
@@ -72,22 +71,5 @@ public class LoaderActivity extends AppCompatActivity {
 
     private void loadUI() {
         this.textViewAppName = this.findViewById(R.id.textViewAppName);
-    }
-
-    private static class LoaderActivityStartTask extends AsyncTask<LoaderActivity, Void, LoaderActivity> {
-        // Await a bit before loading
-        @Override
-        protected LoaderActivity doInBackground(LoaderActivity... params) {
-            Utility.sleep(500);
-            return params[0];
-        }
-
-        @Override
-        protected void onPostExecute(LoaderActivity result) {
-            super.onPostExecute(result);
-            // Load the main activity
-            result.startActivity(new Intent(result, MainActivity.class));
-            result.finish();
-        }
     }
 }
