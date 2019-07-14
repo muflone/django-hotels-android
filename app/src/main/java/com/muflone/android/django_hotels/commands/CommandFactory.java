@@ -40,8 +40,7 @@ public class CommandFactory {
                         commandInstance.execute();
                         commandInstance.after();
                         // Update CommandUsage count
-                        commandUsage.used = command.uses == 0 ? 0 : commandUsage.used + 1;
-                        new TaskCommandSetUsed().execute(commandUsage);
+                        new TaskCommandSetUsed(command.uses == 0 ? 0 : commandUsage.used + 1).execute(commandUsage);
                     }
                 } catch (ClassNotFoundException exception) {
                     Log.w(this.TAG, String.format("Command class %s not found", command.type));

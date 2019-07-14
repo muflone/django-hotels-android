@@ -7,11 +7,18 @@ import com.muflone.android.django_hotels.database.models.CommandUsage;
 
 public class TaskCommandSetUsed extends AsyncTask<CommandUsage, Void, Void> {
     private final Singleton singleton = Singleton.getInstance();
+    private final int used;
+
+    public TaskCommandSetUsed(int used) {
+        this.used = used;
+    }
 
     @Override
     protected Void doInBackground(CommandUsage... params) {
-        CommandUsage commandUsage = params[0];
-        this.singleton.database.commandUsageDao().update(commandUsage);
+        for (CommandUsage commandUsage : params) {
+            commandUsage.used = this.used;
+            this.singleton.database.commandUsageDao().update(commandUsage);
+        }
         return null;
     }
 }
