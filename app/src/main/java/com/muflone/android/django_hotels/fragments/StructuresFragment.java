@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.muflone.android.django_hotels.ContractViewsUpdater;
 import com.muflone.android.django_hotels.EmployeeStatus;
 import com.muflone.android.django_hotels.EmployeeViewsUpdater;
 import com.muflone.android.django_hotels.R;
@@ -36,15 +37,12 @@ import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.Building;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.ContractBuildings;
-import com.muflone.android.django_hotels.database.models.ContractType;
 import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.tasks.TaskStructureLoadEmployees;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,6 +60,7 @@ public class StructuresFragment extends Fragment {
     private View rootLayout;
     private ListView employeesView;
     private EmployeeViewsUpdater employeeViewsUpdater;
+    private ContractViewsUpdater contractViewsUpdater;
     private ExpandableListView roomsView;
     private ExpandableListAdapter buildingRoomsAdapter;
     private final List<String> employeesList = new ArrayList<>();
@@ -73,15 +72,6 @@ public class StructuresFragment extends Fragment {
     @SuppressLint("UseSparseArrays")
     private final HashMap<Long, List<Long>> roomsEmployeesAssignedList = new HashMap<>();
     private final HashMap<String, Boolean> buildingsClosedStatusMap = new HashMap<>();
-
-    private TextView contractIdView;
-    private TextView contractCompanyView;
-    private TextView contractStatusView;
-    private TextView contractTypeView;
-    private TextView contractDailyHoursView;
-    private TextView contractWeeklyHoursView;
-    private TextView contractStartDateView;
-    private TextView contractEndDateView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -159,14 +149,6 @@ public class StructuresFragment extends Fragment {
         this.rootLayout = inflater.inflate(R.layout.structures_fragment, container, false);
         // Save references
         this.employeesView = rootLayout.findViewById(R.id.employeesView);
-        this.contractIdView = rootLayout.findViewById(R.id.contractIdView);
-        this.contractCompanyView = rootLayout.findViewById(R.id.contractCompanyView);
-        this.contractStatusView = rootLayout.findViewById(R.id.contractStatusView);
-        this.contractTypeView = rootLayout.findViewById(R.id.contractTypeView);
-        this.contractDailyHoursView = rootLayout.findViewById(R.id.contractDailyHoursView);
-        this.contractWeeklyHoursView = rootLayout.findViewById(R.id.contractWeeklyHoursView);
-        this.contractStartDateView = rootLayout.findViewById(R.id.contractStartDateView);
-        this.contractEndDateView = rootLayout.findViewById(R.id.contractEndDateView);
         this.roomsView = rootLayout.findViewById(R.id.roomsView);
         // Prepares employee views updater
         this.employeeViewsUpdater = new EmployeeViewsUpdater(
@@ -174,6 +156,17 @@ public class StructuresFragment extends Fragment {
                 rootLayout.findViewById(R.id.employeeFirstNameView),
                 rootLayout.findViewById(R.id.employeeLastNameView),
                 rootLayout.findViewById(R.id.employeeGenderImageView)
+        );
+        // Prepares contracts views updater
+        this.contractViewsUpdater = new ContractViewsUpdater(
+                rootLayout.findViewById(R.id.contractIdView),
+                rootLayout.findViewById(R.id.contractCompanyView),
+                rootLayout.findViewById(R.id.contractStatusView),
+                rootLayout.findViewById(R.id.contractTypeView),
+                rootLayout.findViewById(R.id.contractDailyHoursView),
+                rootLayout.findViewById(R.id.contractWeeklyHoursView),
+                rootLayout.findViewById(R.id.contractStartDateView),
+                rootLayout.findViewById(R.id.contractEndDateView)
         );
     }
 
@@ -199,22 +192,11 @@ public class StructuresFragment extends Fragment {
     }
 
     private void loadEmployee(Employee employee) {
-        // Load Employee details
-        this.employeeViewsUpdater.updateViews(employee);
         // Get the first contract for the employee
         Contract contract = Objects.requireNonNull(this.apiData.contractsMap.get(employee.contractBuildings.get(0).contractId));
-        this.contractIdView.setText(String.valueOf(contract.id));
-        this.contractCompanyView.setText(Objects.requireNonNull(this.apiData.companiesMap.get(contract.companyId)).name);
-        // Add contract info
-        ContractType contractType = Objects.requireNonNull(this.apiData.contractTypeMap.get(contract.contractTypeId));
-        this.contractStatusView.setText(contract.enabled ? R.string.enabled : R.string.disabled);
-        this.contractTypeView.setText(contractType.name);
-        this.contractDailyHoursView.setText(String.valueOf(contractType.dailyHours));
-        this.contractWeeklyHoursView.setText(String.valueOf(contractType.weeklyHours));
-        // Add contract dates
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        this.contractStartDateView.setText(formatter.format(contract.startDate));
-        this.contractEndDateView.setText(formatter.format(contract.endDate));
+        // Update Employee and Contract details
+        this.employeeViewsUpdater.updateViews(employee);
+        this.contractViewsUpdater.updateViews(contract);
         // Build buildings and rooms lists
         this.buildingsList.clear();
         this.roomsList.clear();
