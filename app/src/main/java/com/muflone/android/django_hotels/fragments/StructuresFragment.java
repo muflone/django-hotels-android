@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.muflone.android.django_hotels.R;
+import com.muflone.android.django_hotels.RoomStatus;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.Api;
@@ -41,7 +42,6 @@ import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
-import com.muflone.android.django_hotels.tasks.TaskStructureUpdateRoomStatus;
 
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
@@ -393,7 +393,7 @@ public class StructuresFragment extends Fragment {
                 viewHolder = (StructuresViewHolder) convertView.getTag();
             }
             // Update database row
-            roomStatus.updateDatabase();
+            roomStatus.updateDatabase(serviceActivityTable);
             // Update view row
             this.updateRoomView(roomStatus, viewHolder);
             // Handle service present image LongClick
@@ -406,7 +406,7 @@ public class StructuresFragment extends Fragment {
             // Set transmission LongClick
             viewHolder.transmissionImage.setOnLongClickListener(button -> {
                 roomStatus.transmission = null;
-                roomStatus.updateDatabase();
+                roomStatus.updateDatabase(serviceActivityTable);
                 viewHolder.transmissionImage.setImageResource(R.drawable.ic_timestamp_untransmitted);
                 Toast.makeText(context,
                         R.string.structures_marked_activity_as_untransmitted,
@@ -428,7 +428,7 @@ public class StructuresFragment extends Fragment {
                     // Update ServiceActivity for room
                     roomStatus.nextService();
                     updateService(roomStatus);
-                    roomStatus.updateDatabase();
+                    roomStatus.updateDatabase(serviceActivityTable);
                     updateRoomView(roomStatus, viewHolder);
                 }
             });
@@ -455,7 +455,7 @@ public class StructuresFragment extends Fragment {
                         roomStatus.service = apiData.serviceMap.get(servicesIdList.get(position));
                         roomStatus.prepareForNothing();
                         updateService(roomStatus);
-                        roomStatus.updateDatabase();
+                        roomStatus.updateDatabase(serviceActivityTable);
                         updateRoomView(roomStatus, viewHolder);
                         dialog.dismiss();
                     });
@@ -486,7 +486,7 @@ public class StructuresFragment extends Fragment {
                                         Toast.LENGTH_SHORT).show();
                             } else {
                                     roomStatus.description = descriptionView.getText().toString();
-                                    roomStatus.updateDatabase();
+                                    roomStatus.updateDatabase(serviceActivityTable);
                                     updateRoomView(roomStatus, viewHolder);
                             }
                         })
@@ -613,58 +613,6 @@ public class StructuresFragment extends Fragment {
         Button serviceButton;
         ImageButton descriptionButton;
         ImageView transmissionImage;
-    }
-
-    public class RoomStatus {
-        private final String emptyServiceDescription;
-        private final List<Service> services;
-        private final String name;
-        private int serviceCounter;
-        public final long contractId;
-        public final long roomId;
-        public Service service;
-        public String description;
-        public Date transmission;
-
-        RoomStatus(Context context, String name, long contractId, long roomId,
-                   List<Service> services, Service service, String description,
-                   Date transmission) {
-            this.emptyServiceDescription = context.getString(R.string.empty_service);
-            this.name = name;
-            this.contractId = contractId;
-            this.roomId = roomId;
-            this.services = services;
-            this.service = service;
-            this.serviceCounter = this.services.indexOf(this.service);
-            this.description = description;
-            this.transmission = transmission;
-        }
-
-        @SuppressWarnings("UnusedReturnValue")
-        Service nextService() {
-            // Cycle services
-            this.serviceCounter++;
-            if (this.serviceCounter == this.services.size()) {
-                this.serviceCounter = 0;
-            }
-            this.service = this.services.get(this.serviceCounter);
-            return this.service;
-        }
-
-        String getServiceName() {
-            // Get current service name
-            return this.service == null ? this.emptyServiceDescription : this.service.name;
-        }
-
-        void prepareForNothing() {
-            // Set the cycle counter to the last element so that the next service will be Nothing
-            this.serviceCounter = this.services.size() - 1;
-        }
-
-        private void updateDatabase() {
-            // Update database row
-            new TaskStructureUpdateRoomStatus(serviceActivityTable).execute(this);
-        }
     }
 
     private static class EmployeeStatus {

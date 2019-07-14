@@ -3,13 +3,13 @@ package com.muflone.android.django_hotels.tasks;
 import android.os.AsyncTask;
 
 import com.google.common.collect.Table;
+import com.muflone.android.django_hotels.RoomStatus;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.database.models.ServiceActivity;
-import com.muflone.android.django_hotels.fragments.StructuresFragment;
 
 import java.util.List;
 
-public class TaskStructureUpdateRoomStatus extends AsyncTask<StructuresFragment.RoomStatus, Void, Void> {
+public class TaskStructureUpdateRoomStatus extends AsyncTask<RoomStatus, Void, Void> {
     private final Singleton singleton = Singleton.getInstance();
     private final Table<Long, Long, ServiceActivity> serviceActivityTable;
 
@@ -19,8 +19,8 @@ public class TaskStructureUpdateRoomStatus extends AsyncTask<StructuresFragment.
     }
 
     @Override
-    protected Void doInBackground(StructuresFragment.RoomStatus... params) {
-        StructuresFragment.RoomStatus roomStatus = params[0];
+    protected Void doInBackground(RoomStatus... params) {
+        RoomStatus roomStatus = params[0];
         List<ServiceActivity> serviceActivityList =
                 this.singleton.database.serviceActivityDao().listByDateContract(
                         this.singleton.selectedDate,
