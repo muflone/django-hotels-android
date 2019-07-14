@@ -3,7 +3,6 @@ package com.muflone.android.django_hotels.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,11 +40,8 @@ import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.Room;
 import com.muflone.android.django_hotels.database.models.Service;
 import com.muflone.android.django_hotels.database.models.ServiceActivity;
-import com.muflone.android.django_hotels.database.models.Timestamp;
-import com.muflone.android.django_hotels.database.models.TimestampDirection;
-import com.muflone.android.django_hotels.tasks.TaskStructureUpdateEmployeeStatus;
+import com.muflone.android.django_hotels.tasks.TaskStructureLoadEmployees;
 
-import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -196,7 +192,7 @@ public class StructuresFragment extends Fragment {
                 this.roomsEmployeesAssignedList.put(room.id, new ArrayList<>());
             }
         }
-        new StructuresLoadEmployeesTask(this.employeesList, this.employeesView,
+        new TaskStructureLoadEmployees(this.employeesList, this.employeesView,
                 this.serviceActivityTable, this.employeesStatusList,
                 this.roomsEmployeesAssignedList).execute();
     }
@@ -277,73 +273,6 @@ public class StructuresFragment extends Fragment {
         }
         // Allocate space for the expanded list
         Utility.setExpandableListViewHeight(this.roomsView, -1, this.api.settings.getRoomsListStandardHeight());
-    }
-
-    private static class StructuresLoadEmployeesTask extends AsyncTask<Void, Void, Void> {
-        private final Singleton singleton = Singleton.getInstance();
-        private final List<String> employeesList;
-        private final WeakReference<ListView> employeesView;
-        private final Table<Long, Long, ServiceActivity> serviceActivityTable;
-        private final List<EmployeeStatus> employeesStatusList;
-        private final HashMap<Long, List<Long>> roomsEmployeesAssignedList;
-
-        @SuppressWarnings("WeakerAccess")
-        public StructuresLoadEmployeesTask(List<String> employeesList,
-                                           ListView employeesView,
-                                           Table<Long, Long, ServiceActivity> serviceActivityTable,
-                                           List<EmployeeStatus> employeesStatusList,
-                                           HashMap<Long, List<Long>> roomsEmployeesAssignedList) {
-            this.employeesList = employeesList;
-            this.employeesView = new WeakReference<>(employeesView);
-            this.serviceActivityTable = serviceActivityTable;
-            this.employeesStatusList = employeesStatusList;
-            this.roomsEmployeesAssignedList = roomsEmployeesAssignedList;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            // Load employees for the selected structure
-            for (Employee employee : this.singleton.selectedStructure.employees) {
-                this.employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
-                // Reload services for contract
-                Contract contract = Objects.requireNonNull(this.singleton.apiData.contractsMap.get(
-                        employee.contractBuildings.get(0).contractId));
-                for (ServiceActivity serviceActivity : this.singleton.database.serviceActivityDao().listByDateContract(
-                        this.singleton.selectedDate, contract.id)) {
-                    this.serviceActivityTable.put(
-                            serviceActivity.contractId,
-                            serviceActivity.roomId,
-                            serviceActivity);
-                    // Add employee to the already assigned room list
-                    // only if the room belongs to the selected structure
-                    if (this.roomsEmployeesAssignedList.containsKey(serviceActivity.roomId)) {
-                        Objects.requireNonNull(this.roomsEmployeesAssignedList.get(
-                                serviceActivity.roomId)).add(employee.id);
-                    }
-                }
-                // Add employee status
-                this.employeesStatusList.add(new EmployeeStatus(contract,
-                        this.singleton.selectedDate,
-                        this.singleton.apiData.timestampDirectionsNotEnterExit,
-                        this.singleton.database.timestampDao().listByContractNotEnterExit(
-                                this.singleton.selectedDate, contract.id)));
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            // Update data in the list
-            ((ArrayAdapter) this.employeesView.get().getAdapter()).notifyDataSetChanged();
-            // Select the first employee for the selected tab
-            if (this.employeesList.size() > 0) {
-                this.employeesView.get().performItemClick(
-                        this.employeesView.get().getAdapter().getView(0, null, null),
-                        0,
-                        this.employeesView.get().getAdapter().getItemId(0)
-                );
-            }
-        }
     }
 
     private class ExpandableListAdapter extends BaseExpandableListAdapter {
