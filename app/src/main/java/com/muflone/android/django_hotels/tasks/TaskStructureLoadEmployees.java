@@ -1,6 +1,8 @@
 package com.muflone.android.django_hotels.tasks;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -25,13 +27,14 @@ public class TaskStructureLoadEmployees extends AsyncTask<Void, Void, Void> {
     private final HashMap<Long, List<Long>> roomsEmployeesAssignedList;
 
     @SuppressWarnings("WeakerAccess")
-    public TaskStructureLoadEmployees(List<String> employeesList,
-                                      ListView employeesView,
-                                      Table<Long, Long, ServiceActivity> serviceActivityTable,
-                                      List<EmployeeStatus> employeesStatusList,
-                                      HashMap<Long, List<Long>> roomsEmployeesAssignedList) {
+    public TaskStructureLoadEmployees(@NonNull List<String> employeesList,
+                                      @NonNull ListView employeesView,
+                                      @Nullable Table<Long, Long, ServiceActivity> serviceActivityTable,
+                                      @Nullable List<EmployeeStatus> employeesStatusList,
+                                      @Nullable HashMap<Long, List<Long>> roomsEmployeesAssignedList) {
         this.employeesList = employeesList;
         this.employeesView = new WeakReference<>(employeesView);
+        // Optional references to load service activities
         this.serviceActivityTable = serviceActivityTable;
         this.employeesStatusList = employeesStatusList;
         this.roomsEmployeesAssignedList = roomsEmployeesAssignedList;
@@ -42,28 +45,32 @@ public class TaskStructureLoadEmployees extends AsyncTask<Void, Void, Void> {
         // Load employees for the selected structure
         for (Employee employee : this.singleton.selectedStructure.employees) {
             this.employeesList.add(String.format("%s %s", employee.firstName, employee.lastName));
-            // Reload services for contract
-            Contract contract = Objects.requireNonNull(this.singleton.apiData.contractsMap.get(
-                    employee.contractBuildings.get(0).contractId));
-            for (ServiceActivity serviceActivity : this.singleton.database.serviceActivityDao().listByDateContract(
-                    this.singleton.selectedDate, contract.id)) {
-                this.serviceActivityTable.put(
-                        serviceActivity.contractId,
-                        serviceActivity.roomId,
-                        serviceActivity);
-                // Add employee to the already assigned room list
-                // only if the room belongs to the selected structure
-                if (this.roomsEmployeesAssignedList.containsKey(serviceActivity.roomId)) {
-                    Objects.requireNonNull(this.roomsEmployeesAssignedList.get(
-                            serviceActivity.roomId)).add(employee.id);
+            // Load service activities if requested (this.serviceActivityTable not null)
+            // This is actually used in the StructuresFragment
+            if (this.serviceActivityTable != null) {
+                // Reload services for contract
+                Contract contract = Objects.requireNonNull(this.singleton.apiData.contractsMap.get(
+                        employee.contractBuildings.get(0).contractId));
+                for (ServiceActivity serviceActivity : this.singleton.database.serviceActivityDao().listByDateContract(
+                        this.singleton.selectedDate, contract.id)) {
+                    this.serviceActivityTable.put(
+                            serviceActivity.contractId,
+                            serviceActivity.roomId,
+                            serviceActivity);
+                    // Add employee to the already assigned room list
+                    // only if the room belongs to the selected structure
+                    if (this.roomsEmployeesAssignedList.containsKey(serviceActivity.roomId)) {
+                        Objects.requireNonNull(this.roomsEmployeesAssignedList.get(
+                                serviceActivity.roomId)).add(employee.id);
+                    }
                 }
+                // Add employee status
+                this.employeesStatusList.add(new EmployeeStatus(contract,
+                        this.singleton.selectedDate,
+                        this.singleton.apiData.timestampDirectionsNotEnterExit,
+                        this.singleton.database.timestampDao().listByContractNotEnterExit(
+                                this.singleton.selectedDate, contract.id)));
             }
-            // Add employee status
-            this.employeesStatusList.add(new EmployeeStatus(contract,
-                    this.singleton.selectedDate,
-                    this.singleton.apiData.timestampDirectionsNotEnterExit,
-                    this.singleton.database.timestampDao().listByContractNotEnterExit(
-                            this.singleton.selectedDate, contract.id)));
         }
         return null;
     }
@@ -82,4 +89,3 @@ public class TaskStructureLoadEmployees extends AsyncTask<Void, Void, Void> {
         }
     }
 }
-
