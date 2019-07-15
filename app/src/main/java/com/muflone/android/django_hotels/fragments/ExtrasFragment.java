@@ -23,7 +23,7 @@ import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Employee;
-import com.muflone.android.django_hotels.tasks.TaskStructureLoadEmployees;
+import com.muflone.android.django_hotels.tasks.TaskExtrasLoadEmployees;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -124,8 +124,7 @@ public class ExtrasFragment extends Fragment {
     private void loadEmployees() {
         // Load employees list for the selected Structure tab
         this.employeesList.clear();
-        new TaskStructureLoadEmployees(this.employeesList, this.employeesView,
-                null, null, null).execute();
+        new TaskExtrasLoadEmployees(this.employeesList, this.employeesView).execute();
     }
 
     private void loadEmployee(Employee employee) {
