@@ -68,10 +68,10 @@ public class StructuresFragment extends Fragment {
     private final List<String> buildingsList = new ArrayList<>();
     private final HashMap<String, List<RoomStatus>> roomsList = new HashMap<>();
     private final List<Service> roomServicesList = new ArrayList<>();
-    private final Table<Long, Long, ServiceActivity> serviceActivityTable = HashBasedTable.create();
-    @SuppressLint("UseSparseArrays")
-    private final HashMap<Long, List<Long>> roomsEmployeesAssignedList = new HashMap<>();
     private final HashMap<String, Boolean> buildingsClosedStatusMap = new HashMap<>();
+    private static final Table<Long, Long, ServiceActivity> serviceActivityTable = HashBasedTable.create();
+    @SuppressLint("UseSparseArrays")
+    private static final HashMap<Long, List<Long>> roomsEmployeesAssignedList = new HashMap<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -174,8 +174,8 @@ public class StructuresFragment extends Fragment {
         // Load employees list for the selected Structure tab
         this.employeesList.clear();
         this.employeesStatusList.clear();
-        this.roomsEmployeesAssignedList.clear();
-        this.serviceActivityTable.clear();
+        roomsEmployeesAssignedList.clear();
+        serviceActivityTable.clear();
         // Initialize buildings groups to collapsed
         this.buildingsClosedStatusMap.clear();
         for (Building building : this.singleton.selectedStructure.buildings) {
@@ -183,12 +183,12 @@ public class StructuresFragment extends Fragment {
                     this.api.settings.getBuildingsInitiallyClosed());
             // Initialize empty already assigned rooms list (<Room ID><List of employees>)
             for (Room room : building.rooms) {
-                this.roomsEmployeesAssignedList.put(room.id, new ArrayList<>());
+                roomsEmployeesAssignedList.put(room.id, new ArrayList<>());
             }
         }
         new TaskStructureLoadEmployees(this.employeesList, this.employeesView,
-                this.serviceActivityTable, this.employeesStatusList,
-                this.roomsEmployeesAssignedList).execute();
+                serviceActivityTable, this.employeesStatusList,
+                roomsEmployeesAssignedList).execute();
     }
 
     private void loadEmployee(Employee employee) {
@@ -211,11 +211,11 @@ public class StructuresFragment extends Fragment {
                 Date transmission;
                 for (Room room : building.rooms) {
                     // Restore the previous service for the room
-                    if (this.serviceActivityTable.contains(contractBuilding.contractId, room.id)) {
+                    if (serviceActivityTable.contains(contractBuilding.contractId, room.id)) {
                         service = apiData.serviceMap.get(
-                                this.serviceActivityTable.get(contractBuilding.contractId, room.id).serviceId);
-                        description = this.serviceActivityTable.get(contractBuilding.contractId, room.id).description;
-                        transmission = this.serviceActivityTable.get(contractBuilding.contractId, room.id).transmission;
+                                serviceActivityTable.get(contractBuilding.contractId, room.id).serviceId);
+                        description = serviceActivityTable.get(contractBuilding.contractId, room.id).description;
+                        transmission = serviceActivityTable.get(contractBuilding.contractId, room.id).transmission;
                     } else {
                         service = null;
                         description = "";
@@ -243,7 +243,7 @@ public class StructuresFragment extends Fragment {
         Utility.setExpandableListViewHeight(this.roomsView, -1, this.api.settings.getRoomsListStandardHeight());
     }
 
-    private class ExpandableListAdapter extends BaseExpandableListAdapter {
+    private static class ExpandableListAdapter extends BaseExpandableListAdapter {
         private final Context context;
         private final List<String> buildingsList;
         private final HashMap<String, List<RoomStatus>> roomsList;
@@ -251,6 +251,16 @@ public class StructuresFragment extends Fragment {
         private final Singleton singleton = Singleton.getInstance();
         private Drawable descriptionEnabledDrawable;
         private Drawable descriptionDisabledDrawable;
+
+        private static class ViewHolder {
+            // Views holder caching items for ExpandableListAdapter
+            // https://www.javacodegeeks.com/2013/09/android-viewholder-pattern-example.html
+            ImageView servicePresentImage;
+            TextView roomView;
+            Button serviceButton;
+            ImageButton descriptionButton;
+            ImageView transmissionImage;
+        }
 
         ExpandableListAdapter(Context context, List<String> listDataHeader,
                               HashMap<String, List<RoomStatus>> listChildData) {
@@ -273,14 +283,14 @@ public class StructuresFragment extends Fragment {
         @Override
         public View getChildView(int groupPosition, final int childPosition,
                                  boolean isLastChild, View convertView, ViewGroup parent) {
-            StructuresViewHolder viewHolder;
+            ViewHolder viewHolder;
             RoomStatus roomStatus = getChild(groupPosition, childPosition);
             if (convertView == null) {
-                // Get a new StructuresViewHolder
+                // Get a new ViewHolder
                 LayoutInflater inflater = (LayoutInflater) this.context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.structures_building_item, parent, false);
-                viewHolder = new StructuresViewHolder();
+                viewHolder = new ViewHolder();
                 viewHolder.servicePresentImage = convertView.findViewById(R.id.servicePresentImage);
                 viewHolder.roomView = convertView.findViewById(R.id.roomView);
                 viewHolder.transmissionImage = convertView.findViewById(R.id.transmissionImage);
@@ -288,8 +298,8 @@ public class StructuresFragment extends Fragment {
                 viewHolder.serviceButton = convertView.findViewById(R.id.serviceButton);
                 convertView.setTag(viewHolder);
             } else {
-                // Get the StructuresViewHolder from the saved instance in the ConvertView
-                viewHolder = (StructuresViewHolder) convertView.getTag();
+                // Get the ViewHolder from the saved instance in the ConvertView
+                viewHolder = (ViewHolder) convertView.getTag();
             }
             // Update database row
             roomStatus.updateDatabase(serviceActivityTable);
@@ -444,7 +454,7 @@ public class StructuresFragment extends Fragment {
             return true;
         }
 
-        private void updateRoomView(RoomStatus roomStatus, StructuresViewHolder viewHolder) {
+        private void updateRoomView(RoomStatus roomStatus, ViewHolder viewHolder) {
             // Highlight rooms with at least a service
             viewHolder.servicePresentImage.setImageResource(
                     Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId)).size() > 0 ?
@@ -502,15 +512,5 @@ public class StructuresFragment extends Fragment {
                 roomAssignationList.add(employee.id);
             }
         }
-    }
-
-    private static class StructuresViewHolder {
-        // Views holder caching items for ExpandableListAdapter
-        // https://www.javacodegeeks.com/2013/09/android-viewholder-pattern-example.html
-        ImageView servicePresentImage;
-        TextView roomView;
-        Button serviceButton;
-        ImageButton descriptionButton;
-        ImageView transmissionImage;
     }
 }
