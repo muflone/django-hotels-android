@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/extraView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/serviceButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="ITEM" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/serviceButton"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/btn_rounded_1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/noteButton"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Button" />
+
+    <ImageButton
+        android:id="@+id/noteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:contentDescription="@string/description"
+        app:layout_constraintBottom_toBottomOf="@+id/serviceButton"
+        app:layout_constraintEnd_toStartOf="@+id/transmissionImage"
+        app:layout_constraintTop_toTopOf="@+id/serviceButton"
+        tools:srcCompat="@drawable/ic_note" />
+
+    <ImageView
+        android:id="@+id/transmissionImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="@string/scan_transmission_status"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@drawable/ic_timestamp_transmitted" />
+
+</android.support.constraint.ConstraintLayout>

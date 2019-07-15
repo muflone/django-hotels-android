@@ -16,6 +16,8 @@
 
     <color name="color_employee_detail_background">#B3E5FC</color>
 
+    <color name="color_extras_background">#F48FB1</color>
+
     <color name="color_buildings_background">#689F38</color>
 
     <color name="color_rooms_background">#DCEDC8</color>

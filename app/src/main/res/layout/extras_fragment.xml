@@ -1,17 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/body"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/section_extras"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</android.support.constraint.ConstraintLayout>
+    <include
+        layout="@layout/include_employees_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.3">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/include_employee_detail"
+                layout="@layout/include_employee_detail"
+                tools:layout_editor_absoluteX="8dp" />
+
+            <include
+                android:id="@+id/include_contract_detail"
+                layout="@layout/include_contract_detail" />
+
+            <com.muflone.android.django_hotels.NonScrollingListView
+                android:id="@+id/extrasView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/color_extras_background"
+                android:choiceMode="singleChoice"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/include_contract_detail" />
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+</LinearLayout>
