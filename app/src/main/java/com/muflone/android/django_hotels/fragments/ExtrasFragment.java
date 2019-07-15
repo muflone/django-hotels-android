@@ -67,7 +67,7 @@ public class ExtrasFragment extends Fragment {
                 (parent, view, position, id) -> loadEmployee(this.singleton.selectedStructure.employees.get(position)));
         // Load default extras service ID
         this.extrasServiceId = this.singleton.settings.getLong(CommandConstants.SETTING_EXTRAS_SERVICE_ID, -1);
-
+        // Prepare Extras adapter and layout
         this.extraStatusList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             ExtraStatus extraStatus = new ExtraStatus(this.context, 0, i, null, "sample " + i, null);
