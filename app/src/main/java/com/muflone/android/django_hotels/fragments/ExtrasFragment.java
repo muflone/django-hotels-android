@@ -45,6 +45,7 @@ public class ExtrasFragment extends Fragment {
     private ListView extrasView;
     private EmployeeViewsUpdater employeeViewsUpdater;
     private ContractViewsUpdater contractViewsUpdater;
+    private long extrasServiceId;
     private CustomAdapter extrasAdapter;
     private List<ExtraStatus> extraStatusList;
 
@@ -64,6 +65,8 @@ public class ExtrasFragment extends Fragment {
                 this.context, android.R.layout.simple_list_item_activated_1, this.employeesList));
         this.employeesView.setOnItemClickListener(
                 (parent, view, position, id) -> loadEmployee(this.singleton.selectedStructure.employees.get(position)));
+        // Load default extras service ID
+        this.extrasServiceId = this.singleton.settings.getLong(CommandConstants.SETTING_EXTRAS_SERVICE_ID, -1);
 
         this.extraStatusList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
