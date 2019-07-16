@@ -2,6 +2,7 @@ package com.muflone.android.django_hotels.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,6 +22,7 @@ import com.muflone.android.django_hotels.EmployeeViewsUpdater;
 import com.muflone.android.django_hotels.ExtraStatus;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
+import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.Contract;
@@ -36,8 +40,9 @@ public class ExtrasFragment extends Fragment {
     private final Singleton singleton = Singleton.getInstance();
     private final ApiData apiData = this.singleton.apiData;
     private final List<String> employeesList = new ArrayList<>();
+    private final List<ExtraStatus> extraStatusList = new ArrayList<>();
     @SuppressLint("UseSparseArrays")
-    private final HashMap<Long, List<ExtraStatus>> extraStatusMap = new HashMap<>();
+    private final HashMap<Long, List<ExtraStatus>> extrasStatusMap = new HashMap<>();
 
     private Context context;
     private View rootLayout;
@@ -47,7 +52,6 @@ public class ExtrasFragment extends Fragment {
     private ContractViewsUpdater contractViewsUpdater;
     private long extrasServiceId;
     private CustomAdapter extrasAdapter;
-    private List<ExtraStatus> extraStatusList;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -68,15 +72,8 @@ public class ExtrasFragment extends Fragment {
         // Load default extras service ID
         this.extrasServiceId = this.singleton.settings.getLong(CommandConstants.SETTING_EXTRAS_SERVICE_ID, -1);
         // Prepare Extras adapter and layout
-        this.extraStatusList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            ExtraStatus extraStatus = new ExtraStatus(this.context, 0, i, null, "sample " + i, null);
-            this.extraStatusList.add(extraStatus);
-        }
         this.extrasAdapter = new CustomAdapter(this.extraStatusList, this.context);
-        this.extrasAdapter.notifyDataSetChanged();
         this.extrasView.setAdapter(this.extrasAdapter);
-
         // Load the employees for the selected structure
         if (this.singleton.selectedStructure != null) {
             this.loadEmployees();
@@ -124,7 +121,7 @@ public class ExtrasFragment extends Fragment {
     private void loadEmployees() {
         // Load employees list for the selected Structure tab
         this.employeesList.clear();
-        new TaskExtrasLoadEmployees(this.employeesList, this.employeesView).execute();
+        new TaskExtrasLoadEmployees(this.employeesList, this.employeesView, this.extrasStatusMap).execute();
     }
 
     private void loadEmployee(Employee employee) {
@@ -133,21 +130,30 @@ public class ExtrasFragment extends Fragment {
         // Update Employee and Contract details
         this.employeeViewsUpdater.updateViews(employee);
         this.contractViewsUpdater.updateViews(contract);
+        // Update adapter
+        this.extraStatusList.clear();
+        this.extraStatusList.addAll(this.extrasStatusMap.get(employee.id));
+        this.extrasAdapter.notifyDataSetChanged();
     }
 
     public static class CustomAdapter extends ArrayAdapter<ExtraStatus> implements View.OnClickListener {
-        private List<ExtraStatus> dataSet;
-        Context context;
+        private Context context;
+        private Drawable descriptionEnabledDrawable;
+        private Drawable descriptionDisabledDrawable;
 
         // View lookup cache
         private static class ViewHolder {
             TextView extraView;
+            ImageButton descriptionButton;
+            ImageView transmissionImage;
         }
 
         public CustomAdapter(List<ExtraStatus> data, Context context) {
             super(context, R.layout.extras_extra_item, data);
-            this.dataSet = data;
             this.context = context;
+            this.descriptionEnabledDrawable = this.context.getResources().getDrawable(R.drawable.ic_note);
+            this.descriptionDisabledDrawable = Utility.convertDrawableToGrayScale(
+                    this.descriptionEnabledDrawable);
         }
 
         @Override
@@ -167,24 +173,30 @@ public class ExtrasFragment extends Fragment {
         @NotNull
         @Override
         public View getView(int position, View convertView, @NotNull ViewGroup parent) {
-            // Get the data item for this position
-            ExtraStatus dataModel = Objects.requireNonNull(getItem(position));
-            // Check if an existing view is being reused, otherwise inflate the view
-            CustomAdapter.ViewHolder viewHolder; // view lookup cache stored in tag
-
+            CustomAdapter.ViewHolder viewHolder;
+            ExtraStatus dataModel = Objects.requireNonNull(this.getItem(position));
             if (convertView == null) {
+                // Get the data item for this position
+                // Check if an existing view is being reused, otherwise inflate the view
                 viewHolder = new CustomAdapter.ViewHolder();
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 convertView = inflater.inflate(R.layout.extras_extra_item, parent, false);
                 viewHolder.extraView = convertView.findViewById(R.id.extraView);
+                viewHolder.descriptionButton = convertView.findViewById(R.id.noteButton);
+                viewHolder.transmissionImage = convertView.findViewById(R.id.transmissionImage);
                 convertView.setTag(viewHolder);
             } else {
+                // View lookup cache stored in tag
                 viewHolder = (CustomAdapter.ViewHolder) convertView.getTag();
             }
-
             viewHolder.extraView.setText(dataModel.description);
             viewHolder.extraView.setOnClickListener(this);
-            viewHolder.extraView.setTag(position);
+            // Define transmissionImage
+            viewHolder.transmissionImage.setImageResource(dataModel.transmission == null ?
+                    R.drawable.ic_timestamp_untransmitted : R.drawable.ic_timestamp_transmitted);
+            // Define descriptionButton
+            viewHolder.descriptionButton.setImageDrawable(dataModel.service == null ?
+                    this.descriptionDisabledDrawable : this.descriptionEnabledDrawable);
             // Return the completed view to render on screen
             return convertView;
         }
