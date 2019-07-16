@@ -268,6 +268,9 @@ public class StructuresFragment extends Fragment {
             this.buildingsList = listDataHeader;
             this.roomsList = listChildData;
             this.apiData = this.singleton.apiData;
+            this.descriptionEnabledDrawable = context.getResources().getDrawable(R.drawable.ic_note);
+            this.descriptionDisabledDrawable = Utility.convertDrawableToGrayScale(
+                    this.descriptionEnabledDrawable);
         }
 
         @Override
@@ -471,11 +474,6 @@ public class StructuresFragment extends Fragment {
             // Set room service
             viewHolder.serviceButton.setText(roomStatus.getServiceName());
             // Define descriptionButton
-            if (this.descriptionEnabledDrawable == null) {
-                this.descriptionEnabledDrawable = context.getResources().getDrawable(R.drawable.ic_note);
-                this.descriptionDisabledDrawable = Utility.convertDrawableToGrayScale(
-                        this.descriptionEnabledDrawable);
-            }
             viewHolder.descriptionButton.setEnabled(roomStatus.service != null);
             viewHolder.descriptionButton.setImageDrawable(roomStatus.service == null ?
                     this.descriptionDisabledDrawable : this.descriptionEnabledDrawable);
