@@ -309,4 +309,13 @@ public class Utility {
         }
         return result;
     }
+
+    public static void setSupportActionBarTitle(AppCompatActivity activity, String title) {
+        // Update activity support ActionBar title
+        if (title != null) {
+            activity.getSupportActionBar().setTitle(String.format("%s - %s",
+                    activity.getString(R.string.app_name),
+                    title));
+        }
+    }
 }

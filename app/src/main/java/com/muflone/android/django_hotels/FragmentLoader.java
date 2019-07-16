@@ -60,6 +60,25 @@ public class FragmentLoader {
 
     public static Fragment loadFragment(MainActivity activity, int containerId, String fragmentName) {
         // Load the selected fragment by its name
+        String title = null;
+        if (fragmentName.equals(FRAGMENT_HOME)) {
+            title = activity.getString(R.string.section_home);
+        } else if (fragmentName.equals(FRAGMENT_SCANNER)) {
+            title = activity.getString(R.string.section_scanner);
+        } else if (fragmentName.equals(FRAGMENT_STRUCTURES)) {
+            title = activity.getString(R.string.section_structures);
+        } else if (fragmentName.equals(FRAGMENT_EXTRA)) {
+            title = activity.getString(R.string.section_extras);
+        } else if (fragmentName.equals(FRAGMENT_SYNC)) {
+            title = activity.getString(R.string.section_sync);
+        } else if (fragmentName.equals(FRAGMENT_SETTINGS)) {
+            title = activity.getString(R.string.section_settings);
+        } else if (fragmentName.equals(FRAGMENT_ABOUT)) {
+            title = activity.getString(R.string.section_about);
+        }
+        // Change title bar
+        Utility.setSupportActionBarTitle(activity, title);
+        // Show fragment
         Fragment fragment = FragmentLoader.getFragment(fragmentName);
         return FragmentLoader.loadFragment(activity, containerId, fragment);
     }
