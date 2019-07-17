@@ -23,9 +23,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/include_employee_detail" />
+            <include
+                android:id="@+id/include_employee_detail"
+                layout="@layout/include_employee_detail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <include layout="@layout/include_contract_detail" />
+            <include
+                android:id="@+id/include_contract_detail"
+                layout="@layout/include_contract_detail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/include_employee_detail" />
 
             <ExpandableListView
                 android:id="@+id/roomsView"
@@ -37,7 +56,7 @@
                 android:background="@color/color_rooms_background"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardViewContract">
+                app:layout_constraintTop_toBottomOf="@+id/include_contract_detail">
 
             </ExpandableListView>
 
