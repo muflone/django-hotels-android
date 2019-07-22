@@ -61,6 +61,9 @@
     <string name="structures_employees_already_assigned">Employees already assigned</string>
     <string name="structures_employee_set_conditions">Assign one or more conditions to the employee</string>
 
+    <!-- Extras section -->
+    <string name="extras_add_new_extra">Add a new extra</string>
+
     <!-- Settings section -->
     <string name="settings_tablet">Tablet settings</string>
 

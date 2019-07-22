@@ -38,11 +38,6 @@ public class TaskExtrasLoadEmployees extends AsyncTask<Void, Void, Void> {
         for (Employee employee : this.singleton.selectedStructure.employees) {
             this.employeesListInternal.add(String.format("%s %s", employee.firstName, employee.lastName));
             List<ExtraStatus> extraStatusList = new ArrayList<>();
-            for (int i = 1; i <= employee.id; i++) {
-                ExtraStatus extraStatus = new ExtraStatus(this.singleton.settings.context, 0, i, null,
-                        String.format("%s %s %d", employee.firstName, employee.lastName, i), null);
-                extraStatusList.add(extraStatus);
-            }
             this.extrasStatusMap.put(employee.id, extraStatusList);
         }
         return null;

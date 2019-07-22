@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.muflone.android.django_hotels.ContractViewsUpdater;
@@ -46,10 +48,13 @@ public class ExtrasFragment extends Fragment {
 
     private Context context;
     private View rootLayout;
+    private ScrollView scrollView;
     private ListView employeesView;
     private ListView extrasView;
+    private AppCompatButton addExtraButton;
     private EmployeeViewsUpdater employeeViewsUpdater;
     private ContractViewsUpdater contractViewsUpdater;
+    private Employee currentEmployee;
     private long extrasServiceId;
     private CustomAdapter extrasAdapter;
 
@@ -69,6 +74,18 @@ public class ExtrasFragment extends Fragment {
                 this.context, android.R.layout.simple_list_item_activated_1, this.employeesList));
         this.employeesView.setOnItemClickListener(
                 (parent, view, position, id) -> loadEmployee(this.singleton.selectedStructure.employees.get(position)));
+        this.addExtraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<ExtraStatus> extraStatusList = ExtrasFragment.this.extrasStatusMap.get(currentEmployee.id);
+                ExtraStatus extraStatus = new ExtraStatus(ExtrasFragment.this.singleton.settings.context, 0, 0, null,
+                        String.format("%s %s %d", currentEmployee.firstName, currentEmployee.lastName, 0), null);
+                extraStatusList.add(extraStatus);
+                ExtrasFragment.this.extraStatusList.add(extraStatus);
+                ExtrasFragment.this.extrasAdapter.notifyDataSetChanged();
+                ExtrasFragment.this.extrasView.post(() -> ExtrasFragment.this.scrollView.fullScroll(View.FOCUS_DOWN));
+            }
+        });
         // Load default extras service ID
         this.extrasServiceId = this.singleton.settings.getLong(CommandConstants.SETTING_EXTRAS_SERVICE_ID, -1);
         // Prepare Extras adapter and layout
@@ -96,8 +113,10 @@ public class ExtrasFragment extends Fragment {
         // Inflate the layout for this fragment
         this.rootLayout = inflater.inflate(R.layout.extras_fragment, container, false);
         // Save references
+        this.scrollView = rootLayout.findViewById(R.id.scrollView);
         this.employeesView = rootLayout.findViewById(R.id.employeesView);
         this.extrasView = rootLayout.findViewById(R.id.extrasView);
+        this.addExtraButton = rootLayout.findViewById(R.id.addExtraButton);
         // Prepares employee views updater
         this.employeeViewsUpdater = new EmployeeViewsUpdater(
                 rootLayout.findViewById(R.id.employeeIdView),
@@ -125,6 +144,7 @@ public class ExtrasFragment extends Fragment {
     }
 
     private void loadEmployee(Employee employee) {
+        this.currentEmployee = employee;
         // Get the first contract for the employee
         Contract contract = Objects.requireNonNull(this.apiData.contractsMap.get(employee.contractBuildings.get(0).contractId));
         // Update Employee and Contract details
@@ -136,7 +156,7 @@ public class ExtrasFragment extends Fragment {
         this.extrasAdapter.notifyDataSetChanged();
     }
 
-    public static class CustomAdapter extends ArrayAdapter<ExtraStatus> implements View.OnClickListener {
+    public static class CustomAdapter extends ArrayAdapter<ExtraStatus> {
         private Context context;
         private Drawable descriptionEnabledDrawable;
         private Drawable descriptionDisabledDrawable;
@@ -154,20 +174,6 @@ public class ExtrasFragment extends Fragment {
             this.descriptionEnabledDrawable = this.context.getResources().getDrawable(R.drawable.ic_note);
             this.descriptionDisabledDrawable = Utility.convertDrawableToGrayScale(
                     this.descriptionEnabledDrawable);
-        }
-
-        @Override
-        public void onClick(View view) {
-            int position = (Integer) view.getTag();
-            ExtraStatus dataModel = Objects.requireNonNull(this.getItem(position));
-
-            switch (view.getId())
-            {
-                case R.id.extraView:
-                    Snackbar.make(view, dataModel.description, Snackbar.LENGTH_SHORT)
-                            .setAction("No action", null).show();
-                    break;
-            }
         }
 
         @NotNull
@@ -190,7 +196,6 @@ public class ExtrasFragment extends Fragment {
                 viewHolder = (CustomAdapter.ViewHolder) convertView.getTag();
             }
             viewHolder.extraView.setText(dataModel.description);
-            viewHolder.extraView.setOnClickListener(this);
             // Define transmissionImage
             viewHolder.transmissionImage.setImageResource(dataModel.transmission == null ?
                     R.drawable.ic_timestamp_untransmitted : R.drawable.ic_timestamp_transmitted);
