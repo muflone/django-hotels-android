@@ -163,19 +163,25 @@ public class ExtrasFragment extends Fragment {
     }
 
     public static class CustomAdapter extends ArrayAdapter<ExtraStatus> {
+        private final Singleton singleton = Singleton.getInstance();
+        private final long extrasTimeStep;
         private Context context;
 
         // View lookup cache
         private static class ViewHolder {
-            TextView descriptionView;
-            AppCompatButton extraButton;
-            ImageButton noteButton;
-            ImageView transmissionImage;
+            private TextView descriptionView;
+            private AppCompatButton increaseButton;
+            private AppCompatButton decreaseButton;
+            private TextView extraView;
+            private ImageButton noteButton;
+            private ImageView transmissionImage;
         }
 
         public CustomAdapter(List<ExtraStatus> data, Context context) {
             super(context, R.layout.extras_extra_item, data);
             this.context = context;
+            // Load default time step
+            this.extrasTimeStep = this.singleton.settings.getLong(CommandConstants.SETTING_EXTRAS_TIME_STEP, 15);
         }
 
         @NotNull
@@ -190,7 +196,9 @@ public class ExtrasFragment extends Fragment {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 convertView = inflater.inflate(R.layout.extras_extra_item, parent, false);
                 viewHolder.descriptionView = convertView.findViewById(R.id.descriptionView);
-                viewHolder.extraButton = convertView.findViewById(R.id.extraButton);
+                viewHolder.increaseButton = convertView.findViewById(R.id.increaseButton);
+                viewHolder.decreaseButton = convertView.findViewById(R.id.decreaseButton);
+                viewHolder.extraView = convertView.findViewById(R.id.extraView);
                 viewHolder.noteButton = convertView.findViewById(R.id.noteButton);
                 viewHolder.transmissionImage = convertView.findViewById(R.id.transmissionImage);
                 convertView.setTag(viewHolder);
@@ -199,12 +207,47 @@ public class ExtrasFragment extends Fragment {
                 viewHolder = (CustomAdapter.ViewHolder) convertView.getTag();
             }
             viewHolder.descriptionView.setText(extraStatus.description);
-            viewHolder.extraButton.setText(String.valueOf(extraStatus.id));
+            this.updateExtraView(viewHolder, extraStatus);
+            // Define buttons behavior
+            viewHolder.increaseButton.setTag(position);
+            viewHolder.increaseButton.setOnClickListener(view -> {
+                // Increase extra time
+                extraStatus.minutes += CustomAdapter.this.extrasTimeStep;
+                CustomAdapter.this.updateExtraView(viewHolder, extraStatus);
+            });
+            viewHolder.decreaseButton.setTag(position);
+            viewHolder.decreaseButton.setOnClickListener(view -> {
+                // Decrease extra time
+                extraStatus.minutes -= extraStatus.minutes > CustomAdapter.this.extrasTimeStep ?
+                        CustomAdapter.this.extrasTimeStep : extraStatus.minutes;
+                CustomAdapter.this.updateExtraView(viewHolder, extraStatus);
+            });
             // Define transmissionImage
             viewHolder.transmissionImage.setImageResource(extraStatus.transmission == null ?
                     R.drawable.ic_timestamp_untransmitted : R.drawable.ic_timestamp_transmitted);
             // Return the completed view to render on screen
             return convertView;
+        }
+
+        private void updateExtraView(@NotNull ViewHolder viewHolder, @NotNull ExtraStatus extraStatus) {
+            // Update extra view time
+            long minutes = extraStatus.minutes % 60;
+            long hours = (extraStatus.minutes - minutes) / 60;
+            String extraViewTime;
+            if (hours == 1 & minutes > 0) {
+                extraViewTime = this.context.getString(R.string.extras_time_hour_minutes, hours, minutes);
+            } else if (hours == 1) {
+                extraViewTime = this.context.getString(R.string.extras_time_hour, hours);
+            } else if (hours > 1 & minutes > 0) {
+                extraViewTime = this.context.getString(R.string.extras_time_hours_minutes, hours, minutes);
+            } else if (hours > 1) {
+                extraViewTime = this.context.getString(R.string.extras_time_hours, hours);
+            } else if (minutes > 0) {
+                extraViewTime = this.context.getString(R.string.extras_time_minutes, minutes);
+            } else {
+                extraViewTime = this.context.getString(R.string.extras_time_zero);
+            }
+            viewHolder.extraView.setText(extraViewTime);
         }
     }
 }

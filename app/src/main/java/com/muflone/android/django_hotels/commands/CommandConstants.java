@@ -53,6 +53,7 @@ public class CommandConstants {
     public static final String SETTING_SYNC_CONNECT_TIMEOUT = "sync_connect_timeout";
     public static final String SETTING_SYNC_READ_TIMEOUT = "sync_read_timeout";
     public static final String SETTING_EXTRAS_SERVICE_ID = "extras_service_id";
+    public static final String SETTING_EXTRAS_TIME_STEP = "extras_time_step";
 
     // Set used value for all commands at once
     public static final int SET_USED_SET_ALL_COMMAND_USAGES = -1;

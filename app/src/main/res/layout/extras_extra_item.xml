@@ -15,32 +15,61 @@
         android:layout_marginBottom="8dp"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/extraButton"
+        app:layout_constraintEnd_toStartOf="@+id/increaseButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="ITEM" />
+        tools:text="Extra 123" />
 
     <android.support.v7.widget.AppCompatButton
-        android:id="@+id/extraButton"
+        android:id="@+id/decreaseButton"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_width="200dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/btn_rounded_1"
+        android:text="@string/extras_decrease_time"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/extraView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/extraView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:textAlignment="center"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/increaseButton"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="3 hours and 20 minutes" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/increaseButton"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/btn_rounded_1"
+        android:text="@string/extras_increase_time"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/noteButton"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Button" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/noteButton"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:contentDescription="@string/description"
-        app:layout_constraintBottom_toBottomOf="@+id/extraButton"
+        app:layout_constraintBottom_toBottomOf="@+id/increaseButton"
         app:layout_constraintEnd_toStartOf="@+id/transmissionImage"
-        app:layout_constraintTop_toTopOf="@+id/extraButton"
+        app:layout_constraintTop_toTopOf="@+id/increaseButton"
         app:srcCompat="@drawable/ic_note" />
 
     <ImageView

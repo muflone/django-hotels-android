@@ -63,6 +63,12 @@
 
     <!-- Extras section -->
     <string name="extras_add_new_extra">Aggiungere un nuovo extra</string>
+    <string name="extras_time_zero">Niente</string>
+    <string name="extras_time_minutes">%d minuti</string>
+    <string name="extras_time_hour_minutes">%d ora e %d minuti</string>
+    <string name="extras_time_hour">%d ora</string>
+    <string name="extras_time_hours_minutes">%d ore e %d minuti</string>
+    <string name="extras_time_hours">%d ore</string>
 
     <!-- Settings section -->
     <string name="settings_tablet">Impostazioni tablet</string>
