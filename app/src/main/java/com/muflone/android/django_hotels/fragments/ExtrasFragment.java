@@ -207,21 +207,15 @@ public class ExtrasFragment extends Fragment {
                 viewHolder = (CustomAdapter.ViewHolder) convertView.getTag();
             }
             viewHolder.descriptionView.setText(extraStatus.description);
-            this.updateExtraView(viewHolder, extraStatus);
-            // Define buttons behavior
+            this.updateExtraView(viewHolder, extraStatus, 0);
+            // Set increase time button
             viewHolder.increaseButton.setTag(position);
-            viewHolder.increaseButton.setOnClickListener(view -> {
-                // Increase extra time
-                extraStatus.minutes += CustomAdapter.this.extrasTimeStep;
-                CustomAdapter.this.updateExtraView(viewHolder, extraStatus);
-            });
+            viewHolder.increaseButton.setOnClickListener(view -> CustomAdapter.this.updateExtraView(
+                    viewHolder, extraStatus, CustomAdapter.this.extrasTimeStep));
+            // Set decrease time button
             viewHolder.decreaseButton.setTag(position);
-            viewHolder.decreaseButton.setOnClickListener(view -> {
-                // Decrease extra time
-                extraStatus.minutes -= extraStatus.minutes > CustomAdapter.this.extrasTimeStep ?
-                        CustomAdapter.this.extrasTimeStep : extraStatus.minutes;
-                CustomAdapter.this.updateExtraView(viewHolder, extraStatus);
-            });
+            viewHolder.decreaseButton.setOnClickListener(view -> CustomAdapter.this.updateExtraView(
+                    viewHolder, extraStatus, 0 - CustomAdapter.this.extrasTimeStep));
             // Define transmissionImage
             viewHolder.transmissionImage.setImageResource(extraStatus.transmission == null ?
                     R.drawable.ic_timestamp_untransmitted : R.drawable.ic_timestamp_transmitted);
@@ -229,7 +223,16 @@ public class ExtrasFragment extends Fragment {
             return convertView;
         }
 
-        private void updateExtraView(@NotNull ViewHolder viewHolder, @NotNull ExtraStatus extraStatus) {
+        private void updateExtraView(@NotNull ViewHolder viewHolder, @NotNull ExtraStatus extraStatus, long step) {
+            // Set the extra time
+            if (step > 0) {
+                // Increase time
+                extraStatus.minutes += step;
+            } else if (step < 0) {
+                // Decrease time
+                step = Math.abs(step);
+                extraStatus.minutes -= extraStatus.minutes > step ? step : extraStatus.minutes;
+            }
             // Update extra view time
             long minutes = extraStatus.minutes % 60;
             long hours = (extraStatus.minutes - minutes) / 60;
