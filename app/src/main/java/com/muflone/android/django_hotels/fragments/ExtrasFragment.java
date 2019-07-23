@@ -2,7 +2,6 @@ package com.muflone.android.django_hotels.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,7 +23,6 @@ import com.muflone.android.django_hotels.EmployeeViewsUpdater;
 import com.muflone.android.django_hotels.ExtraStatus;
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
-import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.Contract;
@@ -166,8 +164,6 @@ public class ExtrasFragment extends Fragment {
 
     public static class CustomAdapter extends ArrayAdapter<ExtraStatus> {
         private Context context;
-        private Drawable descriptionEnabledDrawable;
-        private Drawable descriptionDisabledDrawable;
 
         // View lookup cache
         private static class ViewHolder {
@@ -179,9 +175,6 @@ public class ExtrasFragment extends Fragment {
         public CustomAdapter(List<ExtraStatus> data, Context context) {
             super(context, R.layout.extras_extra_item, data);
             this.context = context;
-            this.descriptionEnabledDrawable = this.context.getResources().getDrawable(R.drawable.ic_note);
-            this.descriptionDisabledDrawable = Utility.convertDrawableToGrayScale(
-                    this.descriptionEnabledDrawable);
         }
 
         @NotNull
@@ -207,9 +200,6 @@ public class ExtrasFragment extends Fragment {
             // Define transmissionImage
             viewHolder.transmissionImage.setImageResource(dataModel.transmission == null ?
                     R.drawable.ic_timestamp_untransmitted : R.drawable.ic_timestamp_transmitted);
-            // Define descriptionButton
-            viewHolder.descriptionButton.setImageDrawable(dataModel.service == null ?
-                    this.descriptionDisabledDrawable : this.descriptionEnabledDrawable);
             // Return the completed view to render on screen
             return convertView;
         }

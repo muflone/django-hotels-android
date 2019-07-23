@@ -41,7 +41,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/serviceButton"
         app:layout_constraintEnd_toStartOf="@+id/transmissionImage"
         app:layout_constraintTop_toTopOf="@+id/serviceButton"
-        tools:srcCompat="@drawable/ic_note" />
+        app:srcCompat="@drawable/ic_note" />
 
     <ImageView
         android:id="@+id/transmissionImage"
