@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">@color/colorPrimary</color>
     <color name="colorAccent">#3D3D3D</color>
     <color name="colorError">#CF1D02</color>
+    <color name="colorTransparent">#00000000</color>
 
     <color name="color_simple_list_item_activated">#E64A19</color>
     <color name="color_simple_list_item_selected">@color/color_simple_list_item_activated</color>
