@@ -167,8 +167,9 @@ public class ExtrasFragment extends Fragment {
 
         // View lookup cache
         private static class ViewHolder {
-            TextView extraView;
-            ImageButton descriptionButton;
+            TextView descriptionView;
+            AppCompatButton extraButton;
+            ImageButton noteButton;
             ImageView transmissionImage;
         }
 
@@ -188,15 +189,17 @@ public class ExtrasFragment extends Fragment {
                 viewHolder = new CustomAdapter.ViewHolder();
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 convertView = inflater.inflate(R.layout.extras_extra_item, parent, false);
-                viewHolder.extraView = convertView.findViewById(R.id.extraView);
-                viewHolder.descriptionButton = convertView.findViewById(R.id.noteButton);
+                viewHolder.descriptionView = convertView.findViewById(R.id.descriptionView);
+                viewHolder.extraButton = convertView.findViewById(R.id.extraButton);
+                viewHolder.noteButton = convertView.findViewById(R.id.noteButton);
                 viewHolder.transmissionImage = convertView.findViewById(R.id.transmissionImage);
                 convertView.setTag(viewHolder);
             } else {
                 // View lookup cache stored in tag
                 viewHolder = (CustomAdapter.ViewHolder) convertView.getTag();
             }
-            viewHolder.extraView.setText(dataModel.description);
+            viewHolder.descriptionView.setText(dataModel.description);
+            viewHolder.extraButton.setText(String.valueOf(dataModel.id));
             // Define transmissionImage
             viewHolder.transmissionImage.setImageResource(dataModel.transmission == null ?
                     R.drawable.ic_timestamp_untransmitted : R.drawable.ic_timestamp_transmitted);
