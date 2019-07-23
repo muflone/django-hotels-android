@@ -83,7 +83,7 @@ public class ExtrasFragment extends Fragment {
                 ExtraStatus extraStatus = new ExtraStatus(ExtrasFragment.this.singleton.settings.context,
                         currentEmployee.contractBuildings.get(0).contractId,
                         extraId,
-                        null,
+                        0,
                         String.format(Locale.ROOT, "%s %s %d", currentEmployee.firstName, currentEmployee.lastName, extraId),
                         null);
                 extraStatusList.add(extraStatus);

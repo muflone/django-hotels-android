@@ -2,22 +2,20 @@ package com.muflone.android.django_hotels;
 
 import android.content.Context;
 
-import com.muflone.android.django_hotels.database.models.Service;
-
 import java.util.Date;
 
 public class ExtraStatus {
     public final long contractId;
     public final long id;
-    public Service service;
+    public long minutes;
     public String description;
     public Date transmission;
 
-    public ExtraStatus(Context context, long contractId, long id,
-                       Service service, String description, Date transmission) {
+    public ExtraStatus(Context context, long contractId, long id, long minutes,
+                       String description, Date transmission) {
         this.contractId = contractId;
         this.id = id;
-        this.service = service;
+        this.minutes = minutes;
         this.description = description;
         this.transmission = transmission;
     }
