@@ -78,8 +78,16 @@ public class ExtrasFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 List<ExtraStatus> extraStatusList = ExtrasFragment.this.extrasStatusMap.get(currentEmployee.id);
-                ExtraStatus extraStatus = new ExtraStatus(ExtrasFragment.this.singleton.settings.context, 0, 0, null,
-                        String.format("%s %s %d", currentEmployee.firstName, currentEmployee.lastName, 0), null);
+                // Get last ExtraStatus ID
+                long extraId = extraStatusList.size() > 0 ? extraStatusList.get(extraStatusList.size() - 1).id : 0;
+                // Create new ExtraStatus object
+                extraId++;
+                ExtraStatus extraStatus = new ExtraStatus(ExtrasFragment.this.singleton.settings.context,
+                        currentEmployee.contractBuildings.get(0).contractId,
+                        extraId,
+                        null,
+                        String.format("%s %s %d", currentEmployee.firstName, currentEmployee.lastName, extraId),
+                        null);
                 extraStatusList.add(extraStatus);
                 ExtrasFragment.this.extraStatusList.add(extraStatus);
                 ExtrasFragment.this.extrasAdapter.notifyDataSetChanged();
