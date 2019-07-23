@@ -182,7 +182,7 @@ public class ExtrasFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, @NotNull ViewGroup parent) {
             CustomAdapter.ViewHolder viewHolder;
-            ExtraStatus dataModel = Objects.requireNonNull(this.getItem(position));
+            ExtraStatus extraStatus = Objects.requireNonNull(this.getItem(position));
             if (convertView == null) {
                 // Get the data item for this position
                 // Check if an existing view is being reused, otherwise inflate the view
@@ -198,10 +198,10 @@ public class ExtrasFragment extends Fragment {
                 // View lookup cache stored in tag
                 viewHolder = (CustomAdapter.ViewHolder) convertView.getTag();
             }
-            viewHolder.descriptionView.setText(dataModel.description);
-            viewHolder.extraButton.setText(String.valueOf(dataModel.id));
+            viewHolder.descriptionView.setText(extraStatus.description);
+            viewHolder.extraButton.setText(String.valueOf(extraStatus.id));
             // Define transmissionImage
-            viewHolder.transmissionImage.setImageResource(dataModel.transmission == null ?
+            viewHolder.transmissionImage.setImageResource(extraStatus.transmission == null ?
                     R.drawable.ic_timestamp_untransmitted : R.drawable.ic_timestamp_transmitted);
             // Return the completed view to render on screen
             return convertView;
