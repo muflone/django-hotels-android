@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
@@ -34,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ExtrasFragment extends Fragment {
@@ -84,7 +84,7 @@ public class ExtrasFragment extends Fragment {
                         currentEmployee.contractBuildings.get(0).contractId,
                         extraId,
                         null,
-                        String.format("%s %s %d", currentEmployee.firstName, currentEmployee.lastName, extraId),
+                        String.format(Locale.ROOT, "%s %s %d", currentEmployee.firstName, currentEmployee.lastName, extraId),
                         null);
                 extraStatusList.add(extraStatus);
                 ExtrasFragment.this.extraStatusList.add(extraStatus);
