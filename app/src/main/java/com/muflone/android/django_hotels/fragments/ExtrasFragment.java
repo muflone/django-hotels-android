@@ -84,7 +84,7 @@ public class ExtrasFragment extends Fragment {
                         currentEmployee.contractBuildings.get(0).contractId,
                         extraId,
                         0,
-                        String.format(Locale.ROOT, "%s %s %d", currentEmployee.firstName, currentEmployee.lastName, extraId),
+                        String.format(Locale.ROOT, "Extra %d", extraId),
                         null);
                 extraStatusList.add(extraStatus);
                 ExtrasFragment.this.extraStatusList.add(extraStatus);
