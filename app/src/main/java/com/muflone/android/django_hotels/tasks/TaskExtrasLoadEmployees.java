@@ -5,40 +5,50 @@ import android.support.annotation.NonNull;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.muflone.android.django_hotels.ExtraStatus;
+import com.google.common.collect.Table;
 import com.muflone.android.django_hotels.Singleton;
+import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Employee;
+import com.muflone.android.django_hotels.database.models.ServiceActivity;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class TaskExtrasLoadEmployees extends AsyncTask<Void, Void, Void> {
     private final Singleton singleton = Singleton.getInstance();
     private final List<String> employeesListInternal = new ArrayList<>();
     private final List<String> employeesList;
     private final WeakReference<ListView> employeesView;
-    private final HashMap<Long, List<ExtraStatus>> extrasStatusMap;
+    private final Table<Long, Long, ServiceActivity> serviceActivityTable;
 
     @SuppressWarnings("WeakerAccess")
     public TaskExtrasLoadEmployees(@NonNull List<String> employeesList,
                                    @NonNull ListView employeesView,
-                                   @NonNull HashMap<Long, List<ExtraStatus>> extrasStatusMap) {
+                                   @NonNull Table<Long, Long, ServiceActivity> serviceActivityTable) {
         this.employeesList = employeesList;
         this.employeesView = new WeakReference<>(employeesView);
-        this.extrasStatusMap = extrasStatusMap;
+        this.serviceActivityTable = serviceActivityTable;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
         // Load employees for the selected structure
-        this.extrasStatusMap.clear();
+        this.serviceActivityTable.clear();
         this.employeesListInternal.clear();
         for (Employee employee : this.singleton.selectedStructure.employees) {
             this.employeesListInternal.add(String.format("%s %s", employee.firstName, employee.lastName));
-            List<ExtraStatus> extraStatusList = new ArrayList<>();
-            this.extrasStatusMap.put(employee.id, extraStatusList);
+            // Reload services for contract
+            Contract contract = Objects.requireNonNull(this.singleton.apiData.contractsMap.get(
+                    employee.contractBuildings.get(0).contractId));
+            for (ServiceActivity serviceActivity : this.singleton.database.serviceActivityDao().listExtrasByDateContract(
+                    this.singleton.selectedDate, contract.id)) {
+                this.serviceActivityTable.put(
+                        contract.id,
+                        serviceActivity.roomId,
+                        serviceActivity);
+            }
         }
         return null;
     }

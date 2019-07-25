@@ -30,7 +30,17 @@ public interface ServiceActivityDao {
     @Query("SELECT * " +
            "FROM activities " +
            "WHERE date = :date " +
-           "  AND contract_id = :contractId")
+           "  AND contract_id = :contractId " +
+           "  AND room_id < 0 " +
+           "ORDER BY room_id DESC")
+    List<ServiceActivity> listExtrasByDateContract(@NonNull Date date, long contractId);
+
+    @Query("SELECT * " +
+           "FROM activities " +
+           "WHERE date = :date " +
+           "  AND contract_id = :contractId " +
+           "  AND room_id > 0 " +
+           "ORDER BY room_id")
     List<ServiceActivity> listByDateContract(@NonNull Date date, long contractId);
 
     @Query("SELECT * " +

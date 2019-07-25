@@ -17,6 +17,8 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import com.muflone.android.django_hotels.ContractViewsUpdater;
 import com.muflone.android.django_hotels.EmployeeViewsUpdater;
 import com.muflone.android.django_hotels.ExtraStatus;
@@ -26,12 +28,12 @@ import com.muflone.android.django_hotels.api.ApiData;
 import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Employee;
+import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.tasks.TaskExtrasLoadEmployees;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -42,7 +44,7 @@ public class ExtrasFragment extends Fragment {
     private final List<String> employeesList = new ArrayList<>();
     private final List<ExtraStatus> extraStatusList = new ArrayList<>();
     @SuppressLint("UseSparseArrays")
-    private final HashMap<Long, List<ExtraStatus>> extrasStatusMap = new HashMap<>();
+    private static final Table<Long, Long, ServiceActivity> serviceActivityTable = HashBasedTable.create();
 
     private Context context;
     private View rootLayout;
@@ -53,7 +55,6 @@ public class ExtrasFragment extends Fragment {
     private EmployeeViewsUpdater employeeViewsUpdater;
     private ContractViewsUpdater contractViewsUpdater;
     private Employee currentEmployee;
-    private long extrasServiceId;
     private CustomAdapter extrasAdapter;
 
     @Override
@@ -75,27 +76,34 @@ public class ExtrasFragment extends Fragment {
         this.addExtraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<ExtraStatus> extraStatusList = ExtrasFragment.this.extrasStatusMap.get(currentEmployee.id);
+                List<ServiceActivity> serviceActivityList = new ArrayList<>(serviceActivityTable.row(
+                        currentEmployee.contractBuildings.get(0).contractId).values());
                 // Get last ExtraStatus ID
-                long extraId = extraStatusList.size() > 0 ? extraStatusList.get(extraStatusList.size() - 1).id : 0;
+                long extraId = serviceActivityList.size() > 0 ? serviceActivityList.get(serviceActivityList.size() - 1).roomId : 0;
                 // Create new ExtraStatus object
-                extraId++;
+                extraId--;
                 ExtraStatus extraStatus = new ExtraStatus(ExtrasFragment.this.singleton.settings.context,
                         currentEmployee.contractBuildings.get(0).contractId,
                         extraId,
                         0,
-                        String.format(Locale.ROOT, "Extra %d", extraId),
+                        String.format(Locale.ROOT, "Extra %d", Math.abs(extraId)),
                         null);
-                extraStatusList.add(extraStatus);
+                ExtrasFragment.this.serviceActivityTable.put(extraStatus.contractId, extraId,
+                        new ServiceActivity(0,
+                                ExtrasFragment.this.singleton.selectedDate,
+                                extraStatus.contractId,
+                                extraStatus.id,
+                                0,
+                                extraStatus.minutes,
+                                extraStatus.description,
+                                extraStatus.transmission));
                 ExtrasFragment.this.extraStatusList.add(extraStatus);
                 ExtrasFragment.this.extrasAdapter.notifyDataSetChanged();
                 ExtrasFragment.this.extrasView.post(() -> ExtrasFragment.this.scrollView.fullScroll(View.FOCUS_DOWN));
             }
         });
-        // Load default extras service ID
-        this.extrasServiceId = this.singleton.settings.getLong(CommandConstants.SETTING_EXTRAS_SERVICE_ID, -1);
         // Prepare Extras adapter and layout
-        this.extrasAdapter = new CustomAdapter(this.extraStatusList, this.context);
+        this.extrasAdapter = new CustomAdapter(this.context, this.extraStatusList, this.serviceActivityTable);
         this.extrasView.setAdapter(this.extrasAdapter);
         // Load the employees for the selected structure
         if (this.singleton.selectedStructure != null) {
@@ -146,7 +154,8 @@ public class ExtrasFragment extends Fragment {
     private void loadEmployees() {
         // Load employees list for the selected Structure tab
         this.employeesList.clear();
-        new TaskExtrasLoadEmployees(this.employeesList, this.employeesView, this.extrasStatusMap).execute();
+        serviceActivityTable.clear();
+        new TaskExtrasLoadEmployees(this.employeesList, this.employeesView, serviceActivityTable).execute();
     }
 
     private void loadEmployee(Employee employee) {
@@ -158,13 +167,22 @@ public class ExtrasFragment extends Fragment {
         this.contractViewsUpdater.updateViews(contract);
         // Update adapter
         this.extraStatusList.clear();
-        this.extraStatusList.addAll(this.extrasStatusMap.get(employee.id));
+        for (ServiceActivity serviceActivity : serviceActivityTable.row(contract.id).values()) {
+            ExtraStatus extraStatus = new ExtraStatus(this.context,
+                                                      serviceActivity.contractId,
+                                                      serviceActivity.roomId,
+                                                      serviceActivity.serviceQty,
+                                                      serviceActivity.description,
+                                                      serviceActivity.transmission);
+            this.extraStatusList.add(extraStatus);
+        }
         this.extrasAdapter.notifyDataSetChanged();
     }
 
     public static class CustomAdapter extends ArrayAdapter<ExtraStatus> {
         private final Singleton singleton = Singleton.getInstance();
         private final long extrasTimeStep;
+        private final Table<Long, Long, ServiceActivity> serviceActivityTable;
         private Context context;
 
         // View lookup cache
@@ -177,9 +195,10 @@ public class ExtrasFragment extends Fragment {
             private ImageView transmissionImage;
         }
 
-        public CustomAdapter(List<ExtraStatus> data, Context context) {
+        public CustomAdapter(Context context, List<ExtraStatus> data, Table<Long, Long, ServiceActivity> serviceActivityTable) {
             super(context, R.layout.extras_extra_item, data);
             this.context = context;
+            this.serviceActivityTable = serviceActivityTable;
             // Load default time step
             this.extrasTimeStep = this.singleton.settings.getLong(CommandConstants.SETTING_EXTRAS_TIME_STEP, 15);
         }
@@ -251,6 +270,10 @@ public class ExtrasFragment extends Fragment {
                 extraViewTime = this.context.getString(R.string.extras_time_zero);
             }
             viewHolder.extraView.setText(extraViewTime);
+            // Update database
+            if (step != 0) {
+                extraStatus.updateDatabase(serviceActivityTable);
+            }
         }
     }
 }
