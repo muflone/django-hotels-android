@@ -76,34 +76,32 @@ public class ExtrasFragment extends Fragment {
                 this.context, android.R.layout.simple_list_item_activated_1, this.employeesList));
         this.employeesView.setOnItemClickListener(
                 (parent, view, position, id) -> loadEmployee(this.singleton.selectedStructure.employees.get(position)));
-        this.addExtraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<ServiceActivity> serviceActivityList = new ArrayList<>(serviceActivityTable.row(
-                        currentEmployee.contractBuildings.get(0).contractId).values());
-                // Get last ExtraStatus ID
-                long extraId = serviceActivityList.size() > 0 ? serviceActivityList.get(serviceActivityList.size() - 1).roomId : 0;
-                // Create new ExtraStatus object
-                extraId--;
-                ExtraStatus extraStatus = new ExtraStatus(ExtrasFragment.this.singleton.settings.context,
-                        currentEmployee.contractBuildings.get(0).contractId,
-                        extraId,
-                        0,
-                        String.format(Locale.ROOT, "Extra %d", Math.abs(extraId)),
-                        null);
-                ExtrasFragment.this.serviceActivityTable.put(extraStatus.contractId, extraId,
-                        new ServiceActivity(0,
-                                ExtrasFragment.this.singleton.selectedDate,
-                                extraStatus.contractId,
-                                extraStatus.id,
-                                0,
-                                extraStatus.minutes,
-                                extraStatus.description,
-                                extraStatus.transmission));
-                ExtrasFragment.this.extraStatusList.add(extraStatus);
-                ExtrasFragment.this.extrasAdapter.notifyDataSetChanged();
-                ExtrasFragment.this.extrasView.post(() -> ExtrasFragment.this.scrollView.fullScroll(View.FOCUS_DOWN));
-            }
+        this.addExtraButton.setOnClickListener(view -> {
+            List<ServiceActivity> serviceActivityList = new ArrayList<>(serviceActivityTable.row(
+                    currentEmployee.contractBuildings.get(0).contractId).values());
+            // Get last ExtraStatus ID
+            long extraId = serviceActivityList.size() > 0 ? serviceActivityList.get(serviceActivityList.size() - 1).roomId : 0;
+            // Create new ExtraStatus object
+            extraId--;
+            ExtraStatus extraStatus = new ExtraStatus(ExtrasFragment.this.singleton.settings.context,
+                    currentEmployee.contractBuildings.get(0).contractId,
+                    extraId,
+                    0,
+                    String.format(Locale.ROOT, "Extra %d", Math.abs(extraId)),
+                    null);
+            // Add a new serviceActivity in order to reserve the next id
+            ExtrasFragment.this.serviceActivityTable.put(extraStatus.contractId, extraId,
+                    new ServiceActivity(0,
+                            ExtrasFragment.this.singleton.selectedDate,
+                            extraStatus.contractId,
+                            extraStatus.id,
+                            0,
+                            extraStatus.minutes,
+                            extraStatus.description,
+                            extraStatus.transmission));
+            ExtrasFragment.this.extraStatusList.add(extraStatus);
+            ExtrasFragment.this.extrasAdapter.notifyDataSetChanged();
+            ExtrasFragment.this.extrasView.post(() -> ExtrasFragment.this.scrollView.fullScroll(View.FOCUS_DOWN));
         });
         // Prepare Extras adapter and layout
         this.extrasAdapter = new CustomAdapter(this.context, this.extraStatusList, this.serviceActivityTable);
@@ -171,12 +169,13 @@ public class ExtrasFragment extends Fragment {
         // Update adapter
         this.extraStatusList.clear();
         for (ServiceActivity serviceActivity : serviceActivityTable.row(contract.id).values()) {
-            ExtraStatus extraStatus = new ExtraStatus(this.context,
-                                                      serviceActivity.contractId,
-                                                      serviceActivity.roomId,
-                                                      serviceActivity.serviceQty,
-                                                      serviceActivity.description,
-                                                      serviceActivity.transmission);
+            ExtraStatus extraStatus = new ExtraStatus(
+                    this.context,
+                    serviceActivity.contractId,
+                    serviceActivity.roomId,
+                    serviceActivity.serviceQty,
+                    serviceActivity.description,
+                    serviceActivity.transmission);
             this.extraStatusList.add(extraStatus);
         }
         this.extrasAdapter.notifyDataSetChanged();
