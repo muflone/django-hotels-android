@@ -6,16 +6,19 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -227,6 +230,34 @@ public class ExtrasFragment extends Fragment {
             }
             viewHolder.descriptionView.setText(extraStatus.description);
             this.updateExtraView(viewHolder, extraStatus, 0);
+            // Set extra description Click
+            viewHolder.noteButton.setOnClickListener(button -> {
+                final EditText descriptionView = new EditText(context);
+                descriptionView.setText(extraStatus.description);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                alertDialogBuilder.setTitle(R.string.description);
+                alertDialogBuilder.setView(descriptionView);
+                alertDialogBuilder.setCancelable(true)
+                        .setPositiveButton(android.R.string.ok, (dialog, id) -> {
+                            if (! singleton.apiData.isValidContract(extraStatus.contractId)) {
+                                // Cannot change a disabled contract
+                                Toast.makeText(context, R.string.extras_unable_to_use_contract,
+                                        Toast.LENGTH_SHORT).show();
+                            } else if (extraStatus.transmission != null) {
+                                // Cannot change an already transmitted extra
+                                Toast.makeText(context,
+                                        R.string.extras_unable_to_change_transmitted_activity,
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                extraStatus.description = descriptionView.getText().toString();
+                                extraStatus.updateDatabase(serviceActivityTable);
+                                updateExtraView(viewHolder, extraStatus, 0);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, (dialog, id) -> dialog.cancel());
+                // Show the alert dialog
+                alertDialogBuilder.create().show();
+            });
             // Set increase time button
             viewHolder.increaseButton.setTag(position);
             viewHolder.increaseButton.setOnClickListener(view -> CustomAdapter.this.updateExtraView(
@@ -270,6 +301,7 @@ public class ExtrasFragment extends Fragment {
                 extraViewTime = this.context.getString(R.string.extras_time_zero);
             }
             viewHolder.extraView.setText(extraViewTime);
+            viewHolder.descriptionView.setText(extraStatus.description);
             // Update database
             if (step != 0) {
                 extraStatus.updateDatabase(serviceActivityTable);
