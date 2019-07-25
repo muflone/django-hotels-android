@@ -234,6 +234,7 @@ public class ExtrasFragment extends Fragment {
             viewHolder.noteButton.setOnClickListener(button -> {
                 final EditText descriptionView = new EditText(context);
                 descriptionView.setText(extraStatus.description);
+                descriptionView.setSelection(extraStatus.description.length());
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
                 alertDialogBuilder.setTitle(R.string.description);
                 alertDialogBuilder.setView(descriptionView);
