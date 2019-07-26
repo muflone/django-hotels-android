@@ -382,6 +382,7 @@ public class StructuresFragment extends Fragment {
             viewHolder.descriptionButton.setOnClickListener(button -> {
                 final EditText descriptionView = new EditText(context);
                 descriptionView.setText(roomStatus.description);
+                descriptionView.setSelection(roomStatus.description.length());
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
                 alertDialogBuilder.setTitle(R.string.description);
                 alertDialogBuilder.setView(descriptionView);
