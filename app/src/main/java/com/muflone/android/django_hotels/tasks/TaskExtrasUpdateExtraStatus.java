@@ -3,9 +3,9 @@ package com.muflone.android.django_hotels.tasks;
 import android.os.AsyncTask;
 
 import com.google.common.collect.Table;
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.ExtraStatus;
 import com.muflone.android.django_hotels.Singleton;
-import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.ServiceActivity;
 
 import java.util.List;
@@ -13,7 +13,6 @@ import java.util.List;
 public class TaskExtrasUpdateExtraStatus extends AsyncTask<ExtraStatus, Void, Void> {
     private final Singleton singleton = Singleton.getInstance();
     private final Table<Long, Long, ServiceActivity> serviceActivityTable;
-    private final long extrasServiceId = this.singleton.settings.getLong(CommandConstants.SETTING_EXTRAS_SERVICE_ID, -1);
 
     @SuppressWarnings("WeakerAccess")
     public TaskExtrasUpdateExtraStatus(Table<Long, Long, ServiceActivity> serviceActivityTable) {
@@ -32,7 +31,7 @@ public class TaskExtrasUpdateExtraStatus extends AsyncTask<ExtraStatus, Void, Vo
             serviceActivity = serviceActivityList.get(0);
             if (extraStatus.minutes > 0) {
                 // Update existing ServiceActivity
-                serviceActivity.serviceId = this.extrasServiceId;
+                serviceActivity.serviceId = Constants.EXTRAS_SERVICE_ID;
                 serviceActivity.description = extraStatus.description;
                 serviceActivity.transmission = extraStatus.transmission;
                 serviceActivity.serviceQty = extraStatus.minutes;
@@ -49,7 +48,7 @@ public class TaskExtrasUpdateExtraStatus extends AsyncTask<ExtraStatus, Void, Vo
                     this.singleton.selectedDate,
                     extraStatus.contractId,
                     extraStatus.id,
-                    this.extrasServiceId,
+                    Constants.EXTRAS_SERVICE_ID,
                     extraStatus.minutes,
                     extraStatus.description,
                     null);

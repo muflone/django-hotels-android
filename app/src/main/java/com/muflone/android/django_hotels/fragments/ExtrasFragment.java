@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.ContractViewsUpdater;
 import com.muflone.android.django_hotels.EmployeeViewsUpdater;
 import com.muflone.android.django_hotels.ExtraStatus;
@@ -83,19 +84,19 @@ public class ExtrasFragment extends Fragment {
             long extraId = serviceActivityList.size() > 0 ? serviceActivityList.get(serviceActivityList.size() - 1).roomId : 0;
             // Create new ExtraStatus object
             extraId--;
-            ExtraStatus extraStatus = new ExtraStatus(ExtrasFragment.this.singleton.settings.context,
+            ExtraStatus extraStatus = new ExtraStatus(
                     currentEmployee.contractBuildings.get(0).contractId,
                     extraId,
                     0,
                     String.format(Locale.ROOT, "Extra %d", Math.abs(extraId)),
                     null);
             // Add a new serviceActivity in order to reserve the next id
-            ExtrasFragment.this.serviceActivityTable.put(extraStatus.contractId, extraId,
+            serviceActivityTable.put(extraStatus.contractId, extraId,
                     new ServiceActivity(0,
                             ExtrasFragment.this.singleton.selectedDate,
                             extraStatus.contractId,
                             extraStatus.id,
-                            0,
+                            Constants.EXTRAS_SERVICE_ID,
                             extraStatus.minutes,
                             extraStatus.description,
                             extraStatus.transmission));
@@ -104,7 +105,7 @@ public class ExtrasFragment extends Fragment {
             ExtrasFragment.this.extrasView.post(() -> ExtrasFragment.this.scrollView.fullScroll(View.FOCUS_DOWN));
         });
         // Prepare Extras adapter and layout
-        this.extrasAdapter = new CustomAdapter(this.context, this.extraStatusList, this.serviceActivityTable);
+        this.extrasAdapter = new CustomAdapter(this.context, this.extraStatusList, serviceActivityTable);
         this.extrasView.setAdapter(this.extrasAdapter);
         // Load the employees for the selected structure
         if (this.singleton.selectedStructure != null) {
@@ -170,7 +171,6 @@ public class ExtrasFragment extends Fragment {
         this.extraStatusList.clear();
         for (ServiceActivity serviceActivity : serviceActivityTable.row(contract.id).values()) {
             ExtraStatus extraStatus = new ExtraStatus(
-                    this.context,
                     serviceActivity.contractId,
                     serviceActivity.roomId,
                     serviceActivity.serviceQty,
@@ -181,11 +181,12 @@ public class ExtrasFragment extends Fragment {
         this.extrasAdapter.notifyDataSetChanged();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static class CustomAdapter extends ArrayAdapter<ExtraStatus> {
         private final Singleton singleton = Singleton.getInstance();
         private final long extrasTimeStep;
         private final Table<Long, Long, ServiceActivity> serviceActivityTable;
-        private Context context;
+        private final Context context;
 
         // View lookup cache
         private static class ViewHolder {

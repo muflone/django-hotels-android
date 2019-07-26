@@ -7,4 +7,5 @@ public class Constants {
     public static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 5001;
     public static final int SYNC_CONNECT_TIMEOUT_DEFAULT = 30 * 1000;
     public static final int SYNC_READ_TIMEOUT_DEFAULT = 60 * 1000;
+    public static final long EXTRAS_SERVICE_ID = -1;
 }

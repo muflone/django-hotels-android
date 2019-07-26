@@ -1,7 +1,5 @@
 package com.muflone.android.django_hotels;
 
-import android.content.Context;
-
 import com.google.common.collect.Table;
 import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.tasks.TaskExtrasUpdateExtraStatus;
@@ -13,10 +11,9 @@ public class ExtraStatus {
     public final long id;
     public long minutes;
     public String description;
-    public Date transmission;
+    public final Date transmission;
 
-    public ExtraStatus(Context context, long contractId, long id, long minutes,
-                       String description, Date transmission) {
+    public ExtraStatus(long contractId, long id, long minutes, String description, Date transmission) {
         this.contractId = contractId;
         this.id = id;
         this.minutes = minutes;
