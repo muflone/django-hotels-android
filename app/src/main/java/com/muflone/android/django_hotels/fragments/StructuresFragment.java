@@ -381,6 +381,7 @@ public class StructuresFragment extends Fragment {
             // Set service description Click
             viewHolder.descriptionButton.setOnClickListener(button -> {
                 final EditText descriptionView = new EditText(context);
+                descriptionView.setSingleLine();
                 descriptionView.setText(roomStatus.description);
                 descriptionView.setSelection(roomStatus.description.length());
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
