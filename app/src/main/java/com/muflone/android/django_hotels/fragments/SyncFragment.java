@@ -69,6 +69,7 @@ public class SyncFragment extends Fragment {
         this.progressPhases.add(this.context.getString(R.string.sync_step_date_time));
         this.progressPhases.add(this.context.getString(R.string.sync_step_timestamps_transmission));
         this.progressPhases.add(this.context.getString(R.string.sync_step_activities_transmission));
+        this.progressPhases.add(this.context.getString(R.string.sync_step_extras_transmission));
         this.progressPhases.add(this.context.getString(R.string.sync_step_get_data));
         this.progressPhases.add(this.context.getString(R.string.sync_step_saving_data));
         this.progressPhases.add(this.context.getString(R.string.sync_step_completed));

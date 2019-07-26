@@ -24,8 +24,16 @@ public interface ServiceActivityDao {
     @Query("SELECT * " +
            "FROM activities " +
            "WHERE transmission IS NULL " +
+           "  AND room_id > 0 " +
            "ORDER BY activities.date ASC")
     List<ServiceActivity> listByUntrasmitted();
+
+    @Query("SELECT * " +
+           "FROM activities " +
+           "WHERE transmission IS NULL " +
+           "  AND room_id < 0 " +
+           "ORDER BY activities.date ASC")
+    List<ServiceActivity> listExtrasByUntrasmitted();
 
     @Query("SELECT * " +
            "FROM activities " +
