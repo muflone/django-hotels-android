@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="PluralsCandidate">
     <!-- Application values -->
     <string name="app_description">Esegui le tue attività in Hotel</string>
 
@@ -61,6 +61,17 @@
     <string name="structures_employees_already_assigned">Impiegati già assegnati</string>
     <string name="structures_employee_set_conditions">Assegnare una o più condizioni al dipendente</string>
 
+    <!-- Extras section -->
+    <string name="extras_add_new_extra">Aggiungere un nuovo extra</string>
+    <string name="extras_time_zero">Niente</string>
+    <string name="extras_time_minutes">%d minuti</string>
+    <string name="extras_time_hour_minutes">%d ora e %d minuti</string>
+    <string name="extras_time_hour">%d ora</string>
+    <string name="extras_time_hours_minutes">%d ore e %d minuti</string>
+    <string name="extras_time_hours">%d ore</string>
+    <string name="extras_unable_to_change_transmitted_activity">Impossibile modificare un extra già trasmesso</string>
+    <string name="extras_unable_to_use_contract">Impossibile utilizzare il contratto</string>
+
     <!-- Settings section -->
     <string name="settings_tablet">Impostazioni tablet</string>
 
@@ -97,6 +108,7 @@
     <string name="sync_step_date_time">Controllo di data e ora del dispositivo</string>
     <string name="sync_step_timestamps_transmission">Trasmissione delle timbrature</string>
     <string name="sync_step_activities_transmission">Trasmissione delle attività</string>
+    <string name="sync_step_extras_transmission">Trasmissione degli extra</string>
     <string name="sync_step_get_data">Scaricamento dei dati</string>
     <string name="sync_step_saving_data">Salvataggio dei dati</string>
     <string name="sync_step_completed">Sincronizzazione completata</string>

@@ -108,7 +108,22 @@ public class TaskSync extends AsyncTask<Void, Void, TaskResult> {
                 this.updateProgress();
                 List<ServiceActivity> servicesActivityList = this.singleton.database.serviceActivityDao().listByUntrasmitted();
                 for (ServiceActivity serviceActivity : servicesActivityList) {
+                    // Transmit data
                     data = this.requestApiPutActivity(serviceActivity);
+                    if (data.exception == null) {
+                        serviceActivity.transmission = Utility.getCurrentDateTime();
+                        this.singleton.database.serviceActivityDao().update(serviceActivity);
+                    } else {
+                        // There were some errors during the timestamps transmissions
+                        transmissionErrors = true;
+                    }
+                }
+                // Transmit any incomplete extra (UPLOAD)
+                this.updateProgress();
+                List<ServiceActivity> extrasActivityList = this.singleton.database.serviceActivityDao().listExtrasByUntrasmitted();
+                for (ServiceActivity serviceActivity : extrasActivityList) {
+                    // Transmit data
+                    data = this.requestApiPutExtra(serviceActivity);
                     if (data.exception == null) {
                         serviceActivity.transmission = Utility.getCurrentDateTime();
                         this.singleton.database.serviceActivityDao().update(serviceActivity);
@@ -345,6 +360,44 @@ public class TaskSync extends AsyncTask<Void, Void, TaskResult> {
             } catch (InvalidResponseException exception) {
                 result.exception = exception;
             } catch (RetransmittedActivityException exception) {
+                result.exception = exception;
+            }
+        } else {
+            // Unable to download data from the server
+            result.exception = new NoDownloadException();
+        }
+        return result;
+    }
+
+    private ApiData requestApiPutExtra(ServiceActivity serviceActivity) {
+        ApiData result = new ApiData();
+        JSONObject jsonRoot = null;
+        // Send timestamps to the server
+        try {
+            jsonRoot = this.api.getJSONObject(String.format(Locale.ROOT,
+                    "put/extra/%s/%s/%d/%d/%d/%d/%s/",
+                    this.api.settings.getTabletID(),
+                    this.api.getCurrentTokenCode(),
+                    serviceActivity.contractId,
+                    0 - serviceActivity.roomId,
+                    serviceActivity.serviceQty,
+                    serviceActivity.date.getTime() / 1000,
+                    URLEncoder.encode(serviceActivity.description.replace("\n", "\\n") , "UTF-8")));
+        } catch (UnsupportedEncodingException exception) {
+            result.exception = new InvalidResponseException();
+        }
+        if (jsonRoot != null) {
+            try {
+                // Check the final node for successful reads
+                String status = jsonRoot.getString("status");
+                if (! status.equals(Api.STATUS_OK)) {
+                    // Invalid response received
+                    Log.e(this.TAG, String.format("Invalid response received during the data transmission: %s", status));
+                    throw new InvalidResponseException();
+                }
+            } catch (JSONException exception) {
+                result.exception = new InvalidResponseException();
+            } catch (InvalidResponseException exception) {
                 result.exception = exception;
             }
         } else {
