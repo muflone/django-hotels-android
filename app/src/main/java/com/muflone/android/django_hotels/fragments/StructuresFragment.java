@@ -249,8 +249,8 @@ public class StructuresFragment extends Fragment {
         private final HashMap<String, List<RoomStatus>> roomsList;
         private final ApiData apiData;
         private final Singleton singleton = Singleton.getInstance();
-        private Drawable descriptionEnabledDrawable;
-        private Drawable descriptionDisabledDrawable;
+        private final Drawable descriptionEnabledDrawable;
+        private final Drawable descriptionDisabledDrawable;
 
         private static class ViewHolder {
             // Views holder caching items for ExpandableListAdapter

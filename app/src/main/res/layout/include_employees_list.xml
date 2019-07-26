@@ -9,4 +9,5 @@
     android:choiceMode="singleChoice"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    tools:showIn="@layout/structures_fragment" />
+    tools:showIn="@layout/structures_fragment"
+    tools:ignore="Overdraw" />

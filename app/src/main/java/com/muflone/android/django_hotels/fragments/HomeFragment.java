@@ -58,7 +58,7 @@ public class HomeFragment extends Fragment {
             } else {
                 fragmentName = null;
             }
-            FragmentLoader.loadFragment((MainActivity) getActivity(), R.id.fragment_container, fragmentName);
+            FragmentLoader.loadFragment((MainActivity) getActivity(), R.id.fragment_container, Objects.requireNonNull(fragmentName));
         };
         this.imageSectionScanner.setOnClickListener(clickListener);
         this.textViewScanner.setOnClickListener(clickListener);

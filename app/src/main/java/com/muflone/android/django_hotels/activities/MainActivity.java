@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -153,7 +154,7 @@ public class MainActivity extends AppCompatActivity
         this.invalidateOptionsMenu();
         // Restore previously active fragment
         String fragmentName = savedInstanceState.getString("fragment");
-        this.setActiveFragment(FragmentLoader.loadFragment(this, R.id.fragment_container, fragmentName));
+        this.setActiveFragment(FragmentLoader.loadFragment(this, R.id.fragment_container, Objects.requireNonNull(fragmentName)));
     }
 
     @Override
@@ -212,7 +213,7 @@ public class MainActivity extends AppCompatActivity
         } else if (item == this.menuItemAbout) {
             fragmentName = FragmentLoader.FRAGMENT_ABOUT;
         }
-        this.setActiveFragment(FragmentLoader.loadFragment(this, R.id.fragment_container, fragmentName));
+        this.setActiveFragment(FragmentLoader.loadFragment(this, R.id.fragment_container, Objects.requireNonNull(fragmentName)));
         return this.fragment != null;
     }
 

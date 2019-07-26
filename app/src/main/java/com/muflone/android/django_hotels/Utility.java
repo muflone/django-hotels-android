@@ -313,6 +313,7 @@ public class Utility {
     public static void setSupportActionBarTitle(AppCompatActivity activity, String title) {
         // Update activity support ActionBar title
         if (title != null) {
+            //noinspection ConstantConditions
             activity.getSupportActionBar().setTitle(String.format("%s - %s",
                     activity.getString(R.string.app_name),
                     title));
