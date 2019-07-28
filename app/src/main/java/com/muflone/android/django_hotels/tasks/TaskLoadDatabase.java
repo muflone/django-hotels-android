@@ -98,7 +98,11 @@ public class TaskLoadDatabase extends AsyncTask<Void, Void, TaskResult> {
                 employee.contractBuildings = contractBuildingsDao.listByEmployee(employee.id);
                 structure.employees.add(employee);
             }
-            for(Building building : structure.buildings) {
+            // Load buildings and extras
+            ArrayList<Building> buildingsAndExtrasList = new ArrayList<>();
+            buildingsAndExtrasList.addAll(structure.buildings);
+            buildingsAndExtrasList.addAll(structure.extras);
+            for(Building building : buildingsAndExtrasList) {
                 data.buildingsMap.put(building.id, building);
                 // Load building location
                 building.location = locationDao.findById(building.locationId);
