@@ -178,13 +178,16 @@ public class ExtrasFragment extends Fragment {
         // Update adapter
         this.extraStatusList.clear();
         for (ServiceActivity serviceActivity : serviceActivityTable.row(contract.id).values()) {
-            ExtraStatus extraStatus = new ExtraStatus(
-                    serviceActivity.contractId,
-                    serviceActivity.roomId,
-                    serviceActivity.serviceQty,
-                    serviceActivity.description,
-                    serviceActivity.transmission);
-            this.extraStatusList.add(extraStatus);
+            // Skip empty extras on reload
+            if (serviceActivity.serviceQty > 0) {
+                ExtraStatus extraStatus = new ExtraStatus(
+                        serviceActivity.contractId,
+                        serviceActivity.roomId,
+                        serviceActivity.serviceQty,
+                        serviceActivity.description,
+                        serviceActivity.transmission);
+                this.extraStatusList.add(extraStatus);
+            }
         }
         this.extrasAdapter.notifyDataSetChanged();
     }
