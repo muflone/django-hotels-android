@@ -40,32 +40,37 @@ public class Building {
     @ColumnInfo(name = "location_id", index = true)
     public final long locationId;
 
+    @ColumnInfo(name = "extras")
+    public final boolean extras;
+
     @Ignore
     public List<Room> rooms = null;
 
     @Ignore
     public List<Employee> employees = null;
 
-    public Building(long id, String name, long structureId, long locationId) {
+    public Building(long id, String name, long structureId, long locationId, boolean extras) {
         this.id = id;
         this.name = name;
         this.structureId = structureId;
         this.locationId = locationId;
+        this.extras = extras;
     }
 
     @Ignore
-    public Building(long id, String name, Structure structure, Location location, List<Room> rooms) {
-        this(id, name, structure.id, location.id);
+    public Building(long id, String name, Structure structure, Location location, boolean extras, List<Room> rooms) {
+        this(id, name, structure.id, location.id, extras);
         this.location = location;
         this.rooms = rooms;
     }
 
     @Ignore
-    public Building(JSONObject jsonObject, Structure structure) throws JSONException {
+    public Building(JSONObject jsonObject, Structure structure, boolean extras) throws JSONException {
         this(jsonObject.getJSONObject("building").getLong("id"),
                 jsonObject.getJSONObject("building").getString("name"),
                 structure,
                 new Location(jsonObject.getJSONObject("location")),
+                extras,
                 new ArrayList<>());
         // Loop over every room
         JSONArray jsonRooms = jsonObject.getJSONArray("rooms");

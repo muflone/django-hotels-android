@@ -526,6 +526,17 @@ public class TaskSync extends AsyncTask<Void, Void, TaskResult> {
                     roomDao.insert(room);
                 }
             }
+            // Save extras
+            for (Building extras : structure.extras) {
+                countryDao.insert(extras.location.country);
+                regionDao.insert(extras.location.region);
+                locationDao.insert(extras.location);
+                buildingDao.insert(extras);
+                // Save rooms
+                for (Room room : extras.rooms) {
+                    roomDao.insert(room);
+                }
+            }
         }
         // Save data from contracts
         for (Contract contract : data.contractsMap.values()) {

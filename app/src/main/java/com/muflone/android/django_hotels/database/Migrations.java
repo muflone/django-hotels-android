@@ -51,4 +51,16 @@ public class Migrations {
             super.migrate(database, actions.toArray(new String[0]));
         }
     };
+
+    static final MigrationSafe MIGRATION_7_TO_8 = new MigrationSafe(7, 8) {
+        @Override
+        public void migrate(@NotNull SupportSQLiteDatabase database) {
+            // Define migrations actions
+            List<String> actions = new ArrayList<>();
+            actions.add("ALTER TABLE buildings " +
+                        "ADD COLUMN extras INTEGER NOT NULL DEFAULT 0");
+            // Execute safe migration
+            super.migrate(database, actions.toArray(new String[0]));
+        }
+    };
 }

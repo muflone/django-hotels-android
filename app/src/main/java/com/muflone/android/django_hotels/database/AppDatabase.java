@@ -93,6 +93,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 // Execute schema migrations to save the user data
                 .addMigrations(Migrations.MIGRATION_5_TO_6)
                 .addMigrations(Migrations.MIGRATION_6_TO_7)
+                .addMigrations(Migrations.MIGRATION_7_TO_8)
                 // allow queries on the main thread.
                 // Don’t do this on a real app! See PersistenceBasicSample for an example.
                 //.allowMainThreadQueries()

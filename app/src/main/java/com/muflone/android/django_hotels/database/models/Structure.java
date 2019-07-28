@@ -57,6 +57,9 @@ public class Structure implements Comparable<Structure>  {
     public List<Building> buildings;
 
     @Ignore
+    public List<Building> extras;
+
+    @Ignore
     public List<Employee> employees;
 
     public Structure(long id, String name, long companyId, long brandId, long locationId) {
@@ -69,12 +72,13 @@ public class Structure implements Comparable<Structure>  {
 
     @Ignore
     public Structure(long id, String name, Company company, Brand brand, Location location,
-                     List<Building> buildings) {
+                     List<Building> buildings, List<Building> extras) {
         this(id, name, company.id, brand.id, location.id);
         this.company = company;
         this.brand = brand;
         this.location = location;
         this.buildings = buildings;
+        this.extras = extras;
     }
 
     @Ignore
@@ -84,12 +88,19 @@ public class Structure implements Comparable<Structure>  {
                 new Company(jsonObject.getJSONObject("company")),
                 new Brand(jsonObject.getJSONObject("brand")),
                 new Location(jsonObject.getJSONObject("location")),
+                new ArrayList<>(),
                 new ArrayList<>());
         // Loop over every building
         JSONArray jsonBuildings = jsonObject.getJSONArray("buildings");
         for (int i = 0; i < jsonBuildings.length(); i++) {
-            Building building = new Building(jsonBuildings.getJSONObject(i), this);
+            Building building = new Building(jsonBuildings.getJSONObject(i), this, false);
             this.buildings.add(building);
+        }
+        // Loop over every extras
+        JSONArray jsonExtras = jsonObject.getJSONArray("extras");
+        for (int i = 0; i < jsonExtras.length(); i++) {
+            Building building = new Building(jsonExtras.getJSONObject(i), this, true);
+            this.extras.add(building);
         }
     }
 

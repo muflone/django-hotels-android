@@ -17,13 +17,15 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 public interface BuildingDao {
     @Query("SELECT * " +
            "FROM buildings " +
+           "WHERE extras = :extras " +
            "ORDER BY name")
-    List<Building> listAll();
+    List<Building> listAll(boolean extras);
 
     @Query("SELECT * " +
            "FROM buildings " +
-           "WHERE structure_id = :structureId")
-    List<Building> listByStructure(long structureId);
+           "WHERE structure_id = :structureId " +
+           "  AND extras = :extras")
+    List<Building> listByStructure(long structureId, boolean extras);
 
     @Query("SELECT * " +
            "FROM buildings " +
@@ -36,8 +38,9 @@ public interface BuildingDao {
     Building findByName(String name);
 
     @Query("SELECT COUNT(*) " +
-           "FROM buildings")
-    long count();
+           "FROM buildings " +
+           "WHERE extras = :extras")
+    long count(boolean extras);
 
     @Insert(onConflict = IGNORE)
     long insert(Building item);
