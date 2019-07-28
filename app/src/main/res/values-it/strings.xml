@@ -71,6 +71,7 @@
     <string name="extras_time_hours">%d ore</string>
     <string name="extras_unable_to_change_transmitted_activity">Impossibile modificare un extra già trasmesso</string>
     <string name="extras_unable_to_use_contract">Impossibile utilizzare il contratto</string>
+    <string name="extras_max_number_of_extras">Raggiunto il numero massimo di extra, impossibile aggiungere un nuovo extra</string>
 
     <!-- Settings section -->
     <string name="settings_tablet">Impostazioni tablet</string>

@@ -82,27 +82,35 @@ public class ExtrasFragment extends Fragment {
                     currentEmployee.contractBuildings.get(0).contractId).values());
             // Get last ExtraStatus ID
             long extraId = serviceActivityList.size() > 0 ? serviceActivityList.get(serviceActivityList.size() - 1).roomId : 0;
-            // Create new ExtraStatus object
-            extraId--;
-            ExtraStatus extraStatus = new ExtraStatus(
-                    currentEmployee.contractBuildings.get(0).contractId,
-                    extraId,
-                    0,
-                    String.format(Locale.ROOT, "Extra %d", Math.abs(extraId)),
-                    null);
-            // Add a new serviceActivity in order to reserve the next id
-            serviceActivityTable.put(extraStatus.contractId, extraId,
-                    new ServiceActivity(0,
-                            ExtrasFragment.this.singleton.selectedDate,
-                            extraStatus.contractId,
-                            extraStatus.id,
-                            Constants.EXTRAS_SERVICE_ID,
-                            extraStatus.minutes,
-                            extraStatus.description,
-                            extraStatus.transmission));
-            ExtrasFragment.this.extraStatusList.add(extraStatus);
-            ExtrasFragment.this.extrasAdapter.notifyDataSetChanged();
-            ExtrasFragment.this.extrasView.post(() -> ExtrasFragment.this.scrollView.fullScroll(View.FOCUS_DOWN));
+            // Check the maximum number of allowed extras
+            int max_extras = this.singleton.selectedStructure.extras.size() > 0 ?
+                    this.singleton.selectedStructure.extras.get(0).rooms.size() : 0;
+            if (Math.abs(serviceActivityList.size()) < max_extras) {
+                extraId--;
+                // Create new ExtraStatus object
+                ExtraStatus extraStatus = new ExtraStatus(
+                        currentEmployee.contractBuildings.get(0).contractId,
+                        extraId,
+                        0,
+                        String.format(Locale.ROOT, "Extra %d", Math.abs(extraId)),
+                        null);
+                // Add a new serviceActivity in order to reserve the next id
+                serviceActivityTable.put(extraStatus.contractId, extraId,
+                        new ServiceActivity(0,
+                                ExtrasFragment.this.singleton.selectedDate,
+                                extraStatus.contractId,
+                                extraStatus.id,
+                                Constants.EXTRAS_SERVICE_ID,
+                                extraStatus.minutes,
+                                extraStatus.description,
+                                extraStatus.transmission));
+                ExtrasFragment.this.extraStatusList.add(extraStatus);
+                ExtrasFragment.this.extrasAdapter.notifyDataSetChanged();
+                ExtrasFragment.this.extrasView.post(() -> ExtrasFragment.this.scrollView.fullScroll(View.FOCUS_DOWN));
+            } else {
+                // Max number of extras reached, unable to add a new extra
+                Toast.makeText(this.context, R.string.extras_max_number_of_extras, Toast.LENGTH_SHORT).show();
+            }
         });
         // Prepare Extras adapter and layout
         this.extrasAdapter = new CustomAdapter(this.context, this.extraStatusList, serviceActivityTable);
