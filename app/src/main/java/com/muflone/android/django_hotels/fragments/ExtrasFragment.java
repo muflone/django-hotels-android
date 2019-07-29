@@ -90,6 +90,7 @@ public class ExtrasFragment extends Fragment {
                 // Create new ExtraStatus object
                 ExtraStatus extraStatus = new ExtraStatus(
                         currentEmployee.contractBuildings.get(0).contractId,
+                        this.singleton.selectedStructure.id,
                         extraId,
                         0,
                         String.format(Locale.ROOT, "Extra %d", Math.abs(extraId)),
@@ -182,6 +183,7 @@ public class ExtrasFragment extends Fragment {
             if (serviceActivity.serviceQty > 0) {
                 ExtraStatus extraStatus = new ExtraStatus(
                         serviceActivity.contractId,
+                        this.singleton.selectedStructure.id,
                         serviceActivity.roomId,
                         serviceActivity.serviceQty,
                         serviceActivity.description,

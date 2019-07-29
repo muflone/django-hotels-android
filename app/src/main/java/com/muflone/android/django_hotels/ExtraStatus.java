@@ -8,13 +8,15 @@ import java.util.Date;
 
 public class ExtraStatus {
     public final long contractId;
+    public final long structureId;
     public final long id;
     public long minutes;
     public String description;
     public final Date transmission;
 
-    public ExtraStatus(long contractId, long id, long minutes, String description, Date transmission) {
+    public ExtraStatus(long contractId, long structureId, long id, long minutes, String description, Date transmission) {
         this.contractId = contractId;
+        this.structureId = structureId;
         this.id = id;
         this.minutes = minutes;
         this.description = description;
