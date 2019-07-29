@@ -100,6 +100,7 @@ public class ExtrasFragment extends Fragment {
                         new ServiceActivity(0,
                                 ExtrasFragment.this.singleton.selectedDate,
                                 extraStatus.contractId,
+                                extraStatus.structureId,
                                 extraStatus.id,
                                 Constants.EXTRAS_SERVICE_ID,
                                 extraStatus.minutes,

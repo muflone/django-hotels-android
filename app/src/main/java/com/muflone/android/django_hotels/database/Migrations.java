@@ -63,6 +63,22 @@ public class Migrations {
             // Add new column extras to table buildings
             actions.add("ALTER TABLE buildings " +
                         "ADD COLUMN extras INTEGER NOT NULL DEFAULT 0");
+            // Delete any row from table activities with negative room_id (shouldn't exist)
+            actions.add("DELETE FROM activities " +
+                        "WHERE room_id < 0");
+            // Add new column structure_id to table activities
+            actions.add("ALTER TABLE activities " +
+                        "ADD COLUMN structure_id INTEGER NOT NULL DEFAULT 0");
+            // Update column structure using the structure from the room_id
+            actions.add("UPDATE activities " +
+                        "SET structure_id = COALESCE(( " +
+                        "  SELECT buildings.structure_id " +
+                        "  FROM rooms " +
+                        "  LEFT JOIN buildings " +
+                        "     ON buildings.id = rooms.building_id " +
+                        "  WHERE rooms.id=activities.room_id " +
+                        "), 0) " +
+                        "WHERE activities.room_id > 0");
             // Execute safe migration
             super.migrate(database, actions.toArray(new String[0]));
         }

@@ -25,6 +25,9 @@ public class ServiceActivity {
     @ColumnInfo(name = "contract_id", index = true)
     public final long contractId;
 
+    @ColumnInfo(name = "structure_id")
+    public final long structureId;
+
     @ColumnInfo(name = "room_id", index = true)
     public final long roomId;
 
@@ -42,12 +45,14 @@ public class ServiceActivity {
     @Nullable
     public Date transmission;
 
-    public ServiceActivity(long id, @NonNull Date date, long contractId, long roomId,
+    public ServiceActivity(long id, @NonNull Date date, long contractId,
+                           long structureId, long roomId,
                            long serviceId, long serviceQty,
                            @NonNull String description, @Nullable Date transmission) {
         this.id = id;
         this.date = date;
         this.contractId = contractId;
+        this.structureId = structureId;
         this.roomId = roomId;
         this.serviceId = serviceId;
         this.serviceQty = serviceQty;

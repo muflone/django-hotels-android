@@ -46,6 +46,7 @@ public class TaskStructureUpdateRoomStatus extends AsyncTask<RoomStatus, Void, V
             serviceActivity = new ServiceActivity(0,
                     this.singleton.selectedDate,
                     roomStatus.contractId,
+                    roomStatus.structureId,
                     roomStatus.roomId,
                     roomStatus.service.id,
                     1, roomStatus.description, null);

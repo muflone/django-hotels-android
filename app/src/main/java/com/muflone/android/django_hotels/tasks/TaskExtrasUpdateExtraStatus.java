@@ -47,6 +47,7 @@ public class TaskExtrasUpdateExtraStatus extends AsyncTask<ExtraStatus, Void, Vo
             serviceActivity = new ServiceActivity(0,
                     this.singleton.selectedDate,
                     extraStatus.contractId,
+                    extraStatus.structureId,
                     extraStatus.id,
                     Constants.EXTRAS_SERVICE_ID,
                     extraStatus.minutes,
