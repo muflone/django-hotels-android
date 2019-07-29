@@ -15,18 +15,20 @@ public class RoomStatus {
     private final List<Service> services;
     private int serviceCounter;
     public final long contractId;
+    public final long structureId;
     public final long roomId;
     public final String name;
     public Service service;
     public String description;
     public Date transmission;
 
-    public RoomStatus(Context context, String name, long contractId, long roomId,
+    public RoomStatus(Context context, String name, long contractId, long structureId, long roomId,
                List<Service> services, Service service, String description,
                Date transmission) {
         this.emptyServiceDescription = context.getString(R.string.empty_service);
         this.name = name;
         this.contractId = contractId;
+        this.structureId = structureId;
         this.roomId = roomId;
         this.services = services;
         this.service = service;

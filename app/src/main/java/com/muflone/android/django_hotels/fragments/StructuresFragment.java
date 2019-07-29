@@ -222,7 +222,8 @@ public class StructuresFragment extends Fragment {
                         transmission = null;
                     }
                     RoomStatus roomStatus = new RoomStatus(this.context, room.name,
-                            contractBuilding.contractId, room.id, this.roomServicesList,
+                            contractBuilding.contractId, building.structureId,
+                            room.id, this.roomServicesList,
                             service, description, transmission);
                     rooms.add(roomStatus);
                 }
