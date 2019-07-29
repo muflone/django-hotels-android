@@ -379,7 +379,7 @@ public class TaskSync extends AsyncTask<Void, Void, TaskResult> {
                     this.api.settings.getTabletID(),
                     this.api.getCurrentTokenCode(),
                     serviceActivity.contractId,
-                    0 - serviceActivity.roomId,
+                    serviceActivity.structureId,
                     serviceActivity.serviceQty,
                     serviceActivity.date.getTime() / 1000,
                     URLEncoder.encode(serviceActivity.description.replace("\n", "\\n") , "UTF-8")));
