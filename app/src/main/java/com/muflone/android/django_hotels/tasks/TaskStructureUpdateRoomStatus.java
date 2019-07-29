@@ -49,7 +49,7 @@ public class TaskStructureUpdateRoomStatus extends AsyncTask<RoomStatus, Void, V
                     roomStatus.structureId,
                     roomStatus.roomId,
                     roomStatus.service.id,
-                    1, roomStatus.description, null);
+                    1, false, roomStatus.description, null);
             this.singleton.database.serviceActivityDao().insert(serviceActivity);
             serviceActivityTable.put(roomStatus.contractId, roomStatus.roomId,
                     serviceActivity);

@@ -45,9 +45,12 @@ public class ServiceActivity {
     @Nullable
     public Date transmission;
 
+    @ColumnInfo(name = "extras")
+    public final boolean extras;
+
     public ServiceActivity(long id, @NonNull Date date, long contractId,
                            long structureId, long roomId,
-                           long serviceId, long serviceQty,
+                           long serviceId, long serviceQty, boolean extras,
                            @NonNull String description, @Nullable Date transmission) {
         this.id = id;
         this.date = date;
@@ -56,6 +59,7 @@ public class ServiceActivity {
         this.roomId = roomId;
         this.serviceId = serviceId;
         this.serviceQty = serviceQty;
+        this.extras = extras;
         this.description = description;
         this.transmission = transmission;
     }

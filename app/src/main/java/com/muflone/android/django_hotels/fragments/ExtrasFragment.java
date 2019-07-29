@@ -85,15 +85,15 @@ public class ExtrasFragment extends Fragment {
             // Check the maximum number of allowed extras
             int max_extras = this.singleton.selectedStructure.extras.size() > 0 ?
                     this.singleton.selectedStructure.extras.get(0).rooms.size() : 0;
-            if (Math.abs(serviceActivityList.size()) < max_extras) {
-                extraId--;
+            if (serviceActivityList.size() < max_extras) {
+                extraId++;
                 // Create new ExtraStatus object
                 ExtraStatus extraStatus = new ExtraStatus(
                         currentEmployee.contractBuildings.get(0).contractId,
                         this.singleton.selectedStructure.id,
                         extraId,
                         0,
-                        String.format(Locale.ROOT, "Extra %d", Math.abs(extraId)),
+                        String.format(Locale.ROOT, "Extra %d", extraId),
                         null);
                 // Add a new serviceActivity in order to reserve the next id
                 serviceActivityTable.put(extraStatus.contractId, extraId,
@@ -104,6 +104,7 @@ public class ExtrasFragment extends Fragment {
                                 extraStatus.id,
                                 Constants.EXTRAS_SERVICE_ID,
                                 extraStatus.minutes,
+                                true,
                                 extraStatus.description,
                                 extraStatus.transmission));
                 ExtrasFragment.this.extraStatusList.add(extraStatus);

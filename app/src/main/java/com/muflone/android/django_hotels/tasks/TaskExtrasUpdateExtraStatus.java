@@ -51,6 +51,7 @@ public class TaskExtrasUpdateExtraStatus extends AsyncTask<ExtraStatus, Void, Vo
                     extraStatus.id,
                     Constants.EXTRAS_SERVICE_ID,
                     extraStatus.minutes,
+                    true,
                     extraStatus.description,
                     null);
             this.singleton.database.serviceActivityDao().insert(serviceActivity);

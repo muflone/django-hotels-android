@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 8,
-    "identityHash": "2175303f5a7afa4e9f20c841320e7985",
+    "identityHash": "6e654bdb2b87ee8872c6390e382d9042",
     "entities": [
       {
         "tableName": "brands",
@@ -786,7 +786,7 @@
       },
       {
         "tableName": "activities",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `contract_id` INTEGER NOT NULL, `structure_id` INTEGER NOT NULL, `room_id` INTEGER NOT NULL, `service_id` INTEGER NOT NULL, `service_qty` INTEGER NOT NULL, `description` TEXT NOT NULL, `transmission` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `contract_id` INTEGER NOT NULL, `structure_id` INTEGER NOT NULL, `room_id` INTEGER NOT NULL, `service_id` INTEGER NOT NULL, `service_qty` INTEGER NOT NULL, `description` TEXT NOT NULL, `transmission` INTEGER, `extras` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -841,6 +841,12 @@
             "columnName": "transmission",
             "affinity": "INTEGER",
             "notNull": false
+          },
+          {
+            "fieldPath": "extras",
+            "columnName": "extras",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1136,7 +1142,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"2175303f5a7afa4e9f20c841320e7985\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"6e654bdb2b87ee8872c6390e382d9042\")"
     ]
   }
 }

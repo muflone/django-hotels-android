@@ -79,6 +79,9 @@ public class Migrations {
                         "  WHERE rooms.id=activities.room_id " +
                         "), 0) " +
                         "WHERE activities.room_id > 0");
+            // Add new column extras to table activities
+            actions.add("ALTER TABLE activities " +
+                    "ADD COLUMN extras INTEGER NOT NULL DEFAULT 0");
             // Execute safe migration
             super.migrate(database, actions.toArray(new String[0]));
         }

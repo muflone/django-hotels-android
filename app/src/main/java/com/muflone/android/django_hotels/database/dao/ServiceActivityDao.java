@@ -24,14 +24,14 @@ public interface ServiceActivityDao {
     @Query("SELECT * " +
            "FROM activities " +
            "WHERE transmission IS NULL " +
-           "  AND room_id > 0 " +
+           "  AND extras = 0 " +
            "ORDER BY activities.date ASC")
     List<ServiceActivity> listByUntrasmitted();
 
     @Query("SELECT * " +
            "FROM activities " +
            "WHERE transmission IS NULL " +
-           "  AND room_id < 0 " +
+           "  AND extras = 1 " +
            "ORDER BY activities.date ASC")
     List<ServiceActivity> listExtrasByUntrasmitted();
 
@@ -39,16 +39,16 @@ public interface ServiceActivityDao {
            "FROM activities " +
            "WHERE date = :date " +
            "  AND contract_id = :contractId " +
-           "  AND room_id < 0 " +
-           "ORDER BY room_id DESC")
+           "  AND extras = 1 " +
+           "ORDER BY room_id ASC")
     List<ServiceActivity> listExtrasByDateContract(@NonNull Date date, long contractId);
 
     @Query("SELECT * " +
            "FROM activities " +
            "WHERE date = :date " +
            "  AND contract_id = :contractId " +
-           "  AND room_id > 0 " +
-           "ORDER BY room_id")
+           "  AND extras = 0 " +
+           "ORDER BY room_id ASC")
     List<ServiceActivity> listByDateContract(@NonNull Date date, long contractId);
 
     @Query("SELECT * " +
