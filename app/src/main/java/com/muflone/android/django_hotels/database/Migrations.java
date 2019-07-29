@@ -14,6 +14,7 @@ public class Migrations {
         public void migrate(@NotNull SupportSQLiteDatabase database) {
             // Define migrations actions
             List<String> actions = new ArrayList<>();
+            // Create table settings
             actions.add("CREATE TABLE IF NOT EXISTS settings (" +
                         "  name TEXT NOT NULL, " +
                         "  data TEXT, " +
@@ -30,7 +31,9 @@ public class Migrations {
         public void migrate(@NotNull SupportSQLiteDatabase database) {
             // Define migrations actions
             List<String> actions = new ArrayList<>();
+            // Drop table settings
             actions.add("DROP TABLE IF EXISTS settings");
+            // Create table commands
             actions.add("CREATE TABLE IF NOT EXISTS commands (" +
                         "  id INTEGER, " +
                         "  name TEXT NOT NULL, " +
@@ -57,6 +60,7 @@ public class Migrations {
         public void migrate(@NotNull SupportSQLiteDatabase database) {
             // Define migrations actions
             List<String> actions = new ArrayList<>();
+            // Add new column extras to table buildings
             actions.add("ALTER TABLE buildings " +
                         "ADD COLUMN extras INTEGER NOT NULL DEFAULT 0");
             // Execute safe migration
