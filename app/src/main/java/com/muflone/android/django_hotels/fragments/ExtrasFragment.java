@@ -294,6 +294,14 @@ public class ExtrasFragment extends Fragment {
         }
 
         private void updateExtraView(@NotNull ViewHolder viewHolder, @NotNull ExtraStatus extraStatus, long step) {
+            if (step != 0 && extraStatus.transmission != null) {
+                // Cannot change an already transmitted extra
+                Toast.makeText(context,
+                        R.string.extras_unable_to_change_transmitted_activity,
+                        Toast.LENGTH_SHORT).show();
+                // Disable changes
+                step = 0;
+            }
             // Set the extra time
             if (step > 0) {
                 // Increase time
