@@ -72,6 +72,7 @@
     <string name="extras_unable_to_change_transmitted_activity">Unable to modify an already transmitted extra</string>
     <string name="extras_unable_to_use_contract">Unable to use the contract</string>
     <string name="extras_max_number_of_extras">Max number of extras reached, unable to add a new extra</string>
+    <string name="extras_no_extras_allowed">No extras are allowed for this structure</string>
 
     <!-- Settings section -->
     <string name="settings_tablet">Tablet settings</string>

@@ -110,6 +110,9 @@ public class ExtrasFragment extends Fragment {
                 ExtrasFragment.this.extraStatusList.add(extraStatus);
                 ExtrasFragment.this.extrasAdapter.notifyDataSetChanged();
                 ExtrasFragment.this.extrasView.post(() -> ExtrasFragment.this.scrollView.fullScroll(View.FOCUS_DOWN));
+            } else if (max_extras == 0) {
+                // No extras allowed for this structure, unable to add a new extra
+                Toast.makeText(this.context, R.string.extras_no_extras_allowed, Toast.LENGTH_SHORT).show();
             } else {
                 // Max number of extras reached, unable to add a new extra
                 Toast.makeText(this.context, R.string.extras_max_number_of_extras, Toast.LENGTH_SHORT).show();
