@@ -73,6 +73,7 @@
     <string name="extras_unable_to_use_contract">Impossibile utilizzare il contratto</string>
     <string name="extras_max_number_of_extras">Raggiunto il numero massimo di extra, impossibile aggiungere un nuovo extra</string>
     <string name="extras_no_extras_allowed">Nessun extra è consentito per questa struttura</string>
+    <string name="extras_marked_extra_as_untransmitted">Extra contrassegnato come non trasmesso</string>
 
     <!-- Settings section -->
     <string name="settings_tablet">Impostazioni tablet</string>

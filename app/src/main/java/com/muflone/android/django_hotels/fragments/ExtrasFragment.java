@@ -289,6 +289,15 @@ public class ExtrasFragment extends Fragment {
             // Define transmissionImage
             viewHolder.transmissionImage.setImageResource(extraStatus.transmission == null ?
                     R.drawable.ic_timestamp_untransmitted : R.drawable.ic_timestamp_transmitted);
+            viewHolder.transmissionImage.setOnLongClickListener(button -> {
+                extraStatus.transmission = null;
+                extraStatus.updateDatabase(serviceActivityTable);
+                viewHolder.transmissionImage.setImageResource(R.drawable.ic_timestamp_untransmitted);
+                Toast.makeText(context,
+                        R.string.extras_marked_extra_as_untransmitted,
+                        Toast.LENGTH_SHORT).show();
+                return false;
+            });
             // Return the completed view to render on screen
             return convertView;
         }

@@ -12,7 +12,7 @@ public class ExtraStatus {
     public final long id;
     public long minutes;
     public String description;
-    public final Date transmission;
+    public Date transmission;
 
     public ExtraStatus(long contractId, long structureId, long id, long minutes, String description, Date transmission) {
         this.contractId = contractId;
