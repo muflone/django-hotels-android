@@ -79,7 +79,7 @@
     <!-- Reports section -->
     <string name="report_timestamps">Timestamps</string>
     <string name="report_activities_details">Activities details</string>
-    <string name="report_monthly_activities">Monthly Activities</string>
+    <string name="report_activities_totals">Activities totals</string>
 
     <!-- Settings section -->
     <string name="settings_tablet">Tablet settings</string>

@@ -46,13 +46,13 @@
             android:layout_weight="1" />
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/buttonReportMonthActivities"
+            android:id="@+id/buttonReportActivitiesTotals"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="33"
             android:background="@drawable/btn_rounded_3"
-            android:text="@string/report_monthly_activities" />
+            android:text="@string/report_activities_totals" />
     </LinearLayout>
 
     <WebView
