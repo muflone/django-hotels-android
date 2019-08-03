@@ -72,8 +72,8 @@ public class ReportsFragment extends Fragment {
                     try {
                         PDFCreator pdfCreator = new PDFCreator();
                         pdfCreator.pageSize = PageSize.A4;
-                        pdfCreator.title = settings.context.getString(R.string.reports_timestamps);
-                        pdfCreator.subject = settings.context.getString(R.string.reports_timestamps);
+                        pdfCreator.title = settings.context.getString(R.string.report_timestamps);
+                        pdfCreator.subject = settings.context.getString(R.string.report_timestamps);
                         pdfCreator.creator = settings.getApplicationNameVersion();
                         pdfCreator.author = settings.context.getString(R.string.author_name);
                         pdfCreator.keywords = settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_KEYWORDS, "");

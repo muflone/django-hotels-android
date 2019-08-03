@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="33"
             android:background="@drawable/btn_rounded_1"
-            android:text="@string/reports_timestamps" />
+            android:text="@string/report_timestamps" />
 
         <Space
             android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="33"
             android:background="@drawable/btn_rounded_2"
-            android:text="@string/reports_daily_activities" />
+            android:text="@string/report_daily_activities" />
 
         <Space
             android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="33"
             android:background="@drawable/btn_rounded_3"
-            android:text="@string/reports_monthly_activities" />
+            android:text="@string/report_monthly_activities" />
     </LinearLayout>
 
     <WebView
