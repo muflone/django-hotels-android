@@ -32,13 +32,13 @@
             android:layout_weight="1" />
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/buttonReportDailyActivities"
+            android:id="@+id/buttonReportActivitiesDetails"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="33"
             android:background="@drawable/btn_rounded_2"
-            android:text="@string/report_daily_activities" />
+            android:text="@string/report_activities_details" />
 
         <Space
             android:layout_width="wrap_content"

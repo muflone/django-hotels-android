@@ -78,7 +78,7 @@
 
     <!-- Reports section -->
     <string name="report_timestamps">Ingressi e Uscite</string>
-    <string name="report_daily_activities">Attività giornaliere</string>
+    <string name="report_activities_details">Attività dettagli</string>
     <string name="report_monthly_activities">Attività mensili</string>
 
     <!-- Settings section -->

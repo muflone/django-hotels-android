@@ -78,7 +78,7 @@
 
     <!-- Reports section -->
     <string name="report_timestamps">Timestamps</string>
-    <string name="report_daily_activities">Daily Activities</string>
+    <string name="report_activities_details">Activities details</string>
     <string name="report_monthly_activities">Monthly Activities</string>
 
     <!-- Settings section -->

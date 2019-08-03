@@ -28,7 +28,7 @@ import java.util.Objects;
 public class ReportsFragment extends Fragment {
     private View rootLayout;
     private TextView buttonReportTimestamps;
-    private TextView buttonReportDailyActivities;
+    private TextView buttonReportActivitiesDetails;
     private TextView buttonReportMonthActivities;
     private WebView webReport;
     private final Singleton singleton = Singleton.getInstance();
@@ -88,8 +88,8 @@ public class ReportsFragment extends Fragment {
             if (view == this.buttonReportTimestamps) {
                 TaskReportTimestampsListByDate task = new TaskReportTimestampsListByDate(reportCallback);
                 task.execute();
-            } else if (view == this.buttonReportDailyActivities) {
-                reportText = "<html><body><h1>Daily Activities</h1></body></html>";
+            } else if (view == this.buttonReportActivitiesDetails) {
+                reportText = "<html><body><h1>Activities details</h1></body></html>";
             } else if (view == this.buttonReportMonthActivities) {
                 reportText = "<html><body><h1>Monthly Activities</h1></body></html>";
             }
@@ -100,7 +100,7 @@ public class ReportsFragment extends Fragment {
             }
         };
         this.buttonReportTimestamps.setOnClickListener(clickListener);
-        this.buttonReportDailyActivities.setOnClickListener(clickListener);
+        this.buttonReportActivitiesDetails.setOnClickListener(clickListener);
         this.buttonReportMonthActivities.setOnClickListener(clickListener);
         // Set WebView zoom enabled
         this.webReport.getSettings().setBuiltInZoomControls(
@@ -123,7 +123,7 @@ public class ReportsFragment extends Fragment {
         // Inflate the layout for this fragment
         this.rootLayout = inflater.inflate(R.layout.reports_fragment, container, false);
         this.buttonReportTimestamps = this.rootLayout.findViewById(R.id.buttonReportTimestamps);
-        this.buttonReportDailyActivities = this.rootLayout.findViewById(R.id.buttonReportDailyActivities);
+        this.buttonReportActivitiesDetails = this.rootLayout.findViewById(R.id.buttonReportActivitiesDetails);
         this.buttonReportMonthActivities = this.rootLayout.findViewById(R.id.buttonReportMonthActivities);
         this.webReport = this.rootLayout.findViewById(R.id.webReport);
     }
