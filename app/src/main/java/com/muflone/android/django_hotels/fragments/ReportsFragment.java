@@ -173,9 +173,12 @@ public class ReportsFragment extends Fragment {
                         .replace("{{ LAST_NAME }}", item.lastName)
                         .replace("{{ ENTER_TIME }}", item.enterTime == null ? "" :
                                 new SimpleDateFormat(timeFormat).format(item.enterTime))
+                        .replace("{{ ENTER_TIME_STYLE }}", item.enterTime == null ? "enter_empty" : "enter")
                         .replace("{{ EXIT_TIME }}", item.exitTime == null ? "" :
                                 new SimpleDateFormat(timeFormat).format(item.exitTime))
+                        .replace("{{ EXIT_TIME_STYLE }}", item.exitTime == null ? "exit_empty" : "exit")
                         .replace("{{ DURATION_TIME }}", Utility.formatElapsedTime(duration, durationFormat))
+                        .replace("{{ DURATION_TIME_STYLE }}", duration == 0 ? "duration_empty" : "duration")
                         .replace("{{ NOTES }}", notes == null ? "" : notes)
                         .replace("{{ NOTES_STYLE }}", notes == null ? "notes_empty" : "notes"));
             }
