@@ -161,7 +161,7 @@ public class ReportsFragment extends Fragment {
                 // Prepare notes for missing enter or exit time
                 String notes = null;
                 if (item.enterTime == null) {
-                    notes = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME,
+                    notes = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME_MESSAGE,
                             "Missing enter time");
                 } else if (item.exitTime == null) {
                     notes = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME,
