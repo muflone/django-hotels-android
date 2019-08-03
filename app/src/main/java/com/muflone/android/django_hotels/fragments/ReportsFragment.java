@@ -164,7 +164,7 @@ public class ReportsFragment extends Fragment {
                     notes = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME_MESSAGE,
                             "Missing enter time");
                 } else if (item.exitTime == null) {
-                    notes = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME,
+                    notes = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME_MESSAGE,
                             "Missing exit time");
                 }
                 // Format a single line of content
