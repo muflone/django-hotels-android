@@ -31,7 +31,7 @@
 
     <!-- Scan section -->
     <string name="scan_prompt">Scansiona il tuo codice QR personale</string>
-    <string name="scan_register_enter">Registra ENTRATA</string>
+    <string name="scan_register_enter">Registra INGRESSO</string>
     <string name="scan_register_exit">Registra USCITA</string>
     <string name="scan_latest_timestamps">Ultime timbrature</string>
     <string name="scan_transmission_status">Stato trasmissione</string>
