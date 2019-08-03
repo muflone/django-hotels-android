@@ -20,7 +20,7 @@ import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.tasks.TaskReportInterface;
-import com.muflone.android.django_hotels.tasks.TaskReportTimestampsListByDate;
+import com.muflone.android.django_hotels.tasks.TaskReportTimestamps;
 
 import java.io.File;
 import java.util.Objects;
@@ -86,7 +86,7 @@ public class ReportsFragment extends Fragment {
                 }
             };
             if (view == this.buttonReportTimestamps) {
-                TaskReportTimestampsListByDate task = new TaskReportTimestampsListByDate(reportCallback);
+                TaskReportTimestamps task = new TaskReportTimestamps(reportCallback);
                 task.execute();
             } else if (view == this.buttonReportActivitiesDetails) {
                 reportText = "<html><body><h1>Activities details</h1></body></html>";

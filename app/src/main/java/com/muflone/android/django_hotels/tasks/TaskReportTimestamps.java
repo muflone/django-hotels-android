@@ -14,12 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-public class TaskReportTimestampsListByDate extends AsyncTask<Void, Void, List<ReportTimestamp>> {
+public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimestamp>> {
     private final Singleton singleton = Singleton.getInstance();
     private final TaskReportInterface callback;
 
     @SuppressWarnings("WeakerAccess")
-    public TaskReportTimestampsListByDate(TaskReportInterface callback) {
+    public TaskReportTimestamps(TaskReportInterface callback) {
         this.callback = callback;
     }
 
