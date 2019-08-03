@@ -39,7 +39,7 @@ public interface TimestampDao {
            "INNER JOIN timestamp_directions " +
            "   ON timestamp_directions.id = timestamps.direction_id " +
            "WHERE buildings.structure_id = :structureId " +
-           "  AND datetime BETWEEN :date AND :date + 86400000 - 1 " +
+           "  AND timestamps.datetime BETWEEN :date AND :date + 86400000 - 1 " +
            "  AND (timestamp_directions.type_enter = 1 OR timestamp_directions.type_exit = 1) " +
            "ORDER BY timestamps.datetime DESC " +
            "LIMIT :count")
