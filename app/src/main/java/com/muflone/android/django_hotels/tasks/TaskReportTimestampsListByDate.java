@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.commands.CommandConstants;
+import com.muflone.android.django_hotels.database.models.ReportTimestamp;
 import com.muflone.android.django_hotels.database.models.TimestampEmployee;
 
 import java.text.SimpleDateFormat;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-public class TaskReportTimestampsListByDate extends AsyncTask<Void, Void, List<TimestampEmployee>> {
+public class TaskReportTimestampsListByDate extends AsyncTask<Void, Void, List<ReportTimestamp>> {
     private final Singleton singleton = Singleton.getInstance();
     private final TaskReportInterface callback;
 
@@ -23,16 +24,16 @@ public class TaskReportTimestampsListByDate extends AsyncTask<Void, Void, List<T
     }
 
     @Override
-    protected List<TimestampEmployee> doInBackground(Void... params) {
+    protected List<ReportTimestamp> doInBackground(Void... params) {
         return this.singleton.database.timestampDao().listForReportTimestamps(
                 this.singleton.selectedDate,
                 this.singleton.selectedStructure != null ? this.singleton.selectedStructure.id : 0);
     }
 
     @Override
-    protected void onPostExecute(List<TimestampEmployee> result) {
+    protected void onPostExecute(List<ReportTimestamp> result) {
         HashMap<String, ReportTimestampListItem> timestampItems = new HashMap<>();
-        for (TimestampEmployee timestamp : result) {
+        for (ReportTimestamp timestamp : result) {
             String fullName = timestamp.firstName + " " + timestamp.lastName;
             // Get existing ReportTimestampListItem or create a new one
             ReportTimestampListItem item;

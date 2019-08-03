@@ -6,6 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import com.muflone.android.django_hotels.database.models.ReportTimestamp;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampEmployee;
 
@@ -68,12 +69,10 @@ public interface TimestampDao {
     List<Timestamp> listByUntrasmitted();
 
     @Query("SELECT DISTINCT " +
-            "  timestamps.id, " +
             "  employees.first_name, " +
             "  employees.last_name, " +
             "  timestamps.datetime, " +
-            "  timestamp_directions.description AS direction, " +
-            "  timestamps.transmission AS transmission " +
+            "  timestamp_directions.description AS direction " +
             "FROM timestamps " +
             "INNER JOIN contracts " +
             "   ON contracts.id = timestamps.contract_id " +
@@ -86,12 +85,12 @@ public interface TimestampDao {
             "INNER JOIN timestamp_directions " +
             "   ON timestamp_directions.id = timestamps.direction_id " +
             "WHERE buildings.structure_id = :structureId " +
-            "  AND datetime BETWEEN :date AND :date + 86400000 - 1 " +
+            "  AND timestamps.datetime BETWEEN :date AND :date + 86400000 - 1 " +
             "  AND (timestamp_directions.type_enter = 1 OR timestamp_directions.type_exit = 1) " +
             "ORDER BY employees.first_name ASC, " +
             "         employees.last_name ASC, " +
             "         timestamps.datetime ASC")
-    List<TimestampEmployee> listForReportTimestamps(Date date, long structureId);
+    List<ReportTimestamp> listForReportTimestamps(Date date, long structureId);
 
     @Query("SELECT * " +
            "FROM timestamps " +
