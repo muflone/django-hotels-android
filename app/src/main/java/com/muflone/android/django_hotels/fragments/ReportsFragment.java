@@ -181,6 +181,11 @@ public class ReportsFragment extends Fragment {
                         .replace("{{ ENTER_TIME_STYLE }}", item.enterTime == null ? "enter_empty" : "enter")
                         .replace("{{ EXIT_TIME }}", item.exitTime == null ? "" :
                                 new SimpleDateFormat(timeFormat).format(item.exitTime))
+                        .replace("{{ EXIT_TIME_OK }}", item.exitTime == null ? "" :
+                                singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME_OK, ""))
+                        .replace("{{ EXIT_TIME_NO }}", item.exitTime == null ?
+                                singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME_NO, "") :
+                                "")
                         .replace("{{ EXIT_TIME_STYLE }}", item.exitTime == null ? "exit_empty" : "exit")
                         .replace("{{ DURATION_TIME }}", Utility.formatElapsedTime(duration, durationFormat))
                         .replace("{{ DURATION_TIME_STYLE }}", duration == 0 ? "duration_empty" : "duration")

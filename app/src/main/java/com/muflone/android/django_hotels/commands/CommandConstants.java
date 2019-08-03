@@ -72,6 +72,8 @@ public class CommandConstants {
     public static final String SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME_OK = "reports_timestamps_missing_enter_time_ok";
     public static final String SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME_NO = "reports_timestamps_missing_enter_time_no";
     public static final String SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME_MESSAGE = "reports_timestamps_missing_enter_time_message";
+    public static final String SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME_OK = "reports_timestamps_missing_exit_time_ok";
+    public static final String SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME_NO = "reports_timestamps_missing_exit_time_no";
     public static final String SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME_MESSAGE = "reports_timestamps_missing_exit_time_message";
 
     // Set used value for all commands at once
