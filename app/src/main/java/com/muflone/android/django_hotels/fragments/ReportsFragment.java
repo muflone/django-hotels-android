@@ -173,6 +173,11 @@ public class ReportsFragment extends Fragment {
                         .replace("{{ LAST_NAME }}", item.lastName)
                         .replace("{{ ENTER_TIME }}", item.enterTime == null ? "" :
                                 new SimpleDateFormat(timeFormat).format(item.enterTime))
+                        .replace("{{ ENTER_TIME_OK }}", item.enterTime == null ? "" :
+                                singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME_OK, ""))
+                        .replace("{{ ENTER_TIME_NO }}", item.enterTime == null ?
+                                singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME_NO, "") :
+                                "")
                         .replace("{{ ENTER_TIME_STYLE }}", item.enterTime == null ? "enter_empty" : "enter")
                         .replace("{{ EXIT_TIME }}", item.exitTime == null ? "" :
                                 new SimpleDateFormat(timeFormat).format(item.exitTime))
