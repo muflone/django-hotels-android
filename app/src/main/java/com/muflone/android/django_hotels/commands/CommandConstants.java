@@ -67,6 +67,7 @@ public class CommandConstants {
     public static final String SETTING_REPORTS_TIMESTAMPS_CONTENT = "reports_timestamps_content";
     public static final String SETTING_REPORTS_TIMESTAMPS_TOTALS = "reports_timestamps_totals";
     public static final String SETTING_REPORTS_TIMESTAMPS_FOOTER = "reports_timestamps_footer";
+    public static final String SETTING_REPORTS_TIMESTAMPS_KEYWORDS = "reports_timestamps_keywords";
     public static final String SETTING_REPORTS_TIMESTAMPS_TIME_FORMAT = "reports_timestamps_time_format";
     public static final String SETTING_REPORTS_TIMESTAMPS_DURATION_FORMAT = "reports_timestamps_duration_format";
     public static final String SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME_OK = "reports_timestamps_missing_enter_time_ok";
