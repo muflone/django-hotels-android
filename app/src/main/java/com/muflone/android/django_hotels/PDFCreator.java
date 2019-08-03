@@ -1,7 +1,5 @@
 package com.muflone.android.django_hotels;
 
-import android.graphics.pdf.PdfDocument;
-
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
@@ -16,7 +14,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Locale;
 
 public class PDFCreator {
     private Document document = null;
@@ -66,10 +63,11 @@ public class PDFCreator {
         this.document = null;
     }
 
-    public boolean htmlToPDF(String content, String destionationPath) throws DocumentException {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean htmlToPDF(String content, String destinationPath) throws DocumentException {
         // Save the HTML content to a PDFCreator file
         boolean result = false;
-        File filePath = new File(destionationPath);
+        File filePath = new File(destinationPath);
         try {
             OutputStream destinationStream = new FileOutputStream(filePath);
             this.create();

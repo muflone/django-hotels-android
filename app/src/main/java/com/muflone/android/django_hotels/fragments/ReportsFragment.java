@@ -35,7 +35,7 @@ public class ReportsFragment extends Fragment {
     private TextView buttonReportDailyActivities;
     private TextView buttonReportMonthActivities;
     private WebView webReport;
-    private Singleton singleton = Singleton.getInstance();
+    private final Singleton singleton = Singleton.getInstance();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
