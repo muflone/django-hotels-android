@@ -6,9 +6,7 @@ import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.ReportTimestamp;
-import com.muflone.android.django_hotels.database.models.TimestampEmployee;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,7 +55,6 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
         String reportContent = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_CONTENT,"");
         String reportTotals = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_TOTALS,"");
         String reportFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_FOOTER,"");
-        DateFormat dateFormat = new SimpleDateFormat(singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_DATE_FORMAT, "yyyy-MM-dd"));
         String timeFormat = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_TIME_FORMAT, "HH:mm.ss");
         String durationFormat = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_DURATION_FORMAT, null);
         // Loop results to prepare content data
@@ -108,7 +105,7 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
         String reportData = reportHeader + reportContentBuilder.toString() + reportTotals + reportFooter;
         // Replace common data
         reportData = reportData
-                .replace("{{ SELECTED_DATE }}", dateFormat.format(this.singleton.selectedDate))
+                .replace("{{ SELECTED_DATE }}", this.singleton.defaultDateFormatter.format(this.singleton.selectedDate))
                 .replace("{{ SELECTED_STRUCTURE }}", this.singleton.selectedStructure.name);
         if (reportData.length() == 0) {
             reportData = "<html><body><h1>Timestamps</h1><h3>No data</h3></body></html>";

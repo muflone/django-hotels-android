@@ -49,7 +49,7 @@ public class CommandConstants {
 
     // Settings configured from remote server
     public static final String SETTING_APP_EXIT_COMMANDS_DELAY = "app_exit_commands_delay";
-    public static final String SETTING_SCANNER_TIMESTAMPS_FORMAT_DATE = "scanner_timestamps_format_date";
+    public static final String SETTING_DEFAULT_DATE_FORMAT = "default_date_format";
     public static final String SETTING_SCANNER_TIMESTAMPS_FORMAT_TIME = "scanner_timestamps_format_time";
     public static final String SETTING_SCANNER_CURRENT_DAY_FORMAT = "scanner_current_day_format";
     public static final String SETTING_SCANNER_CURRENT_DATE_FORMAT = "scanner_current_date_format";
@@ -67,7 +67,6 @@ public class CommandConstants {
     public static final String SETTING_REPORTS_TIMESTAMPS_TOTALS = "reports_timestamps_totals";
     public static final String SETTING_REPORTS_TIMESTAMPS_FOOTER = "reports_timestamps_footer";
     public static final String SETTING_REPORTS_TIMESTAMPS_KEYWORDS = "reports_timestamps_keywords";
-    public static final String SETTING_REPORTS_TIMESTAMPS_DATE_FORMAT = "reports_timestamps_date_format";
     public static final String SETTING_REPORTS_TIMESTAMPS_TIME_FORMAT = "reports_timestamps_time_format";
     public static final String SETTING_REPORTS_TIMESTAMPS_DURATION_FORMAT = "reports_timestamps_duration_format";
     public static final String SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME_OK = "reports_timestamps_missing_enter_time_ok";

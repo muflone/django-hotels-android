@@ -28,7 +28,6 @@ import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.fragments.HomeFragment;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -228,7 +227,7 @@ public class MainActivity extends AppCompatActivity
         }
         // Set the date on option menu
         if (this.toolButtonSetDate != null) {
-            this.toolButtonSetDate.setTitle("  " + new SimpleDateFormat("yyyy-MM-dd").format(
+            this.toolButtonSetDate.setTitle("  " + this.singleton.defaultDateFormatter.format(
                     this.singleton.selectedDate));
         }
         return super.onPrepareOptionsMenu(menu);
@@ -285,8 +284,7 @@ public class MainActivity extends AppCompatActivity
                 DatePickerDialog dialog = new DatePickerDialog(MainActivity.this,
                         (view, year, month, day) -> {
                             calendar.set(year, month, day);
-                            toolButtonSetDate.setTitle("  " + new SimpleDateFormat(
-                                    "yyyy-MM-dd").format(calendar.getTime()));
+                            toolButtonSetDate.setTitle("  " + this.singleton.defaultDateFormatter.format(calendar.getTime()));
                             this.singleton.selectedDate = calendar.getTime();
                             FragmentLoader.loadFragment(
                                     MainActivity.this,

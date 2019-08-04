@@ -18,6 +18,7 @@ import com.muflone.android.django_hotels.tasks.TaskListenerInterface;
 import com.muflone.android.django_hotels.tasks.TaskLoaderActivityStart;
 import com.muflone.android.django_hotels.tasks.TaskResult;
 
+import java.text.SimpleDateFormat;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -33,6 +34,8 @@ public class LoaderActivity extends AppCompatActivity {
         this.singleton.settings = new Settings(this);
         this.singleton.api = new Api();
         this.singleton.selectedDate = Utility.getCurrentDate();
+        this.singleton.defaultDateFormat = singleton.settings.getString(CommandConstants.SETTING_DEFAULT_DATE_FORMAT, "yyyy-MM-dd");
+        this.singleton.defaultDateFormatter = new SimpleDateFormat(this.singleton.defaultDateFormat);
         this.singleton.openDatabase(this);
         // Prepares CommandFactory for executing commands
         this.singleton.commandFactory = new CommandFactory();

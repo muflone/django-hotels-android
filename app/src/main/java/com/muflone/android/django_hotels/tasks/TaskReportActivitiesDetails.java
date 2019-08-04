@@ -59,7 +59,7 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
         String reportData = reportHeader + reportContentBuilder.toString() + reportTotals + reportFooter;
         // Replace common data
         reportData = reportData
-                .replace("{{ SELECTED_DATE }}", dateFormat.format(this.singleton.selectedDate))
+                .replace("{{ SELECTED_DATE }}", this.singleton.defaultDateFormatter.format(this.singleton.selectedDate))
                 .replace("{{ SELECTED_STRUCTURE }}", this.singleton.selectedStructure.name);
         if (reportData.length() == 0) {
             reportData = "<html><body><h1>Activities details</h1><h3>No data</h3></body></html>";

@@ -9,6 +9,7 @@ import com.muflone.android.django_hotels.database.AppDatabase;
 import com.muflone.android.django_hotels.database.models.Structure;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.util.Date;
 
 public class Singleton implements Serializable {
@@ -20,6 +21,8 @@ public class Singleton implements Serializable {
     public Structure selectedStructure;
     public CommandFactory commandFactory;
     public AppDatabase database;
+    public String defaultDateFormat;
+    public DateFormat defaultDateFormatter;
 
     private Singleton() {
         // Prevent form the reflection api.

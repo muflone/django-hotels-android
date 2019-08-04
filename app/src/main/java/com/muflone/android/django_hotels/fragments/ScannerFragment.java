@@ -117,7 +117,7 @@ public class ScannerFragment extends Fragment {
         TextClock timeClock = this.rootLayout.findViewById(R.id.timeClock);
         // Set clock/date format based on server settings
         dayClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_DAY_FORMAT, "EEEE"));
-        dateClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_DATE_FORMAT, "yyyy/MM/dd"));
+        dateClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_DATE_FORMAT, this.singleton.defaultDateFormat));
         timeClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_TIME_FORMAT, "HH:mm.ss"));
     }
 
@@ -235,8 +235,7 @@ public class ScannerFragment extends Fragment {
             }
             TimestampEmployeeItem timestampEmployee = Objects.requireNonNull(getItem(position));
             timestampViewHolder.employeeView.setText(timestampEmployee.fullName);
-            timestampViewHolder.dateView.setText(new SimpleDateFormat(singleton.settings.getString(
-                    CommandConstants.SETTING_SCANNER_TIMESTAMPS_FORMAT_DATE, "yyyy-MM-dd")).format(
+            timestampViewHolder.dateView.setText(ScannerFragment.this.singleton.defaultDateFormatter.format(
                             timestampEmployee.datetime));
             timestampViewHolder.timeView.setText(new SimpleDateFormat(singleton.settings.getString(
                     CommandConstants.SETTING_SCANNER_TIMESTAMPS_FORMAT_TIME, "HH:mm.ss")).format(
