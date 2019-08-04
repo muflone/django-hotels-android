@@ -30,7 +30,6 @@ public class ReportsFragment extends Fragment {
     private View rootLayout;
     private TextView buttonReportTimestamps;
     private TextView buttonReportActivitiesDetails;
-    private TextView buttonReportActivitiesTotals;
     private WebView webReport;
     private final Singleton singleton = Singleton.getInstance();
 
@@ -47,7 +46,6 @@ public class ReportsFragment extends Fragment {
         this.loadUI(inflater, Objects.requireNonNull(container));
         // Prepares output callback functions for TaskReports
         View.OnClickListener clickListener = view -> {
-            String reportText = null;
             TaskReportInterface reportCallback = new TaskReportInterface() {
                 @Override
                 public void showHTML(String data, Class<?> reportClass) {
@@ -104,18 +102,10 @@ public class ReportsFragment extends Fragment {
             } else if (view == this.buttonReportActivitiesDetails) {
                 TaskReportActivitiesDetails task = new TaskReportActivitiesDetails(reportCallback);
                 task.execute();
-            } else if (view == this.buttonReportActivitiesTotals) {
-                reportText = "<html><body><h1>Activities totals</h1></body></html>";
-            }
-            // Check if valid report and show it
-            if (reportText != null) {
-                ReportsFragment.this.webReport.loadData(
-                        reportText, "text/html", "utf-8");
             }
         };
         this.buttonReportTimestamps.setOnClickListener(clickListener);
         this.buttonReportActivitiesDetails.setOnClickListener(clickListener);
-        this.buttonReportActivitiesTotals.setOnClickListener(clickListener);
         // Set WebView zoom enabled
         this.webReport.getSettings().setBuiltInZoomControls(
                 this.singleton.settings.getBoolean(CommandConstants.SETTING_REPORTS_ZOOM_ENABLE, false));
@@ -138,7 +128,6 @@ public class ReportsFragment extends Fragment {
         this.rootLayout = inflater.inflate(R.layout.reports_fragment, container, false);
         this.buttonReportTimestamps = this.rootLayout.findViewById(R.id.buttonReportTimestamps);
         this.buttonReportActivitiesDetails = this.rootLayout.findViewById(R.id.buttonReportActivitiesDetails);
-        this.buttonReportActivitiesTotals = this.rootLayout.findViewById(R.id.buttonReportActivitiesTotals);
         this.webReport = this.rootLayout.findViewById(R.id.webReport);
     }
 
