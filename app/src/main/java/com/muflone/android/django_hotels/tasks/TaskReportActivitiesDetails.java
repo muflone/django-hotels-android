@@ -3,13 +3,18 @@ package com.muflone.android.django_hotels.tasks;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.ReportActivityDetail;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Objects;
 
 public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<ReportActivityDetail>> {
     private final Singleton singleton = Singleton.getInstance();
@@ -34,10 +39,30 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
         String reportContent = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_CONTENT,"");
         String reportTotals = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_TOTALS,"");
         String reportFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_FOOTER,"");
+        String reportGroupHeader = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_GROUP_HEADER, "");
+        String reportGroupFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_GROUP_FOOTER,"");
+        // Loop results to prepare totals per contract/service
+        Table<Long, Long, Long> totalsPerContractTable = HashBasedTable.create();
+        Hashtable<Long, List<ReportActivityDetail>> activityDetailsList = new Hashtable<>();
+        for (ReportActivityDetail activityDetail : result) {
+            // Create new list of services
+            if (! activityDetailsList.containsKey(activityDetail.contractId)) {
+                activityDetailsList.put(activityDetail.contractId, new ArrayList<>());
+            }
+            Objects.requireNonNull(activityDetailsList.get(activityDetail.contractId)).add(activityDetail);
+            totalsPerContractTable.put(activityDetail.contractId, activityDetail.serviceId,
+                    totalsPerContractTable.contains(activityDetail.contractId, activityDetail.serviceId) ?
+                    totalsPerContractTable.get(activityDetail.contractId, activityDetail.serviceId) + 1
+                    : 1);
+        }
         // Loop results to prepare content data
         StringBuilder reportContentBuilder = new StringBuilder();
-        for (ReportActivityDetail activityDetail : result) {
-            reportContentBuilder.append(this.replaceTags(reportContent, activityDetail));
+        for (Long contractId : totalsPerContractTable.rowKeySet()) {
+            reportContentBuilder.append(reportGroupHeader);
+            for (ReportActivityDetail activityDetail : Objects.requireNonNull(activityDetailsList.get(contractId))) {
+                reportContentBuilder.append(this.replaceTags(reportContent, activityDetail));
+            }
+            reportContentBuilder.append(reportGroupFooter);
         }
         // Show report data
         String reportData = reportHeader + reportContentBuilder.toString() + reportTotals + reportFooter;
