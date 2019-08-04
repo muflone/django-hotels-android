@@ -111,8 +111,6 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
         if (this.callback != null) {
             // Show the reports data
             this.callback.showHTML(reportData, this.getClass());
-            // Save data to PDF document
-            this.callback.createPDF(reportData, this.getClass());
         }
     }
 
