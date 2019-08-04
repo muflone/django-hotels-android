@@ -34,26 +34,10 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
         String reportContent = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_CONTENT,"");
         String reportTotals = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_TOTALS,"");
         String reportFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_FOOTER,"");
-        DateFormat dateFormat = new SimpleDateFormat(this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_DATE_FORMAT, "yyyy-MM-dd"));
         // Loop results to prepare content data
         StringBuilder reportContentBuilder = new StringBuilder();
         for (ReportActivityDetail activityDetail : result) {
-            reportContentBuilder.append(reportContent
-                .replace("{{ COMPANY_ID }}", String.valueOf(activityDetail.companyId))
-                .replace("{{ COMPANY }}", TextUtils.htmlEncode(activityDetail.company))
-                .replace("{{ EMPLOYEE_ID }}", String.valueOf(activityDetail.employeeId))
-                .replace("{{ FIRST_NAME }}", TextUtils.htmlEncode(activityDetail.firstName))
-                .replace("{{ LAST_NAME }}", TextUtils.htmlEncode(activityDetail.lastName))
-                .replace("{{ CONTRACT_ID }}", String.valueOf(activityDetail.contractId))
-                .replace("{{ DATETIME }}", dateFormat.format(activityDetail.datetime))
-                .replace("{{ BUILDING_ID }}", String.valueOf(activityDetail.buildingId))
-                .replace("{{ BUILDING }}", TextUtils.htmlEncode(activityDetail.building))
-                .replace("{{ ROOM_ID }}", String.valueOf(activityDetail.roomId))
-                .replace("{{ ROOM }}", TextUtils.htmlEncode(activityDetail.room))
-                .replace("{{ SERVICE_ID }}", String.valueOf(activityDetail.serviceId))
-                .replace("{{ SERVICE }}", TextUtils.htmlEncode(activityDetail.service))
-                .replace("{{ DESCRIPTION }}", TextUtils.htmlEncode(activityDetail.description))
-            );
+            reportContentBuilder.append(this.replaceTags(reportContent, activityDetail));
         }
         // Show report data
         String reportData = reportHeader + reportContentBuilder.toString() + reportTotals + reportFooter;
@@ -69,5 +53,25 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
             // Show the reports data
             this.callback.showHTML(reportData, this.getClass());
         }
+    }
+    private String replaceTags(String text, ReportActivityDetail item) {
+        // Format a single line of content
+        DateFormat dateFormat = new SimpleDateFormat(this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_DATE_FORMAT, "yyyy-MM-dd"));
+        return (text
+                .replace("{{ COMPANY_ID }}", String.valueOf(item.companyId))
+                .replace("{{ COMPANY }}", TextUtils.htmlEncode(item.company))
+                .replace("{{ EMPLOYEE_ID }}", String.valueOf(item.employeeId))
+                .replace("{{ FIRST_NAME }}", TextUtils.htmlEncode(item.firstName))
+                .replace("{{ LAST_NAME }}", TextUtils.htmlEncode(item.lastName))
+                .replace("{{ CONTRACT_ID }}", String.valueOf(item.contractId))
+                .replace("{{ DATETIME }}", dateFormat.format(item.datetime))
+                .replace("{{ BUILDING_ID }}", String.valueOf(item.buildingId))
+                .replace("{{ BUILDING }}", TextUtils.htmlEncode(item.building))
+                .replace("{{ ROOM_ID }}", String.valueOf(item.roomId))
+                .replace("{{ ROOM }}", TextUtils.htmlEncode(item.room))
+                .replace("{{ SERVICE_ID }}", String.valueOf(item.serviceId))
+                .replace("{{ SERVICE }}", TextUtils.htmlEncode(item.service))
+                .replace("{{ DESCRIPTION }}", TextUtils.htmlEncode(item.description))
+        );
     }
 }

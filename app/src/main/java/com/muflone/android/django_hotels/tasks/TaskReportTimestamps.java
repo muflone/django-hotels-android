@@ -55,51 +55,10 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
         String reportContent = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_CONTENT,"");
         String reportTotals = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_TOTALS,"");
         String reportFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_FOOTER,"");
-        String timeFormat = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_TIME_FORMAT, this.singleton.defaultTimeFormat);
-        String durationFormat = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_DURATION_FORMAT, this.singleton.defaultTimeFormat);
         // Loop results to prepare content data
         StringBuilder reportContentBuilder = new StringBuilder();
         for (ReportTimestampListItem item : timestampItems.values()) {
-            // Calculate duration time
-            long duration = 0;
-            if (item.enterTime != null && item.exitTime != null) {
-                duration = item.exitTime.getTime() - item.enterTime.getTime();
-                duration /= 1000;
-            }
-            // Prepare notes for missing enter or exit time
-            String notes = null;
-            if (item.enterTime == null) {
-                notes = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME_MESSAGE,
-                        "Missing enter time");
-            } else if (item.exitTime == null) {
-                notes = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME_MESSAGE,
-                        "Missing exit time");
-            }
-            // Format a single line of content
-            reportContentBuilder.append(reportContent
-                    .replace("{{ FIRST_NAME }}", item.firstName)
-                    .replace("{{ LAST_NAME }}", item.lastName)
-                    .replace("{{ ENTER_TIME }}", item.enterTime == null ? "" :
-                            new SimpleDateFormat(timeFormat).format(item.enterTime))
-                    .replace("{{ ENTER_TIME_OK }}", item.enterTime == null ? "" :
-                            singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME_OK, ""))
-                    .replace("{{ ENTER_TIME_NO }}", item.enterTime == null ?
-                            singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME_NO, "") :
-                            "")
-                    .replace("{{ ENTER_TIME_STYLE }}", item.enterTime == null ? "enter_empty" : "enter")
-                    .replace("{{ EXIT_TIME }}", item.exitTime == null ? "" :
-                            new SimpleDateFormat(timeFormat).format(item.exitTime))
-                    .replace("{{ EXIT_TIME_OK }}", item.exitTime == null ? "" :
-                            singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME_OK, ""))
-                    .replace("{{ EXIT_TIME_NO }}", item.exitTime == null ?
-                            singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME_NO, "") :
-                            "")
-                    .replace("{{ EXIT_TIME_STYLE }}", item.exitTime == null ? "exit_empty" : "exit")
-                    .replace("{{ DURATION_TIME }}", Utility.formatElapsedTime(duration, durationFormat))
-                    .replace("{{ DURATION_TIME_STYLE }}", duration == 0 ? "duration_empty" : "duration")
-                    .replace("{{ NOTES }}", notes == null ? "" : notes)
-                    .replace("{{ NOTES_STYLE }}", notes == null ? "notes_empty" : "notes")
-            );
+            reportContentBuilder.append(this.replaceTags(reportContent, item));
         }
         // Show report data
         String reportData = reportHeader + reportContentBuilder.toString() + reportTotals + reportFooter;
@@ -115,6 +74,51 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
             // Show the reports data
             this.callback.showHTML(reportData, this.getClass());
         }
+    }
+
+    private String replaceTags(String text, ReportTimestampListItem item) {
+        // Format a single line of content
+        String timeFormat = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_TIME_FORMAT, this.singleton.defaultTimeFormat);
+        String durationFormat = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_DURATION_FORMAT, this.singleton.defaultTimeFormat);
+        // Calculate duration time
+        long duration = 0;
+        if (item.enterTime != null && item.exitTime != null) {
+            duration = item.exitTime.getTime() - item.enterTime.getTime();
+            duration /= 1000;
+        }
+        // Prepare notes for missing enter or exit time
+        String notes = null;
+        if (item.enterTime == null) {
+            notes = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME_MESSAGE,
+                    "Missing enter time");
+        } else if (item.exitTime == null) {
+            notes = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME_MESSAGE,
+                    "Missing exit time");
+        }
+        return (text
+                .replace("{{ FIRST_NAME }}", item.firstName)
+                .replace("{{ LAST_NAME }}", item.lastName)
+                .replace("{{ ENTER_TIME }}", item.enterTime == null ? "" :
+                        new SimpleDateFormat(timeFormat).format(item.enterTime))
+                .replace("{{ ENTER_TIME_OK }}", item.enterTime == null ? "" :
+                        singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME_OK, ""))
+                .replace("{{ ENTER_TIME_NO }}", item.enterTime == null ?
+                        singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_ENTER_TIME_NO, "") :
+                        "")
+                .replace("{{ ENTER_TIME_STYLE }}", item.enterTime == null ? "enter_empty" : "enter")
+                .replace("{{ EXIT_TIME }}", item.exitTime == null ? "" :
+                        new SimpleDateFormat(timeFormat).format(item.exitTime))
+                .replace("{{ EXIT_TIME_OK }}", item.exitTime == null ? "" :
+                        singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME_OK, ""))
+                .replace("{{ EXIT_TIME_NO }}", item.exitTime == null ?
+                        singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME_NO, "") :
+                        "")
+                .replace("{{ EXIT_TIME_STYLE }}", item.exitTime == null ? "exit_empty" : "exit")
+                .replace("{{ DURATION_TIME }}", Utility.formatElapsedTime(duration, durationFormat))
+                .replace("{{ DURATION_TIME_STYLE }}", duration == 0 ? "duration_empty" : "duration")
+                .replace("{{ NOTES }}", notes == null ? "" : notes)
+                .replace("{{ NOTES_STYLE }}", notes == null ? "notes_empty" : "notes")
+        );
     }
 
     private class ReportTimestampListItem {
