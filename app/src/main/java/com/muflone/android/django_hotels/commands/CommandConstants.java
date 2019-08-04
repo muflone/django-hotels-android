@@ -56,6 +56,7 @@ public class CommandConstants {
     public static final String SETTING_SCANNER_CURRENT_DATE_FORMAT = "scanner_current_date_format";
     public static final String SETTING_SCANNER_CURRENT_TIME_FORMAT = "scanner_current_time_format";
     public static final String SETTING_STRUCTURES_BUILDING_CLOSED = "structures_buildings_closed";
+    public static final String SETTING_STRUCTURES_ROOMS_STANDARD_HEIGHT = "structures_rooms_list_standard_height";
     public static final String SETTING_SYNC_CONNECT_TIMEOUT = "sync_connect_timeout";
     public static final String SETTING_SYNC_READ_TIMEOUT = "sync_read_timeout";
     public static final String SETTING_EXTRAS_TIME_STEP = "extras_time_step";

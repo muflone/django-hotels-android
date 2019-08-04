@@ -39,14 +39,4 @@
             android:summary="@string/settings_scan_orientation_lock_summary"
             android:title="@string/settings_scan_orientation_lock_title" />
     </PreferenceCategory>
-
-
-    <PreferenceCategory android:title="@string/settings_structures">
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="@string/settings_structures_rooms_list_standard_height_id"
-            android:summary="@string/settings_structures_rooms_list_standard_height_summary"
-            android:title="@string/settings_structures_rooms_list_standard_height_title" />
-    </PreferenceCategory>
-
 </PreferenceScreen>

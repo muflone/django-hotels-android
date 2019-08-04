@@ -127,7 +127,7 @@ public class StructuresFragment extends Fragment {
             String groupName = parent.getExpandableListAdapter().getGroup(groupPosition).toString();
             buildingsClosedStatusMap.put(groupName, ! Objects.requireNonNull(buildingsClosedStatusMap.get(groupName)));
             Utility.setExpandableListViewHeight(parent, groupPosition,
-                    this.api.settings.getRoomsListStandardHeight());
+                    this.api.settings.getBoolean(CommandConstants.SETTING_STRUCTURES_ROOMS_STANDARD_HEIGHT, true));
             return false;
         });
         // Execute START STRUCTURE END commands
@@ -241,7 +241,8 @@ public class StructuresFragment extends Fragment {
             }
         }
         // Allocate space for the expanded list
-        Utility.setExpandableListViewHeight(this.roomsView, -1, this.api.settings.getRoomsListStandardHeight());
+        Utility.setExpandableListViewHeight(this.roomsView, -1,
+                this.api.settings.getBoolean(CommandConstants.SETTING_STRUCTURES_ROOMS_STANDARD_HEIGHT, true));
     }
 
     private static class ExpandableListAdapter extends BaseExpandableListAdapter {

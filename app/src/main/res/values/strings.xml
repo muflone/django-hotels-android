@@ -105,9 +105,6 @@
 
     <string name="settings_structures">Structures settings</string>
 
-    <string name="settings_structures_rooms_list_standard_height_title">Rooms list standard height</string>
-    <string name="settings_structures_rooms_list_standard_height_summary">Use a standard room list height for better performances</string>
-
     <!-- Sync section -->
     <string name="sync_step_started">Synchronization started</string>
     <string name="sync_step_server_status">Checking server status</string>
