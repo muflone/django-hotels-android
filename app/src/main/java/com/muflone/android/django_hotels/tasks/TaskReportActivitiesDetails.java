@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<ReportActivityDetail>> {
@@ -58,11 +59,20 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
         // Loop results to prepare content data
         StringBuilder reportContentBuilder = new StringBuilder();
         for (Long contractId : totalsPerContractTable.rowKeySet()) {
-            reportContentBuilder.append(reportGroupHeader);
-            for (ReportActivityDetail activityDetail : Objects.requireNonNull(activityDetailsList.get(contractId))) {
+            List<ReportActivityDetail> activityDetailsPerContract = Objects.requireNonNull(activityDetailsList.get(contractId));
+            // Content header
+            if (activityDetailsPerContract.size() > 0) {
+                reportContentBuilder.append(this.replaceTags(reportGroupHeader, activityDetailsPerContract.listIterator(0).next()));
+            }
+            // Content body
+            for (ReportActivityDetail activityDetail : activityDetailsPerContract) {
                 reportContentBuilder.append(this.replaceTags(reportContent, activityDetail));
             }
             reportContentBuilder.append(reportGroupFooter);
+        }
+        // Check for empty data
+        if (reportContentBuilder.length() == 0) {
+            reportContentBuilder.append(this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_NO_DATA, "No data"));
         }
         // Show report data
         String reportData = reportHeader + reportContentBuilder.toString() + reportTotals + reportFooter;
@@ -70,7 +80,7 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
         reportData = reportData
                 .replace("{{ SELECTED_DATE }}", this.singleton.defaultDateFormatter.format(this.singleton.selectedDate))
                 .replace("{{ SELECTED_STRUCTURE }}", this.singleton.selectedStructure.name);
-        if (reportData.length() == 0) {
+        if (reportContentBuilder.length() == 0) {
             reportData = "<html><body><h1>Activities details</h1><h3>No data</h3></body></html>";
         }
         // Output callback to return results

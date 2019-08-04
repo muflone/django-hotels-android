@@ -60,13 +60,17 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
         for (ReportTimestampListItem item : timestampItems.values()) {
             reportContentBuilder.append(this.replaceTags(reportContent, item));
         }
+        // Check for empty data
+        if (reportContentBuilder.length() == 0) {
+            reportContentBuilder.append(this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_DETAILS_NO_DATA, "No data"));
+        }
         // Show report data
         String reportData = reportHeader + reportContentBuilder.toString() + reportTotals + reportFooter;
         // Replace common data
         reportData = reportData
                 .replace("{{ SELECTED_DATE }}", this.singleton.defaultDateFormatter.format(this.singleton.selectedDate))
                 .replace("{{ SELECTED_STRUCTURE }}", this.singleton.selectedStructure.name);
-        if (reportData.length() == 0) {
+        if (reportContent.length() == 0) {
             reportData = "<html><body><h1>Timestamps</h1><h3>No data</h3></body></html>";
         }
         // Output callback to return results
