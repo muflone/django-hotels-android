@@ -5,7 +5,6 @@ import android.widget.TextView;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.ContractType;
 
-import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 public class ContractViewsUpdater {
