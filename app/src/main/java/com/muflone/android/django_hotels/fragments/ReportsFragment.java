@@ -51,8 +51,6 @@ public class ReportsFragment extends Fragment {
             TaskReportInterface reportCallback = new TaskReportInterface() {
                 @Override
                 public void showHTML(String data, Class<?> reportClass) {
-                    // Load report HTML data in WebView
-                    ReportsFragment.this.webReport.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
                     // Create PDF report from data
                     // Prepares reports output directory
                     Settings settings = ReportsFragment.this.singleton.settings;
@@ -89,12 +87,15 @@ public class ReportsFragment extends Fragment {
                         pdfCreator.creator = settings.getApplicationNameVersion();
                         pdfCreator.author = settings.context.getString(R.string.author_name);
                         pdfCreator.keywords = reportKeywords;
+                        // Show HTML source in the WebView
                         if (! pdfCreator.htmlToPDF(data, destinationPath)) {
                             Log.w(this.getClass().getSimpleName(), "Unable to create PDF document");
                         }
                     } catch (DocumentException e) {
                         e.printStackTrace();
                     }
+                    // Load report HTML data in WebView
+                    ReportsFragment.this.webReport.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
                 }
             };
             if (view == this.buttonReportTimestamps) {
