@@ -105,9 +105,6 @@
 
     <string name="settings_structures">Structures settings</string>
 
-    <string name="settings_structures_buildings_closed_title">Buildings are initially closed</string>
-    <string name="settings_structures_buildings_closed_summary">The buildings groups are automatically closed</string>
-
     <string name="settings_structures_rooms_list_standard_height_title">Rooms list standard height</string>
     <string name="settings_structures_rooms_list_standard_height_summary">Use a standard room list height for better performances</string>
 

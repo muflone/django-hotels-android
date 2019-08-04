@@ -180,7 +180,7 @@ public class StructuresFragment extends Fragment {
         this.buildingsClosedStatusMap.clear();
         for (Building building : this.singleton.selectedStructure.buildings) {
             this.buildingsClosedStatusMap.put(building.name,
-                    this.api.settings.getBuildingsInitiallyClosed());
+                    this.api.settings.getBoolean(CommandConstants.SETTING_STRUCTURES_BUILDING_CLOSED, false));
             // Initialize empty already assigned rooms list (<Room ID><List of employees>)
             for (Room room : building.rooms) {
                 roomsEmployeesAssignedList.put(room.id, new ArrayList<>());

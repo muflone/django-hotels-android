@@ -43,11 +43,6 @@
 
     <PreferenceCategory android:title="@string/settings_structures">
         <SwitchPreference
-            android:defaultValue="false"
-            android:key="@string/settings_structures_buildings_closed_id"
-            android:summary="@string/settings_structures_buildings_closed_summary"
-            android:title="@string/settings_structures_buildings_closed_title" />
-        <SwitchPreference
             android:defaultValue="true"
             android:key="@string/settings_structures_rooms_list_standard_height_id"
             android:summary="@string/settings_structures_rooms_list_standard_height_summary"

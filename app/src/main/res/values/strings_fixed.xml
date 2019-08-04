@@ -21,7 +21,6 @@
     <string name="settings_api_url_id" translatable="false">api_url</string>
     <string name="settings_scan_beep_id" translatable="false">scan_beep</string>
     <string name="settings_scan_orientation_lock_id" translatable="false">scan_orientation_lock</string>
-    <string name="settings_structures_buildings_closed_id" translatable="false">buildings_initially_closed</string>
     <string name="settings_structures_rooms_list_standard_height_id" translatable="false">rooms_list_standard_height</string>
 
     <!-- About section -->
