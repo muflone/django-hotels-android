@@ -53,7 +53,6 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
         }
         // Prepare report data
         String reportHeader = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_HEADER, "");
-        String reportFirstLine = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_FIRST,"");
         String reportContent = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_CONTENT,"");
         String reportTotals = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_TOTALS,"");
         String reportFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_FOOTER,"");
@@ -104,7 +103,7 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
             );
         }
         // Show report data
-        String reportData = reportHeader + reportFirstLine + reportContentBuilder.toString() + reportTotals + reportFooter;
+        String reportData = reportHeader + reportContentBuilder.toString() + reportTotals + reportFooter;
         if (reportData.length() == 0) {
             reportData = "<html><body><h1>Timestamps</h1><h3>No data</h3></body></html>";
         }
