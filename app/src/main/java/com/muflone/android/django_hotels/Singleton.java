@@ -21,6 +21,7 @@ public class Singleton implements Serializable {
     public Structure selectedStructure;
     public CommandFactory commandFactory;
     public AppDatabase database;
+    public String defaultTimeFormat;
     public String defaultDateFormat;
     public DateFormat defaultDateFormatter;
 

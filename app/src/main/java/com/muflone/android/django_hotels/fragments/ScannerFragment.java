@@ -118,7 +118,7 @@ public class ScannerFragment extends Fragment {
         // Set clock/date format based on server settings
         dayClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_DAY_FORMAT, "EEEE"));
         dateClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_DATE_FORMAT, this.singleton.defaultDateFormat));
-        timeClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_TIME_FORMAT, "HH:mm.ss"));
+        timeClock.setFormat24Hour(this.settings.getString(CommandConstants.SETTING_SCANNER_CURRENT_TIME_FORMAT, this.singleton.defaultTimeFormat));
     }
 
     private void startQRScanner(boolean enter) {
@@ -238,7 +238,7 @@ public class ScannerFragment extends Fragment {
             timestampViewHolder.dateView.setText(ScannerFragment.this.singleton.defaultDateFormatter.format(
                             timestampEmployee.datetime));
             timestampViewHolder.timeView.setText(new SimpleDateFormat(singleton.settings.getString(
-                    CommandConstants.SETTING_SCANNER_TIMESTAMPS_FORMAT_TIME, "HH:mm.ss")).format(
+                    CommandConstants.SETTING_SCANNER_TIMESTAMPS_FORMAT_TIME, singleton.defaultTimeFormat)).format(
                             timestampEmployee.datetime));
             timestampViewHolder.transmissionImage.setImageResource(
                     timestampEmployee.transmission == null ?

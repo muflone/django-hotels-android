@@ -50,6 +50,7 @@ public class CommandConstants {
     // Settings configured from remote server
     public static final String SETTING_APP_EXIT_COMMANDS_DELAY = "app_exit_commands_delay";
     public static final String SETTING_DEFAULT_DATE_FORMAT = "default_date_format";
+    public static final String SETTING_DEFAULT_TIME_FORMAT = "default_time_format";
     public static final String SETTING_SCANNER_TIMESTAMPS_FORMAT_TIME = "scanner_timestamps_format_time";
     public static final String SETTING_SCANNER_CURRENT_DAY_FORMAT = "scanner_current_day_format";
     public static final String SETTING_SCANNER_CURRENT_DATE_FORMAT = "scanner_current_date_format";

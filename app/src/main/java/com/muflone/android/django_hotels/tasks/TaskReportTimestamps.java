@@ -55,8 +55,8 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
         String reportContent = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_CONTENT,"");
         String reportTotals = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_TOTALS,"");
         String reportFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_FOOTER,"");
-        String timeFormat = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_TIME_FORMAT, "HH:mm.ss");
-        String durationFormat = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_DURATION_FORMAT, null);
+        String timeFormat = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_TIME_FORMAT, this.singleton.defaultTimeFormat);
+        String durationFormat = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_DURATION_FORMAT, this.singleton.defaultTimeFormat);
         // Loop results to prepare content data
         StringBuilder reportContentBuilder = new StringBuilder();
         for (ReportTimestampListItem item : timestampItems.values()) {

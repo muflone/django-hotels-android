@@ -34,6 +34,7 @@ public class LoaderActivity extends AppCompatActivity {
         this.singleton.settings = new Settings(this);
         this.singleton.api = new Api();
         this.singleton.selectedDate = Utility.getCurrentDate();
+        this.singleton.defaultTimeFormat = singleton.settings.getString(CommandConstants.SETTING_DEFAULT_TIME_FORMAT, "HH:mm.ss");
         this.singleton.defaultDateFormat = singleton.settings.getString(CommandConstants.SETTING_DEFAULT_DATE_FORMAT, "yyyy-MM-dd");
         this.singleton.defaultDateFormatter = new SimpleDateFormat(this.singleton.defaultDateFormat);
         this.singleton.openDatabase(this);
