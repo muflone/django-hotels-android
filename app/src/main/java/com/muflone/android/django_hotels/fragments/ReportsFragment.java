@@ -79,7 +79,7 @@ public class ReportsFragment extends Fragment {
                             reportKeywords = settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_KEYWORDS, "");
                         }
                         PDFCreator pdfCreator = new PDFCreator();
-                        pdfCreator.pageSize = PageSize.A4;
+                        pdfCreator.pageSize = PageSize.A4.rotate();
                         pdfCreator.title = reportTitle;
                         pdfCreator.subject = reportSubject;
                         pdfCreator.creator = settings.getApplicationNameVersion();
