@@ -50,7 +50,7 @@ public class ReportsFragment extends Fragment {
             String reportText = null;
             TaskReportInterface reportCallback = new TaskReportInterface() {
                 @Override
-                public void showHTML(String data) {
+                public void showHTML(String data, Class<?> reportClass) {
                     // Load report HTML data in WebView
                     ReportsFragment.this.webReport.loadData(data, "text/html", "utf-8");
                 }

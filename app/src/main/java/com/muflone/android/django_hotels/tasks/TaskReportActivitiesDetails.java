@@ -62,7 +62,7 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
         // Output callback to return results
         if (this.callback != null) {
             // Show the reports data
-            this.callback.showHTML(reportData);
+            this.callback.showHTML(reportData, this.getClass());
             // Save data to PDF document
             this.callback.createPDF(reportData, this.getClass());
         }
