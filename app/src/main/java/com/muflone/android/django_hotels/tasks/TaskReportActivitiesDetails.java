@@ -34,7 +34,7 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
         String reportContent = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_CONTENT,"");
         String reportTotals = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_TOTALS,"");
         String reportFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_FOOTER,"");
-        DateFormat formatter = new SimpleDateFormat(this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_DATE_FORMAT, "dd/MM/yyyy"));
+        DateFormat dateFormat = new SimpleDateFormat(this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_DATE_FORMAT, "yyyy-MM-dd"));
         // Loop results to prepare content data
         StringBuilder reportContentBuilder = new StringBuilder();
         for (ReportActivityDetail activityDetail : result) {
@@ -45,7 +45,7 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
                 .replace("{{ FIRST_NAME }}", TextUtils.htmlEncode(activityDetail.firstName))
                 .replace("{{ LAST_NAME }}", TextUtils.htmlEncode(activityDetail.lastName))
                 .replace("{{ CONTRACT_ID }}", String.valueOf(activityDetail.contractId))
-                .replace("{{ DATETIME }}", formatter.format(activityDetail.datetime))
+                .replace("{{ DATETIME }}", dateFormat.format(activityDetail.datetime))
                 .replace("{{ BUILDING_ID }}", String.valueOf(activityDetail.buildingId))
                 .replace("{{ BUILDING }}", TextUtils.htmlEncode(activityDetail.building))
                 .replace("{{ ROOM_ID }}", String.valueOf(activityDetail.roomId))
@@ -57,6 +57,10 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
         }
         // Show report data
         String reportData = reportHeader + reportContentBuilder.toString() + reportTotals + reportFooter;
+        // Replace common data
+        reportData = reportData
+                .replace("{{ SELECTED_DATE }}", dateFormat.format(this.singleton.selectedDate))
+                .replace("{{ SELECTED_STRUCTURE }}", this.singleton.selectedStructure.name);
         if (reportData.length() == 0) {
             reportData = "<html><body><h1>Activities details</h1><h3>No data</h3></body></html>";
         }
