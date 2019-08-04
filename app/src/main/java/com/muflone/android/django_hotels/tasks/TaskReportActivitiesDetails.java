@@ -37,9 +37,9 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
         String reportFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_FOOTER,"");
         DateFormat formatter = new SimpleDateFormat(this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_DATE_FORMAT, "dd/MM/yyyy"));
         // Loop results to prepare content data
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder reportContentBuilder = new StringBuilder();
         for (ReportActivityDetail activityDetail : result) {
-            stringBuilder.append(reportContent
+            reportContentBuilder.append(reportContent
                 .replace("{{ COMPANY_ID }}", String.valueOf(activityDetail.companyId))
                 .replace("{{ COMPANY }}", TextUtils.htmlEncode(activityDetail.company))
                 .replace("{{ EMPLOYEE_ID }}", String.valueOf(activityDetail.employeeId))
@@ -56,7 +56,7 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
             );
         }
         // Show report data
-        String reportData = reportHeader + reportFirstLine + stringBuilder.toString() + reportTotals + reportFooter;
+        String reportData = reportHeader + reportFirstLine + reportContentBuilder.toString() + reportTotals + reportFooter;
         if (reportData.length() == 0) {
             reportData = "<html><body><h1>Activities details</h1><h3>No data</h3></body></html>";
         }

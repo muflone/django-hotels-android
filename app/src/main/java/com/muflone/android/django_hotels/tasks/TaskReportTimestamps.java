@@ -60,7 +60,7 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
         String timeFormat = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_TIME_FORMAT, "HH:mm.ss");
         String durationFormat = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_DURATION_FORMAT, null);
         // Loop results to prepare content data
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder reportContentBuilder = new StringBuilder();
         for (ReportTimestampListItem item : timestampItems.values()) {
             // Calculate duration time
             long duration = 0;
@@ -78,7 +78,7 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
                         "Missing exit time");
             }
             // Format a single line of content
-            stringBuilder.append(reportContent
+            reportContentBuilder.append(reportContent
                     .replace("{{ FIRST_NAME }}", item.firstName)
                     .replace("{{ LAST_NAME }}", item.lastName)
                     .replace("{{ ENTER_TIME }}", item.enterTime == null ? "" :
@@ -104,7 +104,7 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
             );
         }
         // Show report data
-        String reportData = reportHeader + reportFirstLine + stringBuilder.toString() + reportTotals + reportFooter;
+        String reportData = reportHeader + reportFirstLine + reportContentBuilder.toString() + reportTotals + reportFooter;
         if (reportData.length() == 0) {
             reportData = "<html><body><h1>Timestamps</h1><h3>No data</h3></body></html>";
         }
