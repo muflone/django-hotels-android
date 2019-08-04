@@ -5,5 +5,5 @@ package com.muflone.android.django_hotels.tasks;
  */
 public interface TaskReportInterface {
     void showHTML(String data);
-    void createPDF(String data, String className);
+    void createPDF(String data, Class<?> reportClass);
 }

@@ -112,7 +112,7 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
             // Show the reports data
             this.callback.showHTML(reportData);
             // Save data to PDF document
-            this.callback.createPDF(reportData, this.getClass().getSimpleName());
+            this.callback.createPDF(reportData, this.getClass());
         }
     }
 

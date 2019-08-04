@@ -56,7 +56,7 @@ public class ReportsFragment extends Fragment {
                 }
 
                 @Override
-                public void createPDF(String data, String className) {
+                public void createPDF(String data, Class<?> reportClass) {
                     // Create PDF report from data
                     // Prepares reports output directory
                     Settings settings = ReportsFragment.this.singleton.settings;
@@ -69,7 +69,7 @@ public class ReportsFragment extends Fragment {
                         //noinspection ResultOfMethodCallIgnored
                         destinationDirectory.mkdir();
                     }
-                    String destinationPath = destinationDirectory + File.separator + className + ".pdf";
+                    String destinationPath = destinationDirectory + File.separator + reportClass.getSimpleName() + ".pdf";
                     try {
                         PDFCreator pdfCreator = new PDFCreator();
                         pdfCreator.pageSize = PageSize.A4;
