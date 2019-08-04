@@ -67,13 +67,28 @@ public class ReportsFragment extends Fragment {
                     }
                     String destinationPath = destinationDirectory + File.separator + reportClass.getSimpleName() + ".pdf";
                     try {
+                        // Prepare PDF document information
+                        String reportTitle = "";
+                        String reportSubject = "";
+                        String reportKeywords = "";
+                        if (reportClass == TaskReportTimestamps.class) {
+                            // PDF information for Timestamps
+                            reportTitle = settings.context.getString(R.string.report_timestamps);
+                            reportSubject = settings.context.getString(R.string.report_timestamps);
+                            reportKeywords = settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_KEYWORDS, "");
+                        } else if (reportClass == TaskReportActivitiesDetails.class) {
+                            // PDF information for Activities Details
+                            reportTitle = settings.context.getString(R.string.report_activities_details);
+                            reportSubject = settings.context.getString(R.string.report_activities_details);
+                            reportKeywords = settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_KEYWORDS, "");
+                        }
                         PDFCreator pdfCreator = new PDFCreator();
                         pdfCreator.pageSize = PageSize.A4;
-                        pdfCreator.title = settings.context.getString(R.string.report_timestamps);
-                        pdfCreator.subject = settings.context.getString(R.string.report_timestamps);
+                        pdfCreator.title = reportTitle;
+                        pdfCreator.subject = reportSubject;
                         pdfCreator.creator = settings.getApplicationNameVersion();
                         pdfCreator.author = settings.context.getString(R.string.author_name);
-                        pdfCreator.keywords = settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_KEYWORDS, "");
+                        pdfCreator.keywords = reportKeywords;
                         if (! pdfCreator.htmlToPDF(data, destinationPath)) {
                             Log.w(this.getClass().getSimpleName(), "Unable to create PDF document");
                         }
