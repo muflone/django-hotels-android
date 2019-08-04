@@ -78,7 +78,6 @@ public class CommandConstants {
 
     // Report for timestamps
     public static final String SETTING_REPORTS_ACTIVITIES_DETAILS_HEADER = "reports_activities_details_header";
-    public static final String SETTING_REPORTS_ACTIVITIES_DETAILS_FIRST = "reports_activities_details_first";
     public static final String SETTING_REPORTS_ACTIVITIES_DETAILS_CONTENT = "reports_activities_details_content";
     public static final String SETTING_REPORTS_ACTIVITIES_DETAILS_TOTALS = "reports_activities_details_totals";
     public static final String SETTING_REPORTS_ACTIVITIES_DETAILS_FOOTER = "reports_activities_details_footer";

@@ -31,7 +31,6 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
     protected void onPostExecute(List<ReportActivityDetail> result) {
         // Prepare report data
         String reportHeader = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_HEADER, "");
-        String reportFirstLine = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_FIRST,"");
         String reportContent = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_CONTENT,"");
         String reportTotals = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_TOTALS,"");
         String reportFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_FOOTER,"");
@@ -56,7 +55,7 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
             );
         }
         // Show report data
-        String reportData = reportHeader + reportFirstLine + reportContentBuilder.toString() + reportTotals + reportFooter;
+        String reportData = reportHeader + reportContentBuilder.toString() + reportTotals + reportFooter;
         if (reportData.length() == 0) {
             reportData = "<html><body><h1>Activities details</h1><h3>No data</h3></body></html>";
         }
