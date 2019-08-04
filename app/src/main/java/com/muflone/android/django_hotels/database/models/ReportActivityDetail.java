@@ -51,4 +51,8 @@ public class ReportActivityDetail {
     @ColumnInfo(name = "service")
     @NonNull
     public String service;
+
+    @ColumnInfo(name = "description")
+    @NonNull
+    public String description;
 }

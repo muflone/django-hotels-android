@@ -52,6 +52,7 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
                 .replace("{{ ROOM }}", TextUtils.htmlEncode(activityDetail.room))
                 .replace("{{ SERVICE_ID }}", String.valueOf(activityDetail.serviceId))
                 .replace("{{ SERVICE }}", TextUtils.htmlEncode(activityDetail.service))
+                .replace("{{ DESCRIPTION }}", TextUtils.htmlEncode(activityDetail.description))
             );
         }
         // Show report data

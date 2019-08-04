@@ -72,7 +72,8 @@ public interface ServiceActivityDao {
             "  rooms.id AS room_id, " +
             "  rooms.name AS room, " +
             "  services.id AS service_id, " +
-            "  services.name AS service " +
+            "  services.name AS service, " +
+            "  activities.description " +
             "FROM activities " +
             "INNER JOIN contracts " +
             "   ON contracts.id = activities.contract_id " +
