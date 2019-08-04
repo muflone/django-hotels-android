@@ -100,7 +100,8 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
                     .replace("{{ DURATION_TIME }}", Utility.formatElapsedTime(duration, durationFormat))
                     .replace("{{ DURATION_TIME_STYLE }}", duration == 0 ? "duration_empty" : "duration")
                     .replace("{{ NOTES }}", notes == null ? "" : notes)
-                    .replace("{{ NOTES_STYLE }}", notes == null ? "notes_empty" : "notes"));
+                    .replace("{{ NOTES_STYLE }}", notes == null ? "notes_empty" : "notes")
+            );
         }
         // Show report data
         String reportData = reportHeader + reportFirstLine + stringBuilder.toString() + reportTotals + reportFooter;
