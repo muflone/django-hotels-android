@@ -100,7 +100,7 @@ public interface ServiceActivityDao {
             "         buildings.name ASC, " +
             "         rooms.name ASC, " +
             "         services.name ASC")
-    List<ReportActivityDetail> listForReportActivityDetails(@NonNull Date date, long structureId);
+    List<ReportActivityDetail> listForReportActivities(@NonNull Date date, long structureId);
 
     @Query("SELECT * " +
            "FROM activities " +

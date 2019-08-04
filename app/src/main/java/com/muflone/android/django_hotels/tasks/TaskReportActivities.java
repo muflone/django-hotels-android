@@ -17,18 +17,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<ReportActivityDetail>> {
+public class TaskReportActivities extends AsyncTask<Void, Void, List<ReportActivityDetail>> {
     private final Singleton singleton = Singleton.getInstance();
     private final TaskReportInterface callback;
 
     @SuppressWarnings("WeakerAccess")
-    public TaskReportActivitiesDetails(TaskReportInterface callback) {
+    public TaskReportActivities(TaskReportInterface callback) {
         this.callback = callback;
     }
 
     @Override
     protected List<ReportActivityDetail> doInBackground(Void... params) {
-        return this.singleton.database.serviceActivityDao().listForReportActivityDetails(
+        return this.singleton.database.serviceActivityDao().listForReportActivities(
                 this.singleton.selectedDate,
                 this.singleton.selectedStructure != null ? this.singleton.selectedStructure.id : 0);
     }
@@ -36,13 +36,13 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
     @Override
     protected void onPostExecute(List<ReportActivityDetail> result) {
         // Prepare report data
-        String reportHeader = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_HEADER, "");
-        String reportContent = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_CONTENT,"");
-        String reportTotals = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_TOTALS,"");
-        String reportFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_FOOTER,"");
-        String reportGroupHeader = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_GROUP_HEADER, "");
-        String reportGroupFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_GROUP_FOOTER,"");
-        String reportTotalsFormat = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_TOTAL_SERVICES_FORMAT, "%s %d\n");
+        String reportHeader = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_HEADER, "");
+        String reportContent = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_CONTENT,"");
+        String reportTotals = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_TOTALS,"");
+        String reportFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_FOOTER,"");
+        String reportGroupHeader = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_GROUP_HEADER, "");
+        String reportGroupFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_GROUP_FOOTER,"");
+        String reportTotalsFormat = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_TOTAL_SERVICES_FORMAT, "%s %d\n");
         // Loop results to prepare totals per contract/service
         Table<Long, Long, Long> totalsPerContractTable = HashBasedTable.create();
         Hashtable<Long, List<ReportActivityDetail>> activityDetailsList = new Hashtable<>();
@@ -82,7 +82,7 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
         }
         // Check for empty data
         if (reportContentBuilder.length() == 0) {
-            reportContentBuilder.append(this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_NO_DATA, "No data"));
+            reportContentBuilder.append(this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_NO_DATA, "No data"));
         }
         // Show report data
         String reportData = reportHeader + reportContentBuilder.toString() + reportTotals + reportFooter;
@@ -101,7 +101,7 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
     }
     private String replaceTags(String text, ReportActivityDetail item) {
         // Format a single line of content
-        DateFormat dateFormat = new SimpleDateFormat(this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_DATE_FORMAT, "yyyy-MM-dd"));
+        DateFormat dateFormat = new SimpleDateFormat(this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DATE_FORMAT, "yyyy-MM-dd"));
         return (text
                 .replace("{{ COMPANY_ID }}", String.valueOf(item.companyId))
                 .replace("{{ COMPANY }}", TextUtils.htmlEncode(item.company))

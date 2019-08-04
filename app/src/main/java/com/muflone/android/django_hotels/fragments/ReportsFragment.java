@@ -19,7 +19,7 @@ import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.commands.CommandConstants;
-import com.muflone.android.django_hotels.tasks.TaskReportActivitiesDetails;
+import com.muflone.android.django_hotels.tasks.TaskReportActivities;
 import com.muflone.android.django_hotels.tasks.TaskReportInterface;
 import com.muflone.android.django_hotels.tasks.TaskReportTimestamps;
 
@@ -29,7 +29,7 @@ import java.util.Objects;
 public class ReportsFragment extends Fragment {
     private View rootLayout;
     private TextView buttonReportTimestamps;
-    private TextView buttonReportActivitiesDetails;
+    private TextView buttonReportActivities;
     private WebView webReport;
     private final Singleton singleton = Singleton.getInstance();
 
@@ -72,11 +72,11 @@ public class ReportsFragment extends Fragment {
                             reportTitle = settings.context.getString(R.string.report_timestamps);
                             reportSubject = settings.context.getString(R.string.report_timestamps);
                             reportKeywords = settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_KEYWORDS, "");
-                        } else if (reportClass == TaskReportActivitiesDetails.class) {
+                        } else if (reportClass == TaskReportActivities.class) {
                             // PDF information for Activities Details
-                            reportTitle = settings.context.getString(R.string.report_activities_details);
-                            reportSubject = settings.context.getString(R.string.report_activities_details);
-                            reportKeywords = settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_KEYWORDS, "");
+                            reportTitle = settings.context.getString(R.string.report_activities);
+                            reportSubject = settings.context.getString(R.string.report_activities);
+                            reportKeywords = settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_KEYWORDS, "");
                         }
                         PDFCreator pdfCreator = new PDFCreator();
                         pdfCreator.pageSize = PageSize.A4;
@@ -99,13 +99,13 @@ public class ReportsFragment extends Fragment {
             if (view == this.buttonReportTimestamps) {
                 TaskReportTimestamps task = new TaskReportTimestamps(reportCallback);
                 task.execute();
-            } else if (view == this.buttonReportActivitiesDetails) {
-                TaskReportActivitiesDetails task = new TaskReportActivitiesDetails(reportCallback);
+            } else if (view == this.buttonReportActivities) {
+                TaskReportActivities task = new TaskReportActivities(reportCallback);
                 task.execute();
             }
         };
         this.buttonReportTimestamps.setOnClickListener(clickListener);
-        this.buttonReportActivitiesDetails.setOnClickListener(clickListener);
+        this.buttonReportActivities.setOnClickListener(clickListener);
         // Set WebView zoom enabled
         this.webReport.getSettings().setBuiltInZoomControls(
                 this.singleton.settings.getBoolean(CommandConstants.SETTING_REPORTS_ZOOM_ENABLE, false));
@@ -127,7 +127,7 @@ public class ReportsFragment extends Fragment {
         // Inflate the layout for this fragment
         this.rootLayout = inflater.inflate(R.layout.reports_fragment, container, false);
         this.buttonReportTimestamps = this.rootLayout.findViewById(R.id.buttonReportTimestamps);
-        this.buttonReportActivitiesDetails = this.rootLayout.findViewById(R.id.buttonReportActivitiesDetails);
+        this.buttonReportActivities = this.rootLayout.findViewById(R.id.buttonReportActivities);
         this.webReport = this.rootLayout.findViewById(R.id.webReport);
     }
 
