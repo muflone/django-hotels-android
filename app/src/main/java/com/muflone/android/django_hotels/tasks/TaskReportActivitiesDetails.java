@@ -42,6 +42,7 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
         String reportFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_FOOTER,"");
         String reportGroupHeader = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_GROUP_HEADER, "");
         String reportGroupFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_GROUP_FOOTER,"");
+        String reportTotalsFormat = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_DETAILS_TOTAL_SERVICES_FORMAT, "%s %d\n");
         // Loop results to prepare totals per contract/service
         Table<Long, Long, Long> totalsPerContractTable = HashBasedTable.create();
         Hashtable<Long, List<ReportActivityDetail>> activityDetailsList = new Hashtable<>();
@@ -68,7 +69,16 @@ public class TaskReportActivitiesDetails extends AsyncTask<Void, Void, List<Repo
             for (ReportActivityDetail activityDetail : activityDetailsPerContract) {
                 reportContentBuilder.append(this.replaceTags(reportContent, activityDetail));
             }
-            reportContentBuilder.append(reportGroupFooter);
+            // Content footer
+            StringBuilder totalServicesBuilder = new StringBuilder();
+            for (Long serviceId : totalsPerContractTable.row(contractId).keySet()) {
+                totalServicesBuilder.append(String.format(Locale.ROOT, reportTotalsFormat,
+                        Objects.requireNonNull(this.singleton.apiData.serviceMap.get(serviceId)).name,
+                        totalsPerContractTable.get(contractId, serviceId)));
+            }
+            reportContentBuilder.append(reportGroupFooter
+                    .replace("{{ TOTALS_SERVICES }}", totalServicesBuilder.toString())
+            );
         }
         // Check for empty data
         if (reportContentBuilder.length() == 0) {

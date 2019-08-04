@@ -90,6 +90,7 @@ public class CommandConstants {
     public static final String SETTING_REPORTS_ACTIVITIES_DETAILS_GROUP_HEADER = "reports_activities_details_group_header";
     public static final String SETTING_REPORTS_ACTIVITIES_DETAILS_GROUP_FOOTER = "reports_activities_details_group_footer";
     public static final String SETTING_REPORTS_ACTIVITIES_DETAILS_NO_DATA = "reports_activities_details_no_data";
+    public static final String SETTING_REPORTS_ACTIVITIES_DETAILS_TOTAL_SERVICES_FORMAT = "reports_activities_details_total_services_format";
 
     // Set used value for all commands at once
     public static final int SET_USED_SET_ALL_COMMAND_USAGES = -1;
