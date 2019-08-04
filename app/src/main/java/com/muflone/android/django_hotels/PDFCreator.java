@@ -29,12 +29,11 @@ public class PDFCreator {
     }
 
     private void create() {
-        this.document = new Document();
+        this.document = new Document(this.pageSize);
     }
 
     private void open() {
         this.document.open();
-        this.document.setPageSize(this.pageSize);
         // Add title
         if (this.title != null) {
             this.document.addTitle(this.title);
