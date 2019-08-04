@@ -52,7 +52,7 @@ public class ReportsFragment extends Fragment {
                 @Override
                 public void showHTML(String data, Class<?> reportClass) {
                     // Load report HTML data in WebView
-                    ReportsFragment.this.webReport.loadData(data, "text/html", "utf-8");
+                    ReportsFragment.this.webReport.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
                     // Create PDF report from data
                     // Prepares reports output directory
                     Settings settings = ReportsFragment.this.singleton.settings;
