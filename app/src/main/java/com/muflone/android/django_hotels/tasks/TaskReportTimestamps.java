@@ -62,7 +62,7 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
         }
         // Check for empty data
         if (reportContentBuilder.length() == 0) {
-            reportContentBuilder.append(this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_DETAILS_NO_DATA, "No data"));
+            reportContentBuilder.append(this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_NO_DATA, "No data"));
         }
         // Show report data
         String reportData = reportHeader + reportContentBuilder.toString() + reportTotals + reportFooter;
