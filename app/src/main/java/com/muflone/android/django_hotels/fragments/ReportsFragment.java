@@ -19,6 +19,7 @@ import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.commands.CommandConstants;
+import com.muflone.android.django_hotels.tasks.TaskReportActivitiesDetails;
 import com.muflone.android.django_hotels.tasks.TaskReportInterface;
 import com.muflone.android.django_hotels.tasks.TaskReportTimestamps;
 
@@ -89,7 +90,8 @@ public class ReportsFragment extends Fragment {
                 TaskReportTimestamps task = new TaskReportTimestamps(reportCallback);
                 task.execute();
             } else if (view == this.buttonReportActivitiesDetails) {
-                reportText = "<html><body><h1>Activities details</h1></body></html>";
+                TaskReportActivitiesDetails task = new TaskReportActivitiesDetails(reportCallback);
+                task.execute();
             } else if (view == this.buttonReportActivitiesTotals) {
                 reportText = "<html><body><h1>Activities totals</h1></body></html>";
             }
