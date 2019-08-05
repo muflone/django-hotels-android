@@ -23,7 +23,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="50"
-            android:background="@drawable/btn_rounded_1"
+            android:background="@drawable/btn_rounded_2"
             android:text="@string/report_timestamps" />
 
         <Space
@@ -37,7 +37,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="50"
-            android:background="@drawable/btn_rounded_2"
+            android:background="@drawable/btn_rounded_3"
             android:text="@string/report_activities" />
     </LinearLayout>
 
