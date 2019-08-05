@@ -51,7 +51,8 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
             }
         }
         // Prepare report data
-        String reportHeader = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_HEADER, "");
+        String reportHeader = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_HEADER, "")
+                .replace("{{ DEFAULT_STYLE }}", this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_DEFAULT_STYLE, ""));
         String reportContent = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_CONTENT,"");
         String reportTotals = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_TOTALS,"");
         String reportFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_FOOTER,"");

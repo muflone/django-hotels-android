@@ -36,7 +36,8 @@ public class TaskReportActivities extends AsyncTask<Void, Void, List<ReportActiv
     @Override
     protected void onPostExecute(List<ReportActivityDetail> result) {
         // Prepare report data
-        String reportHeader = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_HEADER, "");
+        String reportHeader = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_HEADER, "")
+                .replace("{{ DEFAULT_STYLE }}", this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_DEFAULT_STYLE, ""));
         String reportContent = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_CONTENT,"");
         String reportTotals = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_TOTALS,"");
         String reportFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_FOOTER,"");
