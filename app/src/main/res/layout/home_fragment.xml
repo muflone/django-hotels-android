@@ -91,6 +91,29 @@
             android:paddingBottom="8dp">
 
             <ImageView
+                android:id="@+id/imageSectionReports"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/section_reports"
+                android:tint="#000000"
+                app:srcCompat="@drawable/ic_report" />
+
+            <TextView
+                android:id="@+id/textViewReports"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/section_reports"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <ImageView
                 android:id="@+id/imageSectionSync"
                 android:layout_width="48dp"
                 android:layout_height="48dp"

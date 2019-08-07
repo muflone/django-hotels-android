@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
+    <entry_points version="2.0">
+      <entry_point TYPE="field" FQNAME="com.muflone.android.django_hotels.database.models.ReportActivityDetail description" />
+    </entry_points>
     <pattern value="com.muflone.android.django_hotels.database.dao.BrandDao" />
     <pattern value="com.muflone.android.django_hotels.database.dao.BrandDao" method="count" />
     <pattern value="com.muflone.android.django_hotels.database.dao.BrandDao" method="delete" />
@@ -207,6 +210,7 @@
     <pattern value="com.muflone.android.django_hotels.commands.CommandDialog" />
     <pattern value="com.muflone.android.django_hotels.commands.CommandDialog" method="CommandDialog" />
     <pattern value="com.muflone.android.django_hotels.commands.CommandDialog" method="execute" />
+    <pattern value="com.muflone.android.django_hotels.database.models.ReportActivityDetail" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

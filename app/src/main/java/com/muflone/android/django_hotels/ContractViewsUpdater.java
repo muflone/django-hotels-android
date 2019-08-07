@@ -5,8 +5,6 @@ import android.widget.TextView;
 import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.ContractType;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 public class ContractViewsUpdater {
@@ -45,8 +43,7 @@ public class ContractViewsUpdater {
         this.contractDailyHoursView.setText(String.valueOf(contractType.dailyHours));
         this.contractWeeklyHoursView.setText(String.valueOf(contractType.weeklyHours));
         // Add contract dates
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        this.contractStartDateView.setText(formatter.format(contract.startDate));
-        this.contractEndDateView.setText(formatter.format(contract.endDate));
+        this.contractStartDateView.setText(this.singleton.defaultDateFormatter.format(contract.startDate));
+        this.contractEndDateView.setText(this.singleton.defaultDateFormatter.format(contract.endDate));
     }
 }

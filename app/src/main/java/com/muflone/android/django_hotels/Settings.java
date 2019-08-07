@@ -37,10 +37,6 @@ public class Settings {
         return this.preferences.getBoolean(this.context.getString(R.string.settings_scan_orientation_lock_id), false);
     }
 
-    public boolean getBuildingsInitiallyClosed() {
-        return this.preferences.getBoolean(this.context.getString(R.string.settings_structures_buildings_closed_id), false);
-    }
-
     public String getPackageName() {
         return this.context.getPackageName();
     }
@@ -57,10 +53,6 @@ public class Settings {
         return String.format(Locale.ROOT, "%s %s",
                 this.getApplicationName(),
                 this.getApplicationVersion());
-    }
-
-    public boolean getRoomsListStandardHeight() {
-        return this.preferences.getBoolean(this.context.getString(R.string.settings_structures_rooms_list_standard_height_id), true);
     }
 
     @SuppressWarnings("unused")

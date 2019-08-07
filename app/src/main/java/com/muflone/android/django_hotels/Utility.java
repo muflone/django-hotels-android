@@ -34,10 +34,14 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class Utility {
     @SuppressWarnings("WeakerAccess")
@@ -318,5 +322,29 @@ public class Utility {
                     activity.getString(R.string.app_name),
                     title));
         }
+    }
+
+    public static String formatElapsedTime(long seconds, String format) {
+        // Format elapsed time
+        long hours = TimeUnit.SECONDS.toHours(seconds);
+        seconds -= TimeUnit.HOURS.toSeconds(hours);
+
+        long minutes = TimeUnit.SECONDS.toMinutes (seconds);
+        seconds -= TimeUnit.MINUTES.toSeconds(minutes);
+
+        return seconds > 0 ?
+                String.format (format == null ? "%02d:%02d:%02d" : format, hours, minutes, seconds) :
+                "";
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List sortHashtableKeys(Hashtable table, boolean reverse) {
+        // Returns a sorted list of keys in a Hashtable
+        List result = Collections.list(table.keys());
+        Collections.sort(result);
+        if (reverse) {
+            Collections.reverse(result);
+        }
+        return result;
     }
 }

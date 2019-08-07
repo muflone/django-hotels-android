@@ -347,7 +347,7 @@ public class TaskSync extends AsyncTask<Void, Void, TaskResult> {
                                     Objects.requireNonNull(this.singleton.apiData.roomsStructureMap.get(serviceActivity.roomId)).name,
                                     Objects.requireNonNull(this.singleton.apiData.roomsBuildingMap.get(serviceActivity.roomId)).name,
                                     Objects.requireNonNull(this.singleton.apiData.roomsMap.get(serviceActivity.roomId)).name,
-                                    new SimpleDateFormat("yyyy-MM-dd").format(serviceActivity.date),
+                                    this.singleton.defaultDateFormatter.format(serviceActivity.date),
                                     serviceActivity.description
                             ));
                 } else if (! status.equals(Api.STATUS_OK)) {

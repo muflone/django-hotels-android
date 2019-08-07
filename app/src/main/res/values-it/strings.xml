@@ -18,6 +18,7 @@
     <string name="section_scanner">Scansione</string>
     <string name="section_structures">Strutture</string>
     <string name="section_extras">Extra</string>
+    <string name="section_reports">Riepiloghi</string>
     <string name="section_sync">Sincronizzazione</string>
     <string name="section_settings">Impostazioni</string>
     <string name="section_about">Informazioni</string>
@@ -30,7 +31,7 @@
 
     <!-- Scan section -->
     <string name="scan_prompt">Scansiona il tuo codice QR personale</string>
-    <string name="scan_register_enter">Registra ENTRATA</string>
+    <string name="scan_register_enter">Registra INGRESSO</string>
     <string name="scan_register_exit">Registra USCITA</string>
     <string name="scan_latest_timestamps">Ultime timbrature</string>
     <string name="scan_transmission_status">Stato trasmissione</string>
@@ -75,6 +76,10 @@
     <string name="extras_no_extras_allowed">Nessun extra è consentito per questa struttura</string>
     <string name="extras_marked_extra_as_untransmitted">Extra contrassegnato come non trasmesso</string>
 
+    <!-- Reports section -->
+    <string name="report_timestamps">Ingressi e Uscite</string>
+    <string name="report_activities">Attività</string>
+
     <!-- Settings section -->
     <string name="settings_tablet">Impostazioni tablet</string>
 
@@ -98,12 +103,6 @@
     <string name="settings_scan_orientation_lock_summary">Blocca l\'orientamento dello schermo durante il processo di scansione</string>
 
     <string name="settings_structures">Impostazioni strutture</string>
-
-    <string name="settings_structures_buildings_closed_title">Edifici inizialmente chiusi</string>
-    <string name="settings_structures_buildings_closed_summary">I gruppi di edifici sono automaticamente chiusi</string>
-
-    <string name="settings_structures_rooms_list_standard_height_title">Altezza standard per elenco stanze</string>
-    <string name="settings_structures_rooms_list_standard_height_summary">Utilizza altezza standard per l\'elenco delle stanze per prestazioni migliori</string>
 
     <!-- Sync section -->
     <string name="sync_step_started">Sincronizzazione avviata</string>

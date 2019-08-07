@@ -100,9 +100,13 @@ public class SyncFragment extends Fragment {
                                 // Update options menu if available
                                 if (getActivity() != null) {
                                     if (singleton.apiData.structuresMap.size() > 0) {
-                                        // Select the first available structure
+                                        // Select the latest chosen structure or the first available
                                         SortedSet<Structure> sortedStructures = new TreeSet<>(singleton.apiData.structuresMap.values());
-                                        SyncFragment.this.singleton.selectedStructure = sortedStructures.first();
+                                        long latestStructureSelected = SyncFragment.this.singleton.selectedStructure.id;
+                                        SyncFragment.this.singleton.selectedStructure = (
+                                                singleton.apiData.structuresMap.containsKey(latestStructureSelected) ?
+                                                singleton.apiData.structuresMap.get(latestStructureSelected) :
+                                                sortedStructures.first());
                                     } else {
                                         // No available structures
                                         SyncFragment.this.singleton.selectedStructure = null;
