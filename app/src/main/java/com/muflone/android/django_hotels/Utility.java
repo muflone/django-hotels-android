@@ -34,7 +34,10 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
@@ -332,5 +335,16 @@ public class Utility {
         return seconds > 0 ?
                 String.format (format == null ? "%02d:%02d:%02d" : format, hours, minutes, seconds) :
                 "";
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List sortHashtableKeys(Hashtable table, boolean reverse) {
+        // Returns a sorted list of keys in a Hashtable
+        List result = Collections.list(table.keys());
+        Collections.sort(result);
+        if (reverse) {
+            Collections.reverse(result);
+        }
+        return result;
     }
 }
