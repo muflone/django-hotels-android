@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.muflone.android.django_hotels.Singleton;
+import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.ReportActivityDetail;
 
@@ -40,12 +41,14 @@ public class TaskReportActivities extends AsyncTask<Void, Void, List<ReportActiv
                 .replace("{{ DEFAULT_STYLE }}", this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_DEFAULT_STYLE, ""));
         String reportContent = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_CONTENT,"");
         String reportTotals = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_TOTALS,"");
+        String reportTotalsTotalsFormat = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_TOTALS_TOTAL_SERVICES_FORMAT, "%s %d\n");
         String reportFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_FOOTER,"");
         String reportGroupHeader = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_GROUP_HEADER, "");
         String reportGroupFooter = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_GROUP_FOOTER,"");
-        String reportTotalsFormat = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_TOTAL_SERVICES_FORMAT, "%s %d\n");
+        String reportGroupTotalsFormat = this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_GROUP_FOOTER_TOTAL_SERVICES_FORMAT, "%s %d\n");
         // Loop results to prepare totals per contract/service
         Table<Long, Long, Long> totalsPerContractTable = HashBasedTable.create();
+        Hashtable<String, Long> totalsPerServiceList = new Hashtable<>();
         Hashtable<Long, List<ReportActivityDetail>> activityDetailsList = new Hashtable<>();
         for (ReportActivityDetail activityDetail : result) {
             // Create new list of services
@@ -73,8 +76,14 @@ public class TaskReportActivities extends AsyncTask<Void, Void, List<ReportActiv
             // Content footer
             StringBuilder totalServicesBuilder = new StringBuilder();
             for (Long serviceId : totalsPerContractTable.row(contractId).keySet()) {
-                totalServicesBuilder.append(String.format(Locale.ROOT, reportTotalsFormat,
-                        Objects.requireNonNull(this.singleton.apiData.serviceMap.get(serviceId)).name,
+                String serviceName = Objects.requireNonNull(this.singleton.apiData.serviceMap.get(serviceId)).name;
+                // Add totals per service
+                //noinspection ConstantConditions
+                totalsPerServiceList.put(serviceName, totalsPerContractTable.get(contractId, serviceId) +
+                        (totalsPerServiceList.containsKey(serviceName) ? totalsPerServiceList.get(serviceName) : 0L));
+
+                totalServicesBuilder.append(String.format(Locale.ROOT,
+                        reportGroupTotalsFormat, serviceName,
                         totalsPerContractTable.get(contractId, serviceId)));
             }
             reportContentBuilder.append(reportGroupFooter
@@ -85,8 +94,19 @@ public class TaskReportActivities extends AsyncTask<Void, Void, List<ReportActiv
         if (reportContentBuilder.length() == 0) {
             reportContentBuilder.append(this.singleton.settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_NO_DATA, "No data"));
         }
+        // Build totals
+        StringBuilder totalServicesBuilder = new StringBuilder();
+        //noinspection unchecked
+        List<String> servicesTotalsKeysList = Utility.sortHashtableKeys(totalsPerServiceList, false);
+        for (String serviceName : servicesTotalsKeysList) {
+            totalServicesBuilder.append(String.format(Locale.ROOT,
+                    reportTotalsTotalsFormat, serviceName, totalsPerServiceList.get(serviceName)));
+        }
         // Show report data
-        String reportData = reportHeader + reportContentBuilder.toString() + reportTotals + reportFooter;
+        String reportData = reportHeader +
+                reportContentBuilder.toString() +
+                reportTotals.replace("{{ TOTALS_SERVICES }}", totalServicesBuilder.toString()) +
+                reportFooter;
         // Replace common data
         reportData = reportData
                 .replace("{{ SELECTED_DATE }}", this.singleton.defaultDateFormatter.format(this.singleton.selectedDate))

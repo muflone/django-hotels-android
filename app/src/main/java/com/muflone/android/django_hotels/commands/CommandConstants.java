@@ -85,13 +85,14 @@ public class CommandConstants {
     public static final String SETTING_REPORTS_ACTIVITIES_HEADER = "reports_activities_header";
     public static final String SETTING_REPORTS_ACTIVITIES_CONTENT = "reports_activities_content";
     public static final String SETTING_REPORTS_ACTIVITIES_TOTALS = "reports_activities_totals";
+    public static final String SETTING_REPORTS_ACTIVITIES_TOTALS_TOTAL_SERVICES_FORMAT = "reports_activities_totals_total_services_format";
     public static final String SETTING_REPORTS_ACTIVITIES_FOOTER = "reports_activities_footer";
     public static final String SETTING_REPORTS_ACTIVITIES_DATE_FORMAT = "reports_activities_date_format";
     public static final String SETTING_REPORTS_ACTIVITIES_KEYWORDS = "reports_activities_keywords";
     public static final String SETTING_REPORTS_ACTIVITIES_GROUP_HEADER = "reports_activities_group_header";
     public static final String SETTING_REPORTS_ACTIVITIES_GROUP_FOOTER = "reports_activities_group_footer";
+    public static final String SETTING_REPORTS_ACTIVITIES_GROUP_FOOTER_TOTAL_SERVICES_FORMAT = "reports_activities_group_footer_total_services_format";
     public static final String SETTING_REPORTS_ACTIVITIES_NO_DATA = "reports_activities_no_data";
-    public static final String SETTING_REPORTS_ACTIVITIES_TOTAL_SERVICES_FORMAT = "reports_activities_total_services_format";
 
     // Set used value for all commands at once
     public static final int SET_USED_SET_ALL_COMMAND_USAGES = -1;
