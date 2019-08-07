@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
-import com.muflone.android.django_hotels.Constants;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.api.exceptions.InvalidServerStatusException;
 import com.muflone.android.django_hotels.api.exceptions.RetransmittedActivityException;

@@ -62,7 +62,6 @@ public interface ServiceActivityDao {
            "  AND room_id = :roomId")
     List<ServiceActivity> listByDateContract(@NonNull Date date, long contractId, long roomId);
 
-    @SuppressWarnings("NullableProblems")
     @Query("SELECT " +
             "  companies.id AS company_id, " +
             "  companies.name AS company, " +
