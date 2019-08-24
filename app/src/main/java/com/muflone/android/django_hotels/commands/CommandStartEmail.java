@@ -28,7 +28,8 @@ public class CommandStartEmail extends CommandBase {
             Utility.sendEmail(this.activity,
                     this.command.command.getString("recipient").split(","),
                     this.command.command.getString("subject"),
-                    this.command.command.getString("message"));
+                    this.command.command.getString("message"),
+                    null);
         } catch (JSONException exception) {
             exception.printStackTrace();
         }

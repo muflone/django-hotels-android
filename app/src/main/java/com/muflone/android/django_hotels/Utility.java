@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -200,13 +201,22 @@ public class Utility {
         clipboard.setPrimaryClip(ClipData.newPlainText(null, text));
     }
 
-    public static void sendEmail(Context context, String[] recipients, String subject, String body) {
+    public static void sendEmail(Context context, String[] recipients, String subject, String body,
+                                 Uri[] attachments) {
         // Send e-mail to multiple recipients
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_EMAIL, recipients);
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
         intent.putExtra(Intent.EXTRA_TEXT, body);
         intent.setType("message/rfc822");
+        // Add atttachments
+        if (attachments != null) {
+            for (Uri uri : attachments) {
+                if (uri != null) {
+                    intent.putExtra(Intent.EXTRA_STREAM, uri);
+                }
+            }
+        }
         context.startActivity(intent);
     }
 

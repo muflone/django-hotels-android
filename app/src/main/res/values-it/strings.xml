@@ -160,6 +160,7 @@
     <string name="about_feedback_copy_details">Copia dettagli</string>
     <string name="about_feedback_copied_to_clipboard">Dati copiati negli appunti</string>
     <string name="about_feedback_email_details">Invia un\'e-mail all\'autore con i dettagli</string>
+    <string name="about_feedback_email_details_with_attached_db">Invia un\'e-mail all\'autore con i dettagli e una copia della base dati</string>
 
     <string name="about_tools_database_backup">Effettua una copia di sicurezza dei dati</string>
     <string name="about_tools_database_backup_done">Una copia della base dati è stata eseguita</string>

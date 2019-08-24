@@ -1,6 +1,7 @@
 package com.muflone.android.django_hotels.fragments;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -21,6 +22,7 @@ import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.Command;
 import com.muflone.android.django_hotels.database.models.CommandUsage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -218,7 +220,9 @@ public class AboutFragment extends Fragment {
         // Copy details item
         aboutPage.addItem(getCopyDetailsElement(stringBuilder.toString()));
         // E-mail details item
-        aboutPage.addItem(getEmailDetailsElement(stringBuilder.toString()));
+        aboutPage.addItem(getEmailDetailsElement(stringBuilder.toString(), false));
+        // E-mail details item with attached database
+        aboutPage.addItem(getEmailDetailsElement(stringBuilder.toString(), true));
         // Tools section
         aboutPage.addGroup(this.getString(R.string.about_tools));
         aboutPage.addItem(this.databaseBackupElement());
@@ -258,9 +262,16 @@ public class AboutFragment extends Fragment {
         return copyDetails;
     }
 
-    private Element getEmailDetailsElement(String value) {
+    private Element getEmailDetailsElement(String value, boolean attachDatabase) {
         Element copyDetails = new Element();
-        copyDetails.setTitle(this.getString(R.string.about_feedback_email_details));
+        Uri attachment = null;
+        if (attachDatabase) {
+            copyDetails.setTitle(this.getString(R.string.about_feedback_email_details_with_attached_db));
+            attachment = Uri.fromFile(new File(this.singleton.database.backupDatabase(this.context)));
+        } else {
+            copyDetails.setTitle(this.getString(R.string.about_feedback_email_details));
+        };
+        final Uri[] attachments = { attachment };
         copyDetails.setIconDrawable(R.drawable.ic_mail);
         copyDetails.setIconTint(mehdi.sakout.aboutpage.R.color.about_item_icon_color);
         copyDetails.setIconNightTint(android.R.color.white);
@@ -271,7 +282,8 @@ public class AboutFragment extends Fragment {
                         this.getString(R.string.about_feedback_subject),
                         this.singleton.settings.getApplicationName(),
                         this.singleton.settings.getApplicationVersion()),
-                value));
+                value,
+                attachments));
         return copyDetails;
     }
 
