@@ -277,9 +277,9 @@ public class Utility {
         }
     }
 
-    public static boolean backupDatabase(Context context, String databasePath, int version) {
+    public static String backupDatabase(Context context, String databasePath, int version) {
         // Backup database to external storage
-        boolean result = false;
+        String result = null;
         File destinationDirectory = new File(
                 context.getExternalFilesDir(null) +
                         File.separator +
@@ -305,7 +305,7 @@ public class Utility {
             inChannel.transferTo(0, inChannel.size(), outChannel);
             inStream.close();
             outStream.close();
-            result = true;
+            result = destinationFile.getAbsolutePath();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

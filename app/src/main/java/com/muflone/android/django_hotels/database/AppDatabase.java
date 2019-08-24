@@ -162,7 +162,7 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public boolean backupDatabase(Context context) {
+    public String backupDatabase(Context context) {
         // Backup database to external storage
         String databasePath = context.getApplicationInfo().dataDir +
                 File.separator +
