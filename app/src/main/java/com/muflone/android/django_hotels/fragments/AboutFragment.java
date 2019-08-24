@@ -78,7 +78,9 @@ public class AboutFragment extends Fragment {
                 .addGitHub(this.getString(R.string.about_guava_url),
                         this.getString(R.string.about_guava_title))
                 .addGitHub(this.getString(R.string.about_numberprogressbar_url),
-                        this.getString(R.string.about_numberprogressbar_title));
+                        this.getString(R.string.about_numberprogressbar_title))
+                .addGitHub(this.getString(R.string.about_itextpdf_url),
+                        this.getString(R.string.about_itextpdf_title));
         // Application Information section
         aboutPage.addGroup(this.getString(R.string.about_application_information));
         // Application name
