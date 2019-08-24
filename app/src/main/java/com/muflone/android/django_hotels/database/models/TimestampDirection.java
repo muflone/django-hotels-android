@@ -33,6 +33,7 @@ public class TimestampDirection {
     @ColumnInfo(name = "type_exit")
     public final boolean exit;
 
+    @SuppressWarnings("WeakerAccess")
     public TimestampDirection(long id, @NotNull String name, @NotNull String description, @NotNull String shortCode, boolean enter, boolean exit) {
         this.id = id;
         this.name = name;

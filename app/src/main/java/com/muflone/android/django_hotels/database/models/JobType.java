@@ -15,6 +15,7 @@ public class JobType {
     @ColumnInfo(name = "name")
     public final String name;
 
+    @SuppressWarnings("WeakerAccess")
     public JobType(long id, String name) {
         this.id = id;
         this.name = name;

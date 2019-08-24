@@ -15,6 +15,7 @@ public class Region {
     @ColumnInfo(name = "name")
     public final String name;
 
+    @SuppressWarnings("WeakerAccess")
     public Region(long id, String name) {
         this.id = id;
         this.name = name;

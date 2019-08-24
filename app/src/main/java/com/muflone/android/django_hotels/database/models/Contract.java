@@ -85,6 +85,7 @@ public class Contract {
     @Ignore
     public List<Long> buildings;
 
+    @SuppressWarnings("WeakerAccess")
     public Contract(long id, String guid, Date startDate, Date endDate,
                     boolean enabled, boolean active,
                     long employeeId, long companyId, long contractTypeId,
@@ -101,6 +102,7 @@ public class Contract {
         this.jobTypeId = jobTypeId;
     }
 
+    @SuppressWarnings("WeakerAccess")
     @Ignore
     public Contract(long id, String guid, Date startDate, Date endDate,
                     boolean enabled, boolean active,

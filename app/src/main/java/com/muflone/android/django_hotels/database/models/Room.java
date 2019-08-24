@@ -31,6 +31,7 @@ public class Room {
     @ColumnInfo(name = "building_id", index = true)
     public final long buildingId;
 
+    @SuppressWarnings("WeakerAccess")
     public Room(long id, String name, String type, String bedType, long buildingId) {
         this.id = id;
         this.name = name;

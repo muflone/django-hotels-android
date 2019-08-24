@@ -42,6 +42,7 @@ public class Location {
     @ColumnInfo(name = "country_id", index = true)
     public final String countryId;
 
+    @SuppressWarnings("WeakerAccess")
     public Location(long id, String name, String address, long regionId, String countryId) {
         this.id = id;
         this.name = name;
@@ -50,6 +51,7 @@ public class Location {
         this.countryId = countryId;
     }
 
+    @SuppressWarnings("WeakerAccess")
     @Ignore
     public Location(long id, String name, String address, Region region, Country country) {
         this(id, name, address, region.id, country.id);

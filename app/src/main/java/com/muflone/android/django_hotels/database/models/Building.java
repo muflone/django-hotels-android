@@ -49,6 +49,7 @@ public class Building {
     @Ignore
     public List<Employee> employees = null;
 
+    @SuppressWarnings("WeakerAccess")
     public Building(long id, String name, long structureId, long locationId, boolean extras) {
         this.id = id;
         this.name = name;
@@ -57,6 +58,7 @@ public class Building {
         this.extras = extras;
     }
 
+    @SuppressWarnings("WeakerAccess")
     @Ignore
     public Building(long id, String name, Structure structure, Location location, boolean extras, List<Room> rooms) {
         this(id, name, structure.id, location.id, extras);

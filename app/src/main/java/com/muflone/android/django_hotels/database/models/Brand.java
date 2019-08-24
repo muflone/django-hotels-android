@@ -15,6 +15,7 @@ public class Brand {
     @ColumnInfo(name = "name")
     public final String name;
 
+    @SuppressWarnings("WeakerAccess")
     public Brand(long id, String name) {
         this.id = id;
         this.name = name;
