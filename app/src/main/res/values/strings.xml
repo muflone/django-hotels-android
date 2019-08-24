@@ -79,6 +79,7 @@
     <!-- Reports section -->
     <string name="report_timestamps">Timestamps</string>
     <string name="report_activities">Activities</string>
+    <string name="report_loading">The report is currently loading, please wait\nElapsed time: %d seconds</string>
 
     <!-- Settings section -->
     <string name="settings_tablet">Tablet settings</string>

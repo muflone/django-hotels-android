@@ -79,6 +79,7 @@
     <!-- Reports section -->
     <string name="report_timestamps">Ingressi e Uscite</string>
     <string name="report_activities">Attività</string>
+    <string name="report_loading">Il riepilogo sta attualmente caricando, attendere prego\nTempo trascorso: %d secondi</string>
 
     <!-- Settings section -->
     <string name="settings_tablet">Impostazioni tablet</string>

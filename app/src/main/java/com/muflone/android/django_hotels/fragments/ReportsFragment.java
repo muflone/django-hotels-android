@@ -5,29 +5,30 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.PageSize;
-import com.muflone.android.django_hotels.PDFCreator;
 import com.muflone.android.django_hotels.R;
-import com.muflone.android.django_hotels.Settings;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.commands.CommandConstants;
+import com.muflone.android.django_hotels.tasks.TaskListenerInterface;
 import com.muflone.android.django_hotels.tasks.TaskReportActivities;
 import com.muflone.android.django_hotels.tasks.TaskReportInterface;
+import com.muflone.android.django_hotels.tasks.TaskReportCreatePDF;
 import com.muflone.android.django_hotels.tasks.TaskReportTimestamps;
+import com.muflone.android.django_hotels.tasks.TaskResult;
 
-import java.io.File;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ReportsFragment extends Fragment {
     private View rootLayout;
+    private TextView progressView;
+    private ProgressBar progressBar;
     private TextView buttonReportTimestamps;
     private TextView buttonReportActivities;
     private WebView webReport;
@@ -46,56 +47,38 @@ public class ReportsFragment extends Fragment {
         this.loadUI(inflater, Objects.requireNonNull(container));
         // Prepares output callback functions for TaskReports
         View.OnClickListener clickListener = view -> {
-            TaskReportInterface reportCallback = new TaskReportInterface() {
-                @Override
-                public void showHTML(String data, Class<?> reportClass) {
-                    // Create PDF report from data
-                    // Prepares reports output directory
-                    Settings settings = ReportsFragment.this.singleton.settings;
-                    File destinationDirectory = new File(
-                            ReportsFragment.this.singleton.settings.context.getCacheDir() +
-                                    File.separator +
-                                    "reports");
-                    // Create missing destination directory
-                    if (! destinationDirectory.exists()) {
-                        //noinspection ResultOfMethodCallIgnored
-                        destinationDirectory.mkdir();
+            TaskReportInterface reportCallback = (data, reportClass) -> {
+                long startingTime = System.currentTimeMillis();
+                TaskReportCreatePDF task = new TaskReportCreatePDF(data, reportClass, new TaskListenerInterface() {
+                    @Override
+                    public void onSuccess(TaskResult result) {
+                        // Load report HTML data in WebView
+                        ReportsFragment.this.webReport.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
+                        // Loading completed
+                        ReportsFragment.this.webReport.setVisibility(View.VISIBLE);
+                        ReportsFragment.this.progressView.setVisibility(View.INVISIBLE);
+                        ReportsFragment.this.progressBar.setVisibility(View.INVISIBLE);
                     }
-                    String destinationPath = destinationDirectory + File.separator + reportClass.getSimpleName() + ".pdf";
-                    try {
-                        // Prepare PDF document information
-                        String reportTitle = "";
-                        String reportSubject = "";
-                        String reportKeywords = "";
-                        if (reportClass == TaskReportTimestamps.class) {
-                            // PDF information for Timestamps
-                            reportTitle = settings.context.getString(R.string.report_timestamps);
-                            reportSubject = settings.context.getString(R.string.report_timestamps);
-                            reportKeywords = settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_KEYWORDS, "");
-                        } else if (reportClass == TaskReportActivities.class) {
-                            // PDF information for Activities Details
-                            reportTitle = settings.context.getString(R.string.report_activities);
-                            reportSubject = settings.context.getString(R.string.report_activities);
-                            reportKeywords = settings.getString(CommandConstants.SETTING_REPORTS_ACTIVITIES_KEYWORDS, "");
-                        }
-                        PDFCreator pdfCreator = new PDFCreator();
-                        pdfCreator.pageSize = PageSize.A4.rotate();
-                        pdfCreator.title = reportTitle;
-                        pdfCreator.subject = reportSubject;
-                        pdfCreator.creator = settings.getApplicationNameVersion();
-                        pdfCreator.author = settings.context.getString(R.string.author_name);
-                        pdfCreator.keywords = reportKeywords;
-                        // Show HTML source in the WebView
-                        if (! pdfCreator.htmlToPDF(data, destinationPath)) {
-                            Log.w(this.getClass().getSimpleName(), "Unable to create PDF document");
-                        }
-                    } catch (DocumentException e) {
-                        e.printStackTrace();
+
+                    @Override
+                    public void onFailure(Exception exception) {
                     }
-                    // Load report HTML data in WebView
-                    ReportsFragment.this.webReport.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
-                }
+
+                    @Override
+                    public void onProgress(int step, int total) {
+                        // Update loading text with the elapsed time
+                        Objects.requireNonNull(ReportsFragment.this.getActivity()).runOnUiThread(() -> ReportsFragment.this.progressView.setText(
+                                String.format(Locale.ROOT,
+                                        Objects.requireNonNull(ReportsFragment.this.getContext()).getString(R.string.report_loading),
+                                        (System.currentTimeMillis() - startingTime) / 1000)));
+                    }
+                });
+                task.execute();
             };
+            // Loading started
+            this.webReport.setVisibility(View.INVISIBLE);
+            this.progressView.setVisibility(View.VISIBLE);
+            this.progressBar.setVisibility(View.VISIBLE);
             if (view == this.buttonReportTimestamps) {
                 TaskReportTimestamps task = new TaskReportTimestamps(reportCallback);
                 task.execute();
@@ -126,9 +109,14 @@ public class ReportsFragment extends Fragment {
     private void loadUI(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container) {
         // Inflate the layout for this fragment
         this.rootLayout = inflater.inflate(R.layout.reports_fragment, container, false);
+        this.progressView = this.rootLayout.findViewById(R.id.progressView);
+        this.progressView.setVisibility(View.INVISIBLE);
+        this.progressBar = this.rootLayout.findViewById(R.id.progressBar);
+        this.progressBar.setVisibility(View.INVISIBLE);
         this.buttonReportTimestamps = this.rootLayout.findViewById(R.id.buttonReportTimestamps);
         this.buttonReportActivities = this.rootLayout.findViewById(R.id.buttonReportActivities);
         this.webReport = this.rootLayout.findViewById(R.id.webReport);
+        this.webReport.setVisibility(View.VISIBLE);
     }
 
     @Override
