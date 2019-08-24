@@ -8,6 +8,7 @@ import com.muflone.android.django_hotels.commands.CommandConstants;
 import com.muflone.android.django_hotels.database.models.ReportTimestamp;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +49,8 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
                 Objects.requireNonNull(item).enterTime = timestamp.datetime;
             } else if (timestamp.direction.equals(singleton.apiData.exitDirection.name)) {
                 Objects.requireNonNull(item).exitTime = timestamp.datetime;
+            } else {
+                Objects.requireNonNull(item).conditions.add(timestamp.direction);
             }
         }
         // Prepare report data
@@ -100,6 +103,16 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
             notes = singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME_MESSAGE,
                     "Missing exit time");
         }
+        // Add employee conditions
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String direction : item.conditions) {
+            stringBuilder.append(direction);
+            stringBuilder.append("<br />");
+        }
+        // Replace notes with conditions
+        if (stringBuilder.length() > 0) {
+            notes = stringBuilder.toString();
+        }
         return (text
                 .replace("{{ FIRST_NAME }}", item.firstName)
                 .replace("{{ LAST_NAME }}", item.lastName)
@@ -130,6 +143,7 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
         // Single item for timestamps hours report
         private final String firstName;
         private final String lastName;
+        private final List<String> conditions = new ArrayList<>();
         private Date enterTime;
         private Date exitTime;
 

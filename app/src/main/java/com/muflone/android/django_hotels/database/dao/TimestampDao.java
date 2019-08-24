@@ -86,7 +86,6 @@ public interface TimestampDao {
             "   ON timestamp_directions.id = timestamps.direction_id " +
             "WHERE buildings.structure_id = :structureId " +
             "  AND timestamps.datetime BETWEEN :date AND :date + 86400000 - 1 " +
-            "  AND (timestamp_directions.type_enter = 1 OR timestamp_directions.type_exit = 1) " +
             "ORDER BY employees.first_name ASC, " +
             "         employees.last_name ASC, " +
             "         timestamps.datetime ASC")
