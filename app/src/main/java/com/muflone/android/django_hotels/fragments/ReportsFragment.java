@@ -60,6 +60,9 @@ public class ReportsFragment extends Fragment {
                         ReportsFragment.this.progressView1.setVisibility(View.INVISIBLE);
                         ReportsFragment.this.progressView2.setVisibility(View.INVISIBLE);
                         ReportsFragment.this.progressBar.setVisibility(View.INVISIBLE);
+                        // Enable reports buttons after loading has completed
+                        ReportsFragment.this.buttonReportActivities.setEnabled(true);
+                        ReportsFragment.this.buttonReportTimestamps.setEnabled(true);
                     }
 
                     @Override
@@ -77,6 +80,9 @@ public class ReportsFragment extends Fragment {
                 });
                 task.execute();
             };
+            // Disable reports buttons during the load
+            ReportsFragment.this.buttonReportActivities.setEnabled(false);
+            ReportsFragment.this.buttonReportTimestamps.setEnabled(false);
             // Loading started
             this.webReport.setVisibility(View.INVISIBLE);
             this.progressView1.setVisibility(View.VISIBLE);
