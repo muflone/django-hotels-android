@@ -64,6 +64,7 @@ public class CommandConstants {
     public static final String SETTING_REPORTS_ZOOM_CONTROLS = "reports_zoom_controls";
     public static final String SETTING_REPORTS_ZOOM_DEFAULT = "reports_zoom_default";
     public static final String SETTING_REPORTS_DEFAULT_STYLE = "reports_default_style";
+    public static final String SETTING_REPORTS_CREATE_PDF = "reports_create_pdf";
 
     // Report for timestamps
     public static final String SETTING_REPORTS_TIMESTAMPS_HEADER = "reports_timestamps_header";
