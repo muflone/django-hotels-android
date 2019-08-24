@@ -54,8 +54,8 @@
 
     <string name="empty_service">Nothing</string>
 
-    <string name="structures_marked_timestamp_as_untransmitted">Marked timestamp as untrasmitted</string>
-    <string name="structures_marked_activity_as_untransmitted">Marked activity as untrasmitted</string>
+    <string name="structures_marked_timestamp_as_untransmitted">Marked timestamp as untransmitted</string>
+    <string name="structures_marked_activity_as_untransmitted">Marked activity as untransmitted</string>
     <string name="structures_unable_to_change_transmitted_activity">Unable to modify an already transmitted activity</string>
     <string name="structures_unable_to_use_contract">Unable to use the contract</string>
     <string name="structures_select_a_service_room">Select a service for the room</string>
@@ -74,7 +74,7 @@
     <string name="extras_unable_to_use_contract">Unable to use the contract</string>
     <string name="extras_max_number_of_extras">Max number of extras reached, unable to add a new extra</string>
     <string name="extras_no_extras_allowed">No extras are allowed for this structure</string>
-    <string name="extras_marked_extra_as_untransmitted">Marked extra as untrasmitted</string>
+    <string name="extras_marked_extra_as_untransmitted">Marked extra as untransmitted</string>
 
     <!-- Reports section -->
     <string name="report_timestamps">Timestamps</string>

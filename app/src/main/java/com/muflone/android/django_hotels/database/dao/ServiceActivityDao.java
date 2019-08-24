@@ -27,14 +27,14 @@ public interface ServiceActivityDao {
            "WHERE transmission IS NULL " +
            "  AND extras = 0 " +
            "ORDER BY activities.date ASC")
-    List<ServiceActivity> listByUntrasmitted();
+    List<ServiceActivity> listByUntransmitted();
 
     @Query("SELECT * " +
            "FROM activities " +
            "WHERE transmission IS NULL " +
            "  AND extras = 1 " +
            "ORDER BY activities.date ASC")
-    List<ServiceActivity> listExtrasByUntrasmitted();
+    List<ServiceActivity> listExtrasByUntransmitted();
 
     @Query("SELECT * " +
            "FROM activities " +

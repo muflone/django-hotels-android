@@ -66,7 +66,7 @@ public interface TimestampDao {
            "FROM timestamps " +
            "WHERE transmission IS NULL " +
            "ORDER BY timestamps.datetime ASC")
-    List<Timestamp> listByUntrasmitted();
+    List<Timestamp> listByUntransmitted();
 
     @Query("SELECT DISTINCT " +
             "  employees.first_name, " +

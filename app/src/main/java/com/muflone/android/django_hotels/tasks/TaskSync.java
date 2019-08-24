@@ -92,7 +92,7 @@ public class TaskSync extends AsyncTask<Void, Void, TaskResult> {
             if (data.exception == null) {
                 // Transmit any incomplete timestamp (UPLOAD)
                 this.updateProgress();
-                List<Timestamp> timestampsList = this.singleton.database.timestampDao().listByUntrasmitted();
+                List<Timestamp> timestampsList = this.singleton.database.timestampDao().listByUntransmitted();
                 for (Timestamp timestamp : timestampsList) {
                     data = this.requestApiPutTimestamp(timestamp);
                     if (data.exception == null) {
@@ -106,7 +106,7 @@ public class TaskSync extends AsyncTask<Void, Void, TaskResult> {
                 }
                 // Transmit any incomplete activity (UPLOAD)
                 this.updateProgress();
-                List<ServiceActivity> servicesActivityList = this.singleton.database.serviceActivityDao().listByUntrasmitted();
+                List<ServiceActivity> servicesActivityList = this.singleton.database.serviceActivityDao().listByUntransmitted();
                 for (ServiceActivity serviceActivity : servicesActivityList) {
                     // Transmit data
                     data = this.requestApiPutActivity(serviceActivity);
@@ -120,7 +120,7 @@ public class TaskSync extends AsyncTask<Void, Void, TaskResult> {
                 }
                 // Transmit any incomplete extra (UPLOAD)
                 this.updateProgress();
-                List<ServiceActivity> extrasActivityList = this.singleton.database.serviceActivityDao().listExtrasByUntrasmitted();
+                List<ServiceActivity> extrasActivityList = this.singleton.database.serviceActivityDao().listExtrasByUntransmitted();
                 for (ServiceActivity serviceActivity : extrasActivityList) {
                     // Transmit data
                     data = this.requestApiPutExtra(serviceActivity);
