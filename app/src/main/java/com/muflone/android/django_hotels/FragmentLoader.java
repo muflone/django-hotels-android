@@ -73,6 +73,8 @@ public class FragmentLoader {
             title = activity.getString(R.string.section_structures);
         } else if (fragmentName.equals(FRAGMENT_EXTRA)) {
             title = activity.getString(R.string.section_extras);
+        } else if (fragmentName.equals(FRAGMENT_REPORTS)) {
+            title = activity.getString(R.string.section_reports);
         } else if (fragmentName.equals(FRAGMENT_SYNC)) {
             title = activity.getString(R.string.section_sync);
         } else if (fragmentName.equals(FRAGMENT_SETTINGS)) {
