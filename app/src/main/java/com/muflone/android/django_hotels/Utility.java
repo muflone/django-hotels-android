@@ -209,7 +209,7 @@ public class Utility {
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
         intent.putExtra(Intent.EXTRA_TEXT, body);
         intent.setType("message/rfc822");
-        // Add atttachments
+        // Add attachments
         if (attachments != null) {
             for (Uri uri : attachments) {
                 if (uri != null) {

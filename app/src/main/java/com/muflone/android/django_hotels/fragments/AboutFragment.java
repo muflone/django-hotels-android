@@ -270,7 +270,7 @@ public class AboutFragment extends Fragment {
             attachment = Uri.fromFile(new File(this.singleton.database.backupDatabase(this.context)));
         } else {
             copyDetails.setTitle(this.getString(R.string.about_feedback_email_details));
-        };
+        }
         final Uri[] attachments = { attachment };
         copyDetails.setIconDrawable(R.drawable.ic_mail);
         copyDetails.setIconTint(mehdi.sakout.aboutpage.R.color.about_item_icon_color);
