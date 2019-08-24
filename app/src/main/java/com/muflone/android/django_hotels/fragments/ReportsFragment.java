@@ -85,6 +85,7 @@ public class ReportsFragment extends Fragment {
             ReportsFragment.this.buttonReportTimestamps.setEnabled(false);
             // Loading started
             this.webReport.setVisibility(View.INVISIBLE);
+            this.webReport.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
             this.progressView1.setVisibility(View.VISIBLE);
             this.progressView2.setText("");
             this.progressView2.setVisibility(View.VISIBLE);
