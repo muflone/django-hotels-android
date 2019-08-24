@@ -27,7 +27,8 @@ import java.util.Objects;
 
 public class ReportsFragment extends Fragment {
     private View rootLayout;
-    private TextView progressView;
+    private TextView progressView1;
+    private TextView progressView2;
     private ProgressBar progressBar;
     private TextView buttonReportTimestamps;
     private TextView buttonReportActivities;
@@ -56,7 +57,8 @@ public class ReportsFragment extends Fragment {
                         ReportsFragment.this.webReport.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
                         // Loading completed
                         ReportsFragment.this.webReport.setVisibility(View.VISIBLE);
-                        ReportsFragment.this.progressView.setVisibility(View.INVISIBLE);
+                        ReportsFragment.this.progressView1.setVisibility(View.INVISIBLE);
+                        ReportsFragment.this.progressView2.setVisibility(View.INVISIBLE);
                         ReportsFragment.this.progressBar.setVisibility(View.INVISIBLE);
                     }
 
@@ -67,9 +69,9 @@ public class ReportsFragment extends Fragment {
                     @Override
                     public void onProgress(int step, int total) {
                         // Update loading text with the elapsed time
-                        Objects.requireNonNull(ReportsFragment.this.getActivity()).runOnUiThread(() -> ReportsFragment.this.progressView.setText(
+                        Objects.requireNonNull(ReportsFragment.this.getActivity()).runOnUiThread(() -> ReportsFragment.this.progressView2.setText(
                                 String.format(Locale.ROOT,
-                                        Objects.requireNonNull(ReportsFragment.this.getContext()).getString(R.string.report_loading),
+                                        Objects.requireNonNull(ReportsFragment.this.getContext()).getString(R.string.report_loading2),
                                         (System.currentTimeMillis() - startingTime) / 1000)));
                     }
                 });
@@ -77,7 +79,9 @@ public class ReportsFragment extends Fragment {
             };
             // Loading started
             this.webReport.setVisibility(View.INVISIBLE);
-            this.progressView.setVisibility(View.VISIBLE);
+            this.progressView1.setVisibility(View.VISIBLE);
+            this.progressView2.setText("");
+            this.progressView2.setVisibility(View.VISIBLE);
             this.progressBar.setVisibility(View.VISIBLE);
             if (view == this.buttonReportTimestamps) {
                 TaskReportTimestamps task = new TaskReportTimestamps(reportCallback);
@@ -109,8 +113,10 @@ public class ReportsFragment extends Fragment {
     private void loadUI(@NonNull final LayoutInflater inflater, @NonNull final ViewGroup container) {
         // Inflate the layout for this fragment
         this.rootLayout = inflater.inflate(R.layout.reports_fragment, container, false);
-        this.progressView = this.rootLayout.findViewById(R.id.progressView);
-        this.progressView.setVisibility(View.INVISIBLE);
+        this.progressView1 = this.rootLayout.findViewById(R.id.progressView1);
+        this.progressView1.setVisibility(View.INVISIBLE);
+        this.progressView2 = this.rootLayout.findViewById(R.id.progressView2);
+        this.progressView2.setVisibility(View.INVISIBLE);
         this.progressBar = this.rootLayout.findViewById(R.id.progressBar);
         this.progressBar.setVisibility(View.INVISIBLE);
         this.buttonReportTimestamps = this.rootLayout.findViewById(R.id.buttonReportTimestamps);

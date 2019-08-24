@@ -43,15 +43,25 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/progressView"
+        android:id="@+id/progressView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="@string/report_loading"
+        android:text="@string/report_loading1"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layoutButtons" />
+
+    <TextView
+        android:id="@+id/progressView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/report_loading2"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressView1" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -60,7 +70,7 @@
         android:layout_height="96dp"
         android:layout_marginBottom="32dp"
         android:indeterminate="true"
-        app:layout_constraintBottom_toTopOf="@+id/progressView"
+        app:layout_constraintBottom_toTopOf="@+id/progressView1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
