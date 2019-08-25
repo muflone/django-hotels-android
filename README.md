@@ -13,8 +13,8 @@
 # Description
 
 Django Hotels Android is the companion app for 
-[Django Hotels](http://www.muflone.com/django-hotels-android/) to
-organize the work in hotels and inns. 
+[Django Hotels](http://www.muflone.com/django-hotels/) to organize the
+work in hotels and inns. 
 
 # System Requirements
 
