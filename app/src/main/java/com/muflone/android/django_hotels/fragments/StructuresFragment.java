@@ -250,7 +250,6 @@ public class StructuresFragment extends Fragment {
         private final List<String> buildingsList;
         private final HashMap<String, List<RoomStatus>> roomsList;
         private final ApiData apiData;
-        private final Singleton singleton = Singleton.getInstance();
         private final Drawable descriptionEnabledDrawable;
         private final Drawable descriptionDisabledDrawable;
 
@@ -269,7 +268,8 @@ public class StructuresFragment extends Fragment {
             this.context = context;
             this.buildingsList = listDataHeader;
             this.roomsList = listChildData;
-            this.apiData = this.singleton.apiData;
+            Singleton singleton = Singleton.getInstance();
+            this.apiData = singleton.apiData;
             this.descriptionEnabledDrawable = context.getResources().getDrawable(R.drawable.ic_note);
             this.descriptionDisabledDrawable = Utility.convertDrawableToGrayScale(
                     this.descriptionEnabledDrawable);
@@ -313,7 +313,7 @@ public class StructuresFragment extends Fragment {
             // Handle service present image LongClick
             viewHolder.servicePresentImage.setOnLongClickListener(view -> {
                 if (Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId)).size() > 0) {
-                    showAlreadyAssignedEmployees(roomsEmployeesAssignedList.get(roomStatus.roomId));
+                    showAlreadyAssignedEmployees(Objects.requireNonNull(roomsEmployeesAssignedList.get(roomStatus.roomId)));
                 }
                 return false;
             });
