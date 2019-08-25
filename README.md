@@ -20,4 +20,4 @@ work in hotels and inns.
 
 * Android >= 4.4.2
 * Django Hotels server installed and running
-* A pair or tablet key and key to interact with the Django Hotels server
+* Tablet ID and Tablet key to interact with the Django Hotels server
