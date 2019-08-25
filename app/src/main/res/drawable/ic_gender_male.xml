@@ -1,4 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ *     Project: Django Hotels Android
+ * Description: The Android client companion app for Django Hotels
+ *     Website: http://www.muflone.com/django-hotels-android/
+ *      Author: Fabio Castelli (Muflone) <muflone@muflone.com>
+ *   Copyright: 2018-2019 Fabio Castelli
+ *     License: GPL-3+
+ * Source code: https://github.com/muflone/django-hotels-android
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+-->
 <vector android:height="24dp" android:viewportHeight="512"
     android:viewportWidth="512" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
     <path android:fillColor="#00B8E9" android:pathData="M83.2,374.5c10,-8.9 34.1,-27.7 108.8,-61.8c0.5,-0.2 1,-0.5 1.5,-0.7l16.7,-7.5c0.3,-0.1 0.6,-0.3 0.9,-0.4v20.3l3.8,32.9c18.1,-5.2 41.2,-10.7 41.2,-10.7l40.4,13.9l4.2,-36.2l0,-20.2c0.5,0.2 0.9,0.4 1.4,0.6l7.8,3.5c5,2.2 9.7,4.4 14.3,6.5c9.6,4.4 18.3,8.5 26.2,12.4c51.6,25.3 69.7,39.8 78.3,47.4c3.4,3 6.6,7.8 9.4,13.8c21.2,-33.4 33.5,-73 33.5,-115.5C471.7,153.6 375.1,57 256,57S40.3,153.6 40.3,272.8c0,42.5 12.3,82.1 33.5,115.5C76.7,382.3 79.8,377.6 83.2,374.5z"/>
