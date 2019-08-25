@@ -63,6 +63,7 @@
     <string name="structures_employee_set_conditions">Assegnare una o più condizioni al dipendente</string>
 
     <!-- Extras section -->
+    <string name="extras_activities">Attività extra</string>
     <string name="extras_add_new_extra">Aggiungere un nuovo extra</string>
     <string name="extras_time_zero">Niente</string>
     <string name="extras_time_minutes">%d minuti</string>

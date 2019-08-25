@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.Utility;
 import com.muflone.android.django_hotels.commands.CommandConstants;
@@ -21,6 +22,7 @@ import java.util.Objects;
 public class TaskReportActivities extends AsyncTask<Void, Void, List<ReportActivityDetail>> {
     private final Singleton singleton = Singleton.getInstance();
     private final TaskReportInterface callback;
+    private final String extraActivitiesName = this.singleton.settings.context.getString(R.string.extras_activities);
 
     @SuppressWarnings("WeakerAccess")
     public TaskReportActivities(TaskReportInterface callback) {
@@ -50,6 +52,7 @@ public class TaskReportActivities extends AsyncTask<Void, Void, List<ReportActiv
         Table<Long, Long, Long> totalsPerContractTable = HashBasedTable.create();
         Hashtable<String, Long> totalsPerServiceList = new Hashtable<>();
         Hashtable<Long, List<ReportActivityDetail>> activityDetailsList = new Hashtable<>();
+        String totalExtraActivities;
         for (ReportActivityDetail activityDetail : result) {
             // Create new list of services
             if (! activityDetailsList.containsKey(activityDetail.contractId)) {
@@ -75,16 +78,30 @@ public class TaskReportActivities extends AsyncTask<Void, Void, List<ReportActiv
             }
             // Content footer
             StringBuilder totalServicesBuilder = new StringBuilder();
+            totalExtraActivities = null;
             for (Long serviceId : totalsPerContractTable.row(contractId).keySet()) {
-                String serviceName = Objects.requireNonNull(this.singleton.apiData.serviceMap.get(serviceId)).name;
+                String serviceName = serviceId != 0 ?
+                        // Normal service
+                        Objects.requireNonNull(this.singleton.apiData.serviceMap.get(serviceId)).name :
+                        // Extra service
+                        this.extraActivitiesName;
                 // Add totals per service
-                //noinspection ConstantConditions
                 totalsPerServiceList.put(serviceName, totalsPerContractTable.get(contractId, serviceId) +
-                        (totalsPerServiceList.containsKey(serviceName) ? totalsPerServiceList.get(serviceName) : 0L));
-
-                totalServicesBuilder.append(String.format(Locale.ROOT,
-                        reportGroupTotalsFormat, serviceName,
-                        totalsPerContractTable.get(contractId, serviceId)));
+                        (totalsPerServiceList.containsKey(serviceName) ? Objects.requireNonNull(totalsPerServiceList.get(serviceName)) : 0L));
+                if (serviceId != 0) {
+                    // Normal service
+                    totalServicesBuilder.append(String.format(Locale.ROOT,
+                            reportGroupTotalsFormat, serviceName, totalsPerContractTable.get(contractId, serviceId)));
+                } else {
+                    // Extra service
+                    totalExtraActivities = String.format(Locale.ROOT,
+                            reportGroupTotalsFormat, serviceName,
+                            Utility.formatElapsedTime(totalsPerContractTable.get(contractId, serviceId) * 60, null, false));
+                }
+            }
+            // Add extras to the end of the services
+            if (totalExtraActivities != null) {
+                totalServicesBuilder.insert(0, totalExtraActivities);
             }
             reportContentBuilder.append(reportGroupFooter
                     .replace("{{ TOTALS_SERVICES }}", totalServicesBuilder.toString())
@@ -96,11 +113,22 @@ public class TaskReportActivities extends AsyncTask<Void, Void, List<ReportActiv
         }
         // Build totals
         StringBuilder totalServicesBuilder = new StringBuilder();
+        totalExtraActivities = null;
         //noinspection unchecked
         List<String> servicesTotalsKeysList = Utility.sortHashtableKeys(totalsPerServiceList, false);
         for (String serviceName : servicesTotalsKeysList) {
-            totalServicesBuilder.append(String.format(Locale.ROOT,
-                    reportTotalsTotalsFormat, serviceName, totalsPerServiceList.get(serviceName)));
+            if (! serviceName.equals(this.extraActivitiesName)) {
+                // Normal service
+                totalServicesBuilder.append(String.format(Locale.ROOT, reportTotalsTotalsFormat, serviceName, totalsPerServiceList.get(serviceName)));
+            } else {
+                // Extra service
+                totalExtraActivities = String.format(Locale.ROOT, reportTotalsTotalsFormat, serviceName,
+                        Utility.formatElapsedTime(Objects.requireNonNull(totalsPerServiceList.get(serviceName)) * 60, null, false));
+            }
+        }
+        // Add extras to the end of the services
+        if (totalExtraActivities != null) {
+            totalServicesBuilder.insert(0, totalExtraActivities);
         }
         // Show report data
         String reportData = reportHeader +
@@ -136,8 +164,13 @@ public class TaskReportActivities extends AsyncTask<Void, Void, List<ReportActiv
                 .replace("{{ ROOM_ID }}", String.valueOf(item.roomId))
                 .replace("{{ ROOM }}", TextUtils.htmlEncode(item.room))
                 .replace("{{ SERVICE_ID }}", String.valueOf(item.serviceId))
-                .replace("{{ SERVICE }}", TextUtils.htmlEncode(item.service))
-                .replace("{{ DESCRIPTION }}", TextUtils.htmlEncode(item.description))
+                .replace("{{ SERVICE }}", TextUtils.htmlEncode(
+                        item.serviceId != 0 ? item.service : this.extraActivitiesName))
+                .replace("{{ DESCRIPTION }}", item.serviceId != 0 ?
+                        // Normal service
+                        TextUtils.htmlEncode(item.description) :
+                        // Extra service
+                        Utility.formatElapsedTime(item.service_qty * 60, null, false))
         );
     }
 }

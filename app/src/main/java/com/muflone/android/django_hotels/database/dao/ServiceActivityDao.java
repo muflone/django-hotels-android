@@ -71,12 +71,13 @@ public interface ServiceActivityDao {
             "  employees.last_name, " +
             "  contracts.id AS contract_id, " +
             "  activities.date AS datetime, " +
-            "  buildings.id AS building_id, " +
-            "  buildings.name AS building, " +
-            "  rooms.id AS room_id, " +
-            "  rooms.name AS room, " +
-            "  services.id AS service_id, " +
-            "  services.name AS service, " +
+            "  COALESCE(buildings.id, 0) AS building_id, " +
+            "  COALESCE(buildings.name, '') AS building, " +
+            "  COALESCE(rooms.id, 0) AS room_id, " +
+            "  COALESCE(rooms.name, activities.description) AS room, " +
+            "  COALESCE(services.id, 0) AS service_id, " +
+            "  COALESCE(services.name, '') AS service, " +
+            "  activities.service_qty, " +
             "  activities.description " +
             "FROM activities " +
             "INNER JOIN contracts " +
@@ -85,11 +86,11 @@ public interface ServiceActivityDao {
             "   ON companies.id = contracts.company_id " +
             "INNER JOIN employees " +
             "   ON employees.id = contracts.employee_id " +
-            "INNER JOIN rooms " +
+            "LEFT JOIN rooms " +
             "   ON rooms.id = activities.room_id " +
-            "INNER JOIN buildings " +
+            "LEFT JOIN buildings " +
             "   ON buildings.id = rooms.building_id " +
-            "INNER JOIN services " +
+            "LEFT JOIN services " +
             "   ON services.id = activities.service_id " +
             "WHERE activities.structure_id = :structureId " +
             "  AND activities.date = :date " +
