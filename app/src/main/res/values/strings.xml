@@ -130,7 +130,7 @@
     <!-- About section -->
     <string name="about_contacts">Contacts</string>
     <string name="about_license">License</string>
-    <string name="about_app_license">License GPL-2+</string>
+    <string name="about_app_license">License GPL-3+</string>
     <string name="about_credits">Credits</string>
     <string name="about_application_information">Application information</string>
     <string name="about_settings_information">Settings information</string>
