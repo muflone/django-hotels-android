@@ -132,7 +132,7 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
                         singleton.settings.getString(CommandConstants.SETTING_REPORTS_TIMESTAMPS_MISSING_EXIT_TIME_NO, "") :
                         "")
                 .replace("{{ EXIT_TIME_STYLE }}", item.exitTime == null ? "exit_empty" : "exit")
-                .replace("{{ DURATION_TIME }}", Utility.formatElapsedTime(duration, durationFormat))
+                .replace("{{ DURATION_TIME }}", Utility.formatElapsedTime(duration, durationFormat, true))
                 .replace("{{ DURATION_TIME_STYLE }}", duration == 0 ? "duration_empty" : "duration")
                 .replace("{{ NOTES }}", notes == null ? "" : notes)
                 .replace("{{ NOTES_STYLE }}", notes == null ? "notes_empty" : "notes")

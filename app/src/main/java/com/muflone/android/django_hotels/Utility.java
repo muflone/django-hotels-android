@@ -334,17 +334,21 @@ public class Utility {
         }
     }
 
-    public static String formatElapsedTime(long seconds, String format) {
+    public static String formatElapsedTime(long seconds, String format, boolean showSeconds) {
         // Format elapsed time
+        String result;
         long hours = TimeUnit.SECONDS.toHours(seconds);
         seconds -= TimeUnit.HOURS.toSeconds(hours);
 
         long minutes = TimeUnit.SECONDS.toMinutes (seconds);
         seconds -= TimeUnit.MINUTES.toSeconds(minutes);
 
-        return seconds > 0 ?
-                String.format (format == null ? "%02d:%02d:%02d" : format, hours, minutes, seconds) :
-                "";
+        if (showSeconds) {
+            result = String.format (format == null ? "%02d:%02d:%02d" : format, hours, minutes, seconds);
+        } else {
+            result = String.format (format == null ? "%02d:%02d" : format, hours, minutes);
+        }
+        return hours != 0 | minutes != 0 | seconds != 0 ? result : "";
     }
 
     @SuppressWarnings("unchecked")
