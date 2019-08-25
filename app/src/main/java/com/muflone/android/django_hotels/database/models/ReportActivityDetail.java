@@ -46,4 +46,7 @@ public class ReportActivityDetail {
 
     @ColumnInfo(name = "description")
     public String description;
+
+    @ColumnInfo(name = "service_qty")
+    public long service_qty;
 }

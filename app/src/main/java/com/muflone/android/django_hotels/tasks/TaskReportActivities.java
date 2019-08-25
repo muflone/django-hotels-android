@@ -58,8 +58,8 @@ public class TaskReportActivities extends AsyncTask<Void, Void, List<ReportActiv
             Objects.requireNonNull(activityDetailsList.get(activityDetail.contractId)).add(activityDetail);
             totalsPerContractTable.put(activityDetail.contractId, activityDetail.serviceId,
                     totalsPerContractTable.contains(activityDetail.contractId, activityDetail.serviceId) ?
-                    totalsPerContractTable.get(activityDetail.contractId, activityDetail.serviceId) + 1
-                    : 1);
+                            totalsPerContractTable.get(activityDetail.contractId, activityDetail.serviceId) + activityDetail.service_qty :
+                            activityDetail.service_qty);
         }
         // Loop results to prepare content data
         StringBuilder reportContentBuilder = new StringBuilder();
