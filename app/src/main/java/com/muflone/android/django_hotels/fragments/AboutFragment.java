@@ -31,6 +31,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -290,7 +291,9 @@ public class AboutFragment extends Fragment {
         Uri attachment = null;
         if (attachDatabase) {
             copyDetails.setTitle(this.getString(R.string.about_feedback_email_details_with_attached_db));
-            attachment = Uri.fromFile(new File(this.singleton.database.backupDatabase(this.context)));
+            attachment = FileProvider.getUriForFile(this.context,
+                    this.context.getString(R.string.app_authority_provider),
+                    new File(this.singleton.database.backupDatabase(this.context)));
         } else {
             copyDetails.setTitle(this.getString(R.string.about_feedback_email_details));
         }

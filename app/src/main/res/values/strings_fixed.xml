@@ -32,6 +32,9 @@
     <string name="author_web" translatable="false">https://www.muflone.com/</string>
     <string name="author_twitter" translatable="false">il_muflone</string>
 
+    <!-- File provider authority -->
+    <string name="app_authority_provider" translatable="false">com.muflone.android.django_hotels.provider</string>
+
     <!-- Generic descriptions -->
     <string name="placeholder" translatable="false">Placeholder</string>
 
