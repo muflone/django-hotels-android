@@ -65,7 +65,7 @@ public class AutoConfigurationActivity extends AppCompatActivity {
             }
         }
         // Go to the main activity and terminate this activity
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, LoaderActivity.class));
         this.finish();
     }
 }
