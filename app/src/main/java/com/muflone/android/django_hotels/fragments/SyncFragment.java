@@ -125,7 +125,10 @@ public class SyncFragment extends Fragment {
                                     if (singleton.apiData.structuresMap.size() > 0) {
                                         // Select the latest chosen structure or the first available
                                         SortedSet<Structure> sortedStructures = new TreeSet<>(singleton.apiData.structuresMap.values());
-                                        long latestStructureSelected = SyncFragment.this.singleton.selectedStructure.id;
+                                        long latestStructureSelected = (
+                                                SyncFragment.this.singleton.selectedStructure != null ?
+                                                SyncFragment.this.singleton.selectedStructure.id :
+                                                0);
                                         SyncFragment.this.singleton.selectedStructure = (
                                                 singleton.apiData.structuresMap.containsKey(latestStructureSelected) ?
                                                 singleton.apiData.structuresMap.get(latestStructureSelected) :
