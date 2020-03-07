@@ -54,15 +54,11 @@ public interface TimestampDao {
            "FROM timestamps " +
            "INNER JOIN contracts " +
            "   ON contracts.id = timestamps.contract_id " +
-           "INNER JOIN contract_buildings " +
-           "   ON contract_buildings.contract_id = contracts.id " +
-           "INNER JOIN buildings " +
-           "   ON buildings.id = contract_buildings.building_id " +
            "INNER JOIN employees " +
            "   ON employees.id = contracts.employee_id " +
            "INNER JOIN timestamp_directions " +
            "   ON timestamp_directions.id = timestamps.direction_id " +
-           "WHERE buildings.structure_id = :structureId " +
+           "WHERE timestamps.structure_id = :structureId " +
            "  AND timestamps.datetime BETWEEN :date AND :date + 86400000 - 1 " +
            "  AND (timestamp_directions.type_enter = 1 OR timestamp_directions.type_exit = 1) " +
            "ORDER BY timestamps.datetime DESC " +
@@ -79,11 +75,12 @@ public interface TimestampDao {
            "FROM timestamps " +
            "INNER JOIN timestamp_directions " +
            "   ON timestamp_directions.id = timestamps.direction_id " +
-           "WHERE contract_id = :contractId " +
-           "  AND datetime = :date " +
+           "WHERE timestamps.contract_id = :contractId " +
+           "  AND timestamps.datetime = :date " +
+           "  AND timestamps.structure_id = :structureId " +
            "  AND timestamp_directions.type_enter = 0 " +
            "  AND timestamp_directions.type_exit = 0")
-    List<Timestamp> listByContractNotEnterExit(Date date, long contractId);
+    List<Timestamp> listByContractNotEnterExit(Date date, long contractId, long structureId);
 
     @Query("SELECT * " +
            "FROM timestamps " +
@@ -99,15 +96,11 @@ public interface TimestampDao {
             "FROM timestamps " +
             "INNER JOIN contracts " +
             "   ON contracts.id = timestamps.contract_id " +
-            "INNER JOIN contract_buildings " +
-            "   ON contract_buildings.contract_id = contracts.id " +
-            "INNER JOIN buildings " +
-            "   ON buildings.id = contract_buildings.building_id " +
             "INNER JOIN employees " +
             "   ON employees.id = contracts.employee_id " +
             "INNER JOIN timestamp_directions " +
             "   ON timestamp_directions.id = timestamps.direction_id " +
-            "WHERE buildings.structure_id = :structureId " +
+            "WHERE timestamps.structure_id = :structureId " +
             "  AND timestamps.datetime BETWEEN :date AND :date + 86400000 - 1 " +
             "ORDER BY employees.first_name ASC, " +
             "         employees.last_name ASC, " +

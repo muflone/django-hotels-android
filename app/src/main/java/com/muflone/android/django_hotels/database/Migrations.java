@@ -109,4 +109,27 @@ public class Migrations {
             super.migrate(database, actions.toArray(new String[0]));
         }
     };
+
+    static final MigrationSafe MIGRATION_8_TO_9 = new MigrationSafe(8, 9) {
+        @Override
+        public void migrate(@NotNull SupportSQLiteDatabase database) {
+            // Define migrations actions
+            List<String> actions = new ArrayList<>();
+            // Add new column structure_id to table timestamps
+            actions.add("ALTER TABLE timestamps " +
+                        "ADD COLUMN structure_id INTEGER NOT NULL DEFAULT 0");
+            // Update column structure using the structure from the contract
+            actions.add("UPDATE timestamps " +
+                        "SET structure_id = COALESCE(( " +
+                        "  SELECT buildings.structure_id " +
+                        "  FROM contract_buildings" +
+                        "  INNER JOIN buildings " +
+                        "     ON buildings.id = contract_buildings.building_id " +
+                        "  WHERE contract_buildings.contract_id = timestamps.contract_id " +
+                        "), timestamps.structure_id) " +
+                        "WHERE timestamps.structure_id = 0");
+            // Execute safe migration
+            super.migrate(database, actions.toArray(new String[0]));
+        }
+    };
 }

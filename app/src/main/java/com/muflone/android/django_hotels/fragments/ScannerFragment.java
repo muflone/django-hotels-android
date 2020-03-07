@@ -185,7 +185,9 @@ public class ScannerFragment extends Fragment {
                                     contract.employee.firstName + " " + contract.employee.lastName,
                                     Toast.LENGTH_SHORT).show();
                             // Insert new Timestamp in background
-                            Timestamp timestamp = new Timestamp(0, contract.id,
+                            Timestamp timestamp = new Timestamp(0,
+                                    this.singleton.selectedStructure.id,
+                                    contract.id,
                                     this.scanType == ScanType.SCAN_TYPE_ENTER ?
                                             this.apiData.enterDirection.id : this.apiData.exitDirection.id,
                                     Utility.getCurrentDateTime(),

@@ -36,12 +36,16 @@ import java.util.Date;
 
 @Entity(tableName = "timestamps",
         indices = {
-                @Index(value = {"contract_id", "direction_id", "datetime"}, unique = true),
+                @Index(value = {"structure_id", "contract_id", "direction_id", "datetime"},
+                        unique = true),
         })
 public class Timestamp {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     public final long id;
+
+    @ColumnInfo(name = "structure_id")
+    public final long structureId;
 
     @ColumnInfo(name = "contract_id", index = true)
     public final long contractId;
@@ -61,8 +65,9 @@ public class Timestamp {
     @Nullable
     public Date transmission;
 
-    public Timestamp(long id, long contractId, long directionId, @NotNull Date datetime, @NonNull String description, @Nullable Date transmission) {
+    public Timestamp(long id, long structureId, long contractId, long directionId, @NotNull Date datetime, @NonNull String description, @Nullable Date transmission) {
         this.id = id;
+        this.structureId = structureId;
         this.contractId = contractId;
         this.directionId = directionId;
         this.datetime = datetime;
