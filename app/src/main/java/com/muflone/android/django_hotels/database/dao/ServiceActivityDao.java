@@ -59,7 +59,6 @@ public interface ServiceActivityDao {
            "ORDER BY activities.date ASC")
     List<ServiceActivity> listExtrasByUntransmitted();
 
-    @SuppressWarnings("NullableProblems")
     @Query("SELECT * " +
            "FROM activities " +
            "WHERE date = :date " +
@@ -68,7 +67,6 @@ public interface ServiceActivityDao {
            "ORDER BY room_id ASC")
     List<ServiceActivity> listExtrasByDateContract(@NonNull Date date, long contractId);
 
-    @SuppressWarnings("NullableProblems")
     @Query("SELECT * " +
            "FROM activities " +
            "WHERE date = :date " +
@@ -77,7 +75,6 @@ public interface ServiceActivityDao {
            "ORDER BY room_id ASC")
     List<ServiceActivity> listByDateContract(@NonNull Date date, long contractId);
 
-    @SuppressWarnings("NullableProblems")
     @Query("SELECT * " +
            "FROM activities " +
            "WHERE date = :date " +
@@ -85,7 +82,6 @@ public interface ServiceActivityDao {
            "  AND room_id = :roomId")
     List<ServiceActivity> listByDateContract(@NonNull Date date, long contractId, long roomId);
 
-    @SuppressWarnings("NullableProblems")
     @Query("SELECT " +
             "  companies.id AS company_id, " +
             "  companies.name AS company, " +
