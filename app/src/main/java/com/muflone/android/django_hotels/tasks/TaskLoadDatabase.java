@@ -145,11 +145,17 @@ public class TaskLoadDatabase extends AsyncTask<Void, Void, TaskResult> {
                     building.employees.add(employee);
                 }
             }
+            // Load contracts for each structure
+            for(Contract contract : contractDao.listByStructure(structure.id)) {
+                contract.employee = employeeDao.findById(contract.employeeId);
+                contract.contractType = contractTypeDao.findById(contract.contractTypeId);
+                contract.jobType = jobTypeDao.findById(contract.jobTypeId);
+                data.contractsStructureGuidTable.put(structure.id, contract.guid, contract);
+            }
         }
         // Load Contracts
         for(Contract contract : contractDao.listAll()) {
             data.contractsMap.put(contract.id, contract);
-            data.contractsGuidMap.put(contract.guid, contract);
             contract.employee = employeeDao.findById(contract.employeeId);
             data.employeesMap.put(contract.employee.id, contract.employee);
             contract.employee.contractBuildings = contractBuildingsDao.listByEmployee(contract.employeeId);

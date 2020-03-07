@@ -178,9 +178,9 @@ public class ScannerFragment extends Fragment {
                                 uri.getQueryParameter("secret"))).replaceAll(
                                 "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
                                 "$1-$2-$3-$4-$5");
-                        if (this.apiData.contractsGuidMap.containsKey(secret)) {
+                        if (this.apiData.contractsStructureGuidTable.contains(this.singleton.selectedStructure.id, secret)) {
                             // Valid contract found
-                            Contract contract = Objects.requireNonNull(this.apiData.contractsGuidMap.get(secret));
+                            Contract contract = Objects.requireNonNull(this.apiData.contractsStructureGuidTable.get(this.singleton.selectedStructure.id, secret));
                             Toast.makeText(this.context,
                                     contract.employee.firstName + " " + contract.employee.lastName,
                                     Toast.LENGTH_SHORT).show();
