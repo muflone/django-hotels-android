@@ -103,7 +103,7 @@ public class TaskLoadDatabase extends AsyncTask<Void, Void, TaskResult> {
         StructureDao structureDao = this.singleton.database.structureDao();
         TimestampDirectionDao timestampDirectionDao = this.singleton.database.timestampDirectionDao();
         // Load Structures
-        for(Structure structure : structureDao.listAll()) {
+        for (Structure structure : structureDao.listAll()) {
             data.structuresMap.put(structure.id, structure);
             structure.company = companyDao.findById(structure.companyId);
             structure.brand = brandDao.findById(structure.brandId);
@@ -125,7 +125,7 @@ public class TaskLoadDatabase extends AsyncTask<Void, Void, TaskResult> {
             ArrayList<Building> buildingsAndExtrasList = new ArrayList<>();
             buildingsAndExtrasList.addAll(structure.buildings);
             buildingsAndExtrasList.addAll(structure.extras);
-            for(Building building : buildingsAndExtrasList) {
+            for (Building building : buildingsAndExtrasList) {
                 data.buildingsMap.put(building.id, building);
                 // Load building location
                 building.location = locationDao.findById(building.locationId);
@@ -146,7 +146,7 @@ public class TaskLoadDatabase extends AsyncTask<Void, Void, TaskResult> {
                 }
             }
             // Load contracts for each structure
-            for(Contract contract : contractDao.listByStructure(structure.id)) {
+            for (Contract contract : contractDao.listByStructure(structure.id)) {
                 contract.employee = employeeDao.findById(contract.employeeId);
                 contract.contractType = contractTypeDao.findById(contract.contractTypeId);
                 contract.jobType = jobTypeDao.findById(contract.jobTypeId);
@@ -154,7 +154,7 @@ public class TaskLoadDatabase extends AsyncTask<Void, Void, TaskResult> {
             }
         }
         // Load Contracts
-        for(Contract contract : contractDao.listAll()) {
+        for (Contract contract : contractDao.listAll()) {
             data.contractsMap.put(contract.id, contract);
             contract.employee = employeeDao.findById(contract.employeeId);
             data.employeesMap.put(contract.employee.id, contract.employee);
@@ -168,7 +168,7 @@ public class TaskLoadDatabase extends AsyncTask<Void, Void, TaskResult> {
             data.contractsMap.put(contract.id, contract);
         }
         // Load Services
-        for(Service service : serviceDao.listAll()) {
+        for (Service service : serviceDao.listAll()) {
             if (service.extra_service) {
                 data.serviceExtraMap.put(service.id, service);
             } else {
@@ -176,14 +176,14 @@ public class TaskLoadDatabase extends AsyncTask<Void, Void, TaskResult> {
             }
         }
         // Load Timestamp directions
-        for(TimestampDirection timestampDirection : timestampDirectionDao.listAll()) {
+        for (TimestampDirection timestampDirection : timestampDirectionDao.listAll()) {
             data.timestampDirectionsMap.put(timestampDirection.id, timestampDirection);
         }
         data.enterDirection = timestampDirectionDao.findByTypeEnter();
         data.exitDirection = timestampDirectionDao.findByTypeExit();
         data.timestampDirectionsNotEnterExit = timestampDirectionDao.listNotEnterExit();
         // Load Commands
-        for(Command command : commandDao.listAll()) {
+        for (Command command : commandDao.listAll()) {
             // Get Command Usage
             CommandUsage commandUsage = commandUsageDao.findById(command.id);
             if (commandUsage == null) {

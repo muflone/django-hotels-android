@@ -166,10 +166,10 @@ public class ExtrasFragment extends Fragment {
         // Inflate the layout for this fragment
         this.rootLayout = inflater.inflate(R.layout.extras_fragment, container, false);
         // Save references
-        this.scrollView = rootLayout.findViewById(R.id.scrollView);
-        this.employeesView = rootLayout.findViewById(R.id.employeesView);
-        this.extrasView = rootLayout.findViewById(R.id.extrasView);
-        this.addExtraButton = rootLayout.findViewById(R.id.addExtraButton);
+        this.scrollView = this.rootLayout.findViewById(R.id.scrollView);
+        this.employeesView = this.rootLayout.findViewById(R.id.employeesView);
+        this.extrasView = this.rootLayout.findViewById(R.id.extrasView);
+        this.addExtraButton = this.rootLayout.findViewById(R.id.addExtraButton);
         // Prepares employee views updater
         this.employeeViewsUpdater = new EmployeeViewsUpdater(
                 rootLayout.findViewById(R.id.employeeIdView),
