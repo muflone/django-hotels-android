@@ -162,7 +162,7 @@ public class TaskReportTimestamps extends AsyncTask<Void, Void, List<ReportTimes
         );
     }
 
-    private class ReportTimestampListItem {
+    private static class ReportTimestampListItem {
         // Single item for timestamps hours report
         private final String firstName;
         private final String lastName;

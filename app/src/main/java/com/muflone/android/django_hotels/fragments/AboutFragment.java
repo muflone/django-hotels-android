@@ -385,7 +385,7 @@ public class AboutFragment extends Fragment {
         }
     }
 
-    private class CommandValue {
+    private static class CommandValue {
         // Container for CommandValue
         private final String format;
         private final Command command;
