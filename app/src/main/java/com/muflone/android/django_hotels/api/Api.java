@@ -75,14 +75,12 @@ public class Api {
             int timeout = settings.getInteger(
                     CommandConstants.SETTING_SYNC_CONNECT_TIMEOUT,
                     Constants.SYNC_CONNECT_TIMEOUT_DEFAULT);
-            connection.setConnectTimeout(timeout > Constants.SYNC_CONNECT_TIMEOUT_DEFAULT ? timeout :
-                    Constants.SYNC_CONNECT_TIMEOUT_DEFAULT);
+            connection.setConnectTimeout(Math.max(timeout, Constants.SYNC_CONNECT_TIMEOUT_DEFAULT));
             // Set connection read timeout (don't allow lower timeout than default)
             timeout = settings.getInteger(
                     CommandConstants.SETTING_SYNC_READ_TIMEOUT,
                     Constants.SYNC_READ_TIMEOUT_DEFAULT);
-            connection.setReadTimeout(timeout > Constants.SYNC_READ_TIMEOUT_DEFAULT ? timeout :
-                    Constants.SYNC_READ_TIMEOUT_DEFAULT);
+            connection.setReadTimeout(Math.max(timeout, Constants.SYNC_READ_TIMEOUT_DEFAULT));
             // Add custom headers
             connection.setRequestProperty("client-agent", this.settings.getPackageName());
             connection.setRequestProperty("client-version", this.settings.getApplicationVersion());

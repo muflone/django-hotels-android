@@ -247,7 +247,7 @@ public class Utility {
         // Extract leftmost part of a string
         return string == null ? null : (string.substring(
                 0,
-                string.length() >= length ? length : string.length()));
+                Math.min(string.length(), length)));
     }
 
     public static String right(String string, int length) {

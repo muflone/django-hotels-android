@@ -341,7 +341,7 @@ public class ExtrasFragment extends Fragment {
             } else if (step < 0) {
                 // Decrease time
                 step = Math.abs(step);
-                extraStatus.minutes -= extraStatus.minutes > step ? step : extraStatus.minutes;
+                extraStatus.minutes -= Math.min(extraStatus.minutes, step);
             }
             // Update extra view time
             long minutes = extraStatus.minutes % 60;
