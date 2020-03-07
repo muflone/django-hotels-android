@@ -25,6 +25,8 @@ package com.muflone.android.django_hotels.api;
 
 import android.annotation.SuppressLint;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import com.muflone.android.django_hotels.Singleton;
 import com.muflone.android.django_hotels.database.models.Brand;
 import com.muflone.android.django_hotels.database.models.Building;
@@ -53,7 +55,7 @@ public class ApiData {
     public final HashMap<Long, CommandUsage> commandsUsageMap;
     public final HashMap<Long, Company> companiesMap;
     public final HashMap<Long, Contract> contractsMap;
-    public final HashMap<String, Contract> contractsGuidMap;
+    public final Table<Long, String, Contract> contractsStructureGuidTable;
     public final HashMap<Long, ContractType> contractTypeMap;
     public final HashMap<Long, Employee> employeesMap;
     public final HashMap<Long, JobType> jobTypesMap;
@@ -77,7 +79,7 @@ public class ApiData {
         this.commandsUsageMap = new HashMap<>();
         this.companiesMap = new HashMap<>();
         this.contractsMap = new HashMap<>();
-        this.contractsGuidMap = new HashMap<>();
+        this.contractsStructureGuidTable = HashBasedTable.create();
         this.contractTypeMap = new HashMap<>();
         this.employeesMap = new HashMap<>();
         this.jobTypesMap = new HashMap<>();

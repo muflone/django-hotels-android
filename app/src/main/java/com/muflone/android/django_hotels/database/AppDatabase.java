@@ -117,6 +117,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 .addMigrations(Migrations.MIGRATION_5_TO_6)
                 .addMigrations(Migrations.MIGRATION_6_TO_7)
                 .addMigrations(Migrations.MIGRATION_7_TO_8)
+                .addMigrations(Migrations.MIGRATION_8_TO_9)
                 // allow queries on the main thread.
                 // Don’t do this on a real app! See PersistenceBasicSample for an example.
                 //.allowMainThreadQueries()

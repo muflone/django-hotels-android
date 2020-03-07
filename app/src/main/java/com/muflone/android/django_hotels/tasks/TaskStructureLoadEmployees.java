@@ -86,11 +86,15 @@ public class TaskStructureLoadEmployees extends AsyncTask<Void, Void, Void> {
                 }
             }
             // Add employee status
-            this.employeesStatusList.add(new EmployeeStatus(contract,
+            this.employeesStatusList.add(new EmployeeStatus(
+                    this.singleton.selectedStructure,
+                    contract,
                     this.singleton.selectedDate,
                     this.singleton.apiData.timestampDirectionsNotEnterExit,
                     this.singleton.database.timestampDao().listByContractNotEnterExit(
-                            this.singleton.selectedDate, contract.id)));
+                            this.singleton.selectedDate,
+                            contract.id,
+                            this.singleton.selectedStructure.id)));
         }
         return null;
     }

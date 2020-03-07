@@ -24,6 +24,7 @@
 package com.muflone.android.django_hotels;
 
 import com.muflone.android.django_hotels.database.models.Contract;
+import com.muflone.android.django_hotels.database.models.Structure;
 import com.muflone.android.django_hotels.database.models.Timestamp;
 import com.muflone.android.django_hotels.database.models.TimestampDirection;
 import com.muflone.android.django_hotels.tasks.TaskStructureUpdateEmployeeStatus;
@@ -33,6 +34,7 @@ import java.util.Date;
 import java.util.List;
 
 public class EmployeeStatus {
+    public final Structure structure;
     public final Contract contract;
     public final Date date;
     public final List<TimestampDirection> timestampDirections;
@@ -40,9 +42,10 @@ public class EmployeeStatus {
     public final boolean[] directionsCheckedArray;
 
     @SuppressWarnings("WeakerAccess")
-    public EmployeeStatus(Contract contract, Date date,
+    public EmployeeStatus(Structure structure, Contract contract, Date date,
                           List<TimestampDirection> timestampDirections,
                           List<Timestamp> timestampsEmployee) {
+        this.structure = structure;
         this.contract = contract;
         this.date = date;
         // Initialize directionsArray and directionsCheckedArray

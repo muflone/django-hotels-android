@@ -285,10 +285,11 @@ public class TaskSync extends AsyncTask<Void, Void, TaskResult> {
         // Send timestamps to the server
         try {
             jsonRoot = this.api.getJSONObject(String.format(Locale.ROOT,
-                    "put/timestamp/%s/%s/%d/%d/%d/%s/",
+                    "put/timestamp/%s/%s/%d/%d/%d/%d/%s/",
                     this.api.settings.getTabletID(),
                     this.api.getCurrentTokenCode(),
                     timestamp.contractId,
+                    timestamp.structureId,
                     timestamp.directionId,
                     timestamp.datetime.getTime() / 1000,
                     URLEncoder.encode(timestamp.description.replace("\n", "\\n"), "UTF-8")));

@@ -42,6 +42,15 @@ public interface ContractDao {
            "FROM contracts")
     List<Contract> listAll();
 
+    @Query("SELECT DISTINCT contracts.* " +
+           "FROM contracts " +
+           "INNER JOIN contract_buildings " +
+           "   ON contract_buildings.contract_id = contracts.id " +
+           "INNER JOIN buildings " +
+           "   ON buildings.id = contract_buildings.building_id " +
+           "WHERE buildings.structure_id = :structureId")
+    List<Contract> listByStructure(long structureId);
+
     @Query("SELECT * " +
            "FROM contracts " +
            "WHERE id = :id")

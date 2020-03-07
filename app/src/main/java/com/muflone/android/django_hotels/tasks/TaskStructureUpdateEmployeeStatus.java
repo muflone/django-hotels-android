@@ -40,7 +40,7 @@ public class TaskStructureUpdateEmployeeStatus extends AsyncTask<EmployeeStatus,
     protected Void doInBackground(EmployeeStatus... params) {
         EmployeeStatus employeeStatus = params[0];
         List<Timestamp> timestampsEmployee = this.singleton.database.timestampDao().listByContractNotEnterExit(
-                employeeStatus.date, employeeStatus.contract.id);
+                employeeStatus.date, employeeStatus.contract.id, employeeStatus.structure.id);
         // Delete any previous timestamp
         this.singleton.database.timestampDao().delete(timestampsEmployee.toArray(new Timestamp[0]));
         // Re-add every active timestamp
@@ -48,7 +48,7 @@ public class TaskStructureUpdateEmployeeStatus extends AsyncTask<EmployeeStatus,
         for (int index = 0; index < employeeStatus.timestampDirections.size(); index++) {
             if (employeeStatus.directionsCheckedArray[index]) {
                 TimestampDirection timestampDirection = employeeStatus.timestampDirections.get(index);
-                timestampsEmployee.add(new Timestamp(0, employeeStatus.contract.id,
+                timestampsEmployee.add(new Timestamp(0, employeeStatus.structure.id, employeeStatus.contract.id,
                         timestampDirection.id, employeeStatus.date,"", null));
             }
         }
