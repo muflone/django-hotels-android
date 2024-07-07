@@ -91,9 +91,9 @@
     <string name="extras_add_new_extra">Add a new extra</string>
     <string name="extras_time_zero">Nothing</string>
     <string name="extras_time_minutes">%d minutes</string>
-    <string name="extras_time_hour_minutes">%d hour and %d minutes</string>
+    <string name="extras_time_hour_minutes">%1$d hour and %2$d minutes</string>
     <string name="extras_time_hour">%d hour</string>
-    <string name="extras_time_hours_minutes">%d hours and %d minutes</string>
+    <string name="extras_time_hours_minutes">%1$d hours and %2$d minutes</string>
     <string name="extras_time_hours">%d hours</string>
     <string name="extras_unable_to_change_transmitted_activity">Unable to modify an already transmitted extra</string>
     <string name="extras_unable_to_use_contract">Unable to use the contract</string>
@@ -148,8 +148,8 @@
     <string name="sync_error_invalid_server_status_detail">Server status: %s</string>
     <string name="sync_error_invalid_server_response">Invalid response from the server, please check your internet connection</string>
     <string name="sync_error_retransmitted_response">The activity was already transmitted and it\'s refused from the server</string>
-    <string name="sync_error_retransmitted_quantity">An activity was already transmitted with a different quantity\nEmployee: %s %s\nStructure: %s\nBuilding: %s\nRoom: %s\nDate: %s\nQuantity: %d</string>
-    <string name="sync_error_retransmitted_description">Activity was already transmitted with a different description\nEmployee: %s %s\nStructure: %s\nBuilding: %s\nRoom: %s\nDate: %s\nDescription: %s</string>
+    <string name="sync_error_retransmitted_quantity">An activity was already transmitted with a different quantity\nEmployee: %1$s %2$s\nStructure: %3$s\nBuilding: %4$s\nRoom: %5$s\nDate: %6$s\nQuantity: %7$d</string>
+    <string name="sync_error_retransmitted_description">Activity was already transmitted with a different description\nEmployee: %1$s %2$s\nStructure: %3$s\nBuilding: %4$s\nRoom: %5$s\nDate: %6$s\nDescription: %7$s</string>
 
     <!-- About section -->
     <string name="about_contacts">Contacts</string>
@@ -160,7 +160,7 @@
     <string name="about_settings_information">Settings information</string>
     <string name="about_system_information">System information</string>
     <string name="about_configured_commands">Configured commands for the context %s</string>
-    <string name="about_configured_commands_format">ID: %d\nName: %s\nType: %s\nUses: %d/%d</string>
+    <string name="about_configured_commands_format">ID: %1$d\nName: %2$s\nType: %3$s\nUses: %4$d/%5$d</string>
     <string name="about_configured_commands_none">There are no configured commands</string>
     <string name="about_feedback">Feedback</string>
     <string name="about_tools">Tools</string>
@@ -169,7 +169,7 @@
     <string name="about_application_information_version">Application version</string>
     <string name="about_application_information_package">Application package</string>
 
-    <string name="about_system_information_android">Android version: %s %s</string>
+    <string name="about_system_information_android">Android version: %1$s %2$s</string>
     <string name="about_system_information_sdk">SDK API Level</string>
     <string name="about_system_information_rom">ROM version</string>
     <string name="about_system_information_kernel">Kernel version</string>
@@ -179,8 +179,8 @@
     <string name="about_system_information_product">Product</string>
     <string name="about_system_information_brand">Brand</string>
     <string name="about_system_information_device">Device</string>
-    <string name="about_system_information_timezone">Timezone: %s (%s)</string>
-    <string name="about_system_information_resolution">Resolution: %sx%s (%s DPI)</string>
+    <string name="about_system_information_timezone">Timezone: %1$s (%2$s)</string>
+    <string name="about_system_information_resolution">Resolution: %1$sx%2$s (%s DPI)</string>
     <string name="about_system_information_android_id">Android ID</string>
     <string name="about_system_information_user_agent">User Agent</string>
 
