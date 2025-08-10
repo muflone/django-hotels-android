@@ -42,6 +42,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.apps.authenticator.Base32String;
+
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -66,6 +68,7 @@ import org.fedorahosted.freeotp.Token;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -147,7 +150,8 @@ public class ScannerFragment extends Fragment {
         this.scanType = enter ? ScanType.SCAN_TYPE_ENTER : ScanType.SCAN_TYPE_EXIT;
         IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
         // Limit the type of recognized scans to QR Codes
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        integrator.setDesiredBarcodeFormats(
+                Collections.singletonList(BarcodeFormat.QR_CODE.toString()));
         // Set scan title
         integrator.setPrompt(this.context.getString(R.string.scan_prompt));
         // Set beep after scan
