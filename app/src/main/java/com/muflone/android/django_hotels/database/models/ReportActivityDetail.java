@@ -23,7 +23,7 @@
 
 package com.muflone.android.django_hotels.database.models;
 
-import android.arch.persistence.room.ColumnInfo;
+import androidx.room.ColumnInfo;
 
 import java.util.Date;
 

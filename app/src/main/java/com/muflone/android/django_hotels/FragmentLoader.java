@@ -23,7 +23,7 @@
 
 package com.muflone.android.django_hotels;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import com.muflone.android.django_hotels.activities.MainActivity;
 import com.muflone.android.django_hotels.fragments.AboutFragment;

@@ -23,13 +23,11 @@
 
 package com.muflone.android.django_hotels.database.models;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
-
-import org.jetbrains.annotations.NotNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import androidx.annotation.NonNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -57,7 +55,7 @@ public class TimestampDirection {
     public final boolean exit;
 
     @SuppressWarnings("WeakerAccess")
-    public TimestampDirection(long id, @NotNull String name, @NotNull String description, @NotNull String shortCode, boolean enter, boolean exit) {
+    public TimestampDirection(long id, @NonNull String name, @NonNull String description, @NonNull String shortCode, boolean enter, boolean exit) {
         this.id = id;
         this.name = name;
         this.description = description;

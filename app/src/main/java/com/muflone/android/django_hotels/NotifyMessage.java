@@ -26,7 +26,7 @@ package com.muflone.android.django_hotels;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.support.design.widget.Snackbar;
+import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -38,7 +38,8 @@ public class NotifyMessage {
             // This lambda/listener does nothing
         });
         Resources resources = context.getResources();
-        TextView textView = snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        TextView textView = snackbar.getView().findViewById(
+                com.google.android.material.R.id.snackbar_text);
         textView.setTypeface(null, Typeface.BOLD);
         textView.setTextColor(resources.getColor(R.color.colorSnackbarTextColor1));
         textView.setMaxLines(4);

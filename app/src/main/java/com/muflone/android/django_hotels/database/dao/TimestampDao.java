@@ -23,11 +23,11 @@
 
 package com.muflone.android.django_hotels.database.dao;
 
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Delete;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
 
 import com.muflone.android.django_hotels.database.models.ReportTimestamp;
 import com.muflone.android.django_hotels.database.models.Timestamp;
@@ -36,7 +36,7 @@ import com.muflone.android.django_hotels.database.models.TimestampEmployee;
 import java.util.Date;
 import java.util.List;
 
-import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
+import static androidx.room.OnConflictStrategy.IGNORE;
 
 @Dao
 public interface TimestampDao {

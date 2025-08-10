@@ -23,9 +23,9 @@
 
 package com.muflone.android.django_hotels.database;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import org.jetbrains.annotations.NotNull;
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ import java.util.List;
 public class Migrations {
     static final MigrationSafe MIGRATION_5_TO_6 = new MigrationSafe(5, 6) {
         @Override
-        public void migrate(@NotNull SupportSQLiteDatabase database) {
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
             // Define migrations actions
             List<String> actions = new ArrayList<>();
             // Create table settings
@@ -51,7 +51,7 @@ public class Migrations {
 
     static final MigrationSafe MIGRATION_6_TO_7 = new MigrationSafe(6, 7) {
         @Override
-        public void migrate(@NotNull SupportSQLiteDatabase database) {
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
             // Define migrations actions
             List<String> actions = new ArrayList<>();
             // Drop table settings
@@ -80,7 +80,7 @@ public class Migrations {
 
     static final MigrationSafe MIGRATION_7_TO_8 = new MigrationSafe(7, 8) {
         @Override
-        public void migrate(@NotNull SupportSQLiteDatabase database) {
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
             // Define migrations actions
             List<String> actions = new ArrayList<>();
             // Add new column extras to table buildings
@@ -112,7 +112,7 @@ public class Migrations {
 
     static final MigrationSafe MIGRATION_8_TO_9 = new MigrationSafe(8, 9) {
         @Override
-        public void migrate(@NotNull SupportSQLiteDatabase database) {
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
             // Define migrations actions
             List<String> actions = new ArrayList<>();
             // Add new column structure_id to table timestamps

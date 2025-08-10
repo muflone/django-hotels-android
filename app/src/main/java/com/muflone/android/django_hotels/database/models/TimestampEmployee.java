@@ -23,8 +23,8 @@
 
 package com.muflone.android.django_hotels.database.models;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.support.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.annotation.NonNull;
 
 import java.util.Date;
 

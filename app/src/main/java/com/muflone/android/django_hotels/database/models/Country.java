@@ -23,12 +23,11 @@
 
 package com.muflone.android.django_hotels.database.models;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.annotation.NonNull;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,7 +41,7 @@ public class Country {
     public final String name;
 
     @SuppressWarnings("WeakerAccess")
-    public Country(@NotNull String id, String name) {
+    public Country(@NonNull String id, String name) {
         this.id = id;
         this.name = name;
     }

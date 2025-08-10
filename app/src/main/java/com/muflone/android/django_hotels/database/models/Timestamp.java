@@ -23,14 +23,12 @@
 
 package com.muflone.android.django_hotels.database.models;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import org.jetbrains.annotations.NotNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Date;
 
@@ -65,7 +63,7 @@ public class Timestamp {
     @Nullable
     public Date transmission;
 
-    public Timestamp(long id, long structureId, long contractId, long directionId, @NotNull Date datetime, @NonNull String description, @Nullable Date transmission) {
+    public Timestamp(long id, long structureId, long contractId, long directionId, @NonNull Date datetime, @NonNull String description, @Nullable Date transmission) {
         this.id = id;
         this.structureId = structureId;
         this.contractId = contractId;

@@ -23,7 +23,7 @@
 
 package com.muflone.android.django_hotels.database;
 
-import android.arch.persistence.room.TypeConverter;
+import androidx.room.TypeConverter;
 
 import org.json.JSONException;
 import org.json.JSONObject;

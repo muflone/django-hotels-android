@@ -24,7 +24,7 @@
 package com.muflone.android.django_hotels.tasks;
 
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 

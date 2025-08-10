@@ -26,11 +26,11 @@ package com.muflone.android.django_hotels.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatButton;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,8 +57,6 @@ import com.muflone.android.django_hotels.database.models.Contract;
 import com.muflone.android.django_hotels.database.models.Employee;
 import com.muflone.android.django_hotels.database.models.ServiceActivity;
 import com.muflone.android.django_hotels.tasks.TaskExtrasLoadEmployees;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -247,9 +245,9 @@ public class ExtrasFragment extends Fragment {
             this.extrasTimeStep = this.singleton.settings.getLong(CommandConstants.SETTING_EXTRAS_TIME_STEP, 15);
         }
 
-        @NotNull
+        @NonNull
         @Override
-        public View getView(int position, View convertView, @NotNull ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             CustomAdapter.ViewHolder viewHolder;
             ExtraStatus extraStatus = Objects.requireNonNull(this.getItem(position));
             if (convertView == null) {
@@ -325,7 +323,7 @@ public class ExtrasFragment extends Fragment {
             return convertView;
         }
 
-        private void updateExtraView(@NotNull ViewHolder viewHolder, @NotNull ExtraStatus extraStatus, long step) {
+        private void updateExtraView(@NonNull ViewHolder viewHolder, @NonNull ExtraStatus extraStatus, long step) {
             if (step != 0 && extraStatus.transmission != null) {
                 // Cannot change an already transmitted extra
                 Toast.makeText(context,

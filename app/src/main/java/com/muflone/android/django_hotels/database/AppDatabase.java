@@ -23,9 +23,9 @@
 
 package com.muflone.android.django_hotels.database;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.TypeConverters;
+import androidx.room.Database;
+import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import android.content.Context;
 import android.database.Cursor;
 
@@ -109,7 +109,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static synchronized AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = android.arch.persistence.room.Room.databaseBuilder(
+            INSTANCE = androidx.room.Room.databaseBuilder(
                     context, AppDatabase.class, Constants.DATABASE_NAME)
                 // Allow schema changes even without any migration
                 //.fallbackToDestructiveMigration()

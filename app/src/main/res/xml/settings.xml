@@ -23,7 +23,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 -->
-<android.support.v7.preference.PreferenceScreen
+<androidx.preference.PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="@string/settings_tablet">
@@ -63,4 +63,4 @@
             android:summary="@string/settings_scan_orientation_lock_summary"
             android:title="@string/settings_scan_orientation_lock_title" />
     </PreferenceCategory>
-</android.support.v7.preference.PreferenceScreen>
+</androidx.preference.PreferenceScreen>

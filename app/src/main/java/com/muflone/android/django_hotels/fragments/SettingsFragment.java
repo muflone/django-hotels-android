@@ -25,8 +25,8 @@ package com.muflone.android.django_hotels.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.preference.PreferenceManager;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import com.muflone.android.django_hotels.R;
 import com.muflone.android.django_hotels.Singleton;
