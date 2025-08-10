@@ -18,6 +18,6 @@ work in hotels and inns.
 
 # System Requirements
 
-* Android >= 4.4.2
+* Android >= 14
 * Django Hotels server installed and running
 * Tablet ID and Tablet key to interact with the Django Hotels server
