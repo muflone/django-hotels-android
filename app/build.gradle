@@ -25,7 +25,7 @@ apply plugin: 'com.android.application'
 
 def versionMajor = 0
 def versionMinor = 10
-def versionPatch = 0
+def versionPatch = 1
 
 android {
     compileSdk 36
