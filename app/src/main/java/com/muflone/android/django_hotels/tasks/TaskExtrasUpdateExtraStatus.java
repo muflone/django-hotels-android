@@ -3,7 +3,7 @@
  * Description: The Android client companion app for Django Hotels
  *     Website: http://www.muflone.com/django-hotels-android/
  *      Author: Fabio Castelli (Muflone) <muflone@muflone.com>
- *   Copyright: 2018-2025 Fabio Castelli
+ *   Copyright: 2018-2026 Fabio Castelli
  *     License: GPL-3+
  * Source code: https://github.com/muflone/django-hotels-android
  *
