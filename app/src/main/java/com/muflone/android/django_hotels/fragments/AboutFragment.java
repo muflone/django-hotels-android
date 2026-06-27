@@ -207,7 +207,7 @@ public class AboutFragment extends Fragment {
         systemInformationValuesList.add(new SystemInformationValue(
                 R.string.about_system_information_android_id,
                 Settings.Secure.getString(
-                        Objects.requireNonNull(this.getActivity()).getBaseContext().getContentResolver(),
+                        this.requireActivity().getBaseContext().getContentResolver(),
                         Settings.Secure.ANDROID_ID)));
         // User Agent
         systemInformationValuesList.add(new SystemInformationValue(
@@ -222,8 +222,8 @@ public class AboutFragment extends Fragment {
         // Add configured Commands elements
         for (String context : CommandConstants.contexts) {
             ArrayList<Command> commands = this.singleton.apiData.getCommandsByContext(context);
-            aboutPage.addGroup(String.format(this.getString(R.string.about_configured_commands), context));
-            stringBuilder.append(String.format(this.getString(R.string.about_configured_commands), context));
+            aboutPage.addGroup(this.getString(R.string.about_configured_commands, context));
+            stringBuilder.append(this.getString(R.string.about_configured_commands, context));
             stringBuilder.append("\n");
             if (commands.size() > 0) {
                 // Add each configured command
@@ -370,12 +370,16 @@ public class AboutFragment extends Fragment {
         @SuppressWarnings("WeakerAccess")
         public String toString(boolean newLine) {
             String result;
+            System.out.println(getString(this.id));
             if (getString(this.id).contains("%s")) {
                 // Title already contains format specifiers
                 result = String.format(Locale.ROOT, getString(this.id), this.values.toArray());
+            } else if (getString(this.id).contains("%1$s")) {
+                // Title already contains format specifiers
+                result = String.format(Locale.ROOT, getString(this.id, this.values.toArray()));
             } else {
                 // With no format specifiers we add title: value standard format
-                result = String.format(Locale.ROOT, "%s: %s", getString(this.id), this.values.get(0));
+                result = String.format(Locale.ROOT, "%1$s: %2$s", getString(this.id), this.values.get(0));
             }
             // Add a newline character if required
             if (newLine) {

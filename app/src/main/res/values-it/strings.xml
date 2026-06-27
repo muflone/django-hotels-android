@@ -90,11 +90,11 @@
     <string name="extras_activities">Attività extra</string>
     <string name="extras_add_new_extra">Aggiungere un nuovo extra</string>
     <string name="extras_time_zero">Niente</string>
-    <string name="extras_time_minutes">%d minuti</string>
-    <string name="extras_time_hour_minutes">%d ora e %d minuti</string>
-    <string name="extras_time_hour">%d ora</string>
-    <string name="extras_time_hours_minutes">%d ore e %d minuti</string>
-    <string name="extras_time_hours">%d ore</string>
+    <string name="extras_time_minutes">%1$d minuti</string>
+    <string name="extras_time_hour_minutes">%1$d ora e %2$d minuti</string>
+    <string name="extras_time_hour">%1$d ora</string>
+    <string name="extras_time_hours_minutes">%1$d ore e %2$d minuti</string>
+    <string name="extras_time_hours">%1$d ore</string>
     <string name="extras_unable_to_change_transmitted_activity">Impossibile modificare un extra già trasmesso</string>
     <string name="extras_unable_to_use_contract">Impossibile utilizzare il contratto</string>
     <string name="extras_max_number_of_extras">Raggiunto il numero massimo di extra, impossibile aggiungere un nuovo extra</string>
@@ -105,7 +105,7 @@
     <string name="report_timestamps">Ingressi e Uscite</string>
     <string name="report_activities">Attività</string>
     <string name="report_loading1">Il riepilogo sta attualmente caricando, attendere prego</string>
-    <string name="report_loading2">Tempo trascorso: %d secondi</string>
+    <string name="report_loading2">Tempo trascorso: %1$d secondi</string>
 
     <!-- Settings section -->
     <string name="settings_tablet">Impostazioni tablet</string>
@@ -145,11 +145,11 @@
     <string name="sync_error_invalid_date_time">Data o orario non validi, controllare le impostazioni di sistema</string>
     <string name="sync_error_unable_to_download">Impossibile scaricare le informazioni dal server</string>
     <string name="sync_error_invalid_server_status">Stato del server non valido, forse il server non è pronto</string>
-    <string name="sync_error_invalid_server_status_detail">Stato del server: %s</string>
+    <string name="sync_error_invalid_server_status_detail">Stato del server: %1$s</string>
     <string name="sync_error_invalid_server_response">Risposta non valida dal server, controllare la connessione internet</string>
     <string name="sync_error_retransmitted_response">L\'attività è stata già trasmessa e viene rifiutata dal server</string>
-    <string name="sync_error_retransmitted_quantity">Un\'attività è stata già trasmessa con una quantità differente:\nImpiegato: %s %s\nStruttura: %s\nEdificio: %s\nStanza: %s\nData: %s\nQuantità: %d</string>
-    <string name="sync_error_retransmitted_description">Un\'attività è stata già trasmessa con una descrizione differente\nImpiegato: %s %s\nStruttura: %s\nEdificio: %s\nStanza: %s\nData: %s\nDescription: %s</string>
+    <string name="sync_error_retransmitted_quantity">Un\'attività è stata già trasmessa con una quantità differente:\nImpiegato: %1$s %2$s\nStruttura: %3$s\nEdificio: %4$s\nStanza: %5$s\nData: %6$s\nQuantità: %7$d</string>
+    <string name="sync_error_retransmitted_description">Un\'attività è stata già trasmessa con una descrizione differente\nImpiegato: %1$s %2$s\nStruttura: %3$s\nEdificio: %4$s\nStanza: %5$s\nData: %6$s\nDescription: %7$s</string>
 
     <!-- About section -->
     <string name="about_contacts">Contatti</string>
@@ -159,8 +159,8 @@
     <string name="about_application_information">Informazioni sull\'applicazione</string>
     <string name="about_settings_information">Informazioni sulle impostazioni</string>
     <string name="about_system_information">Informazioni di sistema</string>
-    <string name="about_configured_commands">Comandi configurati per il contesto %s</string>
-    <string name="about_configured_commands_format">ID: %d\nNome: %s\nTipo: %s\nUtilizzi: %d/%d</string>
+    <string name="about_configured_commands">Comandi configurati per il contesto %1$s</string>
+    <string name="about_configured_commands_format" translatable="false">ID: %d\nNome: %s\nTipo: %s\nUtilizzi: %d/%d</string>
     <string name="about_configured_commands_none">Non ci sono comandi configurati</string>
     <string name="about_feedback">Feedback</string>
     <string name="about_tools">Strumenti</string>
@@ -169,7 +169,7 @@
     <string name="about_application_information_version">Versione applicazione</string>
     <string name="about_application_information_package">Pacchetto applicazione</string>
 
-    <string name="about_system_information_android">Versione Android: %s %s</string>
+    <string name="about_system_information_android">Versione Android: %1$s %2$s</string>
     <string name="about_system_information_sdk">Livello API SDK</string>
     <string name="about_system_information_rom">Versione ROM</string>
     <string name="about_system_information_kernel">Versione kernel</string>
@@ -179,8 +179,8 @@
     <string name="about_system_information_product">Prodotto</string>
     <string name="about_system_information_brand">Marca</string>
     <string name="about_system_information_device">Dispositivo</string>
-    <string name="about_system_information_timezone">Fuso orario: %s (%s)</string>
-    <string name="about_system_information_resolution">Risoluzione: %sx%s (%s DPI)</string>
+    <string name="about_system_information_timezone">Fuso orario: %1$s (%2$s)</string>
+    <string name="about_system_information_resolution">Risoluzione: %1$sx%2$s (%3$s DPI)</string>
     <string name="about_system_information_android_id">Andoid ID</string>
     <string name="about_system_information_user_agent">User Agent</string>
 

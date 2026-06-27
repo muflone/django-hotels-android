@@ -95,9 +95,8 @@ public class ReportsFragment extends Fragment {
                     @Override
                     public void onProgress(int step, int total) {
                         // Update loading text with the elapsed time
-                        Objects.requireNonNull(ReportsFragment.this.getActivity()).runOnUiThread(() -> ReportsFragment.this.progressView2.setText(
-                                String.format(Locale.ROOT,
-                                        Objects.requireNonNull(ReportsFragment.this.getContext()).getString(R.string.report_loading2),
+                        ReportsFragment.this.requireActivity().runOnUiThread(() -> ReportsFragment.this.progressView2.setText(
+                                ReportsFragment.this.requireActivity().getString(R.string.report_loading2,
                                         (System.currentTimeMillis() - startingTime) / 1000)));
                     }
                 });
