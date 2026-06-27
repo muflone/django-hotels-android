@@ -35,7 +35,7 @@ android {
     }
     defaultConfig {
         applicationId "com.muflone.android.django_hotels"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdk 36
         versionCode versionMajor * 10000 + versionMinor * 100 + versionPatch
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
@@ -67,28 +67,27 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.0'
-    implementation 'androidx.core:core-ktx:1.16.0'
-    implementation 'androidx.fragment:fragment-ktx:1.8.8'
+    implementation 'androidx.core:core-ktx:1.18.0'
+    implementation 'androidx.fragment:fragment-ktx:1.8.9'
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
-    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'com.google.android.material:material:1.14.0'
     implementation 'androidx.drawerlayout:drawerlayout:1.2.0'
     implementation 'androidx.preference:preference-ktx:1.2.1'
-    implementation 'androidx.room:room-runtime:2.7.2'
-    annotationProcessor 'androidx.room:room-compiler:2.7.2'
+    implementation 'androidx.room:room-runtime:2.8.4'
+    annotationProcessor 'androidx.room:room-compiler:2.8.4'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.android.support:multidex:2.0.1'
 
-    implementation "com.google.dagger:dagger:2.50"
-    annotationProcessor "com.google.dagger:dagger-compiler:2.50"
+    implementation "com.google.dagger:dagger:2.60"
+    annotationProcessor "com.google.dagger:dagger-compiler:2.60"
 
     // Thirdy part
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0@aar'
-    implementation 'com.google.zxing:core:3.5.3'
+    implementation 'com.google.zxing:core:3.5.4'
     implementation 'com.github.medyo:android-about-page:1.2.5'
-    implementation 'com.google.guava:guava:33.4.8-android'
+    implementation 'com.google.guava:guava:33.6.0-android'
     implementation 'com.daimajia.numberprogressbar:library:1.4@aar'
-    implementation 'com.itextpdf:itextpdf:5.5.13.4'
-    implementation 'com.itextpdf.tool:xmlworker:5.5.13.4'
+    implementation 'com.itextpdf:itextpdf:5.5.13.5'
+    implementation 'com.itextpdf.tool:xmlworker:5.5.13.5'
 }
