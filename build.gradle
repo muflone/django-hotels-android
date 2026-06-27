@@ -40,6 +40,7 @@ buildscript {
 }
 
 allprojects {
+    buildDir = "/tmp/gradle-build-django-hotels/"
     repositories {
         google()
         mavenCentral()
